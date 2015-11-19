@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="actionbar" type="color">#34495e</item>
+    <item name="white" type="color">#FFFFFF</item>
+    <item name="light_green" type="color">#d7ede9</item>
+    <item name="green" type="color">#1abc9c</item>
+    <item name="darker_green" type="color">#acd0c9</item>
+    <item name="darker_white" type="color">#f2f2f3</item>
+    <item name="black" type="color">#000000</item>
+    <item name="transparent" type="color">#00000000</item>
+    <item name="gray" type="color">#D8D8DA</item>
+</resources>
