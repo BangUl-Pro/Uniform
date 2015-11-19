@@ -1,6 +1,7 @@
 package com.songjin.usum.entities;
 
-import com.kth.baasio.entity.BaasioBaseEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SchoolPointEntity {
     public static final String COLLECTION_NAME = "school_point_2s";
@@ -14,24 +15,31 @@ public class SchoolPointEntity {
 
     }
 
-    public SchoolPointEntity(BaasioBaseEntity entity) {
-        set(entity);
+    public SchoolPointEntity(JSONObject object) {
+        set(object);
     }
 
-    public void set(BaasioBaseEntity entity) {
-        if (entity.getProperty(PROPERTY_SCHOOL_ID) != null) {
-            this.school_id = entity.getProperty(PROPERTY_SCHOOL_ID).asInt();
-        }
-        if (entity.getProperty(PROPERTY_POINT) != null) {
-            this.point = entity.getProperty(PROPERTY_POINT).asLong();
+    public void set(JSONObject object) {
+        try {
+            if (object.getInt(PROPERTY_SCHOOL_ID) != -1) {
+                this.school_id = object.getInt(PROPERTY_SCHOOL_ID);
+            }
+            if (object.getLong(PROPERTY_POINT) != -1) {
+                this.point = object.getLong(PROPERTY_POINT);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
-    public BaasioBaseEntity getBaasioBaseEntity() {
-        BaasioBaseEntity entity = new BaasioBaseEntity();
-        entity.setProperty(PROPERTY_SCHOOL_ID, this.school_id);
-        entity.setProperty(PROPERTY_POINT, this.point);
-
-        return entity;
+    public JSONObject getBaasioBaseEntity() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put(PROPERTY_SCHOOL_ID, this.school_id);
+            object.put(PROPERTY_POINT, this.point);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
     }
 }
