@@ -7,6 +7,7 @@ public class Global {
     public static final String COMMAND = "command";
     public static final String CODE = "code";
     public static final String GET_SCHOOL = "getSchool";
+    public static final String GET_SCHOOL_RANKING = "getSchoolRanking";
     public static final String LOGIN = "login";
     public static final String SIGN_UP = "signUp";
     public static final String SIGN_IN = "signIn";

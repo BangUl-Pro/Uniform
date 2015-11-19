@@ -1,5 +1,6 @@
 package com.songjin.usum.controllers.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.kth.baasio.callback.BaasioQueryCallback;
 import com.kth.baasio.entity.BaasioBaseEntity;
 import com.kth.baasio.exception.BaasioException;
 import com.kth.baasio.query.BaasioQuery;
+import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.views.SchoolRankingCardView;
@@ -23,6 +25,7 @@ import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.managers.SchoolManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
+import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +61,9 @@ public class CommunityFragment extends SlidingBaseFragment {
 
         viewHolder = new ViewHolder(view);
         final SchoolManager schoolManager = new SchoolManager(getActivity());
+        Intent intent = new Intent(getActivity(), SocketService.class);
+        intent.putExtra(Global.COMMAND, Global.GET_SCHOOL_RANKING);
+
         RequestManager.getSchoolRankingsInBackground(schoolManager, new BaasioQueryCallback() {
                     @Override
                     public void onResponse(List<BaasioBaseEntity> entities, List<Object> objects, BaasioQuery baasioQuery, long l) {

@@ -1,8 +1,10 @@
 package com.songjin.usum.dtos;
 
-import com.kth.baasio.entity.BaasioBaseEntity;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.SchoolPointEntity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SchoolRanking {
     public long point;
@@ -17,8 +19,8 @@ public class SchoolRanking {
         set(schoolPointEntity, schoolEntity);
     }
 
-    public SchoolRanking(BaasioBaseEntity entity) {
-        set(entity);
+    public SchoolRanking(JSONObject object) {
+        set(object);
     }
 
     public void set(SchoolPointEntity schoolPointEntity, SchoolEntity schoolEntity) {
@@ -31,26 +33,34 @@ public class SchoolRanking {
         this.gu = schoolEntity.gu;
     }
 
-    public void set(BaasioBaseEntity entity) {
-        this.point = entity.getProperty(SchoolPointEntity.PROPERTY_POINT).asLong();
-        this.school_id = entity.getProperty(SchoolEntity.PROPERTY_ID).asInt();
-        this.schoolname = entity.getProperty(SchoolEntity.PROPERTY_SCHOOLNAME).asText();
-        this.address = entity.getProperty(SchoolEntity.PROPERTY_ADDRESS).asText();
-        this.city = entity.getProperty(SchoolEntity.PROPERTY_CITY).asText();
-        this.category = entity.getProperty(SchoolEntity.PROPERTY_CATEGORY).asText();
-        this.gu = entity.getProperty(SchoolEntity.PROPERTY_GU).asText();
+    public void set(JSONObject object) {
+        try {
+            this.point = object.getLong(SchoolPointEntity.PROPERTY_POINT);
+            this.school_id = object.getInt(SchoolEntity.PROPERTY_ID);
+            this.schoolname = object.getString(SchoolEntity.PROPERTY_SCHOOLNAME);
+            this.address = object.getString(SchoolEntity.PROPERTY_ADDRESS);
+            this.city = object.getString(SchoolEntity.PROPERTY_CITY);
+            this.category = object.getString(SchoolEntity.PROPERTY_CATEGORY);
+            this.gu = object.getString(SchoolEntity.PROPERTY_GU);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    public BaasioBaseEntity getBaasioBaseEntity() {
-        BaasioBaseEntity entity = new BaasioBaseEntity();
-        entity.setProperty(SchoolPointEntity.PROPERTY_POINT, this.point);
-        entity.setProperty(SchoolEntity.PROPERTY_ID, this.school_id);
-        entity.setProperty(SchoolEntity.PROPERTY_SCHOOLNAME, this.schoolname);
-        entity.setProperty(SchoolEntity.PROPERTY_ADDRESS, this.address);
-        entity.setProperty(SchoolEntity.PROPERTY_CITY, this.city);
-        entity.setProperty(SchoolEntity.PROPERTY_CATEGORY, this.category);
-        entity.setProperty(SchoolEntity.PROPERTY_GU, this.gu);
-        return entity;
+    public JSONObject getBaasioBaseEntity() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put(SchoolPointEntity.PROPERTY_POINT, this.point);
+            object.put(SchoolEntity.PROPERTY_ID, this.school_id);
+            object.put(SchoolEntity.PROPERTY_SCHOOLNAME, this.schoolname);
+            object.put(SchoolEntity.PROPERTY_ADDRESS, this.address);
+            object.put(SchoolEntity.PROPERTY_CITY, this.city);
+            object.put(SchoolEntity.PROPERTY_CATEGORY, this.category);
+            object.put(SchoolEntity.PROPERTY_GU, this.gu);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
     }
 
     public SchoolEntity getSchoolEntity() {
