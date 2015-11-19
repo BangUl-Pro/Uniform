@@ -26,7 +26,7 @@ import java.util.List;
 
 import nl.changer.polypicker.ImagePickerActivity;
 
-public class AddProductsActivity extends BaseActivity {
+public class AddProductsActivity extends BaseActivity { ㅇㅇ
     private class ViewHolder {
         ProductAddForm productAddForm;
         ProductRecyclerView products;
