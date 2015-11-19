@@ -1,6 +1,5 @@
 package com.songjin.usum.entities;
 
-import com.kth.baasio.entity.push.BaasioPayload;
 
 public class AlarmEntity {
     public String message;
@@ -10,8 +9,13 @@ public class AlarmEntity {
 
     }
 
-    public AlarmEntity(BaasioPayload baasioPayload) {
-        message = baasioPayload.getAlert();
-        timestamp = baasioPayload.getProperty("timestamp").asLong();
+    public AlarmEntity(String message, Long timestamp) {
+        this.message = message;
+        this.timestamp = timestamp;
+    }
+
+    public AlarmEntity(String message) {
+        this.message = message;
+        this.timestamp = System.currentTimeMillis();
     }
 }

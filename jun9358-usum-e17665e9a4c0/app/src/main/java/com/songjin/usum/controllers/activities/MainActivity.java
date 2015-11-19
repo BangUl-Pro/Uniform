@@ -39,6 +39,7 @@ public class MainActivity extends BaseActivity {
             tabFragments.add(new MyPageFragment());
             tabFragments.add(new SupportFragment());
             tabFragments.add(new SettingFragment());
+            SettingFragment.context = getApplicationContext();
 
             ArrayList<String> tabTitles = new ArrayList<>();
             tabTitles.add("커뮤니티");
@@ -109,13 +110,15 @@ public class MainActivity extends BaseActivity {
     }
 
     private boolean hasNotSyncedAlarm() {
-        ArrayList<BaasioPaylolad> receivedPushMessages = SettingFragment.getReceivedPushMessages();
+//        ArrayList<BaasioPaylolad> receivedPushMessages = SettingFragment.getReceivedPushMessages();
+        ArrayList<AlarmEntity> receivedPushMessages = SettingFragment.getReceivedPushMessages();
         if (receivedPushMessages.isEmpty()) {
             return false;
         }
 
         long lastSyncedTimestamp = SettingFragment.getLastAlarmSyncedTimestamp();
-        AlarmEntity latestAlarmEntity = new AlarmEntity(receivedPushMessages.get(0));
+//        AlarmEntity latestAlarmEntity = new AlarmEntity(receivedPushMessages.get(0));
+        AlarmEntity latestAlarmEntity = receivedPushMessages.get(0);
         return (lastSyncedTimestamp < latestAlarmEntity.timestamp);
     }
 

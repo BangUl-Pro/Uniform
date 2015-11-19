@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.activities.LoginActivity;
 import com.songjin.usum.controllers.activities.MainActivity;
+import com.songjin.usum.entities.AlarmEntity;
 import com.songjin.usum.entities.ReservedCategoryEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
@@ -32,6 +34,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class SettingFragment extends SlidingBaseFragment {
+    private static final String TAG = "SettingFragment";
+    public static Context context;
+
     private class ViewHolder {
         public Button disconnectButton;
         public Button logoutButton;
@@ -111,18 +116,20 @@ public class SettingFragment extends SlidingBaseFragment {
                 editor.commit();
             }
         });
-        viewHolder.useTransactionPush.setChecked(useTransactionPush(getActivity()));
-        viewHolder.useTimelinePush.setChecked(useTimelinePush(getActivity()));
+//        viewHolder.useTransactionPush.setChecked(useTransactionPush(getActivity()));
+//        viewHolder.useTimelinePush.setChecked(useTimelinePush(getActivity()));
+        viewHolder.useTransactionPush.setChecked(useTransactionPush());
+        viewHolder.useTimelinePush.setChecked(useTimelinePush());
 
         return view;
     }
 
-    public static Boolean useTransactionPush(Context context) {
+    public static Boolean useTransactionPush() {
         SecurePreferences securePreferences = new SecurePreferences(context);
         return securePreferences.getBoolean(SettingFragment.PREFERENCE_USE_TRANSACTION_PUSH, true);
     }
 
-    public static Boolean useTimelinePush(Context context) {
+    public static Boolean useTimelinePush() {
         SecurePreferences securePreferences = new SecurePreferences(context);
         return securePreferences.getBoolean(SettingFragment.PREFERENCE_USE_TIMELINE_PUSH, true);
     }
@@ -201,7 +208,7 @@ public class SettingFragment extends SlidingBaseFragment {
     public static ArrayList<ReservedCategoryEntity> getReservedCategories() {
         ArrayList<String> reservedCategoryJsonStrings;
 //        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
-        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+        SecurePreferences securePreferences = new SecurePreferences(context);
         String rawJsonString = securePreferences.getString(PREFERENCE_RESERVED_CATEGORIES, "");
         Gson gson = new Gson();
         try {
@@ -267,15 +274,15 @@ public class SettingFragment extends SlidingBaseFragment {
             reservedCategoryJsonStrings.add(reservedCategory.toString());
         }
 
-        SecurePreferences securePrefs = new SecurePreferences(BaasioApplication.context);
+        SecurePreferences securePrefs = new SecurePreferences(context);
         SecurePreferences.Editor editor = securePrefs.edit();
         Gson gson = new Gson();
         editor.putString(PREFERENCE_RESERVED_CATEGORIES, gson.toJson(reservedCategoryJsonStrings));
         editor.commit();
     }
 
-    public static ArrayList<BaasioPayload> getReceivedPushMessages() {
-        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+    public static ArrayList<AlarmEntity> getReceivedPushMessages() {
+        SecurePreferences securePreferences = new SecurePreferences(context);
         String pushMessageJsonString = securePreferences.getString(PREFERENCE_RECEIVED_PUSH_MESSAGES, "");
 
         Gson gson = new Gson();
@@ -292,44 +299,86 @@ public class SettingFragment extends SlidingBaseFragment {
             return new ArrayList<>();
         }
 
-        ArrayList<BaasioPayload> receivedPushMessages = new ArrayList<>();
+        ArrayList<AlarmEntity> receivedPushMessages = new ArrayList<>();
         for (String jsonString : pushMessageJsonStrings) {
-            receivedPushMessages.add(BaasioPayload.createObject(jsonString));
+            Log.d(TAG, "jsonString = " + jsonString);
+            receivedPushMessages.add(new AlarmEntity(jsonString));
         }
 
         return receivedPushMessages;
     }
+//    public static ArrayList<BaasioPayload> getReceivedPushMessages() {
+//        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+//        String pushMessageJsonString = securePreferences.getString(PREFERENCE_RECEIVED_PUSH_MESSAGES, "");
+//
+//        Gson gson = new Gson();
+//        ArrayList<String> pushMessageJsonStrings;
+//        try {
+//            pushMessageJsonStrings = gson.fromJson(
+//                    pushMessageJsonString,
+//                    new TypeToken<ArrayList<String>>() {
+//                    }.getType());
+//        } catch (Exception e) {
+//            pushMessageJsonStrings = new ArrayList<>();
+//        }
+//        if (pushMessageJsonStrings == null) {
+//            return new ArrayList<>();
+//        }
+//
+//        ArrayList<BaasioPayload> receivedPushMessages = new ArrayList<>();
+//        for (String jsonString : pushMessageJsonStrings) {
+//            receivedPushMessages.add(BaasioPayload.createObject(jsonString));
+//        }
+//
+//        return receivedPushMessages;
+//    }
 
-    public static void addReceivedPushMessage(BaasioPayload baasioPayload) {
-        ArrayList<BaasioPayload> pushMessages = getReceivedPushMessages();
-        pushMessages.add(baasioPayload);
+    public static void addReceivedPushMessage(AlarmEntity alarmEntity) {
+        ArrayList<AlarmEntity> pushMessages = getReceivedPushMessages();
+        pushMessages.add(alarmEntity);
 
         ArrayList<String> pushMessageJsonStrings = new ArrayList<>();
-        for (BaasioPayload pushMessage : pushMessages) {
+        for (AlarmEntity pushMessage : pushMessages) {
             pushMessageJsonStrings.add(0, pushMessage.toString());
+            Log.d(TAG, "pushMessage = " + pushMessage.toString());
         }
 
-        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+        SecurePreferences securePreferences = new SecurePreferences(context);
         SecurePreferences.Editor editor = securePreferences.edit();
         Gson gson = new Gson();
         editor.putString(PREFERENCE_RECEIVED_PUSH_MESSAGES, gson.toJson(pushMessageJsonStrings));
         editor.commit();
     }
+//    public static void addReceivedPushMessage(BaasioPayload baasioPayload) {
+//        ArrayList<BaasioPayload> pushMessages = getReceivedPushMessages();
+//        pushMessages.add(baasioPayload);
+//
+//        ArrayList<String> pushMessageJsonStrings = new ArrayList<>();
+//        for (BaasioPayload pushMessage : pushMessages) {
+//            pushMessageJsonStrings.add(0, pushMessage.toString());
+//        }
+//
+//        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+//        SecurePreferences.Editor editor = securePreferences.edit();
+//        Gson gson = new Gson();
+//        editor.putString(PREFERENCE_RECEIVED_PUSH_MESSAGES, gson.toJson(pushMessageJsonStrings));
+//        editor.commit();
+//    }
 
     public static long getLastAlarmSyncedTimestamp() {
-        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+        SecurePreferences securePreferences = new SecurePreferences(context);
         return securePreferences.getLong(PREFERENCE_ALARM_SYNCED_TIMESTAMP, 0);
     }
 
     public static void updateLastAlarmSyncedTimestamp() {
-        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+        SecurePreferences securePreferences = new SecurePreferences(context);
         SecurePreferences.Editor editor = securePreferences.edit();
         editor.putLong(PREFERENCE_ALARM_SYNCED_TIMESTAMP, System.currentTimeMillis());
         editor.commit();
     }
 
     private static void clearAllSharedPreferences() {
-        SecurePreferences securePrefs = new SecurePreferences(BaasioApplication.context);
+        SecurePreferences securePrefs = new SecurePreferences(context);
         SecurePreferences.Editor editor = securePrefs.edit();
         for (Map.Entry<String, String> entry : securePrefs.getAll().entrySet()) {
             editor.remove(entry.getKey());
@@ -338,24 +387,24 @@ public class SettingFragment extends SlidingBaseFragment {
     }
 
     public static int getLastSchoolRank() {
-        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+        SecurePreferences securePreferences = new SecurePreferences(context);
         return securePreferences.getInt(PREFERENCE_LAST_RANK, -1);
     }
 
     public static void setLastSchoolRank(int lastRank) {
-        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+        SecurePreferences securePreferences = new SecurePreferences(context);
         SecurePreferences.Editor editor = securePreferences.edit();
         editor.putInt(PREFERENCE_LAST_RANK, lastRank);
         editor.commit();
     }
 
     public static boolean getSchoolsLoaded() {
-        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+        SecurePreferences securePreferences = new SecurePreferences(context);
         return securePreferences.getBoolean(PREFERENCE_SCHOOLS_LOADED, false);
     }
 
     public static void setSchoolsLoaded(boolean loaded) {
-        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+        SecurePreferences securePreferences = new SecurePreferences(context);
         SecurePreferences.Editor editor = securePreferences.edit();
         editor.putBoolean(PREFERENCE_SCHOOLS_LOADED, loaded);
         editor.commit();
