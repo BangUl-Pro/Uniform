@@ -1,8 +1,0 @@
-<resources>
-    <declare-styleable name="SquareImageView">
-        <attr name="squared_by" format="enum">
-            <enum name="width" value="1" />
-            <enum name="height" value="2" />
-        </attr>
-    </declare-styleable>
-</resources>

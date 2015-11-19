@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jerryjang.donation"
+    android:versionCode="5"
+    android:versionName="1.1" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="23" />
+
+    <permission
+        android:name="com.songjin.usum.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.songjin.usum.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application
+        android:name="com.songjin.usum.baasio.BaasioApplication"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:theme="@style/AppTheme" >
+        <receiver
+            android:name="com.songjin.usum.gcm.GCMRedirectedBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <!-- Receives the registration id. -->
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.songjin.usum" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.songjin.usum.gcm.GCMIntentService" />
+
+        <receiver android:name="com.songjin.usum.reservation.ReservationPushBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.songjin.usum.reservation.ReservationPushService" />
+
+        <receiver android:name="com.songjin.usum.reservation.SchoolRankingPushBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.songjin.usum.reservation.SchoolRankingPushService" />
+
+        <!-- kakao -->
+        <activity
+            android:name="com.kakao.LoginActivity"
+            android:configChanges="orientation|screenSize" />
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+
+        <!-- App -->
+        <activity
+            android:name="com.songjin.usum.controllers.activities.LoginActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.songjin.usum.controllers.activities.SignUpActivity"
+            android:theme="@style/AppThemeNoTitleBarFullscreen" />
+        <activity android:name="com.songjin.usum.controllers.activities.MainActivity" />
+        <activity android:name="com.songjin.usum.controllers.activities.TimelineDetailActivity" />
+        <activity android:name="com.songjin.usum.controllers.activities.TimelineWriteActivity" />
+        <activity
+            android:name="nl.changer.polypicker.ImagePickerActivity"
+            android:theme="@android:style/Theme.Holo" />
+        <activity android:name="com.songjin.usum.controllers.activities.TimelineActivity" />
+        <activity
+            android:name="com.songjin.usum.controllers.activities.AddProductsActivity"
+            android:label="@string/title_activity_add_products" />
+        <activity
+            android:name="com.songjin.usum.controllers.activities.ProductDetailActivity"
+            android:label="@string/title_activity_product_detail" />
+        <activity
+            android:name="com.songjin.usum.controllers.activities.EditProfileActivity"
+            android:label="@string/title_activity_edit_profile" />
+        <activity
+            android:name="com.songjin.usum.controllers.activities.PhotoViewActivity"
+            android:label="@string/title_activity_photo_view"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.songjin.usum.controllers.activities.SupportActivity"
+            android:label="@string/title_activity_support" >
+        </activity>
+        <activity
+            android:name="com.songjin.usum.controllers.activities.FaqActivity"
+            android:label="@string/title_activity_faq" >
+        </activity>
+        <activity
+            android:name="com.songjin.usum.controllers.activities.SupportCompletedActivity"
+            android:label="@string/title_activity_support_completed" >
+        </activity>
+        <activity
+            android:name="com.songjin.usum.controllers.activities.AlarmActivity"
+            android:label="@string/title_activity_alarm" >
+        </activity>
+
+        <service
+            android:name="com.songjin.usum.socketIo.SocketService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+    </application>
+
+</manifest>

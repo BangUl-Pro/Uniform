@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="library-circular-1.0.2">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/316f99784495d9cc54c708c35eddc736e96389f7/library-circular-1.0.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
