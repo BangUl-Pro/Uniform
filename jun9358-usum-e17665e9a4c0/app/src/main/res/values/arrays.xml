@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="supprotItems">
+        <item>5,000원</item>
+        <item>10,000원</item>
+        <item>20,000원</item>
+        <item>30,000원</item>
+    </string-array>
+    <string-array name="supportSkus">
+        <item>support_5</item>
+        <item>support_10</item>
+        <item>support_20</item>
+        <item>support_30</item>
+    </string-array>
+</resources>

@@ -1,0 +1,3 @@
+[submodule "usum-web"]
+	path = usum-web
+	url = https://bitbucket.org/jun9358/usum-web.git
