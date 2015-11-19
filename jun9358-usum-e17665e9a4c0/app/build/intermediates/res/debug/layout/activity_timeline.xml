@@ -18,4 +18,4 @@
         android:layout_margin="24dp"
         fab:fab_type="mini"
         android:src="@drawable/ic_write_timeline_button" />
-</FrameLayout><!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/layout/activity_timeline.xml -->
+</FrameLayout><!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/layout/activity_timeline.xml -->

@@ -2,4 +2,4 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <solid android:color="@color/md_btn_selected_dark" />
-</shape><!-- From: file:/Users/afollestad/Projects/material-dialogs/library/src/main/res/drawable/md_item_selected_dark.xml --><!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/drawable/md_item_selected_dark.xml -->
+</shape><!-- From: file:/Users/afollestad/Projects/material-dialogs/library/src/main/res/drawable/md_item_selected_dark.xml --><!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/drawable/md_item_selected_dark.xml -->

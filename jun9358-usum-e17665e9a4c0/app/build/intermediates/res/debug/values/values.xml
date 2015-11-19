@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="http://schemas.android.com/tools">
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_strings.xml -->
     <eat-comment/>
     <string-array name="com_kakao_accounts_array">
         <item>@string/com_kakao_kakaotalk_account</item>
         <item>@string/com_kakao_other_kakaoaccount</item>
         <item>@string/com_kakao_account_cancel</item>
     </string-array>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/arrays.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/arrays.xml -->
     <eat-comment/>
     <string-array name="supportSkus">
         <item>support_5</item>
@@ -21,12 +21,12 @@
         <item>20,000원</item>
         <item>30,000원</item>
     </string-array>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="drawerArrowStyle"/>
     <attr format="dimension" name="height"/>
     <attr format="boolean" name="isLightTheme"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
     <eat-comment/>
     <attr format="color" name="md_background_color"/>
     <attr format="reference" name="md_btn_negative_selector"/>
@@ -74,7 +74,7 @@
         <enum name="end" value="2"/>
     </attr>
     <attr format="color" name="md_widget_color"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <attr format="string" name="title"/>
     <bool name="abc_action_bar_embed_tabs">true</bool>
@@ -84,10 +84,10 @@
     <bool name="abc_config_allowActionMenuItemTextWithIcon">false</bool>
     <bool name="abc_config_closeDialogWhenTouchOutside">true</bool>
     <bool name="abc_config_showMenuShortcutsWhenKeyboardPresent">false</bool>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
     <eat-comment/>
     <bool name="md_is_tablet">false</bool>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <color name="abc_input_method_navigation_guard">@android:color/black</color>
     <color name="abc_search_url_text_normal">#7fa87f</color>
@@ -95,19 +95,19 @@
     <color name="abc_search_url_text_selected">@android:color/black</color>
     <color name="accent_material_dark">@color/material_deep_teal_200</color>
     <color name="accent_material_light">@color/material_deep_teal_500</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <item name="actionbar" type="color">#34495e</item>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <color name="background_floating_material_dark">@color/material_grey_800</color>
     <color name="background_floating_material_light">@android:color/white</color>
     <color name="background_material_dark">@color/material_grey_850</color>
     <color name="background_material_light">@color/material_grey_50</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <item name="black" type="color">#000000</item>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <color name="bright_foreground_disabled_material_dark">#80ffffff</color>
     <color name="bright_foreground_disabled_material_light">#80000000</color>
@@ -117,20 +117,20 @@
     <color name="bright_foreground_material_light">@android:color/black</color>
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <color name="cardview_dark_background">#FF202020</color>
     <color name="cardview_light_background">#FFFAFAFA</color>
     <color name="cardview_shadow_end_color">#03000000</color>
     <color name="cardview_shadow_start_color">#37000000</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_colors.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_colors.xml -->
     <eat-comment/>
     <color name="com_kakao_account_button_background">#ffffff</color>
     <color name="com_kakao_brown">#472a2b</color>
     <color name="com_kakao_button_background_press">#ffeb00</color>
     <color name="com_kakao_button_text_press">#000000</color>
     <color name="com_kakao_cancel_button_background">#e5e5e5</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values/colors.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values/colors.xml -->
     <eat-comment/>
     <color name="common_action_bar_splitter">#d2d2d2</color>
     <color name="common_signin_btn_dark_text_default">@android:color/white</color>
@@ -142,14 +142,14 @@
     <color name="common_signin_btn_light_text_disabled">#FFAAAAAA</color>
     <color name="common_signin_btn_light_text_focused">#FF737373</color>
     <color name="common_signin_btn_light_text_pressed">@android:color/white</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
     <eat-comment/>
     <color name="cpb_default_color">#33b5e5</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <item name="darker_green" type="color">#acd0c9</item>
     <item name="darker_white" type="color">#f2f2f3</item>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
@@ -157,24 +157,24 @@
     <color name="dim_foreground_material_light">#ff323232</color>
     <color name="foreground_material_dark">@android:color/white</color>
     <color name="foreground_material_light">@android:color/black</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <item name="gray" type="color">#D8D8DA</item>
     <item name="green" type="color">#1abc9c</item>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <color name="highlighted_text_material_dark">#6680cbc4</color>
     <color name="highlighted_text_material_light">#66009688</color>
     <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark</color>
     <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <item name="light_green" type="color">#d7ede9</item>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.1.0/res/values/values.xml -->
     <eat-comment/>
     <color name="material_blue_500">#5677fc</color>
     <color name="material_blue_600">#4e6cef</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <color name="material_blue_grey_800">#ff37474f</color>
     <color name="material_blue_grey_900">#ff263238</color>
@@ -188,7 +188,7 @@
     <color name="material_grey_800">#ff424242</color>
     <color name="material_grey_850">#ff303030</color>
     <color name="material_grey_900">#ff212121</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
     <eat-comment/>
     <color name="md_btn_selected">#33969696</color>
     <color name="md_btn_selected_dark">#40CBCBCB</color>
@@ -197,7 +197,7 @@
     <color name="md_edittext_error">#DD2C00</color>
     <color name="md_material_blue_600">#1E88E5</color>
     <color name="md_material_blue_800">#1565C0</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <color name="primary_dark_material_dark">@android:color/black</color>
     <color name="primary_dark_material_light">@color/material_grey_600</color>
@@ -217,7 +217,7 @@
     <color name="switch_thumb_disabled_material_light">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <item name="transparent" type="color">#00000000</item>
     <item name="white" type="color">#FFFFFF</item>
@@ -264,7 +264,7 @@
     <declare-styleable name="ViewStubCompat"><attr name="android:layout"/><attr name="android:inflatedId"/><attr name="android:id"/></declare-styleable>
     <declare-styleable name="WriterView"><attr format="enum" name="more_button_visibility"><enum name="gone" value="0x00000000"/><enum name="invisible" value="0x00000004"/><enum name="visible" value="0x00000008"/></attr></declare-styleable>
     <declare-styleable name="superrecyclerview"><attr format="reference" name="layout_empty"/><attr format="reference" name="layout_moreProgress"/><attr format="reference" name="layout_progress"/><attr format="boolean" name="recyclerClipToPadding"/><attr format="dimension" name="recyclerPadding"/><attr format="dimension" name="recyclerPaddingTop"/><attr format="dimension" name="recyclerPaddingBottom"/><attr format="dimension" name="recyclerPaddingLeft"/><attr format="dimension" name="recyclerPaddingRight"/><attr name="scrollbarStyle"><flag name="insideOverlay" value="0x0"/><flag name="insideInset" value="0x01000000"/><flag name="outsideOverlay" value="0x02000000"/><flag name="outsideInset" value="0x03000000"/></attr><attr format="reference" name="mainLayoutId"/></declare-styleable>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <dimen name="abc_action_bar_content_inset_material">16dp</dimen>
     <dimen name="abc_action_bar_default_height_material">56dp</dimen>
@@ -326,27 +326,27 @@
     <dimen name="abc_text_size_subtitle_material_toolbar">16dp</dimen>
     <dimen name="abc_text_size_title_material">20sp</dimen>
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/dimens.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <dimen name="cardview_compat_inset_shadow">1dp</dimen>
     <dimen name="cardview_default_elevation">2dp</dimen>
     <dimen name="cardview_default_radius">2dp</dimen>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
     <eat-comment/>
     <dimen name="circular_progress_border">4dp</dimen>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_dimens.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_dimens.xml -->
     <eat-comment/>
     <dimen name="com_kakao_padding">10dp</dimen>
     <dimen name="com_kakao_profile_property_margin">10dp</dimen>
     <dimen name="com_kakao_profile_property_text">15sp</dimen>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
     <eat-comment/>
     <dimen name="cpb_default_stroke_width">4dp</dimen>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <item name="dialog_fixed_height_major" type="dimen">80%</item>
     <item name="dialog_fixed_height_minor" type="dimen">100%</item>
@@ -354,22 +354,22 @@
     <item name="dialog_fixed_width_minor" type="dimen">320dp</item>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.1.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="fab_elevation_lollipop">8dp</dimen>
     <dimen name="fab_scroll_threshold">4dp</dimen>
     <dimen name="fab_shadow_size">12dp</dimen>
     <dimen name="fab_size_mini">40dp</dimen>
     <dimen name="fab_size_normal">56dp</dimen>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <item format="float" name="highlight_alpha_material_colored" type="dimen">0.26</item>
     <item format="float" name="highlight_alpha_material_dark" type="dimen">0.20</item>
     <item format="float" name="highlight_alpha_material_light" type="dimen">0.12</item>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <dimen name="item_touch_helper_max_drag_scroll_per_frame">20dp</dimen>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
     <eat-comment/>
     <dimen name="md_action_corner_radius">2dp</dimen>
     <dimen name="md_bg_corner_radius">2dp</dimen>
@@ -403,15 +403,15 @@
     <dimen name="md_simplelistitem_padding_top">8dp</dimen>
     <dimen name="md_title_frame_margin_bottom">12dp</dimen>
     <dimen name="md_title_textsize">20sp</dimen>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <dimen name="notification_large_icon_height">64dp</dimen>
     <dimen name="notification_large_icon_width">64dp</dimen>
     <dimen name="notification_subtext_size">12dp</dimen>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.malinskiy/superrecyclerview/1.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.malinskiy/superrecyclerview/1.1.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="swipe_progress_bar_height">8dp</dimen>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <drawable name="notification_template_icon_bg">#3333B5E5</drawable>
     <item name="action_bar_activity_content" type="id"/>
@@ -419,41 +419,41 @@
     <item name="action_menu_divider" type="id"/>
     <item name="action_menu_presenter" type="id"/>
     <item name="home" type="id"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <item name="item_touch_helper_previous_elevation" type="id"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.bmelnychuk/atv/1.2.4/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.bmelnychuk/atv/1.2.4/res/values/values.xml -->
     <eat-comment/>
     <item name="node_header" type="id"/>
     <item name="node_items" type="id"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <item name="progress_circular" type="id"/>
     <item name="progress_horizontal" type="id"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.malinskiy/superrecyclerview/1.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.malinskiy/superrecyclerview/1.1.0/res/values/values.xml -->
     <eat-comment/>
     <item name="recyclerview_swipe" type="id"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <item name="split_action_bar" type="id"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.bmelnychuk/atv/1.2.4/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.bmelnychuk/atv/1.2.4/res/values/values.xml -->
     <eat-comment/>
     <item name="tree_items" type="id"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <item name="up" type="id"/>
     <integer name="abc_config_activityDefaultDur">220</integer>
     <integer name="abc_config_activityShortDur">150</integer>
     <integer name="abc_max_action_buttons">2</integer>
     <integer name="cancel_button_image_alpha">127</integer>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
     <eat-comment/>
     <integer name="cpb_default_max_sweep_angle">300</integer>
     <integer name="cpb_default_min_sweep_angle">20</integer>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values/version.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values/version.xml -->
     <eat-comment/>
     <integer name="google_play_services_version">4242000</integer>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <integer name="status_bar_notification_info_maxnum">999</integer>
     <string name="abc_action_bar_home_description">Navigate home</string>
@@ -473,11 +473,11 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="action_settings">설정</string>
     <string name="app_name">교복통</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values/strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values/strings.xml -->
     <eat-comment/>
     <string name="auth_client_needs_enabling_title">
       An application requires Google Play Services to be enabled.
@@ -493,17 +493,17 @@
     <string name="auth_client_using_bad_version_title">
       An application attempted to use a bad version of Google Play Services.
   </string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/net.the4thdimension/poly-picker/1.0.11/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/net.the4thdimension/poly-picker/1.0.11/res/values/values.xml -->
     <eat-comment/>
     <string name="cancel">Cancel</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_strings.xml -->
     <eat-comment/>
     <string name="com_kakao_account_cancel">Cancel</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakaolink_strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakaolink_strings.xml -->
     <eat-comment/>
     <string name="com_kakao_alert_appKey">need to declare com.kakao.sdk.AppKey in your AndroidManifest.xml</string>
     <string name="com_kakao_alert_install_kakaotalk">There is no installed KakaoTalk version higher than 4.2.0</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_strings.xml -->
     <eat-comment/>
     <string name="com_kakao_cancel_button">Cancel</string>
     <string name="com_kakao_confirm_logout">Are you sure to log out from this app?</string>
@@ -517,7 +517,7 @@
     <string name="com_kakao_profile_nickname">Nickname</string>
     <string name="com_kakao_profile_userId">Kakao User ID</string>
     <string name="com_kakao_unlink_button">Unlink</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values/strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values/strings.xml -->
     <eat-comment/>
     <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Enable Google Play services</string>
     <string msgid="227660514972886228" name="common_google_play_services_enable_text">This app won\'t work unless you enable Google Play services.</string>
@@ -539,21 +539,21 @@
     <string msgid="1788179980625863495" name="common_google_play_services_update_title">Update Google Play services</string>
     <string name="common_signin_button_text">Sign in</string>
     <string name="common_signin_button_text_long">Sign in with Google</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/values/kakao_strings.xml -->
     <eat-comment/>
     <string name="core_com_kakao_sdk_loading">Loading…</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
     <eat-comment/>
     <item format="float" name="cpb_default_rotation_speed" type="string">1</item>
     <item format="float" name="cpb_default_sweep_speed" type="string">1</item>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.1.0/res/values/values.xml -->
     <eat-comment/>
     <string name="define_FloatingActionButton"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/net.the4thdimension/poly-picker/1.0.11/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/net.the4thdimension/poly-picker/1.0.11/res/values/values.xml -->
     <eat-comment/>
     <string name="done">Done</string>
     <string name="gallery">"Gallery"</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="google_public_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnipME1vd7B6KAWqh+O8nWG7f9S3W0SM6WwmjRKU7lfIkyoCdlIKImP9sxaQtVAVRGBXM4kpwsPmxtJmnuv0dvL2OGtM2JSmW/Xc0GepGyIArLlmmzLlIo8DA8PnLYhrXIKHgoBAxwYhbxdjDllq67SN7TBT51vRz5xfxo9fqOI173AS+lQZ1IK9Y9qQ5Hwc3Umv8UiCl0aMPpZuPF75UtRjYDdNhb8XpBsWngYpI67PRv/FifKrDObWQR5GrXO+pNFxqv9hOUyC/bVZbWG3BfxspqXvKxMN1gHiyroGuI9W15uo7R1F0oGhgXsBtBEPjBl72KTqh0RtgU7Mee21cKQIDAQAB</string>
     <string name="ic_access_alarms"></string>
@@ -990,7 +990,7 @@
     <string name="ic_wifi_tethering"></string>
     <string name="ic_work"></string>
     <string name="kakao_app_key">28f9bf07f2aca12f7d566f4dcdd6e2b1</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.1.0/res/values/values.xml -->
     <eat-comment/>
     <string name="library_FloatingActionButton_author">Oleksandr Melnykov</string>
     <string name="library_FloatingActionButton_authorWebsite">https://github.com/makovkastar/FloatingActionButton</string>
@@ -1001,12 +1001,12 @@
     <string name="library_FloatingActionButton_libraryWebsite">https://github.com/makovkastar/FloatingActionButton</string>
     <string name="library_FloatingActionButton_licenseId">mit</string>
     <string name="library_FloatingActionButton_repositoryLink">https://github.com/makovkastar/FloatingActionButton</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
     <eat-comment/>
     <string name="md_back_label">Back</string>
     <string name="md_cancel_label">Cancel</string>
     <string name="md_done_label">Done</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="policy_statements">
 "교복통" 이용약관\n
@@ -1093,19 +1093,19 @@
 05. 만20세 미만의 미성년자인 이용자가 이동통신사의 청소년 요금제에 가입한 경우, 해당 단말기에서의 In-App결제를 하려면 법정대리인의 동의를 받아야 합니다.\n
 06. 후원(In-App 결제) 안내 화면에서 수락 등의 동의 과정을 거친 경우 이는 이용자가 사용 의사를 밝힌 것으로 판단합니다. 해당 사항은 고객의 의도와 상이하게 타인을 통해 구매되었을 경우도 포함합니다.\n
 </string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/net.the4thdimension/poly-picker/1.0.11/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/net.the4thdimension/poly-picker/1.0.11/res/values/values.xml -->
     <eat-comment/>
     <string name="progress_title">Processing...</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="sku_id">support_v1</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/net.the4thdimension/poly-picker/1.0.11/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/net.the4thdimension/poly-picker/1.0.11/res/values/values.xml -->
     <eat-comment/>
     <string name="take_photo">Take a photo</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="title_activity_add_products">기증하기</string>
     <string name="title_activity_alarm">알람 목록</string>
@@ -1116,13 +1116,13 @@
     <string name="title_activity_support">후원</string>
     <string name="title_activity_support_completed">후원 완료</string>
     <string name="usum_cs_email">usum.dev@gmail.com</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>
     <style name="Animation.AppCompat.Dialog" parent="Base.Animation.AppCompat.Dialog"/>
     <style name="Animation.AppCompat.DropDownUp" parent="Base.Animation.AppCompat.DropDownUp"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/net.the4thdimension/poly-picker/1.0.11/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/net.the4thdimension/poly-picker/1.0.11/res/values/values.xml -->
     <eat-comment/>
     <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light">
         <!--
@@ -1131,7 +1131,7 @@
             backward-compatibility can go here.
         -->
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
@@ -1145,7 +1145,7 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <style name="Base.AlertDialog.AppCompat" parent="android:Widget">
         <item name="android:layout">@layout/abc_alert_dialog_material</item>
@@ -2060,7 +2060,7 @@
         <item name="android:minWidth">56dp</item>
         <item name="android:scaleType">center</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="ButtonAppTheme" parent="android:Widget.Button">
         <item name="android:background">@drawable/apptheme_btn_default_holo_light</item>
@@ -2068,7 +2068,7 @@
         <item name="android:minHeight">44dip</item>
         <item name="android:minWidth">64dip</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <style name="CardView">
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
@@ -2084,7 +2084,7 @@
     <style name="CardView.Light">
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
     <eat-comment/>
     <style name="CircularProgressBar" parent="android:Widget.Holo.ProgressBar">
         <item name="cpb_color">@color/cpb_default_color</item>
@@ -2094,7 +2094,7 @@
         <item name="cpb_sweep_speed">@string/cpb_default_sweep_speed</item>
         <item name="cpb_rotation_speed">@string/cpb_default_rotation_speed</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values/values.xml -->
     <eat-comment/>
     <style name="MD_ActionButton">
         <item name="android:layout_width">wrap_content</item>
@@ -2148,7 +2148,7 @@
         <item name="android:windowEnterAnimation">@anim/popup_enter</item>
         <item name="android:windowExitAnimation">@anim/popup_exit</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/actionbar</item>
@@ -2160,7 +2160,7 @@
         <item name="cardElevation">0dp</item>
         <item name="cardCornerRadius">0dp</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.daimajia.numberprogressbar/library/1.2/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.daimajia.numberprogressbar/library/1.2/res/values/values.xml -->
     <eat-comment/>
     <style name="NumberProgressBar_Beauty_Red">
         <item name="android:layout_height">wrap_content</item>
@@ -2258,7 +2258,7 @@
         <item name="progress_reached_bar_height">1.5dp</item>
         <item name="progress_unreached_bar_height">0.75dp</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <style name="Platform.AppCompat" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
@@ -2489,29 +2489,29 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.0.2/res/values/values.xml -->
     <eat-comment/>
     <style name="Theme.SmoothProgressBarDefaults" parent="android:Theme.Holo">
         <item name="cpbStyle">@style/CircularProgressBar</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <style name="ThemeOverlay.AppCompat" parent="Base.ThemeOverlay.AppCompat"/>
     <style name="ThemeOverlay.AppCompat.ActionBar" parent="Base.ThemeOverlay.AppCompat.ActionBar"/>
     <style name="ThemeOverlay.AppCompat.Dark" parent="Base.ThemeOverlay.AppCompat.Dark"/>
     <style name="ThemeOverlay.AppCompat.Dark.ActionBar" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="ThemeOverlay.AppCompat.Light" parent="Base.ThemeOverlay.AppCompat.Light"/>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.bmelnychuk/atv/1.2.4/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.bmelnychuk/atv/1.2.4/res/values/values.xml -->
     <eat-comment/>
     <style name="TreeNodeStyle">
         <item name="android:paddingLeft">20dp</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="TreeNodeStyleCustom">
         <item name="android:paddingLeft">20dp</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <style name="Widget.AppCompat.ActionBar" parent="Base.Widget.AppCompat.ActionBar">
     </style>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-zh-rCN/values-zh-rCN.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-zh-rCN/values-zh-rCN.xml -->
     <eat-comment/>
     <string msgid="4600421777120114993" name="abc_action_bar_home_description">"转到主屏幕"</string>
     <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s：%2$s"</string>
@@ -19,7 +19,7 @@
     <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"分享方式"</string>
     <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"通过%s分享"</string>
     <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"收起"</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values-zh-rCN/strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values-zh-rCN/strings.xml -->
     <eat-comment/>
     <string msgid="3983201110833868073" name="auth_client_needs_enabling_title">"某个应用要求启用 Google Play 服务。"</string>
     <string msgid="7999585836145154206" name="auth_client_needs_installation_title">"某个应用要求安装 Google Play 服务。"</string>
@@ -47,7 +47,7 @@
     <string msgid="6006316683626838685" name="common_google_play_services_update_title">"更新 Google Play 服务"</string>
     <string msgid="9071884888741449141" name="common_signin_button_text">"登录"</string>
     <string msgid="2429381841831957106" name="common_signin_button_text_long">"使用 Google 帐户登录"</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-zh-rCN/values-zh-rCN.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-zh-rCN/values-zh-rCN.xml -->
     <eat-comment/>
     <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

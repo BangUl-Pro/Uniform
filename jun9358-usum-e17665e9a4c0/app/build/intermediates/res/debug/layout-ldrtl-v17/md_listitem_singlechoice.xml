@@ -32,4 +32,4 @@
         android:focusable="false"
         android:focusableInTouchMode="false" />
 
-</LinearLayout><!-- From: file:/Users/afollestad/Projects/material-dialogs/library/src/main/res/layout-ldrtl/md_listitem_singlechoice.xml --><!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/layout-ldrtl/md_listitem_singlechoice.xml -->
+</LinearLayout><!-- From: file:/Users/afollestad/Projects/material-dialogs/library/src/main/res/layout-ldrtl/md_listitem_singlechoice.xml --><!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/layout-ldrtl/md_listitem_singlechoice.xml -->
