@@ -52,4 +52,4 @@
         android:background="@color/transparent"
         android:padding="12dp"
         android:src="@drawable/ic_more" />
-</RelativeLayout><!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/layout/view_writer.xml -->
+</RelativeLayout><!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/layout/view_writer.xml -->

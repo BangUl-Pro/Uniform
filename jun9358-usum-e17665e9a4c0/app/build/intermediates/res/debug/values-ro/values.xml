@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-ro/values-ro.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-ro/values-ro.xml -->
     <eat-comment/>
     <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Navigați la ecranul de pornire"</string>
     <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s, %2$s"</string>
@@ -19,7 +19,7 @@
     <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Trimiteți la"</string>
     <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"Trimiteți la %s"</string>
     <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Restrângeți"</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values-ro/strings.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/res/values-ro/strings.xml -->
     <eat-comment/>
     <string msgid="3983201110833868073" name="auth_client_needs_enabling_title">"O aplicație necesită activarea Serviciilor Google Play."</string>
     <string msgid="7999585836145154206" name="auth_client_needs_installation_title">"O aplicație necesită instalarea Serviciilor Google Play."</string>
@@ -47,7 +47,7 @@
     <string msgid="6006316683626838685" name="common_google_play_services_update_title">"Actualizaţi Servicii Google Play"</string>
     <string msgid="9071884888741449141" name="common_signin_button_text">"Conectați"</string>
     <string msgid="2429381841831957106" name="common_signin_button_text_long">"Conectați-vă cu Google"</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-ro/values-ro.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-ro/values-ro.xml -->
     <eat-comment/>
     <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">"˃999"</string>
 </resources>

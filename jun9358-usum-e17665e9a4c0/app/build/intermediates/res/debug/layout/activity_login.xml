@@ -36,4 +36,4 @@
             android:text="비회원으로 바로 사용하기"
             android:visibility="gone" />
     </LinearLayout>
-</RelativeLayout><!-- From: file:/Users/IronFactory/AndroidStudioProjects/jun9358-usum-e17665e9a4c0/app/src/main/res/layout/activity_login.xml -->
+</RelativeLayout><!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/layout/activity_login.xml -->
