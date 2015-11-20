@@ -14,12 +14,14 @@ import com.kth.baasio.callback.BaasioUploadCallback;
 import com.kth.baasio.entity.entity.BaasioEntity;
 import com.kth.baasio.entity.file.BaasioFile;
 import com.kth.baasio.exception.BaasioException;
+import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.ProductAddForm;
 import com.songjin.usum.controllers.views.ProductRecyclerView;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.entities.ProductEntity;
 import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +106,13 @@ public class AddProductsActivity extends BaseActivity {
                 }
 
                 showLoadingView();
+
+                Intent intent = new Intent(getApplicationContext(), SocketService.class);
+                intent.putExtra(Global.COMMAND, Global.INSERT_PRODUCT);
+                intent.putExtra(Global.PRODUCT_CARD, productCardDtos);
+                startService(intent);
+
+
                 RequestManager.insertProductsInBackground(productCardDtos, new BaasioCallback<List<BaasioEntity>>() {
                     @Override
                     public void onResponse(List<BaasioEntity> baasioEntities) {

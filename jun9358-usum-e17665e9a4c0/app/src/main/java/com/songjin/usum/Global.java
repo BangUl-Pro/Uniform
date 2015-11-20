@@ -13,6 +13,14 @@ public class Global {
     public static final String LOGIN = "login";
     public static final String SIGN_UP = "signUp";
     public static final String SIGN_IN = "signIn";
+
+    public static final String SEARCH_PRODUCT = "searchProduct";
+    public static final String GET_MY_PRODUCT = "getMyProduct";
+    public static final String INSERT_PRODUCT = "insertProduct";
+
+    public static final String ID = "id";
+    public static final String USER = "user";
+    public static final String SCHOOL = "school";
     public static final String USER_ID = "userId";
     public static final String REAL_NAME = "realName";
     public static final String SEX = "sex";
@@ -21,11 +29,9 @@ public class Global {
     public static final String USER_TYPE = "userType";
     public static final String PHONE = "phone";
     public static final String SCHOOL_ID = "schoolId";
-    public static final String SEARCH_PRODUCT = "searchProduct";
+    public static final String PRODUCT_CARD = "productCard";
 
-    public static final String ID = "id";
-    public static final String USER = "user";
-    public static final String SCHOOL = "school";
+
 
     public static UserEntity userEntity;
 }

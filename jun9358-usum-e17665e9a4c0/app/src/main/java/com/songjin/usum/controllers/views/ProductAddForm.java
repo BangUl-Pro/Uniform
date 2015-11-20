@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.kth.baasio.Baas;
+import com.songjin.usum.Global;
 import com.songjin.usum.HashBiMap;
 import com.songjin.usum.R;
 import com.songjin.usum.constants.Category;
@@ -166,7 +166,7 @@ public class ProductAddForm extends CardView {
             case GUEST:
                 break;
             case STUDENT:
-                UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
+                UserEntity userEntity = Global.userEntity;
                 if (userEntity.schoolId != 0) {
                     SchoolEntity schoolEntity = schoolManager.selectSchool(userEntity.schoolId);
                     selectedSchoolId = schoolEntity.id;
@@ -241,8 +241,8 @@ public class ProductAddForm extends CardView {
         int selectedCondition = inverseCondition.get(conditionAdapter.getItem(conditionPosition));
         productEntity.condition = selectedCondition;
 
-        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
-        productEntity.user_uuid = userEntity.uuid;
+        UserEntity userEntity = Global.userEntity;
+        productEntity.user_id = userEntity.id;
 
         productEntity.contents = viewHolder.contents.getText().toString();
 

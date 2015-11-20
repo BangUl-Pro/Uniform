@@ -7,10 +7,12 @@ import android.util.Log;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.gson.Gson;
 import com.songjin.usum.Global;
 import com.songjin.usum.controllers.activities.LoginActivity;
 import com.songjin.usum.controllers.activities.MainActivity;
 import com.songjin.usum.controllers.activities.SignUpActivity;
+import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.UserEntity;
@@ -291,15 +293,48 @@ public class SocketIO {
 
 
     /**
-     * TODO: 학교 정보 받기
+     * TODO: 학교 정보 요청
      * */
     public void getSchool() {
+        Log.d(TAG, "학교 정보 요청");
         socket.emit(Global.GET_SCHOOL, "");
     }
 
 
     // TODO: 15. 11. 20. 학교 랭킹 요청
     public void getSchoolRanking() {
+        Log.d(TAG, "학교 랭킹 요청");
         socket.emit(Global.GET_SCHOOL_RANKING, "");
+    }
+
+    // TODO: 15. 11. 20. 제품검색
+    public void searchProduct(int schoolId, int sex, int category, int size) {
+        Log.d(TAG, "제품 검색");
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.SCHOOL_ID, schoolId);
+            object.put(Global.SEX, sex);
+            object.put(Global.CATEGORY, category);
+            object.put(Global.SIZE, size);
+
+            socket.emit(Global.SEARCH_PRODUCT, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 20. 제품 등록
+    public void insertProduct(ArrayList<ProductCardDto> productCardDtos) {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(productCardDtos);
+            JSONArray array = new JSONArray(json);
+
+            Log.d(TAG, "array = " + array);
+            socket.emit(Global.INSERT_PRODUCT, array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
