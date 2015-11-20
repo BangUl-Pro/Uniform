@@ -25,18 +25,33 @@ public class SocketService extends Service {
             if (command != null) {
                 if (command.equals(Global.GET_SCHOOL)) {
                     // 학교 정보 요청
-                    socketIO.getSchool();
+                    processGetSchool();
                 } else if (command.equals(Global.SIGN_UP)) {
                     // 회원 가입
                     processSignUp(intent);
                 } else if (command.equals(Global.SIGN_IN)) {
                     // 로그인
                     processSignIn(intent);
+                } else if (command.equals(Global.GET_SCHOOL_RANKING)) {
+                    // 학교 랭킹
+                    processGetSchoolRanking();
                 }
             }
         }
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+
+    // TODO: 15. 11. 20. 학교 랭킹 요청
+    private void processGetSchoolRanking() {
+        socketIO.getSchoolRanking();
+    }
+
+
+    // TODO 학교 정보 요청
+    private void processGetSchool() {
+        socketIO.getSchool();
     }
 
 

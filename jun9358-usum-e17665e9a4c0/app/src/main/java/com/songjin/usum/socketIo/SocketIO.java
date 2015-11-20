@@ -9,7 +9,9 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.songjin.usum.Global;
 import com.songjin.usum.controllers.activities.LoginActivity;
+import com.songjin.usum.controllers.activities.MainActivity;
 import com.songjin.usum.controllers.activities.SignUpActivity;
+import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.UserEntity;
 
@@ -91,12 +93,40 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processSignIn(object);
             }
+        }).on(Global.GET_SCHOOL_RANKING, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processGetSchoolRanking(object);
+            }
         });
     }
 
 
+    // TODO: 15. 11. 20. 학교 랭킹 응답
+    private void processGetSchoolRanking(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.putExtra(Global.GET_SCHOOL_RANKING, code);
+
+            if (code == SocketException.SUCCESS) {
+                // 성공
+                JSONObject schoolObject = object.getJSONObject(Global.SCHOOL);
+                SchoolRanking schoolRanking = new SchoolRanking(schoolObject);
+                intent.putExtra(Global.SCHOOL, schoolRanking);
+            }
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 20. 로그인 응답
     private void processSignIn(JSONObject object) {
-        // 로그인 응답
         Log.d(TAG, "로그인 응답");
         try {
             int code = object.getInt(Global.CODE);
@@ -252,6 +282,12 @@ public class SocketIO {
      * TODO: 학교 정보 받기
      * */
     public void getSchool() {
-        socket.emit(Global.GET_SCHOOL, null);
+        socket.emit(Global.GET_SCHOOL, "");
+    }
+
+
+    // TODO: 15. 11. 20. 학교 랭킹 요청
+    public void getSchoolRanking() {
+        socket.emit(Global.GET_SCHOOL_RANKING, "");
     }
 }

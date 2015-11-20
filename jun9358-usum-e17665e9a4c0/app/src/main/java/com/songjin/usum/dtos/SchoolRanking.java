@@ -6,7 +6,9 @@ import com.songjin.usum.entities.SchoolPointEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SchoolRanking {
+import java.io.Serializable;
+
+public class SchoolRanking implements Serializable {
     public long point;
     public int school_id;
     public String schoolname;
