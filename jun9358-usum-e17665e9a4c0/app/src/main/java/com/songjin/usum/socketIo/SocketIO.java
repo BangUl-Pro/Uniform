@@ -166,6 +166,13 @@ public class SocketIO {
                 // 정식모드
                 intent = new Intent(context, SignUpActivity.class);
             }
+
+            if (code == SocketException.SUCCESS) {
+                // 성공
+                JSONObject userObject = object.getJSONObject(Global.USER);
+                UserEntity user = new UserEntity(userObject);
+                intent.putExtra(Global.USER, user);
+            }
             intent.putExtra(Global.COMMAND, Global.SIGN_UP);
             intent.putExtra(Global.CODE, code);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -110,7 +110,7 @@ public class SignUpActivity extends BaseActivity {
 
                     if (command.equals(Global.SIGN_UP)) {
                         // 회원가입 응답
-                        processSignUp(code);
+                        processSignUp(code, intent);
                     }
                 }
             }
@@ -119,11 +119,15 @@ public class SignUpActivity extends BaseActivity {
 
 
     // TODO 회원가입 응답
-    private void processSignUp(int code) {
+    private void processSignUp(int code, Intent intent) {
         BaseActivity.hideLoadingView();
 
         if (code == SocketException.SUCCESS) {
-            BaseActivity.startActivityOnTopStack(MainActivity.class);
+            UserEntity user = intent.getParcelableExtra(Global.USER);
+            Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+            intent1.putExtra(Global.USER, user);
+            startActivity(intent1);
+//            BaseActivity.startActivityOnTopStack(MainActivity.class);
             finish();
         } else {
             new MaterialDialog.Builder(BaseActivity.context)

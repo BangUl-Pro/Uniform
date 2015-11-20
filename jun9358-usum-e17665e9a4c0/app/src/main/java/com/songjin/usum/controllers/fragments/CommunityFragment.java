@@ -7,28 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.kth.baasio.Baas;
-import com.kth.baasio.callback.BaasioQueryCallback;
-import com.kth.baasio.entity.BaasioBaseEntity;
-import com.kth.baasio.exception.BaasioException;
-import com.kth.baasio.query.BaasioQuery;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
-import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.views.SchoolRankingCardView;
 import com.songjin.usum.controllers.views.SchoolRankingRecyclerView;
 import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.AuthManager;
-import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.managers.SchoolManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CommunityFragment extends SlidingBaseFragment {
     private class ViewHolder {
@@ -43,12 +34,25 @@ public class CommunityFragment extends SlidingBaseFragment {
         }
     }
 
+    private UserEntity userEntity;
     private ViewHolder viewHolder;
+
+
+    public static CommunityFragment newInstance(UserEntity user) {
+        CommunityFragment fragment = new CommunityFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Global.USER, user);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userEntity = getArguments().getParcelable(Global.USER);
     }
+
 
     @Override
     public void onPageSelected() {
@@ -116,7 +120,7 @@ public class CommunityFragment extends SlidingBaseFragment {
     private void initMySchoolRankingCard(ArrayList<SchoolRanking> schoolRankings) {
         SchoolManager schoolManager = new SchoolManager(getActivity());
 
-        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
+//        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
         SchoolEntity mySchoolEntity = schoolManager.selectSchool(userEntity.schoolId);
         viewHolder.mySchoolRankingCardView.setSchoolEntity(mySchoolEntity);
 

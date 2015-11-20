@@ -18,6 +18,7 @@ import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.controllers.fragments.SupportFragment;
 import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.entities.AlarmEntity;
+import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 import com.songjin.usum.slidingtab.SlidingTabsBasicFragment;
 import com.songjin.usum.socketIo.SocketException;
@@ -36,6 +37,8 @@ public class MainActivity extends BaseActivity {
     private SupportFragment supportFragment;
     private SettingFragment settingFragment;
 
+    private UserEntity user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +46,7 @@ public class MainActivity extends BaseActivity {
 
         context = this;
         if (savedInstanceState == null) {
+            user = getIntent().getParcelableExtra(Global.USER);
             ArrayList<SlidingBaseFragment> tabFragments = new ArrayList<>();
 
             communityFragment = new CommunityFragment();

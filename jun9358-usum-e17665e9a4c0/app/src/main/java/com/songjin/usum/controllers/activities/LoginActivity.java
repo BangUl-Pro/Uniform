@@ -170,7 +170,10 @@ public class LoginActivity extends BaseActivity {
         guest.phone = "0";
         guest.schoolId = 0;
 
-        BaseActivity.startActivityOnTopStack(MainActivity.class);
+//        BaseActivity.startActivityOnTopStack(MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra(Global.USER, guest);
+        startActivity(intent);
         finish();
 //        RequestManager.requestSignUp(guest, new BaasioSignInCallback() {
 //            @Override
