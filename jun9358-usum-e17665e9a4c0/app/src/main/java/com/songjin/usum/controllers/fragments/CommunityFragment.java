@@ -65,30 +65,37 @@ public class CommunityFragment extends SlidingBaseFragment {
         intent.putExtra(Global.COMMAND, Global.GET_SCHOOL_RANKING);
         getActivity().startService(intent);
 
-        RequestManager.getSchoolRankingsInBackground(schoolManager, new BaasioQueryCallback() {
-                    @Override
-                    public void onResponse(List<BaasioBaseEntity> entities, List<Object> objects, BaasioQuery baasioQuery, long l) {
-                        ArrayList<SchoolRanking> schoolRankings = new ArrayList<>();
-                        for (BaasioBaseEntity entity : entities) {
-                            schoolRankings.add(new SchoolRanking(entity));
-                        }
-                        viewHolder.schoolRankings.setSchoolRankings(schoolRankings);
-
-                        initMySchoolRankingCard(schoolRankings);
-                    }
-
-                    @Override
-                    public void onException(BaasioException e) {
-                        new MaterialDialog.Builder(BaseActivity.context)
-                                .title(R.string.app_name)
-                                .content("학교순위를 가져오는 중에 문제가 발생하였습니다.")
-                                .show();
-                    }
-                }
-        );
+//        RequestManager.getSchoolRankingsInBackground(schoolManager, new BaasioQueryCallback() {
+//                    @Override
+//                    public void onResponse(List<BaasioBaseEntity> entities, List<Object> objects, BaasioQuery baasioQuery, long l) {
+//                        ArrayList<SchoolRanking> schoolRankings = new ArrayList<>();
+//                        for (BaasioBaseEntity entity : entities) {
+//                            schoolRankings.add(new SchoolRanking(entity));
+//                        }
+//                        viewHolder.schoolRankings.setSchoolRankings(schoolRankings);
+//
+//                        initMySchoolRankingCard(schoolRankings);
+//                    }
+//
+//                    @Override
+//                    public void onException(BaasioException e) {
+//                        new MaterialDialog.Builder(BaseActivity.context)
+//                                .title(R.string.app_name)
+//                                .content("학교순위를 가져오는 중에 문제가 발생하였습니다.")
+//                                .show();
+//                    }
+//                }
+//        );
 
         return view;
     }
+
+
+    public void setSchoolRankings(ArrayList<SchoolRanking> schoolRankings) {
+        viewHolder.schoolRankings.setSchoolRankings(schoolRankings);
+        initMySchoolRankingCard(schoolRankings);
+    }
+
 
     @Override
     public void onResume() {

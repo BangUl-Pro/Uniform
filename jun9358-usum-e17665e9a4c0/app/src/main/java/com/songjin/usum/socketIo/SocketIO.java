@@ -113,9 +113,14 @@ public class SocketIO {
 
             if (code == SocketException.SUCCESS) {
                 // 성공
-                JSONObject schoolObject = object.getJSONObject(Global.SCHOOL);
-                SchoolRanking schoolRanking = new SchoolRanking(schoolObject);
-                intent.putExtra(Global.SCHOOL, schoolRanking);
+                JSONArray schoolArray = object.getJSONArray(Global.SCHOOL);
+                ArrayList<SchoolRanking> schoolRankingList = new ArrayList<>();
+                for (int i = 0; i < schoolArray.length(); i++) {
+                    JSONObject schoolObject = schoolArray.getJSONObject(i);
+                    SchoolRanking schoolRanking = new SchoolRanking(schoolObject);
+                    schoolRankingList.add(schoolRanking);
+                }
+                intent.putExtra(Global.SCHOOL, schoolRankingList);
             }
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);

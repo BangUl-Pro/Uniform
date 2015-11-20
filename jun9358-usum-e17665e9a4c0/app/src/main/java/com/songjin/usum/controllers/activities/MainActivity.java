@@ -7,16 +7,20 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
+import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.fragments.BuyFragment;
 import com.songjin.usum.controllers.fragments.CommunityFragment;
 import com.songjin.usum.controllers.fragments.MyPageFragment;
 import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.controllers.fragments.SupportFragment;
+import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.entities.AlarmEntity;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 import com.songjin.usum.slidingtab.SlidingTabsBasicFragment;
+import com.songjin.usum.socketIo.SocketException;
 
 import java.util.ArrayList;
 
@@ -26,6 +30,12 @@ public class MainActivity extends BaseActivity {
 
     private MenuItem alarmMenuItem;
 
+    private CommunityFragment communityFragment;
+    private BuyFragment buyFragment;
+    private MyPageFragment myPageFragment;
+    private SupportFragment supportFragment;
+    private SettingFragment settingFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +44,18 @@ public class MainActivity extends BaseActivity {
         context = this;
         if (savedInstanceState == null) {
             ArrayList<SlidingBaseFragment> tabFragments = new ArrayList<>();
-            tabFragments.add(new CommunityFragment());
-            tabFragments.add(new BuyFragment());
-            tabFragments.add(new MyPageFragment());
-            tabFragments.add(new SupportFragment());
-            tabFragments.add(new SettingFragment());
+
+            communityFragment = new CommunityFragment();
+            buyFragment = new BuyFragment();
+            myPageFragment = new MyPageFragment();
+            supportFragment = new SupportFragment();
+            settingFragment = new SettingFragment();
+
+            tabFragments.add(communityFragment);
+            tabFragments.add(buyFragment);
+            tabFragments.add(myPageFragment);
+            tabFragments.add(supportFragment);
+            tabFragments.add(settingFragment);
             SettingFragment.context = getApplicationContext();
 
             ArrayList<String> tabTitles = new ArrayList<>();
@@ -94,12 +111,49 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent != null) {
+            String command = intent.getStringExtra(Global.COMMAND);
+            if (command != null) {
+                int code = intent.getIntExtra(Global.CODE, -1);
+                if (code != -1) {
+                    SocketException.printErrMsg(code);
+                    SocketException.toastErrMsg(code);
+
+                    if (command.equals(Global.GET_SCHOOL_RANKING)) {
+                        // 학교 랭킹 응답
+                        processGetSchoolRanking(code, intent);
+                    }
+                }
+            }
+        }
+    }
+
+
+    // TODO: 15. 11. 20. 학교 랭킹 응답
+    private void processGetSchoolRanking(int code, Intent intent) {
+        if (code == SocketException.SUCCESS) {
+            // 성공
+            ArrayList<SchoolRanking> schoolRankings = (ArrayList) intent.getSerializableExtra(Global.SCHOOL);
+            communityFragment.setSchoolRankings(schoolRankings);
+        } else {
+            new MaterialDialog.Builder(BaseActivity.context)
+                    .title(R.string.app_name)
+                    .content("학교순위를 가져오는 중에 문제가 발생하였습니다.")
+                    .show();
+        }
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
 
         updateAlarmStatus();
     }
+
 
     private void updateAlarmStatus() {
         if (alarmMenuItem == null) {
