@@ -5,14 +5,13 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.kth.baasio.entity.BaasioBaseEntity;
 import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.ProductEntity;
 import com.songjin.usum.entities.TransactionEntity;
 
 import java.util.ArrayList;
 
-public class ProductCardDto extends BaasioBaseEntity implements Parcelable {
+public class ProductCardDto implements Parcelable {
     public static final String PROPERTY_PRODUCT_ENTITY = "product_entity";
     public static final String PROPERTY_TRANSACTION_ENTITY = "transaction_entity";
     public static final String PROPERTY_URIS = "uris";

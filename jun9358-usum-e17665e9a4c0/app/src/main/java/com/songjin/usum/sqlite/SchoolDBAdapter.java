@@ -18,7 +18,7 @@ public class SchoolDBAdapter extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE " + SchoolEntity.COLLECTION_NAME + " ( " +
                         SchoolEntity.PROPERTY_ID + " INTEGER, " +
-                        SchoolEntity.PROPERTY_UUID + " TEXT, " +
+//                        SchoolEntity.PROPERTY_UUID + " TEXT, " +
                         SchoolEntity.PROPERTY_SCHOOLNAME + " TEXT, " +
                         SchoolEntity.PROPERTY_ADDRESS + " TEXT, " +
                         SchoolEntity.PROPERTY_CITY + " TEXT, " +

@@ -14,17 +14,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kth.baasio.Baas;
-import com.kth.baasio.query.BaasioQuery;
+import com.songjin.usum.Global;
 import com.songjin.usum.HashBiMap;
 import com.songjin.usum.R;
-import com.songjin.usum.baasio.BaasioApplication;
 import com.songjin.usum.constants.Category;
 import com.songjin.usum.constants.Sex;
 import com.songjin.usum.constants.Size;
 import com.songjin.usum.controllers.activities.SchoolAutoCompleteArrayAdapter;
 import com.songjin.usum.controllers.fragments.SettingFragment;
-import com.songjin.usum.entities.ProductEntity;
 import com.songjin.usum.entities.ReservedCategoryEntity;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.UserEntity;
@@ -39,6 +36,7 @@ public class ProductSearchForm extends LinearLayout {
     private ArrayAdapter<String> sexAdapter;
     private ArrayAdapter<String> categoryAdapter;
     private ArrayAdapter<String> sizeAdapter;
+    private Context context;
 
     public ProductSearchForm(Context context) {
         this(context, null);
@@ -151,7 +149,7 @@ public class ProductSearchForm extends LinearLayout {
                     SettingFragment.addReservedCategory(selectedSchoolId, selectedCategory);
                     SchoolEntity schoolEntity = schoolManager.selectSchool(selectedSchoolId);
                     String msg = schoolEntity.schoolname + "의 " + categoryName + " 카테고리에 새로운 교복이 올라오면 알림이 가도록 예약되었습니다.";
-                    Toast.makeText(BaasioApplication.context, msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                 } else {
                     if (!hasAlready) {
                         return;
@@ -160,7 +158,7 @@ public class ProductSearchForm extends LinearLayout {
                     SettingFragment.removeReservedCategory(selectedSchoolId, selectedCategory);
                     SchoolEntity schoolEntity = schoolManager.selectSchool(selectedSchoolId);
                     String msg = schoolEntity.schoolname + "의 " + categoryName + " 카테고리의 알림 예약이 취소되었습니다.";
-                    Toast.makeText(BaasioApplication.context, msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -170,7 +168,7 @@ public class ProductSearchForm extends LinearLayout {
                 viewHolder.useReservationPushContainer.setVisibility(View.INVISIBLE);
                 break;
             case STUDENT:
-                UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
+                UserEntity userEntity = Global.userEntity;
                 if (userEntity.schoolId != 0) {
                     SchoolEntity schoolEntity = schoolManager.selectSchool(userEntity.schoolId);
                     selectedSchoolId = schoolEntity.id;
@@ -205,55 +203,84 @@ public class ProductSearchForm extends LinearLayout {
         viewHolder.submitButton.performClick();
     }
 
-    public BaasioQuery getSearchQuery() {
-        BaasioQuery query = new BaasioQuery();
-        query.setType(ProductEntity.COLLECTION_NAME);
-        query.setOrderBy(
-                ProductEntity.PROPERTY_CREATED,
-                BaasioQuery.ORDER_BY.DESCENDING
-        );
 
-        String whereString = "";
-
-        if (selectedSchoolId != 0) {
-            if (!whereString.isEmpty()) {
-                whereString += " AND ";
-            }
-            whereString += ProductEntity.PROPERTY_SCHOOL_ID + "=" + selectedSchoolId;
-        }
-
-        HashBiMap<String, Integer> inverseSex = Sex.getHashBiMapExceptAll().inverse();
-        int sexPosition = viewHolder.sex.getSelectedItemPosition();
-        int selectedSex = inverseSex.get(sexAdapter.getItem(sexPosition));
-        if (!whereString.isEmpty()) {
-            whereString += " AND ";
-        }
-        whereString += ProductEntity.PROPERTY_SEX + "=" + selectedSex;
-
-        HashBiMap<String, Integer> inverseCategory = Category.getHashBiMap(selectedSex).inverse();
-        int categoryPosition = viewHolder.category.getSelectedItemPosition();
-        int selectedCategory = inverseCategory.get(categoryAdapter.getItem(categoryPosition));
-        if (selectedCategory != Category.ALL) {
-            if (!whereString.isEmpty()) {
-                whereString += " AND ";
-            }
-            whereString += ProductEntity.PROPERTY_CATEGORY + "=" + selectedCategory;
-        }
-
-        HashBiMap<String, Integer> inverseSize = Size.getHashBiMap(selectedCategory).inverse();
-        int sizePosition = viewHolder.size.getSelectedItemPosition();
-        int selectedSize = inverseSize.get(sizeAdapter.getItem(sizePosition));
-        if (selectedSize != Size.ALL) {
-            if (!whereString.isEmpty()) {
-                whereString += " AND ";
-            }
-            whereString += ProductEntity.PROPERTY_SIZE + "=" + selectedSize;
-        }
-
-        query.setWheres(whereString);
-
-        return query;
+    public int getSelectedSchoolId() {
+        return selectedSchoolId;
     }
+
+    public int getSex() {
+        int sexPosition = viewHolder.sex.getSelectedItemPosition();
+        HashBiMap<String, Integer> inverseSex = Sex.getHashBiMapExceptAll().inverse();
+        int selectedSex = inverseSex.get(sexAdapter.getItem(sexPosition));
+        return selectedSex;
+    }
+
+
+    public int getCategory() {
+        int categoryPosition = viewHolder.category.getSelectedItemPosition();
+        HashBiMap<String, Integer> inverseCategory = Category.getHashBiMap(getSex()).inverse();
+        int selectedCategory = inverseCategory.get(categoryAdapter.getItem(categoryPosition));
+        return selectedCategory;
+    }
+
+
+    public int getSize() {
+        int sizePosition = viewHolder.size.getSelectedItemPosition();
+        HashBiMap<String, Integer> inverseSize = Size.getHashBiMap(getCategory()).inverse();
+        int selectedSize = inverseSize.get(sizeAdapter.getItem(sizePosition));
+        return selectedSize;
+    }
+
+
+//    public BaasioQuery getSearchQuery() {
+//        BaasioQuery query = new BaasioQuery();
+//        query.setType(ProductEntity.COLLECTION_NAME);
+//        query.setOrderBy(
+//                ProductEntity.PROPERTY_CREATED,
+//                BaasioQuery.ORDER_BY.DESCENDING
+//        );
+//
+//        String whereString = "";
+//
+//        if (selectedSchoolId != 0) {
+//            if (!whereString.isEmpty()) {
+//                whereString += " AND ";
+//            }
+//            whereString += ProductEntity.PROPERTY_SCHOOL_ID + "=" + selectedSchoolId;
+//        }
+//
+//        HashBiMap<String, Integer> inverseSex = Sex.getHashBiMapExceptAll().inverse();
+//        int sexPosition = viewHolder.sex.getSelectedItemPosition();
+//        int selectedSex = inverseSex.get(sexAdapter.getItem(sexPosition));
+//        if (!whereString.isEmpty()) {
+//            whereString += " AND ";
+//        }
+//        whereString += ProductEntity.PROPERTY_SEX + "=" + selectedSex;
+//
+//        HashBiMap<String, Integer> inverseCategory = Category.getHashBiMap(selectedSex).inverse();
+//        int categoryPosition = viewHolder.category.getSelectedItemPosition();
+//        int selectedCategory = inverseCategory.get(categoryAdapter.getItem(categoryPosition));
+//        if (selectedCategory != Category.ALL) {
+//            if (!whereString.isEmpty()) {
+//                whereString += " AND ";
+//            }
+//            whereString += ProductEntity.PROPERTY_CATEGORY + "=" + selectedCategory;
+//        }
+//
+//        HashBiMap<String, Integer> inverseSize = Size.getHashBiMap(selectedCategory).inverse();
+//        int sizePosition = viewHolder.size.getSelectedItemPosition();
+//        int selectedSize = inverseSize.get(sizeAdapter.getItem(sizePosition));
+//        if (selectedSize != Size.ALL) {
+//            if (!whereString.isEmpty()) {
+//                whereString += " AND ";
+//            }
+//            whereString += ProductEntity.PROPERTY_SIZE + "=" + selectedSize;
+//        }
+//
+//        query.setWheres(whereString);
+//
+//        return query;
+//    }
 
     public void setOnSubmitListener(OnSubmitListener listener) {
         viewHolder.submitButton.setOnClickListener(listener);

@@ -36,7 +36,6 @@ import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
 
 import java.io.File;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -521,7 +520,7 @@ public class RequestManager {
     public static void insertProductsInBackground(ArrayList<ProductCardDto> productCardDtos, BaasioCallback<List<BaasioEntity>> callback) {
         ArrayList<BaasioEntity> baasioEntities = new ArrayList<>();
         for (ProductCardDto productCardDto : productCardDtos) {
-            baasioEntities.add(productCardDto.productEntity.getBaasioEntity());
+            baasioEntities.add(productCardDto.productEntity.getJson());
         }
         BaasioEntity.saveInBackground(ProductEntity.COLLECTION_NAME, baasioEntities, callback);
     }
@@ -647,7 +646,7 @@ public class RequestManager {
     }
 
     public static void updateProduct(ProductCardDto productCardDto, BaasioCallback<BaasioEntity> callback) {
-        BaasioEntity entity = productCardDto.productEntity.getBaasioEntity();
+        BaasioEntity entity = productCardDto.productEntity.getJson();
         entity.updateInBackground(callback);
     }
 
@@ -679,7 +678,7 @@ public class RequestManager {
     }
 
     public static void deleteProduct(ProductCardDto productCardDto, BaasioCallback<BaasioEntity> callback) {
-        BaasioEntity entity = productCardDto.productEntity.getBaasioEntity();
+        BaasioEntity entity = productCardDto.productEntity.getJson();
         entity.deleteInBackground(callback);
     }
 

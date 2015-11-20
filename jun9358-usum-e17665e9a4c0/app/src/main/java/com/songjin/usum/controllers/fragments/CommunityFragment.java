@@ -13,7 +13,6 @@ import com.songjin.usum.controllers.views.SchoolRankingCardView;
 import com.songjin.usum.controllers.views.SchoolRankingRecyclerView;
 import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.entities.SchoolEntity;
-import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.SchoolManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
@@ -34,23 +33,13 @@ public class CommunityFragment extends SlidingBaseFragment {
         }
     }
 
-    private UserEntity userEntity;
     private ViewHolder viewHolder;
 
-
-    public static CommunityFragment newInstance(UserEntity user) {
-        CommunityFragment fragment = new CommunityFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(Global.USER, user);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userEntity = getArguments().getParcelable(Global.USER);
     }
 
 
@@ -121,7 +110,7 @@ public class CommunityFragment extends SlidingBaseFragment {
         SchoolManager schoolManager = new SchoolManager(getActivity());
 
 //        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
-        SchoolEntity mySchoolEntity = schoolManager.selectSchool(userEntity.schoolId);
+        SchoolEntity mySchoolEntity = schoolManager.selectSchool(Global.userEntity.schoolId);
         viewHolder.mySchoolRankingCardView.setSchoolEntity(mySchoolEntity);
 
         int myRanking = 0;
@@ -129,7 +118,7 @@ public class CommunityFragment extends SlidingBaseFragment {
         for (int i = 0; i < schoolRankings.size(); i++) {
             SchoolRanking schoolRanking = schoolRankings.get(i);
 
-            if (userEntity.schoolId == schoolRanking.school_id) {
+            if (Global.userEntity.schoolId == schoolRanking.school_id) {
                 myRanking = i + 1;
                 myProgress = SchoolRankingCardView.calcProgress(schoolRanking.point, schoolRankings.get(0).point);
                 break;

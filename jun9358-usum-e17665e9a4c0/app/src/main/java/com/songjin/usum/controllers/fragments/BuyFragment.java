@@ -1,15 +1,15 @@
 package com.songjin.usum.controllers.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kth.baasio.exception.BaasioException;
-import com.kth.baasio.query.BaasioQuery;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.melnykov.fab.FloatingActionButton;
+import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.AddProductsActivity;
 import com.songjin.usum.controllers.activities.BaseActivity;
@@ -20,6 +20,7 @@ import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
+import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class BuyFragment extends SlidingBaseFragment {
     private ViewHolder viewHolder;
 
     private ArrayList<ProductCardDto> productCardDtos;
-    private BaasioQuery productCardDtoQuery;
+//    private BaasioQuery productCardDtoQuery;
     private RequestManager.TypedBaasioQueryCallback<ProductCardDto> productCardDtoQueryCallback;
 
     @Override
@@ -88,14 +89,16 @@ public class BuyFragment extends SlidingBaseFragment {
             @Override
             public void onRefresh() {
                 productCardDtos.clear();
-                RequestManager.getProductsInBackground(productCardDtoQuery, false, productCardDtoQueryCallback);
+                getProduct();
+//                RequestManager.getProductsInBackground(productCardDtoQuery, false, productCardDtoQueryCallback);
             }
         });
         viewHolder.products.hideMoreProgress();
         viewHolder.products.setOnMoreListener(new OnMoreListener() {
             @Override
             public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
-                RequestManager.getNextProductsInBackground(productCardDtoQuery, false, productCardDtoQueryCallback);
+//                RequestManager.getNextProductsInBackground(productCardDtoQuery, false, productCardDtoQueryCallback);
+                getProduct();
             }
         });
 
@@ -109,16 +112,36 @@ public class BuyFragment extends SlidingBaseFragment {
         viewHolder.productSearchSlidingLayer.getProductSearchForm().setOnSubmitListener(new ProductSearchForm.OnSubmitListener() {
             @Override
             public void onClick(View v) {
-                productCardDtoQuery = viewHolder.productSearchSlidingLayer.getProductSearchForm().getSearchQuery();
+//                productCardDtoQuery = viewHolder.productSearchSlidingLayer.getProductSearchForm().getSearchQuery();
+
+                getProduct();
 
                 viewHolder.productSearchSlidingLayer.closeLayer(true);
                 productCardDtos.clear();
-                RequestManager.getProductsInBackground(productCardDtoQuery, false, productCardDtoQueryCallback);
+//                RequestManager.getProductsInBackground(productCardDtoQuery, false, productCardDtoQueryCallback);
             }
         });
 
         return view;
     }
+
+
+    private void getProduct() {
+        ProductSearchForm form = viewHolder.productSearchSlidingLayer.getProductSearchForm();
+        int schoolId = form.getSelectedSchoolId();
+        int sex = form.getSex();
+        int category = form.getCategory();
+        int size = form.getSize();
+
+        Intent intent = new Intent(getActivity(), SocketService.class);
+        intent.putExtra(Global.COMMAND, Global.SEARCH_PRODUCT);
+        intent.putExtra(Global.SCHOOL_ID, schoolId);
+        intent.putExtra(Global.SEX, sex);
+        intent.putExtra(Global.CATEGORY, category);
+        intent.putExtra(Global.SIZE, size);
+        getActivity().startService(intent);
+    }
+
 
     @Override
     public void onStart() {
