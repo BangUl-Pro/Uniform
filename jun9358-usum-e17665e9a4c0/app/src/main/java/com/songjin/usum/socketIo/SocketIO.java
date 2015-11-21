@@ -337,4 +337,18 @@ public class SocketIO {
             e.printStackTrace();
         }
     }
+
+
+    // TODO: 15. 11. 21. 유저 프로필 업데이트
+    public void updateUserProfile(UserEntity user) {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(user, UserEntity.class);
+            JSONObject object = new JSONObject(json);
+            Log.d(TAG, "object = " + object);
+            socket.emit(Global.UPDATE_USER_PROFILE, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

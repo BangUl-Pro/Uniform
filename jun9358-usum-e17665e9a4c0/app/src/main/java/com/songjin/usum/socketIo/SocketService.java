@@ -3,6 +3,7 @@ package com.songjin.usum.socketIo;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.songjin.usum.Global;
 import com.songjin.usum.dtos.ProductCardDto;
@@ -26,6 +27,7 @@ public class SocketService extends Service {
         if (intent != null) {
             String command = intent.getStringExtra(Global.COMMAND);
             if (command != null) {
+                Log.d(TAG, "command = " + command);
                 if (command.equals(Global.GET_SCHOOL)) {
                     // 학교 정보 요청
                     processGetSchool();
@@ -44,11 +46,21 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.INSERT_PRODUCT)) {
                     // 제품 등록
                     processInsertProduct(intent);
+                } else if (command.equals(Global.UPDATE_USER_PROFILE)) {
+                    // 유저 프로필 업데이트
+                    processUpdateUserProfile(intent);
                 }
             }
         }
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+
+    // TODO: 15. 11. 21. 유저 프로필 업데이트
+    private void processUpdateUserProfile(Intent intent) {
+        UserEntity user = intent.getParcelableExtra(Global.USER);
+        socketIO.updateUserProfile(user);
     }
 
 

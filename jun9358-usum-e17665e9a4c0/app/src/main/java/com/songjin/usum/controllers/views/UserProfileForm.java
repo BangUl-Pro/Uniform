@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.SchoolAutoCompleteArrayAdapter;
 import com.songjin.usum.entities.SchoolEntity;
@@ -112,7 +113,8 @@ public class UserProfileForm extends ScrollView {
     }
 
     private void setEditMode() {
-        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
+//        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
+        UserEntity userEntity = Global.userEntity;
         viewHolder.realNameEditText.setText(userEntity.realName);
         viewHolder.realNameEditText.setEnabled(false);
         viewHolder.sexRadioGroup.check(getSexResId(userEntity.sex));

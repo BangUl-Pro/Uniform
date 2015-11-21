@@ -13,6 +13,7 @@ public class Global {
     public static final String LOGIN = "login";
     public static final String SIGN_UP = "signUp";
     public static final String SIGN_IN = "signIn";
+    public static final String UPDATE_USER_PROFILE = "updateUserProfile";
 
     public static final String SEARCH_PRODUCT = "searchProduct";
     public static final String GET_MY_PRODUCT = "getMyProduct";
