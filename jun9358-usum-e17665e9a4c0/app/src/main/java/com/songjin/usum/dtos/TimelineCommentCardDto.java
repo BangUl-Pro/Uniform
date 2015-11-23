@@ -1,10 +1,11 @@
 package com.songjin.usum.dtos;
 
-import com.kth.baasio.entity.BaasioBaseEntity;
 import com.songjin.usum.entities.CommentEntity;
 import com.songjin.usum.entities.UserEntity;
 
-public class TimelineCommentCardDto extends BaasioBaseEntity {
+import java.io.Serializable;
+
+public class TimelineCommentCardDto implements Serializable {
     public CommentEntity commentEntity;
     public UserEntity userEntity;
 

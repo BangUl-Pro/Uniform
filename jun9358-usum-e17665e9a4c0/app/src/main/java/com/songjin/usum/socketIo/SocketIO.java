@@ -9,11 +9,14 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 import com.songjin.usum.Global;
+import com.songjin.usum.controllers.activities.EditProfileActivity;
 import com.songjin.usum.controllers.activities.LoginActivity;
 import com.songjin.usum.controllers.activities.MainActivity;
+import com.songjin.usum.controllers.activities.ProductDetailActivity;
 import com.songjin.usum.controllers.activities.SignUpActivity;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.SchoolRanking;
+import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.UserEntity;
 
@@ -101,7 +104,95 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processGetSchoolRanking(object);
             }
+        }).on(Global.UPDATE_USER_PROFILE, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processUpdateUserProfile(object);
+            }
+        }).on(Global.INSERT_TIMELINE_COMMENT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processInsertTimelineComment(object);
+            }
+        }).on(Global.GET_TIMELINE_COMMENT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processGetTimelineComment(object);
+            }
         });
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 글 댓글 불러오기 응답
+    private void processGetTimelineComment(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
+            intent.putExtra(Global.CODE, code);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            if (code == SocketException.SUCCESS) {
+                // 성공
+                Gson gson = new Gson();
+                ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
+                JSONArray timelineCommentArray = object.getJSONArray(Global.TIMELINE_COMMENT);
+                for (int i = 0; i < timelineCommentArray.length(); i++) {
+                    JSONObject timelineCommentObject = timelineCommentArray.getJSONObject(i);
+                    TimelineCommentCardDto comment = gson.fromJson(timelineCommentObject.toString(), TimelineCommentCardDto.class);
+//                    TimelineCommentCardDto comment = new TimelineCommentCardDto();
+                    timelineCommentCardDtos.add(comment);
+                }
+                intent.putExtra(Global.TIMELINE_COMMENT, timelineCommentCardDtos);
+            }
+
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 게시글에 댓글 달기 응답
+    private void processInsertTimelineComment(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE_COMMENT);
+            intent.putExtra(Global.CODE, code);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 21. 유저 프로필 업데이트 응답
+    private void processUpdateUserProfile(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, EditProfileActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.CODE, code);
+
+            if (code == SocketException.SUCCESS) {
+                // 성공
+                Gson gson = new Gson();
+                JSONObject userObject = object.getJSONObject(Global.USER);
+                UserEntity user = gson.fromJson(userObject.toString(), UserEntity.class);
+                intent.putExtra(Global.USER, user);
+            }
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -347,6 +438,31 @@ public class SocketIO {
             JSONObject object = new JSONObject(json);
             Log.d(TAG, "object = " + object);
             socket.emit(Global.UPDATE_USER_PROFILE, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 게시글에 댓글 달기
+    public void insertTimelineComment(String timelineItemId, String commentContent) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
+            object.put(Global.COMMENT_CONTENT, commentContent);
+            socket.emit(Global.INSERT_TIMELINE_COMMENT, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 게시글 댓글 불러오기
+    public void getTimelineComment(String id) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.ID, id);
+            socket.emit(Global.GET_TIMELINE_COMMENT, object);
         } catch (JSONException e) {
             e.printStackTrace();
         }

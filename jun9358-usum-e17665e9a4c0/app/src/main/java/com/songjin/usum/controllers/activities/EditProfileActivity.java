@@ -4,14 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.kth.baasio.Baas;
-import com.kth.baasio.callback.BaasioCallback;
-import com.kth.baasio.entity.user.BaasioUser;
-import com.kth.baasio.exception.BaasioException;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.UserProfileForm;
-import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
 
 public class EditProfileActivity extends BaseActivity {
@@ -47,20 +43,48 @@ public class EditProfileActivity extends BaseActivity {
                 intent.putExtra(Global.USER, viewHolder.userProfileForm.getUserEntity());
                 startService(intent);
 
-                RequestManager.updateUserProfile(viewHolder.userProfileForm.getUserEntity(), new BaasioCallback<BaasioUser>() {
-                    @Override
-                    public void onResponse(BaasioUser baasioUser) {
-                        Baas.io().setSignedInUser(baasioUser);
-                        hideLoadingView();
-                        finish();
-                    }
-
-                    @Override
-                    public void onException(BaasioException e) {
-
-                    }
-                });
+//                RequestManager.updateUserProfile(viewHolder.userProfileForm.getUserEntity(), new BaasioCallback<BaasioUser>() {
+//                    @Override
+//                    public void onResponse(BaasioUser baasioUser) {
+//                        Baas.io().setSignedInUser(baasioUser);
+//                        hideLoadingView();
+//                        finish();
+//                    }
+//
+//                    @Override
+//                    public void onException(BaasioException e) {
+//
+//                    }
+//                });
             }
         });
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent != null) {
+            String command = intent.getStringExtra(Global.COMMAND);
+            if (command != null) {
+                int code = intent.getIntExtra(Global.CODE, -1);
+                SocketException.printErrMsg(code);
+                SocketException.toastErrMsg(code);
+
+                if (code != -1) {
+                    if (command.equals(Global.UPDATE_USER_PROFILE)) {
+                        // 회원 프로필 수정 응답
+                        processUpdateUserProfile(intent);
+                    }
+                }
+            }
+        }
+    }
+
+
+    // TODO: 15. 11. 21. 회원 프로필 수정 응답
+    private void processUpdateUserProfile(Intent intent) {
+        Global.userEntity = intent.getParcelableExtra(Global.USER);
+        hideLoadingView();
+        finish();
     }
 }

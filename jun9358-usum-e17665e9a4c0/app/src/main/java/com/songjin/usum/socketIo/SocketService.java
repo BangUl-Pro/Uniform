@@ -49,11 +49,33 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.UPDATE_USER_PROFILE)) {
                     // 유저 프로필 업데이트
                     processUpdateUserProfile(intent);
+                } else if (command.equals(Global.INSERT_TIMELINE_COMMENT)) {
+                    // 타임라인 글에 댓글 달기
+                    processInsertTimelineComment(intent);
+                } else if (command.equals(Global.GET_TIMELINE_COMMENT)) {
+                    // 타임라인 글 댓글 불러오기
+                    processGetTimelineComment(intent);
                 }
             }
         }
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 글 댓글 불러오기
+    private void processGetTimelineComment(Intent intent) {
+        String id = intent.getStringExtra(Global.ID);
+        socketIO.getTimelineComment(id);
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 글에 댓글 달기
+    private void processInsertTimelineComment(Intent intent) {
+        String timelineItemId = intent.getStringExtra(Global.TIMELINE_ITEM_ID);
+        String commentContent = intent.getStringExtra(Global.COMMENT_CONTENT);
+
+        socketIO.insertTimelineComment(timelineItemId, commentContent);
     }
 
 

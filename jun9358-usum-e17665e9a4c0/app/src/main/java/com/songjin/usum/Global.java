@@ -14,6 +14,10 @@ public class Global {
     public static final String SIGN_UP = "signUp";
     public static final String SIGN_IN = "signIn";
     public static final String UPDATE_USER_PROFILE = "updateUserProfile";
+    public static final String INSERT_TIMELINE_COMMENT = "insertTimelineComment";
+    public static final String TIMELINE_ITEM_ID = "timelineItemId";
+    public static final String COMMENT_CONTENT = "commentContent";
+    public static final String GET_TIMELINE_COMMENT = "getTimelineComment";
 
     public static final String SEARCH_PRODUCT = "searchProduct";
     public static final String GET_MY_PRODUCT = "getMyProduct";
@@ -31,6 +35,8 @@ public class Global {
     public static final String PHONE = "phone";
     public static final String SCHOOL_ID = "schoolId";
     public static final String PRODUCT_CARD = "productCard";
+    public static final String TIMELINE = "timeline";
+    public static final String TIMELINE_COMMENT = "timelineComment";
 
 
 
