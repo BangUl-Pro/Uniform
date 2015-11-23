@@ -3,28 +3,24 @@ package com.songjin.usum.controllers.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.kth.baasio.Baas;
-import com.kth.baasio.entity.entity.BaasioEntity;
-import com.kth.baasio.exception.BaasioException;
-import com.kth.baasio.query.BaasioQuery;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.melnykov.fab.FloatingActionButton;
+import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.TimelineRecyclerView;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.entities.SchoolEntity;
-import com.songjin.usum.entities.TimelineEntity;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketException;
+import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TimelineActivity extends BaseActivity {
     private class ViewHolder {
@@ -41,7 +37,8 @@ public class TimelineActivity extends BaseActivity {
 
     private RequestManager.TypedBaasioQueryCallback<TimelineCardDto> timelineCardDtoQueryCallback;
     private ArrayList<TimelineCardDto> timelineCardDtos;
-    private BaasioQuery timelineCardDtoQuery;
+//    private BaasioQuery timelineCardDtoQuery;
+    private Intent intent;
     private SchoolEntity schoolEntity;
 
     private MenuItem queryTypeMenuItem;
@@ -55,7 +52,7 @@ public class TimelineActivity extends BaseActivity {
 
         timelineCardDtos = new ArrayList<>();
         setQueryToAllTimelines();
-        initCallback();
+//        initCallback();
 
         initViews(R.layout.activity_timeline);
     }
@@ -76,47 +73,100 @@ public class TimelineActivity extends BaseActivity {
         }
 
         timelineCardDtos.clear();
-        RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
+//        RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
+        startService(intent);
     }
 
     private void setQueryToAllTimelines() {
-        timelineCardDtoQuery = new BaasioQuery();
-        timelineCardDtoQuery.setType(TimelineEntity.COLLECTION_NAME);
-        timelineCardDtoQuery.setWheres(TimelineEntity.PROPERTY_SCHOOL_ID + "=" + String.valueOf(schoolEntity.id));
-        timelineCardDtoQuery.setOrderBy(
-                BaasioEntity.PROPERTY_CREATED,
-                BaasioQuery.ORDER_BY.DESCENDING
-        );
+        intent = new Intent(getApplicationContext(), SocketService.class);
+        intent.putExtra(Global.COMMAND, Global.GET_ALL_TIMELINE);
+        intent.putExtra(Global.SCHOOL_ID, schoolEntity.id);
+
+//        timelineCardDtoQuery = new BaasioQuery();
+//        timelineCardDtoQuery.setType(TimelineEntity.COLLECTION_NAME);
+//        timelineCardDtoQuery.setWheres(TimelineEntity.PROPERTY_SCHOOL_ID + "=" + String.valueOf(schoolEntity.id));
+//        timelineCardDtoQuery.setOrderBy(
+//                BaasioEntity.PROPERTY_CREATED,
+//                BaasioQuery.ORDER_BY.DESCENDING
+//        );
     }
 
     private void setQueryToMyTimelines() {
-        timelineCardDtoQuery = new BaasioQuery();
-        timelineCardDtoQuery.setType(TimelineEntity.COLLECTION_NAME);
-        timelineCardDtoQuery.setWheres(
-                TimelineEntity.PROPERTY_SCHOOL_ID + "=" + String.valueOf(schoolEntity.id) + " AND " +
-                        TimelineEntity.PROPERTY_USER_UUID + "=" + Baas.io().getSignedInUser().getUuid().toString()
-        );
-        timelineCardDtoQuery.setOrderBy(
-                BaasioEntity.PROPERTY_CREATED,
-                BaasioQuery.ORDER_BY.DESCENDING
-        );
+        intent = new Intent(getApplicationContext(), SocketService.class);
+        intent.putExtra(Global.COMMAND, Global.GET_MY_TIMELINE);
+        intent.putExtra(Global.SCHOOL_ID, schoolEntity.id);
+        intent.putExtra(Global.USER_ID, Global.userEntity.id);
+
+//        timelineCardDtoQuery = new BaasioQuery();
+//        timelineCardDtoQuery.setType(TimelineEntity.COLLECTION_NAME);
+//        timelineCardDtoQuery.setWheres(
+//                TimelineEntity.PROPERTY_SCHOOL_ID + "=" + String.valueOf(schoolEntity.id) + " AND " +
+//                        TimelineEntity.PROPERTY_USER_UUID + "=" + Baas.io().getSignedInUser().getUuid().toString()
+//        );
+//        timelineCardDtoQuery.setOrderBy(
+//                BaasioEntity.PROPERTY_CREATED,
+//                BaasioQuery.ORDER_BY.DESCENDING
+//        );
     }
 
-    private void initCallback() {
-        timelineCardDtoQueryCallback = new RequestManager.TypedBaasioQueryCallback<TimelineCardDto>() {
-            @Override
-            public void onResponse(List<TimelineCardDto> entities) {
-                timelineCardDtos.addAll(entities);
-                viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
-                viewHolder.timelines.hideMoreProgress();
-            }
+//    private void initCallback() {
+//        timelineCardDtoQueryCallback = new RequestManager.TypedBaasioQueryCallback<TimelineCardDto>() {
+//            @Override
+//            public void onResponse(List<TimelineCardDto> entities) {
+//                timelineCardDtos.addAll(entities);
+//                viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
+//                viewHolder.timelines.hideMoreProgress();
+//            }
+//
+//            @Override
+//            public void onException(BaasioException e) {
+//                viewHolder.timelines.hideMoreProgress();
+//            }
+//        };
+//    }
 
-            @Override
-            public void onException(BaasioException e) {
-                viewHolder.timelines.hideMoreProgress();
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent != null) {
+            String command = intent.getStringExtra(Global.COMMAND);
+            if (command != null) {
+                int code = intent.getIntExtra(Global.CODE, -1);
+                if (code != -1) {
+                    SocketException.toastErrMsg(code);
+                    SocketException.printErrMsg(code);
+                    if (command.equals(Global.GET_ALL_TIMELINE)) {
+                        // 타임라인 모두 받아오기 응답
+                        processGetAllTimeline(code, intent);
+                    } else if (command.equals(Global.GET_MY_TIMELINE)) {
+                        // 타임라인 내 글 받아오기 응답
+                        processGetMyTimeline(code, intent);
+                    }
+                }
             }
-        };
+        }
     }
+
+
+    // TODO: 15. 11. 23. 타임라인 모두 받아오기 응답
+    private void processGetAllTimeline(int code, Intent intent) {
+        if (code == SocketException.SUCCESS) {
+            ArrayList<TimelineCardDto> timelineCardDtos = intent.getParcelableArrayListExtra(Global.TIMELINE);
+            viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
+        }
+        viewHolder.timelines.hideMoreProgress();
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 모두 받아오기 응답
+    private void processGetMyTimeline(int code, Intent intent) {
+        if (code == SocketException.SUCCESS) {
+            ArrayList<TimelineCardDto> timelineCardDtos = intent.getParcelableArrayListExtra(Global.TIMELINE);
+            viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
+        }
+        viewHolder.timelines.hideMoreProgress();
+    }
+
 
     @Override
     protected void initViews(int layoutResID) {
@@ -128,7 +178,7 @@ public class TimelineActivity extends BaseActivity {
 
         viewHolder = new ViewHolder(getWindow().getDecorView());
 
-        UserEntity signedUser = new UserEntity(Baas.io().getSignedInUser());
+        UserEntity signedUser = Global.userEntity;
         if (signedUser.schoolId != schoolEntity.id) {
             viewHolder.writeTimelineButton.setVisibility(View.GONE);
         }
@@ -143,14 +193,16 @@ public class TimelineActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 timelineCardDtos.clear();
-                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
+                startService(intent);
+//                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
             }
         });
 
         viewHolder.timelines.setOnMoreListener(new OnMoreListener() {
             @Override
             public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
-                RequestManager.getNextTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
+                startService(intent);
+//                RequestManager.getNextTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
             }
         });
     }
@@ -188,7 +240,8 @@ public class TimelineActivity extends BaseActivity {
                     queryTypeMenuItem.setTitle("내가쓴글");
                     setQueryToAllTimelines();
                 }
-                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
+                startService(intent);
+//                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
 
                 return true;
             default:

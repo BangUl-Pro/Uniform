@@ -14,8 +14,11 @@ import com.songjin.usum.controllers.activities.LoginActivity;
 import com.songjin.usum.controllers.activities.MainActivity;
 import com.songjin.usum.controllers.activities.ProductDetailActivity;
 import com.songjin.usum.controllers.activities.SignUpActivity;
+import com.songjin.usum.controllers.activities.TimelineActivity;
+import com.songjin.usum.controllers.activities.TimelineDetailActivity;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.SchoolRanking;
+import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.UserEntity;
@@ -122,7 +125,75 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processGetTimelineComment(object);
             }
+        }).on(Global.GET_ALL_TIMELINE, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processGetAllTimeline(object);
+            }
+        }).on(Global.GET_MY_TIMELINE, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processGetMyTimeline(object);
+            }
         });
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 글 모두 불러오기 응답
+    private void processGetAllTimeline(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, TimelineActivity.class);
+            intent.putExtra(Global.COMMAND, Global.GET_ALL_TIMELINE);
+            intent.putExtra(Global.CODE, code);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (code == SocketException.SUCCESS) {
+                // 성공
+                ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
+                JSONArray timelineArray = object.getJSONArray(Global.TIMELINE);
+                for (int i = 0; i < timelineArray.length(); i++) {
+                    JSONObject timelineObject = timelineArray.getJSONObject(i);
+                    Gson gson = new Gson();
+                    TimelineCardDto timelineCardDto = gson.fromJson(timelineObject.toString(), TimelineCardDto.class);
+                    timelineCardDtos.add(timelineCardDto);
+                }
+                intent.putExtra(Global.TIMELINE, timelineCardDtos);
+            }
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 글 모두 불러오기 응답
+    private void processGetMyTimeline(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, TimelineActivity.class);
+            intent.putExtra(Global.COMMAND, Global.GET_MY_TIMELINE);
+            intent.putExtra(Global.CODE, code);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (code == SocketException.SUCCESS) {
+                // 성공
+                ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
+                JSONArray timelineArray = object.getJSONArray(Global.TIMELINE);
+                for (int i = 0; i < timelineArray.length(); i++) {
+                    JSONObject timelineObject = timelineArray.getJSONObject(i);
+                    Gson gson = new Gson();
+                    TimelineCardDto timelineCardDto = gson.fromJson(timelineObject.toString(), TimelineCardDto.class);
+                    timelineCardDtos.add(timelineCardDto);
+                }
+                intent.putExtra(Global.TIMELINE, timelineCardDtos);
+            }
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -131,7 +202,11 @@ public class SocketIO {
         try {
             int code = object.getInt(Global.CODE);
 
-            Intent intent = new Intent(context, ProductDetailActivity.class);
+            Intent intent;
+            if (object.getInt(Global.FROM) == 0)
+                intent = new Intent(context, ProductDetailActivity.class);
+            else
+                intent = new Intent(context, TimelineDetailActivity.class);
             intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
             intent.putExtra(Global.CODE, code);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -161,8 +236,14 @@ public class SocketIO {
     private void processInsertTimelineComment(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            int from = object.getInt(Global.FROM);
 
-            Intent intent = new Intent(context, ProductDetailActivity.class);
+            Intent intent;
+            if (from == 0)
+                intent = new Intent(context, ProductDetailActivity.class);
+            else
+                intent = new Intent(context, TimelineDetailActivity.class);
+
             intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE_COMMENT);
             intent.putExtra(Global.CODE, code);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -445,11 +526,12 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 게시글에 댓글 달기
-    public void insertTimelineComment(String timelineItemId, String commentContent) {
+    public void insertTimelineComment(String timelineItemId, String commentContent, int from) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
             object.put(Global.COMMENT_CONTENT, commentContent);
+            object.put(Global.FROM, from);
             socket.emit(Global.INSERT_TIMELINE_COMMENT, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -458,11 +540,37 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 게시글 댓글 불러오기
-    public void getTimelineComment(String id) {
+    public void getTimelineComment(String id, int from) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.ID, id);
+            object.put(Global.FROM, from);
             socket.emit(Global.GET_TIMELINE_COMMENT, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 글 모두 불러오기
+    public void getAllTimeline(int schoolId) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.SCHOOL_ID, schoolId);
+            socket.emit(Global.GET_ALL_TIMELINE, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 내 글 불러오기
+    public void getMyTimeline(int schoolId, String userId) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.SCHOOL_ID, schoolId);
+            object.put(Global.USER_ID, userId);
+            socket.emit(Global.GET_ALL_TIMELINE, object);
         } catch (JSONException e) {
             e.printStackTrace();
         }

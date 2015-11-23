@@ -55,6 +55,12 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.GET_TIMELINE_COMMENT)) {
                     // 타임라인 글 댓글 불러오기
                     processGetTimelineComment(intent);
+                } else if (command.equals(Global.GET_ALL_TIMELINE)) {
+                    // 타임라인 글 모두 불러오기
+                    processGetAllTimeline(intent);
+                } else if (command.equals(Global.GET_MY_TIMELINE)) {
+                    // 타임라인 글 내 글 불러오기
+                    processGetMyTimeline(intent);
                 }
             }
         }
@@ -63,10 +69,29 @@ public class SocketService extends Service {
     }
 
 
+    // TODO: 15. 11. 23. 타임라인 글 모두 불러오기
+    private void processGetAllTimeline(Intent intent) {
+        int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
+        if (schoolId != -1)
+            socketIO.getAllTimeline(schoolId);
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 내 글 불러오기
+    private void processGetMyTimeline(Intent intent) {
+        int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
+        String userId = intent.getStringExtra(Global.USER_ID);
+        if (schoolId != -1 && userId != null)
+            socketIO.getMyTimeline(schoolId, userId);
+    }
+
+
     // TODO: 15. 11. 23. 타임라인 글 댓글 불러오기
     private void processGetTimelineComment(Intent intent) {
         String id = intent.getStringExtra(Global.ID);
-        socketIO.getTimelineComment(id);
+        int from = intent.getIntExtra(Global.FROM, -1);
+
+        socketIO.getTimelineComment(id, from);
     }
 
 
@@ -74,8 +99,9 @@ public class SocketService extends Service {
     private void processInsertTimelineComment(Intent intent) {
         String timelineItemId = intent.getStringExtra(Global.TIMELINE_ITEM_ID);
         String commentContent = intent.getStringExtra(Global.COMMENT_CONTENT);
+        int from = intent.getIntExtra(Global.FROM, -1);
 
-        socketIO.insertTimelineComment(timelineItemId, commentContent);
+        socketIO.insertTimelineComment(timelineItemId, commentContent, from);
     }
 
 

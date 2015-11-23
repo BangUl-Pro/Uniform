@@ -18,10 +18,14 @@ public class Global {
     public static final String TIMELINE_ITEM_ID = "timelineItemId";
     public static final String COMMENT_CONTENT = "commentContent";
     public static final String GET_TIMELINE_COMMENT = "getTimelineComment";
+    public static final String DELETE_FILE = "deleteFile";
 
     public static final String SEARCH_PRODUCT = "searchProduct";
     public static final String GET_MY_PRODUCT = "getMyProduct";
     public static final String INSERT_PRODUCT = "insertProduct";
+    public static final String GET_ALL_TIMELINE = "getAllTimeline";
+    public static final String GET_MY_TIMELINE = "getMyTimeline";
+    public static final String UPDATE_TIMELINE = "updateTimeline";
 
     public static final String ID = "id";
     public static final String USER = "user";
@@ -37,6 +41,8 @@ public class Global {
     public static final String PRODUCT_CARD = "productCard";
     public static final String TIMELINE = "timeline";
     public static final String TIMELINE_COMMENT = "timelineComment";
+    public static final String FROM = "from";
+    public static final String FILE = "file";
 
 
 

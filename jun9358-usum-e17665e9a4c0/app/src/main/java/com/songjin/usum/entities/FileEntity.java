@@ -11,9 +11,11 @@ public class FileEntity implements Parcelable {
     public static final String COLLECTION_NAME = "files";
 
 //    public static final String PROPERTY_UUID = BaasioBaseEntity.PROPERTY_UUID;
+    public static final String PROPERTY_ID = "id";
     public static final String PROPERTY_PARENT_UUID = "parent_uuid";
 
 //    public String uuid;
+    public String id;
     public String parent_uuid;
 
     public static final Creator<FileEntity> CREATOR = new Creator<FileEntity>() {
@@ -40,12 +42,14 @@ public class FileEntity implements Parcelable {
 
     public void set(Bundle bundle) {
 //        this.uuid = bundle.getString(PROPERTY_UUID);
+        this.id = bundle.getString(PROPERTY_ID);
         this.parent_uuid = bundle.getString(PROPERTY_PARENT_UUID);
     }
 
     public void set(JSONObject object) {
 //        this.uuid = object.getUuid().toString();
         try {
+            this.id = object.getString(PROPERTY_ID);
             if (object.getString(PROPERTY_PARENT_UUID) != null) {
                 this.parent_uuid = object.getString(PROPERTY_PARENT_UUID);
             }
@@ -57,6 +61,7 @@ public class FileEntity implements Parcelable {
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
 //        bundle.putString(PROPERTY_UUID, this.uuid);
+        bundle.putString(PROPERTY_ID, this.id);
         bundle.putString(PROPERTY_PARENT_UUID, this.parent_uuid);
 
         return bundle;

@@ -1,5 +1,6 @@
 package com.songjin.usum.controllers.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -7,20 +8,18 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.kth.baasio.callback.BaasioCallback;
-import com.kth.baasio.entity.entity.BaasioEntity;
-import com.kth.baasio.exception.BaasioException;
+import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.TimelineCardView;
 import com.songjin.usum.controllers.views.TimelineCommentRecyclerView;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.managers.AuthManager;
-import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketException;
+import com.songjin.usum.socketIo.SocketService;
 import com.songjin.usum.utils.StringUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TimelineDetailActivity extends BaseActivity {
     private class ViewHolder {
@@ -73,21 +72,77 @@ public class TimelineDetailActivity extends BaseActivity {
 
     public void requestTimelineComments() {
         showLoadingView();
-        RequestManager.getTimelineComments(timelineCardDto.timelineEntity.uuid, new RequestManager.TypedBaasioQueryCallback<TimelineCommentCardDto>() {
-            @Override
-            public void onResponse(List<TimelineCommentCardDto> entities) {
-                ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
-                timelineCommentCardDtos.addAll(entities);
-                viewHolder.comments.setTimelineCommentCardDtos(timelineCommentCardDtos);
+        Intent intent = new Intent(getApplicationContext(), SocketService.class);
+        intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
+        intent.putExtra(Global.ID, timelineCardDto.timelineEntity.id);
+        intent.putExtra(Global.FROM, 1);
+        startService(intent);
 
-                hideLoadingView();
-            }
+//        RequestManager.getTimelineComments(timelineCardDto.timelineEntity.id, new RequestManager.TypedBaasioQueryCallback<TimelineCommentCardDto>() {
+//            @Override
+//            public void onResponse(List<TimelineCommentCardDto> entities) {
+//                ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
+//                timelineCommentCardDtos.addAll(entities);
+//                viewHolder.comments.setTimelineCommentCardDtos(timelineCommentCardDtos);
+//
+//                hideLoadingView();
+//            }
+//
+//            @Override
+//            public void onException(BaasioException e) {
+//                hideLoadingView();
+//            }
+//        });
+    }
 
-            @Override
-            public void onException(BaasioException e) {
-                hideLoadingView();
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent != null) {
+            String command = intent.getStringExtra(Global.COMMAND);
+            if (command != null) {
+                int code = intent.getIntExtra(Global.CODE, -1);
+                if (code != -1) {
+                    SocketException.printErrMsg(code);
+                    SocketException.toastErrMsg(code);
+
+                    if (command.equals(Global.GET_TIMELINE_COMMENT)) {
+                        // 타임라인 댓글 요청 응답
+                        processGetTimelineComment(code, intent);
+                    } else if (command.equals(Global.INSERT_TIMELINE_COMMENT)) {
+                        // 타임라인 댓글 입력 응답
+                        processInsertTimelineComment(code);
+                    }
+                }
             }
-        });
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 댓글 작성 응답
+    private void processInsertTimelineComment(int code) {
+        viewHolder.writeCommentButton.setEnabled(true);
+        if (code == SocketException.SUCCESS) {
+            requestTimelineComments();
+            viewHolder.commentContents.setText("");
+            viewHolder.commentContents.clearFocus();
+        } else {
+            new MaterialDialog.Builder(BaseActivity.context)
+                    .title(R.string.app_name)
+                    .content("덧글을 작성하는 도중에 문제가 발생하였습니다.")
+                    .show();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 댓글 요청 응답
+    private void processGetTimelineComment(int code, Intent intent) {
+        if (code == SocketException.SUCCESS) {
+            // 성공
+            ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = (ArrayList) intent.getSerializableExtra(Global.TIMELINE_COMMENT);
+            viewHolder.comments.setTimelineCommentCardDtos(timelineCommentCardDtos);
+        }
+        hideLoadingView();
     }
 
     @Override
@@ -123,7 +178,7 @@ public class TimelineDetailActivity extends BaseActivity {
         viewHolder.writeCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String timelineItemUuid = timelineCardDto.timelineEntity.uuid;
+                String timelineItemUuid = timelineCardDto.timelineEntity.id;
                 String commentContents = viewHolder.commentContents.getText().toString();
 
                 if (StringUtil.isEmptyString(timelineItemUuid)) {
@@ -140,28 +195,34 @@ public class TimelineDetailActivity extends BaseActivity {
                 }
 
                 viewHolder.writeCommentButton.setEnabled(false);
-                RequestManager.insertTimelineComment(
-                        timelineItemUuid,
-                        commentContents,
-                        new BaasioCallback<BaasioEntity>() {
-                            @Override
-                            public void onResponse(BaasioEntity baasioEntity) {
-                                requestTimelineComments();
-                                viewHolder.commentContents.setText("");
-                                viewHolder.commentContents.clearFocus();
-                                viewHolder.writeCommentButton.setEnabled(true);
-                            }
+                Intent intent = new Intent(getApplicationContext(), SocketService.class);
+                intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE_COMMENT);
+                intent.putExtra(Global.TIMELINE_ITEM_ID, timelineItemUuid);
+                intent.putExtra(Global.COMMENT_CONTENT, commentContents);
+                intent.putExtra(Global.FROM, 1);
 
-                            @Override
-                            public void onException(BaasioException e) {
-                                new MaterialDialog.Builder(BaseActivity.context)
-                                        .title(R.string.app_name)
-                                        .content("덧글을 작성하는 도중에 문제가 발생하였습니다.")
-                                        .show();
-                                viewHolder.writeCommentButton.setEnabled(true);
-                            }
-                        }
-                );
+//                RequestManager.insertTimelineComment(
+//                        timelineItemUuid,
+//                        commentContents,
+//                        new BaasioCallback<BaasioEntity>() {
+//                            @Override
+//                            public void onResponse(BaasioEntity baasioEntity) {
+//                                requestTimelineComments();
+//                                viewHolder.commentContents.setText("");
+//                                viewHolder.commentContents.clearFocus();
+//                                viewHolder.writeCommentButton.setEnabled(true);
+//                            }
+//
+//                            @Override
+//                            public void onException(BaasioException e) {
+//                                new MaterialDialog.Builder(BaseActivity.context)
+//                                        .title(R.string.app_name)
+//                                        .content("덧글을 작성하는 도중에 문제가 발생하였습니다.")
+//                                        .show();
+//                                viewHolder.writeCommentButton.setEnabled(true);
+//                            }
+//                        }
+//                );
             }
         });
     }

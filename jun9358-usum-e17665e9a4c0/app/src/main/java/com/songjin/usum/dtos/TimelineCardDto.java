@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.kth.baasio.entity.BaasioBaseEntity;
 import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.LikeEntity;
 import com.songjin.usum.entities.TimelineEntity;
@@ -12,7 +11,7 @@ import com.songjin.usum.entities.UserEntity;
 
 import java.util.ArrayList;
 
-public class TimelineCardDto extends BaasioBaseEntity implements Parcelable {
+public class TimelineCardDto implements Parcelable {
     public static final String COLLECTION_NAME = "timeline_card_dto";
 
     public static final String PROPERTY_TIMELINE_ENTITY = "timeline_entity";

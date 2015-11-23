@@ -12,13 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.kth.baasio.Baas;
-import com.kth.baasio.callback.BaasioCallback;
-import com.kth.baasio.callback.BaasioDownloadCallback;
-import com.kth.baasio.callback.BaasioUploadCallback;
-import com.kth.baasio.entity.entity.BaasioEntity;
-import com.kth.baasio.entity.file.BaasioFile;
-import com.kth.baasio.exception.BaasioException;
+import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.AttachedImageRecyclerView;
 import com.songjin.usum.controllers.views.WriterView;
@@ -26,6 +20,7 @@ import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -99,11 +94,20 @@ public class TimelineWriteActivity extends BaseActivity {
                     return true;
                 }
 
-                UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
+                UserEntity userEntity = Global.userEntity;
 
                 onWriteBefore();
                 if (isUpdate) {
                     timelineCardDtoForUpdate.timelineEntity.contents = contents;
+                    Intent intent = new Intent(getApplicationContext(), SocketService.class);
+                    intent.putExtra(Global.COMMAND, Global.DELETE_FILE);
+                    intent.putExtra(Global.FILE, timelineCardDtoForUpdate.fileEntities);
+                    startService(intent);
+
+                    intent = new Intent(getApplicationContext(), SocketService.class);
+                    intent.putExtra(Global.COMMAND, Global.UPDATE_TIMELINE);
+                    startService(intent);
+
                     RequestManager.deleteFileEntities(timelineCardDtoForUpdate.fileEntities);
                     RequestManager.updateTimeline(timelineCardDtoForUpdate, timelineInsertCallback);
                 } else {
@@ -164,7 +168,8 @@ public class TimelineWriteActivity extends BaseActivity {
             }
             viewHolder.selectedImages.setUris(selectedImageUris);
         } else {
-            viewHolder.writerView.setUserEntity(new UserEntity(Baas.io().getSignedInUser()));
+//            viewHolder.writerView.setUserEntity(new UserEntity(Baas.io().getSignedInUser()));
+            viewHolder.writerView.setUserEntity(Global.userEntity);
             viewHolder.writerView.setWrittenTime(System.currentTimeMillis());
         }
     }
