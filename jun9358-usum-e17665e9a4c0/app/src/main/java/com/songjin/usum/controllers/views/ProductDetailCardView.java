@@ -26,6 +26,7 @@ import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.gcm.PushManager;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
@@ -227,7 +228,7 @@ public class ProductDetailCardView extends CardView {
                 switch (productCardDto.transactionEntity.status) {
                     case REGISTERED:
                         intent.putExtra(Global.STATUS, TransactionEntity.STATUS_TYPE.REQUESTED.ordinal());
-                        RequestManager.updateTransactionStatus(productCardDto.transactionEntity, TransactionEntity.STATUS_TYPE.REQUESTED, callback);
+//                        RequestManager.updateTransactionStatus(productCardDto.transactionEntity, TransactionEntity.STATUS_TYPE.REQUESTED, callback);
                         break;
                     case REQUESTED:
                         intent.putExtra(Global.STATUS, TransactionEntity.STATUS_TYPE.SENDED.ordinal());
@@ -270,28 +271,28 @@ public class ProductDetailCardView extends CardView {
                 intent.putExtra(Global.FROM, 2);
                 getContext().startService(intent);
 
-                RequestManager.getTimelineComments(productCardDto.productEntity.user_id, new RequestManager.TypedBaasioQueryCallback<TimelineCommentCardDto>() {
-                    @Override
-                    public void onResponse(List<TimelineCommentCardDto> entities) {
-                        ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
-                        timelineCommentCardDtos.addAll(entities);
-                        for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
-                            RequestManager.deleteComment(timelineCommentCardDto, new BaasioCallback<BaasioEntity>() {
-                                @Override
-                                public void onResponse(BaasioEntity baasioEntity) {
-                                }
-
-                                @Override
-                                public void onException(BaasioException e) {
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onException(BaasioException e) {
-                    }
-                });
+//                RequestManager.getTimelineComments(productCardDto.productEntity.user_id, new RequestManager.TypedBaasioQueryCallback<TimelineCommentCardDto>() {
+//                    @Override
+//                    public void onResponse(List<TimelineCommentCardDto> entities) {
+//                        ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
+//                        timelineCommentCardDtos.addAll(entities);
+//                        for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
+//                            RequestManager.deleteComment(timelineCommentCardDto, new BaasioCallback<BaasioEntity>() {
+//                                @Override
+//                                public void onResponse(BaasioEntity baasioEntity) {
+//                                }
+//
+//                                @Override
+//                                public void onException(BaasioException e) {
+//                                }
+//                            });
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onException(BaasioException e) {
+//                    }
+//                });
             }
         });
         viewHolder.updateButton.setOnClickListener(new OnClickListener() {
@@ -305,23 +306,28 @@ public class ProductDetailCardView extends CardView {
             @Override
             public void onClick(View v) {
                 BaseActivity.showLoadingView();
-                RequestManager.deleteProduct(productCardDto, new BaasioCallback<BaasioEntity>() {
-                    @Override
-                    public void onResponse(BaasioEntity baasioEntity) {
-                        BaseActivity.hideLoadingView();
-                        ((Activity) BaseActivity.context).finish();
-                    }
+                Intent intent = new Intent(getContext(), SocketService.class);
+                intent.putExtra(Global.COMMAND, Global.DELETE_PRODUCT);
+                intent.putExtra(Global.PRODUCT_CARD, productCardDto);
+                getContext().startService(intent);
 
-                    @Override
-                    public void onException(BaasioException e) {
-                        BaseActivity.hideLoadingView();
-
-                        new MaterialDialog.Builder(BaseActivity.context)
-                                .title(R.string.app_name)
-                                .content("상품을 삭제하는 중에 문제가 발생하였습니다.")
-                                .show();
-                    }
-                });
+//                RequestManager.deleteProduct(productCardDto, new BaasioCallback<BaasioEntity>() {
+//                    @Override
+//                    public void onResponse(BaasioEntity baasioEntity) {
+//                        BaseActivity.hideLoadingView();
+//                        ((Activity) BaseActivity.context).finish();
+//                    }
+//
+//                    @Override
+//                    public void onException(BaasioException e) {
+//                        BaseActivity.hideLoadingView();
+//
+//                        new MaterialDialog.Builder(BaseActivity.context)
+//                                .title(R.string.app_name)
+//                                .content("상품을 삭제하는 중에 문제가 발생하였습니다.")
+//                                .show();
+//                    }
+//                });
             }
         });
         viewHolder.productAddForm.setAttachImageButtonOnClickListener(new OnClickListener() {
@@ -390,6 +396,21 @@ public class ProductDetailCardView extends CardView {
                 break;
             case PARENT:
                 break;
+        }
+    }
+
+
+    public void processDeleteProduct(int code) {
+        if (code == SocketException.SUCCESS) {
+            BaseActivity.hideLoadingView();
+            ((Activity) BaseActivity.context).finish();
+        } else {
+            BaseActivity.hideLoadingView();
+
+            new MaterialDialog.Builder(BaseActivity.context)
+                    .title(R.string.app_name)
+                    .content("상품을 삭제하는 중에 문제가 발생하였습니다.")
+                    .show();
         }
     }
 

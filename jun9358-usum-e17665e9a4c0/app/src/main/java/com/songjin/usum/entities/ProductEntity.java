@@ -16,6 +16,7 @@ public class ProductEntity implements Parcelable {
 //    public static final String PROPERTY_USER_UUID = "user_uuid";
     public static final String PROPERTY_USER_ID = "user_id";
 //    public static final String PROPERTY_UUID = BaasioBaseEntity.PROPERTY_UUID;
+    public static final String PROPERTY_ID = "id";
     public static final String PROPERTY_PRODUCT_NAME = "product_name";
     public static final String PROPERTY_SCHOOL_ID = "school_id";
     public static final String PROPERTY_CATEGORY = "category";
@@ -34,6 +35,7 @@ public class ProductEntity implements Parcelable {
     };
     public long created;
 //    public String uuid;
+    public String id;
     public String product_name;
 //    public String user_uuid;
     public String user_id;
@@ -62,7 +64,7 @@ public class ProductEntity implements Parcelable {
 
     public void set(Bundle bundle) {
         this.created = bundle.getLong(PROPERTY_CREATED);
-//        this.uuid = bundle.getString(PROPERTY_UUID);
+        this.id = bundle.getString(PROPERTY_ID);
         this.product_name = bundle.getString(PROPERTY_PRODUCT_NAME);
 //        this.user_uuid = bundle.getString(PROPERTY_USER_UUID);
         this.user_id = bundle.getString(PROPERTY_USER_ID);
@@ -78,6 +80,10 @@ public class ProductEntity implements Parcelable {
         try {
             if (object.getLong(PROPERTY_CREATED) != -1) {
                 this.created = object.getLong(PROPERTY_CREATED);
+            }
+
+            if (object.getString(PROPERTY_ID) != null) {
+                this.id = object.getString(PROPERTY_ID);
             }
 //            if (object.getUuid() != null) {
 //                this.uuid = object.getUuid().toString();
@@ -118,6 +124,7 @@ public class ProductEntity implements Parcelable {
         Bundle bundle = new Bundle();
         bundle.putLong(PROPERTY_CREATED, this.created);
 //        bundle.putString(PROPERTY_UUID, this.uuid);
+        bundle.putString(PROPERTY_ID, this.id);
         bundle.putString(PROPERTY_PRODUCT_NAME, this.product_name);
 //        bundle.putString(PROPERTY_USER_UUID, this.user_uuid);
         bundle.putString(PROPERTY_USER_ID, this.user_id);
@@ -141,6 +148,7 @@ public class ProductEntity implements Parcelable {
             object.put(PROPERTY_CREATED, this.created);
             object.put(PROPERTY_PRODUCT_NAME, this.product_name);
             object.put(PROPERTY_SCHOOL_ID, this.school_id);
+            object.put(PROPERTY_ID, this.id);
 //        object.setProperty(PROPERTY_USER_UUID, this.user_uuid);
             object.put(PROPERTY_USER_ID, this.user_id);
             object.put(PROPERTY_CATEGORY, this.category);

@@ -20,6 +20,7 @@ public class Global {
     public static final String SEARCH_PRODUCT = "searchProduct";
     public static final String UPDATE_TRANSACTION_STATUS = "updateTransactionStatus";
     public static final String DELETE_COMMENT = "deleteComment";
+    public static final String DELETE_PRODUCT = "deleteProduct";
 
     public static final String GET_MY_PRODUCT = "getMyProduct";
     public static final String INSERT_PRODUCT = "insertProduct";
@@ -49,6 +50,7 @@ public class Global {
     public static final String COMMENT_CONTENT = "commentContent";
     public static final String TIMELINE_CONTENT = "timelineContent";
     public static final String PARENT_ID = "parentId";
+    public static final String PRODUCT_ID = "productId";
     public static final String TRANSACTION = "transaction";
     public static final String STATUS = "status";
 

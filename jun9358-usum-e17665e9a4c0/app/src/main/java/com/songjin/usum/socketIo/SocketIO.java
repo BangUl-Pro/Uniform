@@ -176,7 +176,28 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processUpdateTransactionStatus(object);
             }
+        }).on(Global.DELETE_PRODUCT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processDeleteProduct(object);
+            }
         });
+    }
+
+
+    // TODO: 15. 11. 25. 제품 삭제 응답
+    private void processDeleteProduct(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.COMMAND, Global.DELETE_PRODUCT);
+            intent.putExtra(Global.CODE, code);
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -834,6 +855,17 @@ public class SocketIO {
             object.put(Global.STATUS, status);
             object.put(Global.TRANSACTION, transJson);
             socket.emit(Global.UPDATE_TRANSACTION_STATUS, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void deleteProduct(ProductCardDto productCardDto) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.PRODUCT_ID, productCardDto.productEntity.id);
+            socket.emit(Global.DELETE_PRODUCT, object);
         } catch (JSONException e) {
             e.printStackTrace();
         }

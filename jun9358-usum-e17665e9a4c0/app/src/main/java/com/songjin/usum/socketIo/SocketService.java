@@ -83,11 +83,21 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.UPDATE_TRANSACTION_STATUS)) {
                     //
                     processUpdateTransactionStatus(intent);
+                } else if (command.equals(Global.DELETE_PRODUCT)) {
+                    // 제품 삭제
+                    processDeleteProduct(intent);
                 }
             }
         }
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+
+    // TODO: 15. 11. 25. 제품 삭제
+    private void processDeleteProduct(Intent intent) {
+        ProductCardDto dto = intent.getParcelableExtra(Global.PRODUCT_CARD);
+        socketIO.deleteProduct(dto);
     }
 
 

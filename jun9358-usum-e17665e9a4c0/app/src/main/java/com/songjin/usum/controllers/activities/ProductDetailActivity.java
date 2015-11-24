@@ -137,10 +137,19 @@ public class ProductDetailActivity extends BaseActivity {
                     } else if (command.equals(Global.UPDATE_TRANSACTION_STATUS)) {
                         //
                         processUpdateTransactionUpdate(code, intent);
+                    } else if (command.equals(Global.DELETE_PRODUCT)) {
+                        // 제품 삭제
+                        processDeleteProduct(code);
                     }
                 }
             }
         }
+    }
+
+
+    // TODO: 15. 11. 25. 제품 삭제
+    private void processDeleteProduct(int code) {
+        viewHolder.productDetailCardView.processDeleteProduct(code);
     }
 
 
