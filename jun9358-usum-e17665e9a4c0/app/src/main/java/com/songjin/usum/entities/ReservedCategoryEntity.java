@@ -1,9 +1,6 @@
 package com.songjin.usum.entities;
 
-import com.kth.baasio.utils.JsonUtils;
-
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.google.gson.Gson;
 
 public class ReservedCategoryEntity {
     public int schoolId;
@@ -20,9 +17,10 @@ public class ReservedCategoryEntity {
 
     }
 
-    @JsonCreator
+//    @JsonCreator
     public static ReservedCategoryEntity createObject(String jsonString) {
-        return (ReservedCategoryEntity) JsonUtils.fromJsonString(jsonString, ReservedCategoryEntity.class);
+        Gson gson = new Gson();
+        return (ReservedCategoryEntity) gson.fromJson(jsonString, ReservedCategoryEntity.class);
     }
 
     public int getCategory() {
@@ -50,6 +48,7 @@ public class ReservedCategoryEntity {
     }
 
     public String toString() {
-        return JsonUtils.toJsonString(this);
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

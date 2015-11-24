@@ -16,11 +16,14 @@ import com.songjin.usum.controllers.activities.ProductDetailActivity;
 import com.songjin.usum.controllers.activities.SignUpActivity;
 import com.songjin.usum.controllers.activities.TimelineActivity;
 import com.songjin.usum.controllers.activities.TimelineDetailActivity;
+import com.songjin.usum.controllers.activities.TimelineWriteActivity;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.SchoolEntity;
+import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
 
 import org.json.JSONArray;
@@ -137,7 +140,172 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processGetMyTimeline(object);
             }
+        }).on(Global.UPDATE_TIMELINE, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processUpdateTimeline(object);
+            }
+        }).on(Global.INSERT_PRODUCT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processInsertTimeline(object);
+            }
+        }).on(Global.SEARCH_PRODUCT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processSearchProduct(object);
+            }
+        }).on(Global.GET_MY_PRODUCT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processGetMyProduct(object);
+            }
+        }).on(Global.DELETE_COMMENT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processDeleteComment(object);
+            }
+        }).on(Global.UPDATE_TRANSACTION_STATUS, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processUpdateTransactionStatus(object);
+            }
         });
+    }
+
+
+    private void processUpdateTransactionStatus(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+            int status = object.getInt(Global.STATUS);
+
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.CODE, code);
+            intent.putExtra(Global.STATUS, status);
+
+            if (code == SocketException.SUCCESS) {
+                // 성공
+                JSONObject transactionJson = object.getJSONObject(Global.TRANSACTION);
+                Gson gson = new Gson();
+                TransactionEntity transactionEntity = gson.fromJson(transactionJson.toString(), TransactionEntity.class);
+                intent.putExtra(Global.TRANSACTION, transactionEntity);
+            }
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    // TODO: 15. 11. 24. 댓글 삭제
+    private void processDeleteComment(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.CODE, code);
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 24. 내 제품 요청 응답
+    private void processGetMyProduct(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.CODE, code);
+
+            if (code == SocketException.SUCCESS) {
+                ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
+                JSONArray array = object.getJSONArray(Global.PRODUCT_CARD);
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject productObject = array.getJSONObject(i);
+                    Gson gson = new Gson();
+                    ProductCardDto dto = gson.fromJson(productObject.toString(), ProductCardDto.class);
+                    productCardDtos.add(dto);
+                }
+                intent.putExtra(Global.PRODUCT_CARD, productCardDtos);
+            }
+
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 제품 검색 응답
+    private void processSearchProduct(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.COMMAND, Global.SEARCH_PRODUCT);
+            intent.putExtra(Global.CODE, code);
+
+            if (code == SocketException.SUCCESS) {
+                ArrayList<ProductCardDto> products = new ArrayList<>();
+                JSONArray array = object.getJSONArray(Global.PRODUCT_CARD);
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject productJson = array.getJSONObject(i);
+                    Gson gson = new Gson();
+                    ProductCardDto dto = gson.fromJson(productJson.toString(), ProductCardDto.class);
+                    products.add(dto);
+                }
+                intent.putExtra(Global.PRODUCT_CARD, products);
+            }
+            context.startActivity(intent);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 업데이트 응답
+    private void processInsertTimeline(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, TimelineWriteActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE);
+            intent.putExtra(Global.CODE, code);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 업데이트 응답
+    private void processUpdateTimeline(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, TimelineWriteActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.COMMAND, Global.UPDATE_TIMELINE);
+            intent.putExtra(Global.CODE, code);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -203,7 +371,7 @@ public class SocketIO {
             int code = object.getInt(Global.CODE);
 
             Intent intent;
-            if (object.getInt(Global.FROM) == 0)
+            if (object.getInt(Global.FROM) == 0 || object.getInt(Global.FROM) == 2)
                 intent = new Intent(context, ProductDetailActivity.class);
             else
                 intent = new Intent(context, TimelineDetailActivity.class);
@@ -571,6 +739,101 @@ public class SocketIO {
             object.put(Global.SCHOOL_ID, schoolId);
             object.put(Global.USER_ID, userId);
             socket.emit(Global.GET_ALL_TIMELINE, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 글 쓰기
+    public void insertTimeline(int schoolId, String timelineContent) {
+        try {
+            Log.d(TAG, "schoolId = " + schoolId);
+            Log.d(TAG, "timelineContent = " + timelineContent);
+
+            JSONObject object = new JSONObject();
+            object.put(Global.SCHOOL_ID, schoolId);
+            object.put(Global.TIMELINE_CONTENT, timelineContent);
+            socket.emit(Global.INSERT_TIMELINE, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 파일 지우기
+    public void deleteFile(ArrayList<FileEntity> files) {
+        try {
+            for (int i = 0; i < files.size(); i++) {
+                Log.d(TAG, i + "번째 id = " + files.get(i).id);
+                Log.d(TAG, i + "번째 parent_uuid = " + files.get(i).parent_uuid);
+            }
+
+            Gson gson = new Gson();
+            String json = gson.toJson(files);
+            JSONArray array = new JSONArray(json);
+            socket.emit(Global.DELETE_FILE, array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 업데이트
+    public void updateTimeline(TimelineCardDto timelineCardDto) {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(timelineCardDto);
+            JSONObject object = new JSONObject(json);
+            socket.emit(Global.DELETE_FILE, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 24. 내 제품 요청
+    public void getMyProduct(String donatorId, String receiverId) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put(TransactionEntity.PROPERTY_DONATOR_UUID, donatorId);
+            object.put(TransactionEntity.PROPERTY_RECEIVER_UUID, receiverId);
+            socket.emit(Global.GET_MY_PRODUCT, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 24. 댓글 삭제 요청
+    public void deleteComment(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
+        try {
+            JSONArray array = new JSONArray();
+            for (int i = 0; i < timelineCommentCardDtos.size(); i++) {
+                TimelineCommentCardDto dto = timelineCommentCardDtos.get(i);
+                JSONObject commentObject = new JSONObject();
+                commentObject.put(Global.ID, dto.commentEntity.id);
+                commentObject.put(Global.TIMELINE_ITEM_ID, dto.commentEntity.timeline_item_uuid);
+                commentObject.put(Global.USER_ID, dto.commentEntity.user_uuid);
+                array.put(commentObject);
+            }
+            socket.emit(Global.DELETE_COMMENT, array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public  void updateTransactionStatus(int status, TransactionEntity transactionEntity) {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(transactionEntity, TransactionEntity.class);
+            JSONObject transJson = new JSONObject(json);
+
+            JSONObject object = new JSONObject();
+            object.put(Global.STATUS, status);
+            object.put(Global.TRANSACTION, transJson);
+            socket.emit(Global.UPDATE_TRANSACTION_STATUS, object);
         } catch (JSONException e) {
             e.printStackTrace();
         }

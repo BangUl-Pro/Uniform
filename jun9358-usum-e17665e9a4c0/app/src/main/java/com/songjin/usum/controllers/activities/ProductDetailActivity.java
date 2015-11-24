@@ -15,6 +15,7 @@ import com.songjin.usum.controllers.views.ProductDetailCardView;
 import com.songjin.usum.controllers.views.TimelineCommentRecyclerView;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
@@ -130,6 +131,12 @@ public class ProductDetailActivity extends BaseActivity {
                     } else if (command.equals(Global.GET_TIMELINE_COMMENT)) {
                         // 타임라인 게시글 댓글 불러오기 응답
                         processGetTimelineComment(code, intent);
+                    } else if (command.equals(Global.DELETE_COMMENT)) {
+                        // 댓글 삭제
+                        processDeleteComment(code);
+                    } else if (command.equals(Global.UPDATE_TRANSACTION_STATUS)) {
+                        //
+                        processUpdateTransactionUpdate(code, intent);
                     }
                 }
             }
@@ -137,22 +144,49 @@ public class ProductDetailActivity extends BaseActivity {
     }
 
 
+    private void processUpdateTransactionUpdate(int code, Intent intent) {
+        if (code == SocketException.SUCCESS) {
+            // 성공
+            int status = intent.getIntExtra(Global.STATUS, -1);
+            TransactionEntity transactionEntity = intent.getParcelableExtra(Global.TRANSACTION);
+            if (status == 10) {
+                viewHolder.productDetailCardView.processCancelUpdateTransactionStatus(transactionEntity);
+            } else {
+                viewHolder.productDetailCardView.processUpdateTransactionStatus(transactionEntity);
+            }
+        }
+    }
+
+
+    // TODO: 15. 11. 24. 댓글 삭제
+    private void processDeleteComment(int code) {
+        if (SocketException.SUCCESS != code) {
+
+        }
+    }
+
+
     // TODO: 15. 11. 23. 타임라인 게시글 댓글 불러오기 응답
     private void processGetTimelineComment(int code, Intent intent) {
         if (code == SocketException.SUCCESS) {
+            int from = intent.getIntExtra(Global.FROM, -1);
             ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = (ArrayList) intent.getSerializableExtra(Global.TIMELINE_COMMENT);
-            for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
-                timelineCommentCardDto.userEntity.picture = "";
-                if (timelineCommentCardDto.userEntity.id.equals(productCardDto.productEntity.user_id    )) {
-                    timelineCommentCardDto.userEntity.realName = "기부자";
-                } else if (timelineCommentCardDto.userEntity.id.equals(productCardDto.transactionEntity.receiver_uuid)) {
-                    timelineCommentCardDto.userEntity.realName = "구매자";
-                } else {
-                    timelineCommentCardDto.userEntity.realName = "이방인";
+            if (from == 0) {
+                for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
+                    timelineCommentCardDto.userEntity.picture = "";
+                    if (timelineCommentCardDto.userEntity.id.equals(productCardDto.productEntity.user_id    )) {
+                        timelineCommentCardDto.userEntity.realName = "기부자";
+                    } else if (timelineCommentCardDto.userEntity.id.equals(productCardDto.transactionEntity.receiver_uuid)) {
+                        timelineCommentCardDto.userEntity.realName = "구매자";
+                    } else {
+                        timelineCommentCardDto.userEntity.realName = "이방인";
+                    }
                 }
-            }
 
-            viewHolder.comments.setTimelineCommentCardDtos(timelineCommentCardDtos);
+                viewHolder.comments.setTimelineCommentCardDtos(timelineCommentCardDtos);
+            } else if (from == 2) {
+                viewHolder.productDetailCardView.processGetTimelineComment(timelineCommentCardDtos);
+            }
         }
     }
 

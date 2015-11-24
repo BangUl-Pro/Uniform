@@ -16,6 +16,8 @@ import com.songjin.usum.controllers.activities.PhotoViewActivity;
 import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.managers.RequestManager;
 
+import java.io.File;
+
 public class ImageCardView extends CardView {
     private class ViewHolder {
         public SquareImageView image;
@@ -61,23 +63,35 @@ public class ImageCardView extends CardView {
     }
 
     public void setFileEntity(final FileEntity fileEntity) {
-        RequestManager.downloadFile(fileEntity, new BaasioDownloadCallback() {
-            @Override
-            public void onResponse(String s) {
-                imageUrl = BaseActivity.context.getCacheDir() + fileEntity.uuid;
-                loadImage(imageUrl);
-            }
 
-            @Override
-            public void onException(BaasioException e) {
+        File file = new File(BaseActivity.context.getCacheDir() + fileEntity.id);
+        if (file.exists()) {
+            // 성공
+            imageUrl = BaseActivity.context.getCacheDir() + fileEntity.uuid;
+            loadImage(imageUrl);
+            return;
+        }
 
-            }
+        BaasioFile baasioFile = fileEntity.getBaasioFile();
+        baasioFile.fileDownloadInBackground(BaseActivity.context.getCacheDir() + fileEntity.id, baasioDownloadCallback);
 
-            @Override
-            public void onProgress(long l, long l1) {
-
-            }
-        });
+//        RequestManager.downloadFile(fileEntity, new BaasioDownloadCallback() {
+//            @Override
+//            public void onResponse(String s) {
+//                imageUrl = BaseActivity.context.getCacheDir() + fileEntity.uuid;
+//                loadImage(imageUrl);
+//            }
+//
+//            @Override
+//            public void onException(BaasioException e) {
+//
+//            }
+//
+//            @Override
+//            public void onProgress(long l, long l1) {
+//
+//            }
+//        });
     }
 
     private void loadImage(String url) {

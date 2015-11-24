@@ -16,6 +16,7 @@ import com.songjin.usum.controllers.fragments.CommunityFragment;
 import com.songjin.usum.controllers.fragments.MyPageFragment;
 import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.controllers.fragments.SupportFragment;
+import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.entities.AlarmEntity;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
@@ -126,9 +127,35 @@ public class MainActivity extends BaseActivity {
                     if (command.equals(Global.GET_SCHOOL_RANKING)) {
                         // 학교 랭킹 응답
                         processGetSchoolRanking(code, intent);
+                    } else if (command.equals(Global.SEARCH_PRODUCT)) {
+                        // 제품 검색
+                        processSearchProduct(code, intent);
+                    } else if (command.equals(Global.GET_MY_PRODUCT)) {
+                        // 내 제품 요청 응답
+                        processGetMyProduct(code, intent);
                     }
                 }
             }
+        }
+    }
+
+
+    // TODO: 15. 11. 24. 내 제품 요청 응답
+    private void processGetMyProduct(int code, Intent intent) {
+        if (code == SocketException.SUCCESS) {
+            ArrayList<ProductCardDto> productCardDtos = intent.getParcelableArrayListExtra(Global.PRODUCT_CARD);
+            myPageFragment.setProduct(productCardDtos);
+        }
+    }
+
+
+    // TODO: 15. 11. 24. 제품 검색 응답
+    private void processSearchProduct(int code, Intent intent) {
+        if (code == SocketException.SUCCESS) {
+            ArrayList<ProductCardDto> productCardDtos = intent.getParcelableArrayListExtra(Global.PRODUCT_CARD);
+            buyFragment.setProductCard(productCardDtos);
+        } else {
+            buyFragment.setProductCard(null);
         }
     }
 

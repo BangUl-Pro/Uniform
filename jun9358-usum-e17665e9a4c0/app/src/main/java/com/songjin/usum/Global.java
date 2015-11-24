@@ -15,17 +15,19 @@ public class Global {
     public static final String SIGN_IN = "signIn";
     public static final String UPDATE_USER_PROFILE = "updateUserProfile";
     public static final String INSERT_TIMELINE_COMMENT = "insertTimelineComment";
-    public static final String TIMELINE_ITEM_ID = "timelineItemId";
-    public static final String COMMENT_CONTENT = "commentContent";
     public static final String GET_TIMELINE_COMMENT = "getTimelineComment";
     public static final String DELETE_FILE = "deleteFile";
-
     public static final String SEARCH_PRODUCT = "searchProduct";
+    public static final String UPDATE_TRANSACTION_STATUS = "updateTransactionStatus";
+    public static final String DELETE_COMMENT = "deleteComment";
+
     public static final String GET_MY_PRODUCT = "getMyProduct";
     public static final String INSERT_PRODUCT = "insertProduct";
     public static final String GET_ALL_TIMELINE = "getAllTimeline";
     public static final String GET_MY_TIMELINE = "getMyTimeline";
     public static final String UPDATE_TIMELINE = "updateTimeline";
+    public static final String INSERT_TIMELINE = "insertTimeline";
+    public static final String INSERT_FILE = "insertFile";
 
     public static final String ID = "id";
     public static final String USER = "user";
@@ -43,6 +45,12 @@ public class Global {
     public static final String TIMELINE_COMMENT = "timelineComment";
     public static final String FROM = "from";
     public static final String FILE = "file";
+    public static final String TIMELINE_ITEM_ID = "timelineItemId";
+    public static final String COMMENT_CONTENT = "commentContent";
+    public static final String TIMELINE_CONTENT = "timelineContent";
+    public static final String PARENT_ID = "parentId";
+    public static final String TRANSACTION = "transaction";
+    public static final String STATUS = "status";
 
 
 

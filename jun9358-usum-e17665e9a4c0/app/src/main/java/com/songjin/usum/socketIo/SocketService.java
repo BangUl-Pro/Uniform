@@ -7,6 +7,10 @@ import android.util.Log;
 
 import com.songjin.usum.Global;
 import com.songjin.usum.dtos.ProductCardDto;
+import com.songjin.usum.dtos.TimelineCardDto;
+import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.FileEntity;
+import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
 
 import java.util.ArrayList;
@@ -61,11 +65,76 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.GET_MY_TIMELINE)) {
                     // 타임라인 글 내 글 불러오기
                     processGetMyTimeline(intent);
+                } else if (command.equals(Global.DELETE_FILE)) {
+                    // 파일 지우기
+                    processDeleteFile(intent);
+                } else if (command.equals(Global.UPDATE_TIMELINE)) {
+                    // 타임라인 업데이트
+                    processUpdateTimeline(intent);
+                } else if (command.equals(Global.INSERT_TIMELINE)) {
+                    // 타임라인 글 쓰기
+                    processInsertTimeline(intent);
+                } else if (command.equals(Global.GET_MY_PRODUCT)) {
+                    // 내 글 쓰기
+                    processGetMyProduct(intent);
+                } else if (command.equals(Global.DELETE_COMMENT)) {
+                    // 댓글 삭제
+                    processDeleteComment(intent);
+                } else if (command.equals(Global.UPDATE_TRANSACTION_STATUS)) {
+                    //
+                    processUpdateTransactionStatus(intent);
                 }
             }
         }
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+
+    // TODO: 15. 11. 24.
+    private void processUpdateTransactionStatus(Intent intent) {
+        int status = intent.getIntExtra(Global.STATUS, -1);
+        TransactionEntity transactionEntity = intent.getParcelableExtra(Global.TRANSACTION);
+        socketIO.updateTransactionStatus(status, transactionEntity);
+    }
+
+
+
+    // TODO: 15. 11. 24. 댓글 삭제
+    private void processDeleteComment(Intent intent) {
+        ArrayList<TimelineCommentCardDto> commentCardDtos = (ArrayList) intent.getSerializableExtra(Global.TIMELINE_COMMENT);
+        socketIO.deleteComment(commentCardDtos);
+    }
+
+
+    // TODO: 15. 11. 24. 내 제품 요청
+    private void processGetMyProduct(Intent intent) {
+        String donatorId = intent.getStringExtra(TransactionEntity.PROPERTY_DONATOR_UUID);
+        String receiverId = intent.getStringExtra(TransactionEntity.PROPERTY_RECEIVER_UUID);
+        socketIO.getMyProduct(donatorId, receiverId);
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 글 쓰기
+    private void processInsertTimeline(Intent intent) {
+        int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
+        String timelineContent = intent.getStringExtra(Global.TIMELINE_CONTENT);
+
+        socketIO.insertTimeline(schoolId, timelineContent);
+    }
+
+
+    // TODO: 15. 11. 23. 파일 지우기
+    private void processDeleteFile(Intent intent) {
+        ArrayList<FileEntity> files = intent.getParcelableArrayListExtra(Global.FILE);
+        socketIO.deleteFile(files);
+    }
+
+
+    // TODO: 15. 11. 23. 타임라인 업데이트
+    private void processUpdateTimeline(Intent intent) {
+        TimelineCardDto timeline = intent.getParcelableExtra(Global.TIMELINE);
+        socketIO.updateTimeline(timeline);
     }
 
 

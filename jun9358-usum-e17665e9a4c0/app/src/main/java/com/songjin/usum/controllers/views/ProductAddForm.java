@@ -274,7 +274,7 @@ public class ProductAddForm extends CardView {
         viewHolder.contents.setText(productCardDto.productEntity.contents);
 
         for (FileEntity fileEntity : productCardDto.fileEntities) {
-            Uri uri = Uri.fromFile(new File(BaseActivity.context.getCacheDir() + fileEntity.uuid));
+            Uri uri = Uri.fromFile(new File(BaseActivity.context.getCacheDir() + fileEntity.id));
             selectedImageUris.add(uri);
         }
         viewHolder.attachedImages.clear();

@@ -62,7 +62,7 @@ public class ProductCardView extends LinearLayout {
         if (0 < productCardDto.uris.size()) {
             photo.setImageURI(productCardDto.uris.get(0));
         } else if (0 < productCardDto.fileEntities.size()) {
-            String photoUrl = "https://portal-access-api.baas.io/usum/usum/files/" + productCardDto.fileEntities.get(0).uuid + "/data";
+            String photoUrl = "https://portal-access-api.baas.io/usum/usum/files/" + productCardDto.fileEntities.get(0).id + "/data";
             Ion.with(photo)
                     .placeholder(R.drawable.ic_launcher)
                     .error(R.drawable.ic_launcher)

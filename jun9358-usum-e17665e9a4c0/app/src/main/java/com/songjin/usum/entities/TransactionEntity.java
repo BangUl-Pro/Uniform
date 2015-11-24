@@ -10,7 +10,7 @@ import org.json.JSONObject;
 public class TransactionEntity implements Parcelable {
     public static final String COLLECTION_NAME = "transactions";
 //    public static final String PROPERTY_UUID = BaasioBaseEntity.PROPERTY_UUID;
-//    public static final String PROPERTY_MODIFIED = BaasioBaseEntity.PROPERTY_MODIFIED;
+    public static final String PROPERTY_MODIFIED = "modified";
     public static final String PROPERTY_STATUS = "status";
     public static final String PROPERTY_DONATOR_UUID = "donator_uuid";
     public static final String PROPERTY_RECEIVER_UUID = "receiver_uuid";
@@ -23,7 +23,7 @@ public class TransactionEntity implements Parcelable {
         REGISTERED, REQUESTED, SENDED, RECEIVED
     }
 
-//    public long modified;
+    public long modified;
     public STATUS_TYPE status;
     public String donator_uuid;
     public String receiver_uuid;
@@ -42,7 +42,7 @@ public class TransactionEntity implements Parcelable {
 
     public TransactionEntity() {
 //        this.uuid = "";
-//        this.modified = 0;
+        this.modified = 0;
         this.status = STATUS_TYPE.REGISTERED;
         this.donator_uuid = "";
         this.receiver_uuid = "";
@@ -64,7 +64,7 @@ public class TransactionEntity implements Parcelable {
 
     public void set(Bundle bundle) {
 //        this.uuid = bundle.getString(PROPERTY_UUID);
-//        this.modified = bundle.getLong(PROPERTY_MODIFIED);
+        this.modified = bundle.getLong(PROPERTY_MODIFIED);
         this.status = STATUS_TYPE.values()[bundle.getInt(PROPERTY_STATUS)];
         this.donator_uuid = bundle.getString(PROPERTY_DONATOR_UUID);
         this.receiver_uuid = bundle.getString(PROPERTY_RECEIVER_UUID);
@@ -75,7 +75,7 @@ public class TransactionEntity implements Parcelable {
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
 //        bundle.putString(PROPERTY_UUID, this.uuid);
-//        bundle.putLong(PROPERTY_MODIFIED, this.modified);
+        bundle.putLong(PROPERTY_MODIFIED, this.modified);
         bundle.putInt(PROPERTY_STATUS, this.status.ordinal());
         bundle.putString(PROPERTY_DONATOR_UUID, this.donator_uuid);
         bundle.putString(PROPERTY_RECEIVER_UUID, this.receiver_uuid);
@@ -107,6 +107,9 @@ public class TransactionEntity implements Parcelable {
             }
             if (object.getString(PROPERTY_PRODUCT_NAME) != null) {
                 this.product_name = object.getString(PROPERTY_PRODUCT_NAME);
+            }
+            if (object.getLong(PROPERTY_MODIFIED) != -1) {
+                this.modified = object.getLong(PROPERTY_MODIFIED);
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -20,6 +20,7 @@ import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
 
 import java.io.File;
@@ -106,11 +107,18 @@ public class TimelineWriteActivity extends BaseActivity {
 
                     intent = new Intent(getApplicationContext(), SocketService.class);
                     intent.putExtra(Global.COMMAND, Global.UPDATE_TIMELINE);
+                    intent.putExtra(Global.TIMELINE, timelineCardDtoForUpdate);
                     startService(intent);
 
                     RequestManager.deleteFileEntities(timelineCardDtoForUpdate.fileEntities);
                     RequestManager.updateTimeline(timelineCardDtoForUpdate, timelineInsertCallback);
                 } else {
+                    Intent intent = new Intent(getApplicationContext(), SocketService.class);
+                    intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE);
+                    intent.putExtra(Global.SCHOOL_ID, userEntity.schoolId);
+                    intent.putExtra(Global.TIMELINE_CONTENT, contents);
+                    startService(intent);
+
                     RequestManager.insertTimeline(userEntity.schoolId, contents, timelineInsertCallback);
                 }
                 return true;
@@ -163,7 +171,8 @@ public class TimelineWriteActivity extends BaseActivity {
             viewHolder.writerView.setWrittenTime(timelineCardDtoForUpdate.timelineEntity.created);
 
             for (FileEntity fileEntity : timelineCardDtoForUpdate.fileEntities) {
-                Uri uri = Uri.fromFile(new File(BaseActivity.context.getCacheDir() + fileEntity.uuid));
+//                Uri uri = Uri.fromFile(new File(BaseActivity.context.getCacheDir() + fileEntity.uuid));
+                Uri uri = Uri.fromFile(new File(BaseActivity.context.getCacheDir() + fileEntity.id));
                 selectedImageUris.add(uri);
             }
             viewHolder.selectedImages.setUris(selectedImageUris);
@@ -199,6 +208,54 @@ public class TimelineWriteActivity extends BaseActivity {
                 break;
         }
     }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent != null) {
+            String command = intent.getStringExtra(Global.COMMAND);
+            if (command != null) {
+                int code = intent.getIntExtra(Global.CODE, -1);
+                if (code != -1) {
+                    SocketException.printErrMsg(code);
+                    SocketException.toastErrMsg(code);
+                    if (command.equals(Global.UPDATE_TIMELINE)) {
+                        // 타임라인 업데이트
+                        processInsertTimeline(code, intent);
+                    } else if (command.equals(Global.INSERT_TIMELINE)) {
+                        // 타임라인 글 쓰기
+                        processInsertTimeline(code, intent);
+                    }
+                }
+            }
+        }
+    }
+
+
+    private void processInsertTimeline(int code, Intent intent) {
+        if (code == SocketException.SUCCESS) {
+            // 성공
+            if (0 < selectedImageUris.size()) {
+                Uri selectedUri = selectedImageUris.get(0);
+                selectedImageUris.remove(0);
+
+                TimelineCardDto timelineCardDto = intent.getParcelableExtra(Global.TIMELINE);
+                String parentUuid = baasioEntity.getUuid().toString();
+
+                Intent intent1 = new Intent(getApplicationContext(), SocketService.class);
+                intent1.putExtra(Global.COMMAND, Global.INSERT_FILE);
+                intent1.putExtra(Global.PARENT_ID, parentUuid);
+                startActivity(intent1);
+                RequestManager.insertFile(parentUuid, selectedUri, fileUploadCallback);
+            } else {
+                onWriteAfter(true);
+            }
+        } else {
+            // 실패
+            onWriteAfter(false);
+        }
+    }
+
 
     private class TimelineInsertCallback implements BaasioCallback<BaasioEntity> {
         @Override

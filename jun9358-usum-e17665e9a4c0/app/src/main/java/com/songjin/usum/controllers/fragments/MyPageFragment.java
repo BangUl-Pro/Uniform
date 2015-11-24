@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kth.baasio.Baas;
-import com.kth.baasio.exception.BaasioException;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
@@ -15,14 +13,11 @@ import com.songjin.usum.controllers.views.ProductRecyclerView;
 import com.songjin.usum.controllers.views.ProfileView;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.entities.TransactionEntity;
-import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.AuthManager;
-import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MyPageFragment extends SlidingBaseFragment {
     private class ViewHolder {
@@ -80,18 +75,24 @@ public class MyPageFragment extends SlidingBaseFragment {
         intent.putExtra(TransactionEntity.PROPERTY_RECEIVER_UUID, Global.userEntity.id);
         getActivity().startService(intent);
 
-        RequestManager.getMyProductsInBackground(new RequestManager.TypedBaasioQueryCallback<ProductCardDto>() {
-            @Override
-            public void onResponse(List<ProductCardDto> entities) {
-                viewHolder.dealingProducts.setProductCardDtos(new ArrayList<>(entities));
-            }
-
-            @Override
-            public void onException(BaasioException e) {
-
-            }
-        });
+//        RequestManager.getMyProductsInBackground(new RequestManager.TypedBaasioQueryCallback<ProductCardDto>() {
+//            @Override
+//            public void onResponse(List<ProductCardDto> entities) {
+//                viewHolder.dealingProducts.setProductCardDtos(new ArrayList<>(entities));
+//            }
+//
+//            @Override
+//            public void onException(BaasioException e) {
+//
+//            }
+//        });
     }
+
+
+    public void setProduct(ArrayList<ProductCardDto> productCardDtos) {
+        viewHolder.dealingProducts.setProductCardDtos(productCardDtos);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

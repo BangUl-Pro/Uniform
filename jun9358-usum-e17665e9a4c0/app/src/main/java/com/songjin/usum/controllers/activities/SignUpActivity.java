@@ -7,14 +7,10 @@ import android.widget.CheckBox;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kakao.Session;
-import com.kth.baasio.callback.BaasioSignInCallback;
-import com.kth.baasio.entity.user.BaasioUser;
-import com.kth.baasio.exception.BaasioException;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.UserProfileForm;
 import com.songjin.usum.entities.UserEntity;
-import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
 

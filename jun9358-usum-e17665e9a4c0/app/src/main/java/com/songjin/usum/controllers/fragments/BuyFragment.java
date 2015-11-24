@@ -23,7 +23,6 @@ import com.songjin.usum.slidingtab.SlidingBaseFragment;
 import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BuyFragment extends SlidingBaseFragment {
     private class ViewHolder {
@@ -53,20 +52,31 @@ public class BuyFragment extends SlidingBaseFragment {
     }
 
     private void initCallback() {
-        productCardDtoQueryCallback = new RequestManager.TypedBaasioQueryCallback<ProductCardDto>() {
-            @Override
-            public void onResponse(List<ProductCardDto> entities) {
-                productCardDtos.addAll(entities);
-                viewHolder.products.setProductCardDtos(productCardDtos);
-                viewHolder.products.hideMoreProgress();
-            }
-
-            @Override
-            public void onException(BaasioException e) {
-                viewHolder.products.hideMoreProgress();
-            }
-        };
+//        productCardDtoQueryCallback = new RequestManager.TypedBaasioQueryCallback<ProductCardDto>() {
+//            @Override
+//            public void onResponse(List<ProductCardDto> entities) {
+//                productCardDtos.addAll(entities);
+//                viewHolder.products.setProductCardDtos(productCardDtos);
+//                viewHolder.products.hideMoreProgress();
+//            }
+//
+//            @Override
+//            public void onException(BaasioException e) {
+//                viewHolder.products.hideMoreProgress();
+//            }
+//        };
     }
+
+
+    public void setProductCard(ArrayList<ProductCardDto> productCard) {
+        if (productCard != null) {
+            // 성공
+            productCardDtos.addAll(productCard);
+            viewHolder.products.setProductCardDtos(productCardDtos);
+        }
+        viewHolder.products.hideMoreProgress();
+    }
+
 
     @Override
     public void onPageSelected() {
