@@ -56,6 +56,7 @@ public class CommunityFragment extends SlidingBaseFragment {
         final SchoolManager schoolManager = new SchoolManager(getActivity());
         Intent intent = new Intent(getActivity(), SocketService.class);
         intent.putExtra(Global.COMMAND, Global.GET_SCHOOL_RANKING);
+        intent.putExtra(Global.FROM, 0);
         getActivity().startService(intent);
 
 //        RequestManager.getSchoolRankingsInBackground(schoolManager, new BaasioQueryCallback() {

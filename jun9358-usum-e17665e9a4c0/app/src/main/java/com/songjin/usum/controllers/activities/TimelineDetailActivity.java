@@ -14,6 +14,7 @@ import com.songjin.usum.controllers.views.TimelineCardView;
 import com.songjin.usum.controllers.views.TimelineCommentRecyclerView;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.LikeEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
@@ -35,6 +36,7 @@ public class TimelineDetailActivity extends BaseActivity {
             writeCommentButton = (Button) view.findViewById(R.id.write_comment);
 
             comments = (TimelineCommentRecyclerView) view.findViewById(R.id.comments);
+            comments.setFrom(1);
         }
     }
 
@@ -112,10 +114,38 @@ public class TimelineDetailActivity extends BaseActivity {
                     } else if (command.equals(Global.INSERT_TIMELINE_COMMENT)) {
                         // 타임라인 댓글 입력 응답
                         processInsertTimelineComment(code);
+                    } else if (command.equals(Global.DELETE_TIMELINE)) {
+                        // 타임라인 지우기
+                        processDeleteTimeline(code);
+                    } else if (command.equals(Global.DELETE_LIKE)) {
+                        // 좋아요 지우기
+                        processDeleteLike(code);
+                    } else if (command.equals(Global.INSERT_LIKE)) {
+                        // 좋아요
+                        processInsertLike(code, intent);
                     }
                 }
             }
         }
+    }
+
+
+    // TODO: 15. 11. 25. 좋아요
+    private void processInsertLike(int code, Intent intent) {
+        LikeEntity likeEntity = intent.getParcelableExtra(Global.LIKE);
+        viewHolder.timelineCardView.processInsertLike(code, likeEntity);
+    }
+
+
+    // TODO: 15. 11. 25. 좋아요 지우기
+    private void processDeleteLike(int code) {
+        viewHolder.timelineCardView.processDeleteLike(code);
+    }
+
+
+    // TODO: 15. 11. 25. 타임라인 지우기
+    private void processDeleteTimeline(int code) {
+        viewHolder.timelineCardView.processDeleteTimeline(code);
     }
 
 

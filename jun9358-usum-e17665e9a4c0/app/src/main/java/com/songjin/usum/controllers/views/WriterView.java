@@ -47,7 +47,7 @@ public class WriterView extends RelativeLayout {
     }
 
     public void setUserEntity(UserEntity userEntity) {
-        if (userEntity.uuid == null) {
+        if (userEntity.id == null) {
             setName("탈퇴한 회원");
             return;
         }

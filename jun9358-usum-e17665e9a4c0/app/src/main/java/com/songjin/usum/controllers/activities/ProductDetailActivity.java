@@ -34,6 +34,7 @@ public class ProductDetailActivity extends BaseActivity {
         public ViewHolder(View view) {
             productDetailCardView = (ProductDetailCardView) view.findViewById(R.id.product_detail_card_view);
             comments = (TimelineCommentRecyclerView) view.findViewById(R.id.comments);
+            comments.setFrom(0);
             commentsLayout = (LinearLayout) view.findViewById(R.id.comments_layout);
             commentContents = (TextView) view.findViewById(R.id.comment_contents);
             writeCommentButton = (Button) view.findViewById(R.id.write_comment);
@@ -140,10 +141,19 @@ public class ProductDetailActivity extends BaseActivity {
                     } else if (command.equals(Global.DELETE_PRODUCT)) {
                         // 제품 삭제
                         processDeleteProduct(code);
+                    } else if (command.equals(Global.UPDATE_PRODUCT)) {
+                        // 제품 수정
+                        processUpdateProduct(code);
                     }
                 }
             }
         }
+    }
+
+
+    // TODO: 15. 11. 25. 제품 등록
+    private void processUpdateProduct(int code) {
+        viewHolder.productDetailCardView.processUpdateProduct(code);
     }
 
 
@@ -170,7 +180,7 @@ public class ProductDetailActivity extends BaseActivity {
     // TODO: 15. 11. 24. 댓글 삭제
     private void processDeleteComment(int code) {
         if (SocketException.SUCCESS != code) {
-
+            viewHolder.comments.
         }
     }
 

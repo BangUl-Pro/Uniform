@@ -23,6 +23,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.kth.baasio.entity.push.BaasioPayload;
@@ -41,7 +42,7 @@ import com.songjin.usum.controllers.fragments.SettingFragment;
  */
 public class GCMIntentService extends GCMBaseIntentService {
 
-    private static final String TAG = LogUtils.makeLogTag("GCM");
+    private static final String TAG = "GCMIntentService";
 
     public static final String PUSH_PROPERTY_TYPE = "push_type";
     public static final int PUSH_TYPE_TRANSACTION = 1;
@@ -142,13 +143,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     @Override
     public void onError(Context context, String errorId) {
-        LogUtils.LOGE(TAG, "Received error: " + errorId);
+        Log.e(TAG, "Received error: " + errorId);
     }
 
     @Override
     protected boolean onRecoverableError(Context context, String errorId) {
         // log message
-        LogUtils.LOGW(TAG, "Received recoverable error: " + errorId);
+        Log.w(TAG, "Received recoverable error: " + errorId);
         return super.onRecoverableError(context, errorId);
     }
 }

@@ -22,9 +22,12 @@ import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.entities.FileEntity;
+import com.songjin.usum.entities.LikeEntity;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
+import com.songjin.usum.reservation.ReservationPushService;
+import com.songjin.usum.reservation.SchoolRankingPushService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -182,7 +185,165 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processDeleteProduct(object);
             }
+        }).on(Global.DELETE_FILE, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processDeleteFile(object);
+            }
+        }).on(Global.UPDATE_PRODUCT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processUpdateProduct(object);
+            }
+        }).on(Global.DELETE_TIMELINE, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processDeleteTimeline(object);
+            }
+        }).on(Global.DELETE_LIKE, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processDeleteLike(object);
+            }
+        }).on(Global.INSERT_LIKE, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processInsertLike(object);
+            }
+        }).on(Global.GET_PRODUCT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processGetProduct(object);
+            }
         });
+    }
+
+
+    // TODO: 15. 11. 25. 제품 요청 응답
+    private void processGetProduct(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, ReservationPushService.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.COMMAND, Global.INSERT_LIKE);
+            intent.putExtra(Global.CODE, code);
+
+            if (code == SocketException.SUCCESS) {
+                JSONArray productArray = object.getJSONArray(Global.PRODUCT);
+                Gson gson = new Gson();
+                ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
+
+                for (int i = 0; i < productArray.length(); i++) {
+                    JSONObject productObject = productArray.getJSONObject(i);
+                    ProductCardDto dto = gson.fromJson(productObject.toString(), ProductCardDto.class);
+                    productCardDtos.add(dto);
+                }
+                intent.putExtra(Global.PRODUCT, productCardDtos);
+            }
+            context.startService(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 좋아요
+    private void processInsertLike(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, TimelineDetailActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.COMMAND, Global.INSERT_LIKE);
+            intent.putExtra(Global.CODE, code);
+
+            if (code == SocketException.SUCCESS) {
+                JSONObject likeObject = object.getJSONObject(Global.LIKE);
+                Gson gson = new Gson();
+                LikeEntity likeEntity = gson.fromJson(likeObject.toString(), LikeEntity.class);
+                intent.putExtra(Global.LIKE, likeEntity);
+            }
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 좋아요 삭제
+    private void processDeleteLike(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, TimelineDetailActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.COMMAND, Global.DELETE_LIKE);
+            intent.putExtra(Global.CODE, code);
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 타임라인 지우기
+    private void processDeleteTimeline(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, TimelineDetailActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.COMMAND, Global.DELETE_TIMELINE);
+            intent.putExtra(Global.CODE, code);
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 제품 업데이트
+    private void processUpdateProduct(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.COMMAND, Global.UPDATE_PRODUCT);
+            intent.putExtra(Global.CODE, code);
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 파일 삭제
+    private void processDeleteFile(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+            int from = object.getInt(Global.FROM);
+
+            Intent intent;
+            if (from == 0)
+                intent = new Intent(context, TimelineWriteActivity.class);
+            else
+                intent = new Intent(context, ProductDetailActivity.class);
+
+            intent.putExtra(Global.COMMAND, Global.DELETE_FILE);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.CODE, code);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -230,8 +391,18 @@ public class SocketIO {
     private void processDeleteComment(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            int from = object.getInt(Global.FROM);
 
-            Intent intent = new Intent(context, ProductDetailActivity.class);
+            if (code == SocketException.SUCCESS)
+                Global.onDeleted.onDeleted();
+            else
+                Global.onDeleted.onException();
+
+            Intent intent;
+            if (from == 0)
+                intent = new Intent(context, ProductDetailActivity.class);
+            else
+                intent = new Intent(context, TimelineDetailActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Global.CODE, code);
             context.startActivity(intent);
@@ -470,8 +641,14 @@ public class SocketIO {
     private void processGetSchoolRanking(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            int from = object.getInt(Global.FROM);
 
-            Intent intent = new Intent(context, MainActivity.class);
+            Intent intent;
+            if (from == 0)
+                intent = new Intent(context, MainActivity.class);
+            else
+                intent = new Intent(context, SchoolRankingPushService.class);
+
             intent.putExtra(Global.GET_SCHOOL_RANKING, code);
 
             if (code == SocketException.SUCCESS) {
@@ -486,7 +663,11 @@ public class SocketIO {
                 intent.putExtra(Global.SCHOOL, schoolRankingList);
             }
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+
+            if (from == 0)
+                context.startActivity(intent);
+            else
+                context.startService(intent);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -663,9 +844,9 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 20. 학교 랭킹 요청
-    public void getSchoolRanking() {
+    public void getSchoolRanking(int from) {
         Log.d(TAG, "학교 랭킹 요청");
-        socket.emit(Global.GET_SCHOOL_RANKING, "");
+        socket.emit(Global.GET_SCHOOL_RANKING, from);
     }
 
     // TODO: 15. 11. 20. 제품검색
@@ -693,7 +874,9 @@ public class SocketIO {
             JSONArray array = new JSONArray(json);
 
             Log.d(TAG, "array = " + array);
-            socket.emit(Global.INSERT_PRODUCT, array);
+            JSONObject object = new JSONObject();
+            object.put(Global.PRODUCT, array);
+            socket.emit(Global.INSERT_PRODUCT, object);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -793,7 +976,10 @@ public class SocketIO {
             Gson gson = new Gson();
             String json = gson.toJson(files);
             JSONArray array = new JSONArray(json);
-            socket.emit(Global.DELETE_FILE, array);
+            JSONObject object = new JSONObject();
+            object.put(Global.FILE, array);
+
+            socket.emit(Global.DELETE_FILE, object);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -806,7 +992,7 @@ public class SocketIO {
             Gson gson = new Gson();
             String json = gson.toJson(timelineCardDto);
             JSONObject object = new JSONObject(json);
-            socket.emit(Global.DELETE_FILE, object);
+            socket.emit(Global.UPDATE_TIMELINE, object);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -827,8 +1013,9 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 24. 댓글 삭제 요청
-    public void deleteComment(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
+    public void deleteComment(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos, int from) {
         try {
+            JSONObject object = new JSONObject();
             JSONArray array = new JSONArray();
             for (int i = 0; i < timelineCommentCardDtos.size(); i++) {
                 TimelineCommentCardDto dto = timelineCommentCardDtos.get(i);
@@ -838,7 +1025,9 @@ public class SocketIO {
                 commentObject.put(Global.USER_ID, dto.commentEntity.user_uuid);
                 array.put(commentObject);
             }
-            socket.emit(Global.DELETE_COMMENT, array);
+            object.put(Global.COMMENT, array);
+            object.put(Global.FROM, from);
+            socket.emit(Global.DELETE_COMMENT, object);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -861,11 +1050,91 @@ public class SocketIO {
     }
 
 
+    // TODO: 15. 11. 25. 제품 삭제
     public void deleteProduct(ProductCardDto productCardDto) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.PRODUCT_ID, productCardDto.productEntity.id);
             socket.emit(Global.DELETE_PRODUCT, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 제품 수정
+    public void updateProduct(ProductCardDto productCardDto) {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(productCardDto);
+            JSONObject object = new JSONObject(json);
+            socket.emit(Global.UPDATE_PRODUCT, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 파일 입력
+    public void insertFile(String id, String path, String fileName) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.PRODUCT_ID, id);
+            object.put(Global.PATH, path);
+            object.put(Global.FILE, fileName);
+            socket.emit(Global.INSERT_FILE, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 타임라인 지우기
+    public void deleteTimeline(TimelineCardDto timelineCardDto) {
+        String timelineId = timelineCardDto.timelineEntity.id;
+        String userId = timelineCardDto.userEntity.id;
+
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.TIMELINE_ITEM_ID, timelineId);
+            object.put(Global.USER_ID, userId);
+            socket.emit(Global.DELETE_TIMELINE, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 좋아요 지우기
+    public void deleteLike(LikeEntity likeEntity) {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(likeEntity);
+            JSONObject object = new JSONObject(json);
+            socket.emit(Global.DELETE_LIKE, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 좋아요
+    public void insertLike(String timelineItemId) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
+            socket.emit(Global.INSERT_LIKE, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 제품 요청
+    public void getProduct(String productJson) {
+        try {
+            JSONArray array = new JSONArray(productJson);
+            socket.emit(Global.GET_PRODUCT, array);
         } catch (JSONException e) {
             e.printStackTrace();
         }

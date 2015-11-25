@@ -25,13 +25,11 @@ import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.gcm.PushManager;
 import com.songjin.usum.managers.AuthManager;
-import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import nl.changer.polypicker.ImagePickerActivity;
 
@@ -68,6 +66,7 @@ public class ProductDetailCardView extends CardView {
 
     private ViewHolder viewHolder;
     private ProductCardDto productCardDto;
+    private ProductCardDto productCardDtoForUpdate;
 
     public ProductDetailCardView(Context context) {
         this(context, null);
@@ -343,47 +342,58 @@ public class ProductDetailCardView extends CardView {
             public void onClick(View v) {
                 BaseActivity.showLoadingView();
 
-                final ProductCardDto productCardDtoForUpdate = viewHolder.productAddForm.getProductCardDto();
+                productCardDtoForUpdate = viewHolder.productAddForm.getProductCardDto();
                 productCardDtoForUpdate.productEntity.user_id = productCardDto.productEntity.user_id;
                 productCardDtoForUpdate.productEntity.product_name = productCardDto.productEntity.product_name;
-                RequestManager.deleteFileEntities(productCardDto.fileEntities);
-                RequestManager.updateProduct(productCardDtoForUpdate, new BaasioCallback<BaasioEntity>() {
-                    @Override
-                    public void onResponse(BaasioEntity baasioEntity) {
-                        for (Uri uri : productCardDtoForUpdate.uris) {
-                            RequestManager.insertFile(
-                                    productCardDtoForUpdate.productEntity.uuid,
-                                    uri,
-                                    new BaasioUploadCallback() {
-                                        @Override
-                                        public void onResponse(BaasioFile baasioFile) {
 
-                                        }
+                Intent intent = new Intent(getContext(), SocketService.class);
+                intent.putExtra(Global.COMMAND, Global.DELETE_FILE);
+                intent.putExtra(Global.FILE, productCardDto.fileEntities);
+                getContext().startService(intent);
 
-                                        @Override
-                                        public void onException(BaasioException e) {
+                intent = new Intent(getContext(), SocketService.class);
+                intent.putExtra(Global.COMMAND, Global.UPDATE_PRODUCT);
+                intent.putExtra(Global.PRODUCT_CARD, productCardDtoForUpdate);
+                getContext().startService(intent);
 
-                                        }
-
-                                        @Override
-                                        public void onProgress(long l, long l2) {
-
-                                        }
-                                    }
-                            );
-                        }
-
-                        BaseActivity.hideLoadingView();
-                        viewHolder.productUpdateDialog.hide();
-                        ((Activity) BaseActivity.context).finish();
-                    }
-
-                    @Override
-                    public void onException(BaasioException e) {
-                        BaseActivity.hideLoadingView();
-                        viewHolder.productUpdateDialog.hide();
-                    }
-                });
+//                RequestManager.deleteFileEntities(productCardDto.fileEntities);
+//                RequestManager.updateProduct(productCardDtoForUpdate, new BaasioCallback<BaasioEntity>() {
+//                    @Override
+//                    public void onResponse(BaasioEntity baasioEntity) {
+//                        for (Uri uri : productCardDtoForUpdate.uris) {
+//                            RequestManager.insertFile(
+//                                    productCardDtoForUpdate.productEntity.uuid,
+//                                    uri,
+//                                    new BaasioUploadCallback() {
+//                                        @Override
+//                                        public void onResponse(BaasioFile baasioFile) {
+//
+//                                        }
+//
+//                                        @Override
+//                                        public void onException(BaasioException e) {
+//
+//                                        }
+//
+//                                        @Override
+//                                        public void onProgress(long l, long l2) {
+//
+//                                        }
+//                                    }
+//                            );
+//                        }
+//
+//                        BaseActivity.hideLoadingView();
+//                        viewHolder.productUpdateDialog.hide();
+//                        ((Activity) BaseActivity.context).finish();
+//                    }
+//
+//                    @Override
+//                    public void onException(BaasioException e) {
+//                        BaseActivity.hideLoadingView();
+//                        viewHolder.productUpdateDialog.hide();
+//                    }
+//                });
             }
         });
 
@@ -396,6 +406,51 @@ public class ProductDetailCardView extends CardView {
                 break;
             case PARENT:
                 break;
+        }
+    }
+
+
+    public void processUpdateProduct(int code) {
+        if (code == SocketException.SUCCESS) {
+            for (Uri uri : productCardDtoForUpdate.uris) {
+                String path = uri.getEncodedPath();
+                String fileName = path.substring(path.lastIndexOf('/') + 1);
+
+                Intent intent = new Intent(getContext(), SocketService.class);
+                intent.putExtra(Global.COMMAND, Global.INSERT_FILE);
+                intent.putExtra(Global.PRODUCT_ID, productCardDtoForUpdate.productEntity.id);
+                intent.putExtra(Global.PATH, path);
+                intent.putExtra(Global.FILE, fileName);
+                getContext().startService(intent);
+
+//                RequestManager.insertFile(
+//                        productCardDtoForUpdate.productEntity.uuid,
+//                        uri,
+//                        new BaasioUploadCallback() {
+//                            @Override
+//                            public void onResponse(BaasioFile baasioFile) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onException(BaasioException e) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onProgress(long l, long l2) {
+//
+//                            }
+//                        }
+//                );
+            }
+
+            BaseActivity.hideLoadingView();
+            viewHolder.productUpdateDialog.hide();
+            ((Activity) BaseActivity.context).finish();
+        } else {
+            BaseActivity.hideLoadingView();
+            viewHolder.productUpdateDialog.hide();
         }
     }
 

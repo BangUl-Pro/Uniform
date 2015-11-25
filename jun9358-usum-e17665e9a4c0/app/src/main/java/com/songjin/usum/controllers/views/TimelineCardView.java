@@ -14,11 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.kth.baasio.Baas;
-import com.kth.baasio.callback.BaasioCallback;
-import com.kth.baasio.entity.entity.BaasioEntity;
-import com.kth.baasio.exception.BaasioException;
 import com.songjin.usum.GMailSender;
+import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.activities.TimelineDetailActivity;
@@ -27,7 +24,8 @@ import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.entities.LikeEntity;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.AuthManager;
-import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketException;
+import com.songjin.usum.socketIo.SocketService;
 
 public class TimelineCardView extends CardView {
     private TimelineCardDto timelineCardDto;
@@ -91,11 +89,11 @@ public class TimelineCardView extends CardView {
     }
 
     private void showMorePopup() {
-        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
+        UserEntity userEntity = Global.userEntity;
 
         PopupMenu popup = new PopupMenu(getContext(), viewHolder.writerView.moreButton);
         popup.getMenuInflater().inflate(R.menu.menu_writer_more, popup.getMenu());
-        if (timelineCardDto.timelineEntity.user_uuid.equals(userEntity.uuid)) {
+        if (timelineCardDto.timelineEntity.user_uuid.equals(userEntity.id)) {
             popup.getMenu().findItem(R.id.action_update).setVisible(true);
             popup.getMenu().findItem(R.id.action_delete).setVisible(true);
         } else {
@@ -104,6 +102,7 @@ public class TimelineCardView extends CardView {
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
+                Intent intent;
                 switch (item.getItemId()) {
                     case R.id.action_report:
                         new MaterialDialog.Builder(BaseActivity.context)
@@ -120,32 +119,37 @@ public class TimelineCardView extends CardView {
                                 .show();
                         return true;
                     case R.id.action_update:
-                        Intent intent = new Intent(BaseActivity.context, TimelineWriteActivity.class);
+                        intent = new Intent(BaseActivity.context, TimelineWriteActivity.class);
                         intent.putExtra("isUpdate", true);
                         intent.putExtra("timelineCardDto", timelineCardDto);
                         BaseActivity.startActivityUsingStack(intent);
                         return true;
                     case R.id.action_delete:
                         BaseActivity.showLoadingView();
-                        RequestManager.deleteTimeline(timelineCardDto, new BaasioCallback<BaasioEntity>() {
-                            @Override
-                            public void onResponse(BaasioEntity baasioEntity) {
-                                BaseActivity.hideLoadingView();
-                                if (timelineActionCallback != null) {
-                                    timelineActionCallback.onDelete();
-                                }
-                            }
+                        intent = new Intent(getContext(), SocketService.class);
+                        intent.putExtra(Global.COMMAND, Global.DELETE_TIMELINE);
+                        intent.putExtra(Global.TIMELINE, timelineCardDto);
+                        getContext().startService(intent);
 
-                            @Override
-                            public void onException(BaasioException e) {
-                                BaseActivity.hideLoadingView();
-
-                                new MaterialDialog.Builder(BaseActivity.context)
-                                        .title(R.string.app_name)
-                                        .content("타임라인을 삭제하는 중에 문제가 발생하였습니다.")
-                                        .show();
-                            }
-                        });
+//                        RequestManager.deleteTimeline(timelineCardDto, new BaasioCallback<BaasioEntity>() {
+//                            @Override
+//                            public void onResponse(BaasioEntity baasioEntity) {
+//                                BaseActivity.hideLoadingView();
+//                                if (timelineActionCallback != null) {
+//                                    timelineActionCallback.onDelete();
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onException(BaasioException e) {
+//                                BaseActivity.hideLoadingView();
+//
+//                                new MaterialDialog.Builder(BaseActivity.context)
+//                                        .title(R.string.app_name)
+//                                        .content("타임라인을 삭제하는 중에 문제가 발생하였습니다.")
+//                                        .show();
+//                            }
+//                        });
                         return true;
                 }
 
@@ -154,6 +158,23 @@ public class TimelineCardView extends CardView {
         });
 
         popup.show();
+    }
+
+
+    public void processDeleteTimeline(int code) {
+        if (code == SocketException.SUCCESS) {
+            BaseActivity.hideLoadingView();
+            if (timelineActionCallback != null) {
+                timelineActionCallback.onDelete();
+            }
+        } else {
+            BaseActivity.hideLoadingView();
+
+            new MaterialDialog.Builder(BaseActivity.context)
+                    .title(R.string.app_name)
+                    .content("타임라인을 삭제하는 중에 문제가 발생하였습니다.")
+                    .show();
+        }
     }
 
     public interface TimelineActionCallback {
@@ -169,15 +190,15 @@ public class TimelineCardView extends CardView {
         protected Boolean doInBackground(Void... params) {
             try {
                 GMailSender sender = new GMailSender("usum.sender@gmail.com", "!@#usumsender123");
-                UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
+                UserEntity userEntity = Global.userEntity;
                 sender.sendMail(
-                        "교복통 타임라인 신고접수(" + timelineCardDto.timelineEntity.uuid + ")",
-                        "TIMELINE UUID: " + timelineCardDto.timelineEntity.uuid + "\n" +
+                        "교복통 타임라인 신고접수(" + timelineCardDto.timelineEntity.id + ")",
+                        "TIMELINE UUID: " + timelineCardDto.timelineEntity.id + "\n" +
                                 "내용: " + timelineCardDto.timelineEntity.contents + "\n" +
                                 "작성자: " + timelineCardDto.userEntity.realName + "\n" +
-                                "신고자: " + userEntity.realName + "(" + userEntity.uuid + ")",
+                                "신고자: " + userEntity.realName + "(" + userEntity.id + ")",
                         "usum.sender@gmail.com",
-                        getResources().getString(R.string.usum_cs_email));
+                        "usum.dev@gmail.com");
             } catch (Exception e) {
                 Log.e("SendMail", e.getMessage(), e);
                 return false;
@@ -208,7 +229,7 @@ public class TimelineCardView extends CardView {
 
         viewHolder.writerView.setUserEntity(timelineCardDto.userEntity);
         viewHolder.writerView.setWrittenTime(timelineCardDto.timelineEntity.created);
-        setLiked(viewHolder, !timelineCardDto.likeEntity.uuid.isEmpty());
+        setLiked(viewHolder, !timelineCardDto.likeEntity.id.isEmpty());
         viewHolder.images.setFileEntities(timelineCardDto.fileEntities);
 
         viewHolder.writerView.moreButton.setOnClickListener(new OnClickListener() {
@@ -228,35 +249,45 @@ public class TimelineCardView extends CardView {
         viewHolder.likeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                setLiked(viewHolder, timelineCardDto.likeEntity.uuid.isEmpty());
+                setLiked(viewHolder, timelineCardDto.likeEntity.id.isEmpty());
 
                 viewHolder.likeButton.setActivated(false);
-                if (!timelineCardDto.likeEntity.uuid.isEmpty()) {
-                    RequestManager.deleteLike(timelineCardDto.likeEntity, new BaasioCallback<BaasioEntity>() {
-                        @Override
-                        public void onResponse(BaasioEntity baasioEntity) {
-                            timelineCardDto.likeEntity = new LikeEntity();
-                            viewHolder.likeButton.setActivated(true);
-                        }
+                if (!timelineCardDto.likeEntity.id.isEmpty()) {
+                    Intent intent = new Intent(getContext(), SocketService.class);
+                    intent.putExtra(Global.COMMAND, Global.DELETE_LIKE);
+                    intent.putExtra(Global.LIKE, timelineCardDto.likeEntity);
+                    getContext().startService(intent);
 
-                        @Override
-                        public void onException(BaasioException e) {
-                            viewHolder.likeButton.setActivated(true);
-                        }
-                    });
+//                    RequestManager.deleteLike(timelineCardDto.likeEntity, new BaasioCallback<BaasioEntity>() {
+//                        @Override
+//                        public void onResponse(BaasioEntity baasioEntity) {
+//                            timelineCardDto.likeEntity = new LikeEntity();
+//                            viewHolder.likeButton.setActivated(true);
+//                        }
+//
+//                        @Override
+//                        public void onException(BaasioException e) {
+//                            viewHolder.likeButton.setActivated(true);
+//                        }
+//                    });
                 } else {
-                    RequestManager.insertLike(timelineCardDto.timelineEntity.uuid, new BaasioCallback<BaasioEntity>() {
-                        @Override
-                        public void onResponse(BaasioEntity baasioEntity) {
-                            timelineCardDto.likeEntity = new LikeEntity(baasioEntity);
-                            viewHolder.likeButton.setActivated(true);
-                        }
+                    Intent intent = new Intent(getContext(), SocketService.class);
+                    intent.putExtra(Global.COMMAND, Global.INSERT_LIKE);
+                    intent.putExtra(Global.TIMELINE_ITEM_ID, timelineCardDto.timelineEntity.id);
+                    getContext().startService(intent);
 
-                        @Override
-                        public void onException(BaasioException e) {
-                            viewHolder.likeButton.setActivated(true);
-                        }
-                    });
+//                    RequestManager.insertLike(timelineCardDto.timelineEntity.uuid, new BaasioCallback<BaasioEntity>() {
+//                        @Override
+//                        public void onResponse(BaasioEntity baasioEntity) {
+//                            timelineCardDto.likeEntity = new LikeEntity(baasioEntity);
+//                            viewHolder.likeButton.setActivated(true);
+//                        }
+//
+//                        @Override
+//                        public void onException(BaasioException e) {
+//                            viewHolder.likeButton.setActivated(true);
+//                        }
+//                    });
                 }
             }
         });
@@ -264,6 +295,29 @@ public class TimelineCardView extends CardView {
         // 내용 표시
         viewHolder.contents.setText(timelineCardDto.timelineEntity.contents);
     }
+
+
+    // TODO: 15. 11. 25. 좋아요 삭제
+    public void processDeleteLike(int code) {
+        if (code == SocketException.SUCCESS) {
+            timelineCardDto.likeEntity = new LikeEntity();
+            viewHolder.likeButton.setActivated(true);
+        } else {
+            viewHolder.likeButton.setActivated(true);
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 좋아요
+    public void processInsertLike(int code, LikeEntity likeEntity) {
+        if (code == SocketException.SUCCESS) {
+            timelineCardDto.likeEntity = likeEntity;
+            viewHolder.likeButton.setActivated(true);
+        } else {
+            viewHolder.likeButton.setActivated(true);
+        }
+    }
+
 
     private void setLiked(ViewHolder viewHolder, boolean isLiked) {
         if (isLiked) {

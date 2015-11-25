@@ -1,6 +1,7 @@
 package com.songjin.usum.controllers.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
@@ -11,20 +12,18 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.kth.baasio.Baas;
-import com.kth.baasio.callback.BaasioCallback;
-import com.kth.baasio.entity.entity.BaasioEntity;
-import com.kth.baasio.exception.BaasioException;
 import com.songjin.usum.GMailSender;
+import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.entities.UserEntity;
-import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketService;
 
 public class TimelineCommentCardView extends CardView {
     private TimelineCommentCardDto timelineCommentCardDto;
     private TimelineCardView.TimelineActionCallback timelineActionCallback;
+    private int from;
 
     private class ViewHolder {
         public WriterView writerView;
@@ -57,11 +56,11 @@ public class TimelineCommentCardView extends CardView {
     }
 
     private void showMorePopup() {
-        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
+        UserEntity userEntity = Global.userEntity;
 
         PopupMenu popup = new PopupMenu(getContext(), viewHolder.writerView.moreButton);
         popup.getMenuInflater().inflate(R.menu.menu_writer_more, popup.getMenu());
-        if (timelineCommentCardDto.commentEntity.user_uuid.equals(userEntity.uuid)) {
+        if (timelineCommentCardDto.commentEntity.user_uuid.equals(userEntity.id)) {
             popup.getMenu().findItem(R.id.action_delete).setVisible(true);
         } else {
             popup.getMenu().findItem(R.id.action_report).setVisible(true);
@@ -86,9 +85,15 @@ public class TimelineCommentCardView extends CardView {
                         return true;
                     case R.id.action_delete:
                         BaseActivity.showLoadingView();
-                        RequestManager.deleteComment(timelineCommentCardDto, new BaasioCallback<BaasioEntity>() {
+
+                        Intent intent = new Intent(getContext(), SocketService.class);
+                        intent.putExtra(Global.COMMAND, Global.DELETE_COMMENT);
+                        intent.putExtra(Global.TIMELINE_COMMENT, timelineCommentCardDto);
+                        intent.putExtra(Global.FROM, from);
+                        getContext().startService(intent);
+                        Global.onDeleted = new Global.onDeleted() {
                             @Override
-                            public void onResponse(BaasioEntity baasioEntity) {
+                            public void onDeleted() {
                                 BaseActivity.hideLoadingView();
                                 if (timelineActionCallback != null) {
                                     timelineActionCallback.onDelete();
@@ -96,7 +101,7 @@ public class TimelineCommentCardView extends CardView {
                             }
 
                             @Override
-                            public void onException(BaasioException e) {
+                            public void onException() {
                                 BaseActivity.hideLoadingView();
 
                                 new MaterialDialog.Builder(BaseActivity.context)
@@ -104,7 +109,27 @@ public class TimelineCommentCardView extends CardView {
                                         .content("댓글을 삭제하는 중에 문제가 발생하였습니다.")
                                         .show();
                             }
-                        });
+                        };
+
+//                        RequestManager.deleteComment(timelineCommentCardDto, new BaasioCallback<BaasioEntity>() {
+//                            @Override
+//                            public void onResponse(BaasioEntity baasioEntity) {
+//                                BaseActivity.hideLoadingView();
+//                                if (timelineActionCallback != null) {
+//                                    timelineActionCallback.onDelete();
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onException(BaasioException e) {
+//                                BaseActivity.hideLoadingView();
+//
+//                                new MaterialDialog.Builder(BaseActivity.context)
+//                                        .title(R.string.app_name)
+//                                        .content("댓글을 삭제하는 중에 문제가 발생하였습니다.")
+//                                        .show();
+//                            }
+//                        });
                         return true;
                 }
 
@@ -124,15 +149,15 @@ public class TimelineCommentCardView extends CardView {
         protected Boolean doInBackground(Void... params) {
             try {
                 GMailSender sender = new GMailSender("usum.sender@gmail.com", "!@#usumsender123");
-                UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
+                UserEntity userEntity = Global.userEntity;
                 sender.sendMail(
                         "교복통 타임라인 댓글 신고접수(" + timelineCommentCardDto.commentEntity.timeline_item_uuid + ")",
                         "COMMENT UUID: " + timelineCommentCardDto.commentEntity.timeline_item_uuid + "\n" +
                                 "내용: " + timelineCommentCardDto.commentEntity.contents + "\n" +
                                 "작성자: " + timelineCommentCardDto.userEntity.realName + "\n" +
-                                "신고자: " + userEntity.realName + "(" + userEntity.uuid + ")",
+                                "신고자: " + userEntity.realName + "(" + userEntity.id + ")",
                         "usum.sender@gmail.com",
-                        getResources().getString(R.string.usum_cs_email));
+                        "usum.dev@gmail.com");
             } catch (Exception e) {
                 Log.e("SendMail", e.getMessage(), e);
                 return false;
@@ -170,5 +195,15 @@ public class TimelineCommentCardView extends CardView {
         });
 
         viewHolder.contents.setText(timelineCommentCardDto.commentEntity.contents);
+    }
+
+
+    public void setFrom(int from) {
+        this.from = from;
+    }
+
+
+    public void processDeleteComment(int code) {
+
     }
 }

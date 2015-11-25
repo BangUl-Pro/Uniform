@@ -8,8 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
-import com.kth.baasio.Baas;
-import com.kth.baasio.entity.user.BaasioUser;
+import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.activities.EditProfileActivity;
@@ -88,8 +87,9 @@ public class ProfileView extends LinearLayout {
         }
         viewHolder.phone.setText(userEntity.phone);
 
-        BaasioUser baasioUser = Baas.io().getSignedInUser();
-        if (userEntity.uuid.equals(baasioUser.getUuid().toString())) {
+//        BaasioUser baasioUser = Baas.io().getSignedInUser();
+//        if (userEntity.uuid.equals(baasioUser.getUuid().toString())) {
+        if (userEntity.id.equals(Global.userEntity.id)) {
             viewHolder.editProfileButton.setVisibility(View.VISIBLE);
         } else {
             viewHolder.editProfileButton.setVisibility(View.GONE);

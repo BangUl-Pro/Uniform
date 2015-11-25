@@ -16,6 +16,7 @@ public class Global {
     public static final String UPDATE_USER_PROFILE = "updateUserProfile";
     public static final String INSERT_TIMELINE_COMMENT = "insertTimelineComment";
     public static final String GET_TIMELINE_COMMENT = "getTimelineComment";
+    public static final String GET_PRODUCT = "getProduct";
     public static final String DELETE_FILE = "deleteFile";
     public static final String SEARCH_PRODUCT = "searchProduct";
     public static final String UPDATE_TRANSACTION_STATUS = "updateTransactionStatus";
@@ -27,8 +28,12 @@ public class Global {
     public static final String GET_ALL_TIMELINE = "getAllTimeline";
     public static final String GET_MY_TIMELINE = "getMyTimeline";
     public static final String UPDATE_TIMELINE = "updateTimeline";
+    public static final String UPDATE_PRODUCT = "updateProduct";
     public static final String INSERT_TIMELINE = "insertTimeline";
     public static final String INSERT_FILE = "insertFile";
+    public static final String DELETE_TIMELINE = "deleteTimeline";
+    public static final String DELETE_LIKE = "deleteLike";
+    public static final String INSERT_LIKE = "insertLike";
 
     public static final String ID = "id";
     public static final String USER = "user";
@@ -53,8 +58,17 @@ public class Global {
     public static final String PRODUCT_ID = "productId";
     public static final String TRANSACTION = "transaction";
     public static final String STATUS = "status";
+    public static final String COMMENT = "comment";
+    public static final String PRODUCT = "product";
+    public static final String PATH = "path";
+    public static final String LIKE = "like";
 
+    public static onDeleted onDeleted;
 
+    public interface onDeleted {
+        void onDeleted();
+        void onException();
+    }
 
     public static UserEntity userEntity;
 }

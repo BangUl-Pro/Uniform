@@ -89,7 +89,7 @@ public class ProductRecyclerView extends SuperRecyclerView {
             holder.productCardView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (productCardDto.productEntity.uuid == null) {
+                    if (productCardDto.productEntity.id == null) {
                         return;
                     }
 

@@ -10,6 +10,7 @@ import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.entities.FileEntity;
+import com.songjin.usum.entities.LikeEntity;
 import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
 
@@ -43,7 +44,7 @@ public class SocketService extends Service {
                     processSignIn(intent);
                 } else if (command.equals(Global.GET_SCHOOL_RANKING)) {
                     // 학교 랭킹
-                    processGetSchoolRanking();
+                    processGetSchoolRanking(intent);
                 } else if (command.equals(Global.SEARCH_PRODUCT)) {
                     // 제품 검색
                     processSearchProduct(intent);
@@ -86,11 +87,74 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.DELETE_PRODUCT)) {
                     // 제품 삭제
                     processDeleteProduct(intent);
+                } else if (command.equals(Global.UPDATE_PRODUCT)) {
+                    // 제품 수정
+                    processUpdateProduct(intent);
+                } else if (command.equals(Global.INSERT_FILE)) {
+                    // 파일 입력
+                    processInsertFile(intent);
+                } else if (command.equals(Global.DELETE_TIMELINE)) {
+                    // 타임라인 지우기
+                    processDeleteTimeline(intent);
+                } else if (command.equals(Global.DELETE_LIKE)) {
+                    // 좋아요 지우기
+                    processDeleteLike(intent);
+                } else if (command.equals(Global.INSERT_LIKE)) {
+                    // 좋아요
+                    processInsertLike(intent);
+                } else if (command.equals(Global.GET_PRODUCT)) {
+                    // 제품 요청
+                    processGetProduct(intent);
                 }
             }
         }
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+
+    // TODO: 15. 11. 25. 제품 요청
+    private void processGetProduct(Intent intent) {
+        String productJson = intent.getStringExtra(Global.PRODUCT);
+        socketIO.getProduct(productJson);
+    }
+
+
+    // TODO: 15. 11. 25. 좋아요
+    private void processInsertLike(Intent intent) {
+        String timelineItemId = intent.getStringExtra(Global.TIMELINE_ITEM_ID);
+        socketIO.insertLike(timelineItemId);
+    }
+
+
+    // TODO: 15. 11. 25. 좋아요 지우기
+    private void processDeleteLike(Intent intent) {
+        LikeEntity likeEntity = intent.getParcelableExtra(Global.LIKE);
+        socketIO.deleteLike(likeEntity);
+    }
+
+
+    // TODO: 15. 11. 25. 타임라인 지우기
+    private void processDeleteTimeline(Intent intent) {
+        TimelineCardDto timelineCardDto = intent.getParcelableExtra(Global.TIMELINE);
+        socketIO.deleteTimeline(timelineCardDto);
+    }
+
+
+    // TODO: 15. 11. 25. 파일 입력
+    private void processInsertFile(Intent intent) {
+        String id = intent.getStringExtra(Global.PRODUCT_ID);
+        String path = intent.getStringExtra(Global.PATH);
+        String fileName = intent.getStringExtra(Global.FILE);
+        socketIO.insertFile(id, path, fileName);
+    }
+
+
+
+    // TODO: 15. 11. 25. 제품 수정
+    private void processUpdateProduct(Intent intent) {
+        ProductCardDto productCardDto = intent.getParcelableExtra(Global.PRODUCT_CARD);
+        socketIO.updateProduct(productCardDto);
     }
 
 
@@ -112,8 +176,9 @@ public class SocketService extends Service {
 
     // TODO: 15. 11. 24. 댓글 삭제
     private void processDeleteComment(Intent intent) {
+        int from = intent.getIntExtra(Global.FROM, -1);
         ArrayList<TimelineCommentCardDto> commentCardDtos = (ArrayList) intent.getSerializableExtra(Global.TIMELINE_COMMENT);
-        socketIO.deleteComment(commentCardDtos);
+        socketIO.deleteComment(commentCardDtos, from);
     }
 
 
@@ -210,8 +275,9 @@ public class SocketService extends Service {
 
 
     // TODO: 15. 11. 20. 학교 랭킹 요청
-    private void processGetSchoolRanking() {
-        socketIO.getSchoolRanking();
+    private void processGetSchoolRanking(Intent intent) {
+        int from = intent.getIntExtra(Global.FROM, -1);
+        socketIO.getSchoolRanking(from);
     }
 
 

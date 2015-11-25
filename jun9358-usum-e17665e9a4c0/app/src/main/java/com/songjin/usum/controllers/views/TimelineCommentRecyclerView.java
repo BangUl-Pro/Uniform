@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class TimelineCommentRecyclerView extends RecyclerView {
     private ArrayList<TimelineCommentCardDto> timelineCommentCardDtos;
 
+    private TimelineCommentAdapter adapter;
+
     public TimelineCommentRecyclerView(Context context) {
         this(context, null);
     }
@@ -30,7 +32,6 @@ public class TimelineCommentRecyclerView extends RecyclerView {
     private void initView() {
         timelineCommentCardDtos = new ArrayList<>();
         setLayoutManager(new RecyclerInScrollLayoutManager(getContext()));
-        setAdapter(new TimelineCommentAdapter(timelineCommentCardDtos));
     }
 
     public void setTimelineCommentCardDtos(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
@@ -41,9 +42,11 @@ public class TimelineCommentRecyclerView extends RecyclerView {
 
     private class TimelineCommentAdapter extends Adapter<TimelineCommentAdapter.ViewHolder> {
         private ArrayList<TimelineCommentCardDto> timelineCommentCardDtos;
+        private int from;
 
-        public TimelineCommentAdapter(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
+        public TimelineCommentAdapter(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos, int from) {
             this.timelineCommentCardDtos = timelineCommentCardDtos;
+            this.from = from;
         }
 
         @Override
@@ -78,7 +81,24 @@ public class TimelineCommentRecyclerView extends RecyclerView {
                 super(view);
 
                 timelineCommentCard = (TimelineCommentCardView) view.findViewWithTag("TimelineCommentCardView");
+                timelineCommentCard.setFrom(from);
             }
         }
+
+
+        public void processDeleteComment(int code) {
+
+        }
+    }
+
+
+    public void setFrom(int from) {
+        adapter = new TimelineCommentAdapter(timelineCommentCardDtos, from);
+        setAdapter(adapter);
+    }
+
+
+    public void processDeleteComment(int code) {
+        adapter.processDeleteComment(code);
     }
 }

@@ -67,7 +67,7 @@ public class ImageCardView extends CardView {
         File file = new File(BaseActivity.context.getCacheDir() + fileEntity.id);
         if (file.exists()) {
             // 성공
-            imageUrl = BaseActivity.context.getCacheDir() + fileEntity.uuid;
+            imageUrl = BaseActivity.context.getCacheDir() + fileEntity.id;
             loadImage(imageUrl);
             return;
         }
