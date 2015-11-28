@@ -16,7 +16,6 @@ import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.AuthManager;
-import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
 
@@ -35,7 +34,7 @@ public class TimelineActivity extends BaseActivity {
 
     private ViewHolder viewHolder;
 
-    private RequestManager.TypedBaasioQueryCallback<TimelineCardDto> timelineCardDtoQueryCallback;
+//    private RequestManager.TypedBaasioQueryCallback<TimelineCardDto> timelineCardDtoQueryCallback;
     private ArrayList<TimelineCardDto> timelineCardDtos;
 //    private BaasioQuery timelineCardDtoQuery;
     private Intent intent;

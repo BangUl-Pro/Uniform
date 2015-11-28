@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Parcelable;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,7 +24,6 @@ import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
-import com.songjin.usum.gcm.PushManager;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
@@ -34,6 +34,7 @@ import java.util.Arrays;
 import nl.changer.polypicker.ImagePickerActivity;
 
 public class ProductDetailCardView extends CardView {
+    private static final String TAG = "ProductDetailCardView";
     private class ViewHolder {
         public ProductCardView productCardView;
         public ProductAddForm productAddForm;
@@ -556,7 +557,8 @@ public class ProductDetailCardView extends CardView {
                 pushMessage = "구매자가 상품을 수취하였습니다.";
 
                 // activity가 닫혀서 dialog가 표시안되서 특별처리
-                PushManager.sendTransactionPush(targetUserUuids, pushMessage);
+                Log.d(TAG, "푸시알림 구현해야함");
+//                PushManager.sendTransactionPush(targetUserUuids, pushMessage);
 
                 // 예약알림에서 제거
                 SettingFragment.removeReservedCategory(
@@ -565,7 +567,8 @@ public class ProductDetailCardView extends CardView {
                 );
                 return;
         }
-        PushManager.sendTransactionPush(targetUserUuids, pushMessage);
+//        PushManager.sendTransactionPush(targetUserUuids, pushMessage);
+        Log.d(TAG, "푸시알림 구현해야함");
 
         new MaterialDialog.Builder(BaseActivity.context)
                 .title(R.string.app_name)

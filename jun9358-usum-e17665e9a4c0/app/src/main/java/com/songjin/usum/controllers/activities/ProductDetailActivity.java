@@ -134,7 +134,7 @@ public class ProductDetailActivity extends BaseActivity {
                         processGetTimelineComment(code, intent);
                     } else if (command.equals(Global.DELETE_COMMENT)) {
                         // 댓글 삭제
-                        processDeleteComment(code);
+//                        processDeleteComment(code);
                     } else if (command.equals(Global.UPDATE_TRANSACTION_STATUS)) {
                         //
                         processUpdateTransactionUpdate(code, intent);
@@ -177,12 +177,12 @@ public class ProductDetailActivity extends BaseActivity {
     }
 
 
-    // TODO: 15. 11. 24. 댓글 삭제
-    private void processDeleteComment(int code) {
-        if (SocketException.SUCCESS != code) {
-            viewHolder.comments.
-        }
-    }
+//    // TODO: 15. 11. 24. 댓글 삭제
+//    private void processDeleteComment(int code) {
+//        if (SocketException.SUCCESS != code) {
+//            viewHolder.comments.
+//        }
+//    }
 
 
     // TODO: 15. 11. 23. 타임라인 게시글 댓글 불러오기 응답

@@ -19,7 +19,6 @@ import com.songjin.usum.controllers.views.WriterView;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.UserEntity;
-import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
 
@@ -51,8 +50,8 @@ public class TimelineWriteActivity extends BaseActivity {
     private static final int MAXIMUM_IMAGES = 10;
     private Menu menu;
     private ArrayList<Uri> selectedImageUris;
-    private TimelineInsertCallback timelineInsertCallback = new TimelineInsertCallback();
-    private FileUploadCallback fileUploadCallback = new FileUploadCallback();
+//    private TimelineInsertCallback timelineInsertCallback = new TimelineInsertCallback();
+//    private FileUploadCallback fileUploadCallback = new FileUploadCallback();
     private Context context;
 
     @Override
@@ -110,8 +109,8 @@ public class TimelineWriteActivity extends BaseActivity {
                     intent.putExtra(Global.TIMELINE, timelineCardDtoForUpdate);
                     startService(intent);
 
-                    RequestManager.deleteFileEntities(timelineCardDtoForUpdate.fileEntities);
-                    RequestManager.updateTimeline(timelineCardDtoForUpdate, timelineInsertCallback);
+//                    RequestManager.deleteFileEntities(timelineCardDtoForUpdate.fileEntities);
+//                    RequestManager.updateTimeline(timelineCardDtoForUpdate, timelineInsertCallback);
                 } else {
                     Intent intent = new Intent(getApplicationContext(), SocketService.class);
                     intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE);
@@ -119,7 +118,7 @@ public class TimelineWriteActivity extends BaseActivity {
                     intent.putExtra(Global.TIMELINE_CONTENT, contents);
                     startService(intent);
 
-                    RequestManager.insertTimeline(userEntity.schoolId, contents, timelineInsertCallback);
+//                    RequestManager.insertTimeline(userEntity.schoolId, contents, timelineInsertCallback);
                 }
                 return true;
             default:
@@ -232,6 +231,7 @@ public class TimelineWriteActivity extends BaseActivity {
     }
 
 
+    // TODO: 15. 11. 28. 타임라인 삽입 응답
     private void processInsertTimeline(int code, Intent intent) {
         if (code == SocketException.SUCCESS) {
             // 성공
@@ -240,13 +240,39 @@ public class TimelineWriteActivity extends BaseActivity {
                 selectedImageUris.remove(0);
 
                 TimelineCardDto timelineCardDto = intent.getParcelableExtra(Global.TIMELINE);
-                String parentUuid = baasioEntity.getUuid().toString();
+//                String parentUuid = baasioEntity.getUuid().toString();
+                final String parentUuid = timelineCardDto.timelineEntity.id;
 
                 Intent intent1 = new Intent(getApplicationContext(), SocketService.class);
                 intent1.putExtra(Global.COMMAND, Global.INSERT_FILE);
-                intent1.putExtra(Global.PARENT_ID, parentUuid);
+                intent1.putExtra(Global.PRODUCT_ID, parentUuid);
+                intent1.putExtra(Global.PATH, selectedUri);
                 startActivity(intent1);
-                RequestManager.insertFile(parentUuid, selectedUri, fileUploadCallback);
+
+                Global.OnInsertFile = new Global.onInsertFile() {
+                    @Override
+                    public void onSuccess() {
+                        if (0 < selectedImageUris.size()) {
+                            Uri selectedUri = selectedImageUris.get(0);
+                            selectedImageUris.remove(0);
+
+//                            String parentUuid = baasioFile.getProperty("parent_uuid").asText();
+                            Intent intent = new Intent(getApplicationContext(), SocketService.class);
+                            intent.putExtra(Global.COMMAND, Global.INSERT_FILE);
+                            intent.putExtra(Global.PRODUCT_ID, parentUuid);
+                            intent.putExtra(Global.PATH, selectedUri);
+                            startActivity(intent);
+                        } else {
+                            onWriteAfter(true);
+                        }
+                    }
+
+                    @Override
+                    public void onException(int code) {
+                        onWriteAfter(false);
+                    }
+                };
+//                RequestManager.insertFile(parentUuid, selectedUri, fileUploadCallback);
             } else {
                 onWriteAfter(true);
             }
@@ -257,48 +283,48 @@ public class TimelineWriteActivity extends BaseActivity {
     }
 
 
-    private class TimelineInsertCallback implements BaasioCallback<BaasioEntity> {
-        @Override
-        public void onResponse(BaasioEntity baasioEntity) {
-            if (0 < selectedImageUris.size()) {
-                Uri selectedUri = selectedImageUris.get(0);
-                selectedImageUris.remove(0);
+//    private class TimelineInsertCallback implements BaasioCallback<BaasioEntity> {
+//        @Override
+//        public void onResponse(BaasioEntity baasioEntity) {
+//            if (0 < selectedImageUris.size()) {
+//                Uri selectedUri = selectedImageUris.get(0);
+//                selectedImageUris.remove(0);
+//
+//                String parentUuid = baasioEntity.getUuid().toString();
+//                RequestManager.insertFile(parentUuid, selectedUri, fileUploadCallback);
+//            } else {
+//                onWriteAfter(true);
+//            }
+//        }
+//
+//        @Override
+//        public void onException(BaasioException e) {
+//            onWriteAfter(false);
+//        }
+//    }
 
-                String parentUuid = baasioEntity.getUuid().toString();
-                RequestManager.insertFile(parentUuid, selectedUri, fileUploadCallback);
-            } else {
-                onWriteAfter(true);
-            }
-        }
-
-        @Override
-        public void onException(BaasioException e) {
-            onWriteAfter(false);
-        }
-    }
-
-    private class FileUploadCallback implements BaasioUploadCallback {
-        @Override
-        public void onResponse(BaasioFile baasioFile) {
-            if (0 < selectedImageUris.size()) {
-                Uri selectedUri = selectedImageUris.get(0);
-                selectedImageUris.remove(0);
-
-                String parentUuid = baasioFile.getProperty("parent_uuid").asText();
-                RequestManager.insertFile(parentUuid, selectedUri, fileUploadCallback);
-            } else {
-                onWriteAfter(true);
-            }
-        }
-
-        @Override
-        public void onException(BaasioException e) {
-            onWriteAfter(false);
-        }
-
-        @Override
-        public void onProgress(long l, long l2) {
-            // TODO 진행상황 표시
-        }
-    }
+//    private class FileUploadCallback implements BaasioUploadCallback {
+//        @Override
+//        public void onResponse(BaasioFile baasioFile) {
+//            if (0 < selectedImageUris.size()) {
+//                Uri selectedUri = selectedImageUris.get(0);
+//                selectedImageUris.remove(0);
+//
+//                String parentUuid = baasioFile.getProperty("parent_uuid").asText();
+//                RequestManager.insertFile(parentUuid, selectedUri, fileUploadCallback);
+//            } else {
+//                onWriteAfter(true);
+//            }
+//        }
+//
+//        @Override
+//        public void onException(BaasioException e) {
+//            onWriteAfter(false);
+//        }
+//
+//        @Override
+//        public void onProgress(long l, long l2) {
+//             TODO 진행상황 표시
+//        }
+//    }
 }

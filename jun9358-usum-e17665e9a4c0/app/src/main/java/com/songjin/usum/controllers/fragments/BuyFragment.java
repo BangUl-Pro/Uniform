@@ -18,7 +18,6 @@ import com.songjin.usum.controllers.views.ProductSearchForm;
 import com.songjin.usum.controllers.views.ProductSearchSlidingLayer;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.managers.AuthManager;
-import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 import com.songjin.usum.socketIo.SocketService;
 
@@ -41,7 +40,7 @@ public class BuyFragment extends SlidingBaseFragment {
 
     private ArrayList<ProductCardDto> productCardDtos;
 //    private BaasioQuery productCardDtoQuery;
-    private RequestManager.TypedBaasioQueryCallback<ProductCardDto> productCardDtoQueryCallback;
+//    private RequestManager.TypedBaasioQueryCallback<ProductCardDto> productCardDtoQueryCallback;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -1,9 +1,7 @@
--keep class com.songjin.usum.baasio.BaasioApplication {
+-keep class null {
     <init>();
     void attachBaseContext(android.content.Context);
 }
--keep class com.songjin.usum.gcm.GCMRedirectedBroadcastReceiver { <init>(); }
--keep class com.songjin.usum.gcm.GCMIntentService { <init>(); }
 -keep class com.songjin.usum.reservation.ReservationPushBroadcastReceiver { <init>(); }
 -keep class com.songjin.usum.reservation.ReservationPushService { <init>(); }
 -keep class com.songjin.usum.reservation.SchoolRankingPushBroadcastReceiver { <init>(); }

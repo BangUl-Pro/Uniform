@@ -91,9 +91,9 @@ public class TimelineCommentCardView extends CardView {
                         intent.putExtra(Global.TIMELINE_COMMENT, timelineCommentCardDto);
                         intent.putExtra(Global.FROM, from);
                         getContext().startService(intent);
-                        Global.onDeleted = new Global.onDeleted() {
+                        Global.OnDeleted = new Global.onDeleted() {
                             @Override
-                            public void onDeleted() {
+                            public void onSuccess() {
                                 BaseActivity.hideLoadingView();
                                 if (timelineActionCallback != null) {
                                     timelineActionCallback.onDelete();

@@ -2,6 +2,7 @@ package com.songjin.usum.reservation;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 import com.songjin.usum.Global;
 import com.songjin.usum.HashBiMap;
@@ -12,7 +13,6 @@ import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.entities.ProductEntity;
 import com.songjin.usum.entities.ReservedCategoryEntity;
 import com.songjin.usum.entities.UserEntity;
-import com.songjin.usum.gcm.PushManager;
 import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
 
@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class ReservationPushService extends IntentService {
+    private static final String TAG = "ReservationPushService";
     private ReservationCheckThread reservationCheckThread;
 
     public ReservationPushService() {
@@ -147,7 +148,8 @@ public class ReservationPushService extends IntentService {
                 String msg = "";
                 msg += categories.get(productCardDto.productEntity.category);
                 msg += "에 해당하는 상품이 등록되었습니다.";
-                PushManager.sendReservationPushToMe(msg);
+//                PushManager.sendReservationPushToMe(msg);
+                Log.d(TAG, "푸시알림 구현해야함");
 
                 SettingFragment.updateReservedCategoryTimestamp(
                         productCardDto.productEntity.school_id,

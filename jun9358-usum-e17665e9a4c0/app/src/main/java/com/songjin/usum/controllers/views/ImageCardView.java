@@ -5,20 +5,20 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.koushikdutta.ion.Ion;
-import com.kth.baasio.callback.BaasioDownloadCallback;
-import com.kth.baasio.exception.BaasioException;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.activities.PhotoViewActivity;
 import com.songjin.usum.entities.FileEntity;
-import com.songjin.usum.managers.RequestManager;
 
 import java.io.File;
 
 public class ImageCardView extends CardView {
+    private static final String TAG = "ImageCardView";
+
     private class ViewHolder {
         public SquareImageView image;
 
@@ -72,8 +72,10 @@ public class ImageCardView extends CardView {
             return;
         }
 
-        BaasioFile baasioFile = fileEntity.getBaasioFile();
-        baasioFile.fileDownloadInBackground(BaseActivity.context.getCacheDir() + fileEntity.id, baasioDownloadCallback);
+        Log.d(TAG, "파일 다운로드 구현해야함");
+
+//        BaasioFile baasioFile = fileEntity.getBaasioFile();
+//        baasioFile.fileDownloadInBackground(BaseActivity.context.getCacheDir() + fileEntity.id, baasioDownloadCallback);
 
 //        RequestManager.downloadFile(fileEntity, new BaasioDownloadCallback() {
 //            @Override

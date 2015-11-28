@@ -107,6 +107,9 @@ public class SignUpActivity extends BaseActivity {
                     if (command.equals(Global.SIGN_UP)) {
                         // 회원가입 응답
                         processSignUp(code, intent);
+                    } else if (command.equals(Global.SIGN_IN_KAKAO)) {
+                        // 카카오톡 로그인
+                        processSignInKakao(code, intent);
                     }
                 }
             }
@@ -134,33 +137,57 @@ public class SignUpActivity extends BaseActivity {
     }
 
 
+    private void processSignInKakao(int code, Intent intent) {
+        if (code == SocketException.SUCCESS) {
+            // 성공
+            UserEntity userEntity = intent.getParcelableExtra(Global.USER);
+            if (userEntity.hasExtraProfile) {
+                BaseActivity.startActivityOnTopStack(MainActivity.class);
+                finish();
+            } else {
+                initViews(R.layout.activity_sign_up);
+            }
+        } else {
+            new MaterialDialog.Builder(BaseActivity.context)
+                    .title(R.string.app_name)
+                    .content("로그인하는데 문제가 발생하였습니다.")
+                    .show();
+        }
+    }
+
+
     // TODO RequestManager에 넣기
     private void requestCheckConfirmedUser() {
         setContentView(R.layout.activity_login);
         String kakaoToken = Session.getCurrentSession().getAccessToken();
 
-        BaasioUser.signInViaKakaotalkInBackground(
-                this,
-                Session.getCurrentSession().getAccessToken(),
-                new BaasioSignInCallback() {
-                    @Override
-                    public void onResponse(BaasioUser baasioUser) {
-                        UserEntity userEntity = new UserEntity(baasioUser);
-                        if (userEntity.hasExtraProfile) {
-                            BaseActivity.startActivityOnTopStack(MainActivity.class);
-                            finish();
-                        } else {
-                            initViews(R.layout.activity_sign_up);
-                        }
-                    }
+        Intent intent = new Intent(getApplicationContext(), SocketService.class);
+        intent.putExtra(Global.COMMAND, Global.SIGN_IN_KAKAO);
+        intent.putExtra(Global.TOKEN, kakaoToken);
+        startService(intent);
 
-                    @Override
-                    public void onException(BaasioException e) {
-                        new MaterialDialog.Builder(BaseActivity.context)
-                                .title(R.string.app_name)
-                                .content("로그인하는데 문제가 발생하였습니다.")
-                                .show();
-                    }
-                });
+//        BaasioUser.signInViaKakaotalkInBackground(
+//                this,
+//                Session.getCurrentSession().getAccessToken(),
+//                new BaasioSignInCallback() {
+//                    @Override
+//                    public void onResponse(BaasioUser baasioUser) {
+//                        UserEntity userEntity = new UserEntity(baasioUser);
+//                        if (userEntity.hasExtraProfile) {
+//                            BaseActivity.startActivityOnTopStack(MainActivity.class);
+//                            finish();
+//                        } else {
+//                            initViews(R.layout.activity_sign_up);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onException(BaasioException e) {
+//                        new MaterialDialog.Builder(BaseActivity.context)
+//                                .title(R.string.app_name)
+//                                .content("로그인하는데 문제가 발생하였습니다.")
+//                                .show();
+//                    }
+//                });
     }
 }

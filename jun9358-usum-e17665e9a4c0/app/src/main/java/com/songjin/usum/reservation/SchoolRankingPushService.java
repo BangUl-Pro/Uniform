@@ -8,7 +8,6 @@ import com.songjin.usum.Global;
 import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.entities.UserEntity;
-import com.songjin.usum.gcm.PushManager;
 import com.songjin.usum.managers.SchoolManager;
 import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
@@ -16,6 +15,7 @@ import com.songjin.usum.socketIo.SocketService;
 import java.util.ArrayList;
 
 public class SchoolRankingPushService extends IntentService {
+    private static final String TAG = "SchoolRankingPushService";
     private SchoolRankingCheckThread schoolRankingCheckThread;
 
     public SchoolRankingPushService() {
@@ -117,7 +117,8 @@ public class SchoolRankingPushService extends IntentService {
             if (lastRank == -1 || currentRank == -1) {
                 SettingFragment.setLastSchoolRank(currentRank);
             } else if (lastRank != currentRank) {
-                PushManager.sendSchoolRankUpdatedPushToMe("학교 순위가 " + lastRank + "위에서 " + currentRank + "위로 변경되었습니다!");
+//                PushManager.sendSchoolRankUpdatedPushToMe("학교 순위가 " + lastRank + "위에서 " + currentRank + "위로 변경되었습니다!");
+                Log.d(TAG, "푸시 알림 구현해야함");
                 SettingFragment.setLastSchoolRank(currentRank);
             }
             Log.d("USUM", "lastRank: " + lastRank);

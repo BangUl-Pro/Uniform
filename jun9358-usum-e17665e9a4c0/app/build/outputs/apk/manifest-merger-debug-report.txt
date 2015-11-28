@@ -112,179 +112,153 @@ MERGED from com.kakao.sdk:push:1.0.46:7:5
 MERGED from com.kakao.sdk:login:1.0.46:7:5
 MERGED from com.kakao.sdk:util:1.0.46:7:5
 	android:label
-		ADDED from AndroidManifest.xml:28:9
-	android:allowBackup
-		ADDED from AndroidManifest.xml:26:9
-	android:icon
 		ADDED from AndroidManifest.xml:27:9
+	android:allowBackup
+		ADDED from AndroidManifest.xml:25:9
+	android:icon
+		ADDED from AndroidManifest.xml:26:9
 	android:hardwareAccelerated
 		ADDED from com.github.chrisbanes.photoview:library:1.2.3:4:45
 	android:theme
-		ADDED from AndroidManifest.xml:30:9
-	android:largeHeap
 		ADDED from AndroidManifest.xml:29:9
-	android:name
-		ADDED from AndroidManifest.xml:25:9
-receiver#com.songjin.usum.gcm.GCMRedirectedBroadcastReceiver
-ADDED from AndroidManifest.xml:31:9
-	android:permission
-		ADDED from AndroidManifest.xml:33:13
-	android:name
-		ADDED from AndroidManifest.xml:32:13
-intent-filter#com.google.android.c2dm.intent.RECEIVE+com.google.android.c2dm.intent.REGISTRATION+com.songjin.usum
-ADDED from AndroidManifest.xml:34:13
-action#com.google.android.c2dm.intent.RECEIVE
-ADDED from AndroidManifest.xml:37:17
-	android:name
-		ADDED from AndroidManifest.xml:37:25
-action#com.google.android.c2dm.intent.REGISTRATION
-ADDED from AndroidManifest.xml:39:17
-	android:name
-		ADDED from AndroidManifest.xml:39:25
-category#com.songjin.usum
-ADDED from AndroidManifest.xml:41:17
-	android:name
-		ADDED from AndroidManifest.xml:41:27
-service#com.songjin.usum.gcm.GCMIntentService
-ADDED from AndroidManifest.xml:45:9
-	android:name
-		ADDED from AndroidManifest.xml:45:18
+	android:largeHeap
+		ADDED from AndroidManifest.xml:28:9
 receiver#com.songjin.usum.reservation.ReservationPushBroadcastReceiver
-ADDED from AndroidManifest.xml:47:9
+ADDED from AndroidManifest.xml:46:9
 	android:name
-		ADDED from AndroidManifest.xml:47:19
+		ADDED from AndroidManifest.xml:46:19
 intent-filter#android.intent.action.BOOT_COMPLETED
-ADDED from AndroidManifest.xml:48:13
+ADDED from AndroidManifest.xml:47:13
 action#android.intent.action.BOOT_COMPLETED
-ADDED from AndroidManifest.xml:49:17
+ADDED from AndroidManifest.xml:48:17
 	android:name
-		ADDED from AndroidManifest.xml:49:25
+		ADDED from AndroidManifest.xml:48:25
 service#com.songjin.usum.reservation.ReservationPushService
-ADDED from AndroidManifest.xml:53:9
+ADDED from AndroidManifest.xml:52:9
 	android:name
-		ADDED from AndroidManifest.xml:53:18
+		ADDED from AndroidManifest.xml:52:18
 receiver#com.songjin.usum.reservation.SchoolRankingPushBroadcastReceiver
-ADDED from AndroidManifest.xml:55:9
+ADDED from AndroidManifest.xml:54:9
 	android:name
-		ADDED from AndroidManifest.xml:55:19
+		ADDED from AndroidManifest.xml:54:19
 service#com.songjin.usum.reservation.SchoolRankingPushService
-ADDED from AndroidManifest.xml:61:9
+ADDED from AndroidManifest.xml:60:9
 	android:name
-		ADDED from AndroidManifest.xml:61:18
+		ADDED from AndroidManifest.xml:60:18
 activity#com.kakao.LoginActivity
-ADDED from AndroidManifest.xml:64:9
+ADDED from AndroidManifest.xml:63:9
 	android:configChanges
-		ADDED from AndroidManifest.xml:66:13
-	android:name
 		ADDED from AndroidManifest.xml:65:13
+	android:name
+		ADDED from AndroidManifest.xml:64:13
 meta-data#com.kakao.sdk.AppKey
-ADDED from AndroidManifest.xml:68:9
+ADDED from AndroidManifest.xml:67:9
 	android:name
-		ADDED from AndroidManifest.xml:69:13
+		ADDED from AndroidManifest.xml:68:13
 	android:value
-		ADDED from AndroidManifest.xml:70:13
+		ADDED from AndroidManifest.xml:69:13
 activity#com.songjin.usum.controllers.activities.LoginActivity
-ADDED from AndroidManifest.xml:73:9
+ADDED from AndroidManifest.xml:72:9
 	android:label
-		ADDED from AndroidManifest.xml:75:13
-	android:name
 		ADDED from AndroidManifest.xml:74:13
+	android:name
+		ADDED from AndroidManifest.xml:73:13
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:76:13
+ADDED from AndroidManifest.xml:75:13
 action#android.intent.action.MAIN
-ADDED from AndroidManifest.xml:77:17
+ADDED from AndroidManifest.xml:76:17
 	android:name
-		ADDED from AndroidManifest.xml:77:25
+		ADDED from AndroidManifest.xml:76:25
 category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:79:17
+ADDED from AndroidManifest.xml:78:17
 	android:name
-		ADDED from AndroidManifest.xml:79:27
+		ADDED from AndroidManifest.xml:78:27
 activity#com.songjin.usum.controllers.activities.SignUpActivity
-ADDED from AndroidManifest.xml:82:9
+ADDED from AndroidManifest.xml:81:9
 	android:theme
-		ADDED from AndroidManifest.xml:84:13
-	android:name
 		ADDED from AndroidManifest.xml:83:13
+	android:name
+		ADDED from AndroidManifest.xml:82:13
 activity#com.songjin.usum.controllers.activities.MainActivity
+ADDED from AndroidManifest.xml:84:9
+	android:name
+		ADDED from AndroidManifest.xml:84:19
+activity#com.songjin.usum.controllers.activities.TimelineDetailActivity
 ADDED from AndroidManifest.xml:85:9
 	android:name
 		ADDED from AndroidManifest.xml:85:19
-activity#com.songjin.usum.controllers.activities.TimelineDetailActivity
+activity#com.songjin.usum.controllers.activities.TimelineWriteActivity
 ADDED from AndroidManifest.xml:86:9
 	android:name
 		ADDED from AndroidManifest.xml:86:19
-activity#com.songjin.usum.controllers.activities.TimelineWriteActivity
-ADDED from AndroidManifest.xml:87:9
-	android:name
-		ADDED from AndroidManifest.xml:87:19
 activity#nl.changer.polypicker.ImagePickerActivity
-ADDED from AndroidManifest.xml:88:9
+ADDED from AndroidManifest.xml:87:9
 	android:theme
-		ADDED from AndroidManifest.xml:90:13
-	android:name
 		ADDED from AndroidManifest.xml:89:13
+	android:name
+		ADDED from AndroidManifest.xml:88:13
 activity#com.songjin.usum.controllers.activities.TimelineActivity
-ADDED from AndroidManifest.xml:91:9
+ADDED from AndroidManifest.xml:90:9
 	android:name
-		ADDED from AndroidManifest.xml:91:19
+		ADDED from AndroidManifest.xml:90:19
 activity#com.songjin.usum.controllers.activities.AddProductsActivity
-ADDED from AndroidManifest.xml:92:9
+ADDED from AndroidManifest.xml:91:9
 	android:label
-		ADDED from AndroidManifest.xml:94:13
-	android:name
 		ADDED from AndroidManifest.xml:93:13
+	android:name
+		ADDED from AndroidManifest.xml:92:13
 activity#com.songjin.usum.controllers.activities.ProductDetailActivity
-ADDED from AndroidManifest.xml:95:9
+ADDED from AndroidManifest.xml:94:9
 	android:label
-		ADDED from AndroidManifest.xml:97:13
-	android:name
 		ADDED from AndroidManifest.xml:96:13
+	android:name
+		ADDED from AndroidManifest.xml:95:13
 activity#com.songjin.usum.controllers.activities.EditProfileActivity
-ADDED from AndroidManifest.xml:98:9
+ADDED from AndroidManifest.xml:97:9
 	android:label
-		ADDED from AndroidManifest.xml:100:13
-	android:name
 		ADDED from AndroidManifest.xml:99:13
+	android:name
+		ADDED from AndroidManifest.xml:98:13
 activity#com.songjin.usum.controllers.activities.PhotoViewActivity
-ADDED from AndroidManifest.xml:101:9
+ADDED from AndroidManifest.xml:100:9
 	android:label
-		ADDED from AndroidManifest.xml:103:13
-	android:theme
-		ADDED from AndroidManifest.xml:104:13
-	android:name
 		ADDED from AndroidManifest.xml:102:13
+	android:theme
+		ADDED from AndroidManifest.xml:103:13
+	android:name
+		ADDED from AndroidManifest.xml:101:13
 activity#com.songjin.usum.controllers.activities.SupportActivity
-ADDED from AndroidManifest.xml:105:9
+ADDED from AndroidManifest.xml:104:9
 	android:label
-		ADDED from AndroidManifest.xml:107:13
-	android:name
 		ADDED from AndroidManifest.xml:106:13
+	android:name
+		ADDED from AndroidManifest.xml:105:13
 activity#com.songjin.usum.controllers.activities.FaqActivity
-ADDED from AndroidManifest.xml:109:9
+ADDED from AndroidManifest.xml:108:9
 	android:label
-		ADDED from AndroidManifest.xml:111:13
-	android:name
 		ADDED from AndroidManifest.xml:110:13
+	android:name
+		ADDED from AndroidManifest.xml:109:13
 activity#com.songjin.usum.controllers.activities.SupportCompletedActivity
-ADDED from AndroidManifest.xml:113:9
+ADDED from AndroidManifest.xml:112:9
 	android:label
-		ADDED from AndroidManifest.xml:115:13
-	android:name
 		ADDED from AndroidManifest.xml:114:13
+	android:name
+		ADDED from AndroidManifest.xml:113:13
 activity#com.songjin.usum.controllers.activities.AlarmActivity
-ADDED from AndroidManifest.xml:117:9
+ADDED from AndroidManifest.xml:116:9
 	android:label
-		ADDED from AndroidManifest.xml:119:13
-	android:name
 		ADDED from AndroidManifest.xml:118:13
-service#com.songjin.usum.socketIo.SocketService
-ADDED from AndroidManifest.xml:122:9
-	android:exported
-		ADDED from AndroidManifest.xml:125:13
-	android:enabled
-		ADDED from AndroidManifest.xml:124:13
 	android:name
+		ADDED from AndroidManifest.xml:117:13
+service#com.songjin.usum.socketIo.SocketService
+ADDED from AndroidManifest.xml:121:9
+	android:exported
+		ADDED from AndroidManifest.xml:124:13
+	android:enabled
 		ADDED from AndroidManifest.xml:123:13
+	android:name
+		ADDED from AndroidManifest.xml:122:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:multidex:1.0.0:18:5

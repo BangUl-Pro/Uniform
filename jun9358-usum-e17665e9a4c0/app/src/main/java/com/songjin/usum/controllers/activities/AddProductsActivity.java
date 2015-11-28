@@ -9,22 +9,16 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.kth.baasio.callback.BaasioCallback;
-import com.kth.baasio.callback.BaasioUploadCallback;
-import com.kth.baasio.entity.entity.BaasioEntity;
-import com.kth.baasio.entity.file.BaasioFile;
-import com.kth.baasio.exception.BaasioException;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.ProductAddForm;
 import com.songjin.usum.controllers.views.ProductRecyclerView;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.entities.ProductEntity;
-import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketException;
 import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import nl.changer.polypicker.ImagePickerActivity;
 
@@ -91,6 +85,79 @@ public class AddProductsActivity extends BaseActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent != null) {
+            String command = intent.getStringExtra(Global.COMMAND);
+            if (command != null) {
+                int code = intent.getIntExtra(Global.CODE, -1);
+                if (command.equals(Global.INSERT_PRODUCT)) {
+                    // 제품 입력
+                    processInsertProduct(code, intent);
+                }
+            }
+        }
+    }
+
+
+    // TODO: 15. 11. 25. 제품 입력
+    private void processInsertProduct(int code, Intent intent) {
+        if (code == SocketException.SUCCESS) {
+            ArrayList<ProductEntity> productEntities = intent.getParcelableArrayListExtra(Global.PRODUCT);
+            Intent transactionIntent = new Intent(getApplicationContext(), SocketService.class);
+            transactionIntent.putExtra(Global.COMMAND, Global.INSERT_TRANSACTION);
+            transactionIntent.putExtra(Global.PRODUCT, productEntities);
+            startActivity(transactionIntent);
+
+//            RequestManager.insertTransactionsInBackground(productEntities, new BaasioCallback<List<BaasioEntity>>() {
+//                @Override
+//                public void onResponse(List<BaasioEntity> baasioEntities) {
+//
+//                }
+//
+//                @Override
+//                public void onException(BaasioException e) {
+//
+//                }
+//            });
+
+            for (int i = 0; i < productEntities.size(); i++) {
+                for (Uri uri : productCardDtos.get(i).uris) {
+                    intent = new Intent(getApplicationContext(), SocketService.class);
+                    intent.putExtra(Global.COMMAND, Global.INSERT_FILE);
+                    intent.putExtra(Global.PRODUCT_ID, productEntities.get(i).id);
+                    intent.putExtra(Global.PATH, uri);
+                    startService(intent);
+
+//                    RequestManager.insertFile(
+//                            productEntities.get(i).uuid,
+//                            uri,
+//                            new BaasioUploadCallback() {
+//                                @Override
+//                                public void onResponse(BaasioFile baasioFile) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onException(BaasioException e) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onProgress(long l, long l2) {
+//
+//                                }
+//                            }
+//                    );
+                }
+            }
+
+            hideLoadingView();
+            finish();
+        }
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -113,60 +180,60 @@ public class AddProductsActivity extends BaseActivity {
                 startService(intent);
 
 
-                RequestManager.insertProductsInBackground(productCardDtos, new BaasioCallback<List<BaasioEntity>>() {
-                    @Override
-                    public void onResponse(List<BaasioEntity> baasioEntities) {
-                        ArrayList<ProductEntity> productEntities = new ArrayList<>();
-                        for (BaasioEntity baasioEntity : baasioEntities) {
-                            productEntities.add(new ProductEntity(baasioEntity));
-                        }
-
-                        RequestManager.insertTransactionsInBackground(productEntities, new BaasioCallback<List<BaasioEntity>>() {
-                            @Override
-                            public void onResponse(List<BaasioEntity> baasioEntities) {
-
-                            }
-
-                            @Override
-                            public void onException(BaasioException e) {
-
-                            }
-                        });
-
-                        for (int i = 0; i < productEntities.size(); i++) {
-                            for (Uri uri : productCardDtos.get(i).uris) {
-                                RequestManager.insertFile(
-                                        productEntities.get(i).uuid,
-                                        uri,
-                                        new BaasioUploadCallback() {
-                                            @Override
-                                            public void onResponse(BaasioFile baasioFile) {
-
-                                            }
-
-                                            @Override
-                                            public void onException(BaasioException e) {
-
-                                            }
-
-                                            @Override
-                                            public void onProgress(long l, long l2) {
-
-                                            }
-                                        }
-                                );
-                            }
-                        }
-
-                        hideLoadingView();
-                        finish();
-                    }
-
-                    @Override
-                    public void onException(BaasioException e) {
-                        // TODO: 에러메세지
-                    }
-                });
+//                RequestManager.insertProductsInBackground(productCardDtos, new BaasioCallback<List<BaasioEntity>>() {
+//                    @Override
+//                    public void onResponse(List<BaasioEntity> baasioEntities) {
+//                        ArrayList<ProductEntity> productEntities = new ArrayList<>();
+//                        for (BaasioEntity baasioEntity : baasioEntities) {
+//                            productEntities.add(new ProductEntity(baasioEntity));
+//                        }
+//
+//                        RequestManager.insertTransactionsInBackground(productEntities, new BaasioCallback<List<BaasioEntity>>() {
+//                            @Override
+//                            public void onResponse(List<BaasioEntity> baasioEntities) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onException(BaasioException e) {
+//
+//                            }
+//                        });
+//
+//                        for (int i = 0; i < productEntities.size(); i++) {
+//                            for (Uri uri : productCardDtos.get(i).uris) {
+//                                RequestManager.insertFile(
+//                                        productEntities.get(i).uuid,
+//                                        uri,
+//                                        new BaasioUploadCallback() {
+//                                            @Override
+//                                            public void onResponse(BaasioFile baasioFile) {
+//
+//                                            }
+//
+//                                            @Override
+//                                            public void onException(BaasioException e) {
+//
+//                                            }
+//
+//                                            @Override
+//                                            public void onProgress(long l, long l2) {
+//
+//                                            }
+//                                        }
+//                                );
+//                            }
+//                        }
+//
+//                        hideLoadingView();
+//                        finish();
+//                    }
+//
+//                    @Override
+//                    public void onException(BaasioException e) {
+//                        // TODO: 에러메세지
+//                    }
+//                });
                 return true;
         }
         return super.onOptionsItemSelected(item);

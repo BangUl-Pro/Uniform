@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import com.kakao.APIErrorResult;
 import com.kakao.LogoutResponseCallback;
 import com.kakao.UnlinkResponseCallback;
+import com.kakao.UserManagement;
 import com.securepreferences.SecurePreferences;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
@@ -27,7 +28,6 @@ import com.songjin.usum.controllers.activities.MainActivity;
 import com.songjin.usum.entities.AlarmEntity;
 import com.songjin.usum.entities.ReservedCategoryEntity;
 import com.songjin.usum.managers.AuthManager;
-import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 
 import java.util.ArrayList;
@@ -144,7 +144,7 @@ public class SettingFragment extends SlidingBaseFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 BaseActivity.showLoadingView();
-                                RequestManager.unlinkAppInBackground(new UnlinkResponseCallback() {
+                                UserManagement.requestUnlink(new UnlinkResponseCallback() {
                                     @Override
                                     protected void onSuccess(final long userId) {
                                         BaseActivity.hideLoadingView();
@@ -170,6 +170,32 @@ public class SettingFragment extends SlidingBaseFragment {
                                                 .show();
                                     }
                                 });
+//                                RequestManager.unlinkAppInBackground(new UnlinkResponseCallback() {
+//                                    @Override
+//                                    protected void onSuccess(final long userId) {
+//                                        BaseActivity.hideLoadingView();
+//                                        BaseActivity.startActivityOnTopStack(LoginActivity.class);
+//                                        ((Activity) MainActivity.context).finish();
+//                                    }
+//
+//                                    @Override
+//                                    protected void onSessionClosedFailure(final APIErrorResult errorResult) {
+//                                        BaseActivity.hideLoadingView();
+//                                        new MaterialDialog.Builder(BaseActivity.context)
+//                                                .title(R.string.app_name)
+//                                                .content("연결해제하는 중에 세션에 문제가 생겼습니다.")
+//                                                .show();
+//                                    }
+//
+//                                    @Override
+//                                    protected void onFailure(final APIErrorResult errorResult) {
+//                                        BaseActivity.hideLoadingView();
+//                                        new MaterialDialog.Builder(BaseActivity.context)
+//                                                .title(R.string.app_name)
+//                                                .content("연결해제에 실패하였습니다.")
+//                                                .show();
+//                                    }
+//                                });
                                 dialog.dismiss();
                             }
                         })
@@ -186,7 +212,7 @@ public class SettingFragment extends SlidingBaseFragment {
 
     private void requestLogout() {
         BaseActivity.showLoadingView();
-        RequestManager.logoutAppInBackground(new LogoutResponseCallback() {
+        UserManagement.requestLogout(new LogoutResponseCallback() {
             @Override
             protected void onSuccess(final long userId) {
                 BaseActivity.hideLoadingView();
@@ -203,6 +229,23 @@ public class SettingFragment extends SlidingBaseFragment {
                         .show();
             }
         });
+//        RequestManager.logoutAppInBackground(new LogoutResponseCallback() {
+//            @Override
+//            protected void onSuccess(final long userId) {
+//                BaseActivity.hideLoadingView();
+//                BaseActivity.startActivityOnTopStack(LoginActivity.class);
+//                ((Activity) MainActivity.context).finish();
+//            }
+//
+//            @Override
+//            protected void onFailure(final APIErrorResult apiErrorResult) {
+//                BaseActivity.hideLoadingView();
+//                new MaterialDialog.Builder(BaseActivity.context)
+//                        .title(R.string.app_name)
+//                        .content("로그아웃에 실패하였습니다.")
+//                        .show();
+//            }
+//        });
     }
 
     public static ArrayList<ReservedCategoryEntity> getReservedCategories() {

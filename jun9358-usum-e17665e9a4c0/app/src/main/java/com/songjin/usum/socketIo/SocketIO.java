@@ -9,6 +9,7 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 import com.songjin.usum.Global;
+import com.songjin.usum.controllers.activities.AddProductsActivity;
 import com.songjin.usum.controllers.activities.EditProfileActivity;
 import com.songjin.usum.controllers.activities.LoginActivity;
 import com.songjin.usum.controllers.activities.MainActivity;
@@ -23,6 +24,7 @@ import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.LikeEntity;
+import com.songjin.usum.entities.ProductEntity;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
@@ -221,7 +223,35 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processGetProduct(object);
             }
+        }).on(Global.SIGN_IN_KAKAO, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processSignInKakao(object);
+            }
         });
+    }
+
+
+    // TODO: 15. 11. 28. 카카오 로그인 응답
+    private void processSignInKakao(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+
+            Intent intent = new Intent(context, SignUpActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.CODE, code);
+            if (code == SocketException.SUCCESS) {
+                // 성공
+                JSONObject userObject = object.getJSONObject(Global.USER);
+                Gson gson = new Gson();
+                UserEntity user = gson.fromJson(userObject.toString(), UserEntity.class);
+                intent.putExtra(Global.USER, user);
+            }
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -394,9 +424,9 @@ public class SocketIO {
             int from = object.getInt(Global.FROM);
 
             if (code == SocketException.SUCCESS)
-                Global.onDeleted.onDeleted();
+                Global.OnDeleted.onSuccess();
             else
-                Global.onDeleted.onException();
+                Global.OnDeleted.onException();
 
             Intent intent;
             if (from == 0)
@@ -474,11 +504,24 @@ public class SocketIO {
         try {
             int code = object.getInt(Global.CODE);
 
-            Intent intent = new Intent(context, TimelineWriteActivity.class);
+            Intent intent = new Intent(context, AddProductsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE);
             intent.putExtra(Global.CODE, code);
 
+            if (code == SocketException.SUCCESS) {
+                JSONArray array = object.getJSONArray(Global.PRODUCT);
+                ArrayList<ProductEntity> productEntities = new ArrayList<>();
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject productJson = array.getJSONObject(i);
+                    Gson gson = new Gson();
+                    ProductEntity productEntity = gson.fromJson(productJson.toString(), ProductEntity.class);
+                    productEntities.add(productEntity);
+                }
+                intent.putExtra(Global.PRODUCT, productEntities);
+            }
+
+            context.startActivity(intent);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -494,7 +537,7 @@ public class SocketIO {
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Global.COMMAND, Global.UPDATE_TIMELINE);
             intent.putExtra(Global.CODE, code);
-
+            context.startActivity(intent);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -858,7 +901,7 @@ public class SocketIO {
             object.put(Global.SEX, sex);
             object.put(Global.CATEGORY, category);
             object.put(Global.SIZE, size);
-
+            Log.d(TAG, "searchProduct Object = " + object);
             socket.emit(Global.SEARCH_PRODUCT, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -873,9 +916,9 @@ public class SocketIO {
             String json = gson.toJson(productCardDtos);
             JSONArray array = new JSONArray(json);
 
-            Log.d(TAG, "array = " + array);
             JSONObject object = new JSONObject();
             object.put(Global.PRODUCT, array);
+            Log.d(TAG, "insertProduct Object = " + object);
             socket.emit(Global.INSERT_PRODUCT, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -889,7 +932,7 @@ public class SocketIO {
             Gson gson = new Gson();
             String json = gson.toJson(user, UserEntity.class);
             JSONObject object = new JSONObject(json);
-            Log.d(TAG, "object = " + object);
+            Log.d(TAG, "updateUserProfile Object = " + object);
             socket.emit(Global.UPDATE_USER_PROFILE, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -904,6 +947,7 @@ public class SocketIO {
             object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
             object.put(Global.COMMENT_CONTENT, commentContent);
             object.put(Global.FROM, from);
+            Log.d(TAG, "insertTimelineComment Object = " + object);
             socket.emit(Global.INSERT_TIMELINE_COMMENT, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -917,6 +961,7 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(Global.ID, id);
             object.put(Global.FROM, from);
+            Log.d(TAG, "getTimelineComment Object = " + object);
             socket.emit(Global.GET_TIMELINE_COMMENT, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -929,6 +974,7 @@ public class SocketIO {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.SCHOOL_ID, schoolId);
+            Log.d(TAG, "getAllTimeline Object = " + object);
             socket.emit(Global.GET_ALL_TIMELINE, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -942,6 +988,7 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(Global.SCHOOL_ID, schoolId);
             object.put(Global.USER_ID, userId);
+            Log.d(TAG, "getMyTimeline Object = " + object);
             socket.emit(Global.GET_ALL_TIMELINE, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -958,6 +1005,7 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(Global.SCHOOL_ID, schoolId);
             object.put(Global.TIMELINE_CONTENT, timelineContent);
+            Log.d(TAG, "insertTimeline Object = " + object);
             socket.emit(Global.INSERT_TIMELINE, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -978,7 +1026,7 @@ public class SocketIO {
             JSONArray array = new JSONArray(json);
             JSONObject object = new JSONObject();
             object.put(Global.FILE, array);
-
+            Log.d(TAG, "deleteFile Object = " + object);
             socket.emit(Global.DELETE_FILE, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -992,6 +1040,7 @@ public class SocketIO {
             Gson gson = new Gson();
             String json = gson.toJson(timelineCardDto);
             JSONObject object = new JSONObject(json);
+            Log.d(TAG, "updateTimeline Object = " + object);
             socket.emit(Global.UPDATE_TIMELINE, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1005,6 +1054,7 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(TransactionEntity.PROPERTY_DONATOR_UUID, donatorId);
             object.put(TransactionEntity.PROPERTY_RECEIVER_UUID, receiverId);
+            Log.d(TAG, "getMyProduct Object = " + object);
             socket.emit(Global.GET_MY_PRODUCT, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1027,6 +1077,7 @@ public class SocketIO {
             }
             object.put(Global.COMMENT, array);
             object.put(Global.FROM, from);
+            Log.d(TAG, "deleteComment Object = " + object);
             socket.emit(Global.DELETE_COMMENT, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1043,6 +1094,7 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(Global.STATUS, status);
             object.put(Global.TRANSACTION, transJson);
+            Log.d(TAG, "updateTransactionStatus Object = " + object);
             socket.emit(Global.UPDATE_TRANSACTION_STATUS, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1055,6 +1107,7 @@ public class SocketIO {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.PRODUCT_ID, productCardDto.productEntity.id);
+            Log.d(TAG, "deleteProduct Object = " + object);
             socket.emit(Global.DELETE_PRODUCT, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1068,6 +1121,7 @@ public class SocketIO {
             Gson gson = new Gson();
             String json = gson.toJson(productCardDto);
             JSONObject object = new JSONObject(json);
+            Log.d(TAG, "updateProduct Object = " + object);
             socket.emit(Global.UPDATE_PRODUCT, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1082,6 +1136,7 @@ public class SocketIO {
             object.put(Global.PRODUCT_ID, id);
             object.put(Global.PATH, path);
             object.put(Global.FILE, fileName);
+            Log.d(TAG, "insertFile Object = " + object);
             socket.emit(Global.INSERT_FILE, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1098,6 +1153,7 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(Global.TIMELINE_ITEM_ID, timelineId);
             object.put(Global.USER_ID, userId);
+            Log.d(TAG, "deleteTimeLine Object = " + object);
             socket.emit(Global.DELETE_TIMELINE, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1111,6 +1167,7 @@ public class SocketIO {
             Gson gson = new Gson();
             String json = gson.toJson(likeEntity);
             JSONObject object = new JSONObject(json);
+            Log.d(TAG, "deleteLike Object = " + object);
             socket.emit(Global.DELETE_LIKE, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1123,6 +1180,7 @@ public class SocketIO {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
+            Log.d(TAG, "insertLike Object = " + object);
             socket.emit(Global.INSERT_LIKE, object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1134,7 +1192,35 @@ public class SocketIO {
     public void getProduct(String productJson) {
         try {
             JSONArray array = new JSONArray(productJson);
+            Log.d(TAG, "getProduct Array = " + array.toString());
             socket.emit(Global.GET_PRODUCT, array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 28.
+    public void insertTransaction(ArrayList<TransactionEntity> transactionEntities) {
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(transactionEntities);
+            JSONArray array = new JSONArray(json);
+            Log.d(TAG, "insertTransaction Array = " + array.toString());
+            socket.emit(Global.INSERT_TRANSACTION, array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO: 15. 11. 28. 카카오 로그인
+    public void signInKakao(String token) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.TOKEN, token);
+            Log.d(TAG, "signInKakao Object = " + object);
+            socket.emit(Global.SIGN_IN_KAKAO, object);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -13,6 +13,7 @@ public class Global {
     public static final String LOGIN = "login";
     public static final String SIGN_UP = "signUp";
     public static final String SIGN_IN = "signIn";
+    public static final String SIGN_IN_KAKAO = "signInKakao";
     public static final String UPDATE_USER_PROFILE = "updateUserProfile";
     public static final String INSERT_TIMELINE_COMMENT = "insertTimelineComment";
     public static final String GET_TIMELINE_COMMENT = "getTimelineComment";
@@ -34,6 +35,7 @@ public class Global {
     public static final String DELETE_TIMELINE = "deleteTimeline";
     public static final String DELETE_LIKE = "deleteLike";
     public static final String INSERT_LIKE = "insertLike";
+    public static final String INSERT_TRANSACTION = "insertTransaction";
 
     public static final String ID = "id";
     public static final String USER = "user";
@@ -62,12 +64,19 @@ public class Global {
     public static final String PRODUCT = "product";
     public static final String PATH = "path";
     public static final String LIKE = "like";
+    public static final String TOKEN = "token";
 
-    public static onDeleted onDeleted;
+    public static onDeleted OnDeleted;
+    public static onInsertFile OnInsertFile;
 
     public interface onDeleted {
-        void onDeleted();
+        void onSuccess();
         void onException();
+    }
+
+    public interface onInsertFile {
+        void onSuccess();
+        void onException(int code);
     }
 
     public static UserEntity userEntity;

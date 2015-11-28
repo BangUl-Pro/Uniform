@@ -11,6 +11,7 @@ import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.LikeEntity;
+import com.songjin.usum.entities.ProductEntity;
 import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
 
@@ -105,11 +106,44 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.GET_PRODUCT)) {
                     // 제품 요청
                     processGetProduct(intent);
+                } else if (command.equals(Global.INSERT_TRANSACTION)) {
+                    //
+                    processInsertTransaction(intent);
+                } else if (command.equals(Global.SIGN_IN_KAKAO)) {
+                    // 카카오 로그인
+                    processSignInKakao(intent);
                 }
             }
         }
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+
+    // TODO: 15. 11. 28. 카카오 로그인
+    private void processSignInKakao(Intent intent) {
+        String token = intent.getStringExtra(Global.TOKEN);
+        socketIO.signInKakao(token);
+    }
+
+
+    // TODO: 15. 11. 28.
+    private void processInsertTransaction(Intent intent) {
+        ArrayList<ProductEntity> productEntities = intent.getParcelableArrayListExtra(Global.PRODUCT);
+        ArrayList<TransactionEntity> transactionEntities = new ArrayList<>();
+
+        for (ProductEntity product :
+                productEntities) {
+            TransactionEntity transactionEntity = new TransactionEntity();
+            transactionEntity.status = TransactionEntity.STATUS_TYPE.REGISTERED;
+            transactionEntity.donator_uuid = product.user_id;
+            transactionEntity.receiver_uuid = "";
+            transactionEntity.product_uuid = product.id;
+            transactionEntity.product_name = product.product_name;
+            transactionEntities.add(transactionEntity);
+        }
+
+        socketIO.insertTransaction(transactionEntities);
     }
 
 
