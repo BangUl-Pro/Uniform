@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:background="@color/light_green">
 
-    <com.songjin.usum.controllers.views.AlarmRecyclerView
+    <com.ironfactory.donation.controllers.views.AlarmRecyclerView
         android:id="@+id/alarms"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

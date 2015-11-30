@@ -989,7 +989,7 @@
     <string name="ic_whatshot"></string>
     <string name="ic_wifi_tethering"></string>
     <string name="ic_work"></string>
-    <string name="kakao_app_key">28f9bf07f2aca12f7d566f4dcdd6e2b1</string>
+    <string name="kakao_app_key">a30e5f575adfa98350fbd87b82ca36a8</string>
     <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.1.0/res/values/values.xml -->
     <eat-comment/>
     <string name="library_FloatingActionButton_author">Oleksandr Melnykov</string>

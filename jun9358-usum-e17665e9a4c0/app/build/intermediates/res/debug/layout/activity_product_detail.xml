@@ -13,7 +13,7 @@
             android:padding="10dp">
 
             <!-- 본문 -->
-            <com.songjin.usum.controllers.views.ProductDetailCardView
+            <com.ironfactory.donation.controllers.views.ProductDetailCardView
                 android:id="@+id/product_detail_card_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -52,7 +52,7 @@
             </LinearLayout>
 
             <!-- 덧글 -->
-            <com.songjin.usum.controllers.views.TimelineCommentRecyclerView
+            <com.ironfactory.donation.controllers.views.TimelineCommentRecyclerView
                 android:id="@+id/comments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

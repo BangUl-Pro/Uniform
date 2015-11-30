@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.songjin.usum.controllers.activities.SignUpActivity">
+    tools:context="com.ironfactory.donation.controllers.activities.SignUpActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
             android:text="약관에 모두 동의합니다." />
     </RelativeLayout>
 
-    <com.songjin.usum.controllers.views.UserProfileForm
+    <com.ironfactory.donation.controllers.views.UserProfileForm
         android:id="@+id/user_profile_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

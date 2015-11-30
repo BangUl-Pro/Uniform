@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.songjin.usum.controllers.views.SquareImageView
+    <com.ironfactory.donation.controllers.views.SquareImageView
         android:id="@+id/thumbnail_image"
         android:layout_width="50dp"
         android:layout_height="50dp"

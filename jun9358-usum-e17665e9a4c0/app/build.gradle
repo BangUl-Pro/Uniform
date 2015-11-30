@@ -5,12 +5,12 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.jerryjang.donation"
+        applicationId "com.ironfactory.donation"
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 5
         versionName "1.1"
-        multiDexEnabled = true
+        multiDexEnabled true
     }
     buildTypes {
         release {

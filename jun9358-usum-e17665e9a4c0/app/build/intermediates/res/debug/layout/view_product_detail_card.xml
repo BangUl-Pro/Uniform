@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.songjin.usum.controllers.views.ProductCardView
+    <com.ironfactory.donation.controllers.views.ProductCardView
         android:id="@+id/product_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.songjin.usum.controllers.views.TimelineImageRecyclerView
+    <com.ironfactory.donation.controllers.views.TimelineImageRecyclerView
         android:id="@+id/images"
         android:layout_width="match_parent"
         android:layout_height="300dp"
