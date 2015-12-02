@@ -154,7 +154,9 @@ public class SignUpActivity extends BaseActivity {
             // 성공
             UserEntity userEntity = intent.getParcelableExtra(Global.USER);
             if (userEntity.hasExtraProfile) {
-                BaseActivity.startActivityOnTopStack(MainActivity.class);
+                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                intent1.putExtra(Global.USER, userEntity);
+                startActivity(intent1);
                 finish();
             } else {
                 initViews(R.layout.activity_sign_up);

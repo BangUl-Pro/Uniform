@@ -14,6 +14,7 @@ import com.ironfactory.donation.controllers.activities.TimelineActivity;
 import com.ironfactory.donation.entities.SchoolEntity;
 
 public class SchoolRankingCardView extends LinearLayout {
+    private static final String TAG = "SchoolRankingCardView";
     private class ViewHolder {
         public TextView ranking;
         public TextView schoolname;

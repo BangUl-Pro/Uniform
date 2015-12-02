@@ -12,8 +12,8 @@ public class LikeEntity implements Parcelable {
 
 //    public static final String PROPERTY_UUID = BaasioBaseEntity.PROPERTY_UUID;
     public static final String PROPERTY_ID = "id";
-    public static final String PROPERTY_TIMELINE_UUID = "timeline_uuid";
-    public static final String PROPERTY_USER_UUID = "user_uuid";
+    public static final String PROPERTY_TIMELINE_UUID = "timeline_id";
+    public static final String PROPERTY_USER_UUID = "user_id";
 
 //    public String uuid;
     public String id;

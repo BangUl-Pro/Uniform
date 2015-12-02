@@ -152,7 +152,7 @@ public class SocketIO {
             @Override
             public void call(Object... args) {
                 JSONObject object = (JSONObject) args[0];
-                processInsertTimeline(object);
+                processInsertProduct(object);
             }
         }).on(Global.SEARCH_PRODUCT, new Emitter.Listener() {
             @Override
@@ -232,7 +232,58 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processGetSchool(object);
             }
+        }).on(Global.INSERT_TIMELINE, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processInsertTimeline(object);
+            }
+        }).on(Global.INSERT_FILE, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processInsertFile(object);
+            }
         });
+    }
+
+
+    // TODO: 15. 12. 2. 파일 입력 응답
+    private void processInsertFile(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+            if (code == SocketException.SUCCESS)
+                Global.OnInsertFile.onSuccess();
+            else
+                Global.OnInsertFile.onException(code);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    // TODO: 15. 12. 2. 타임라인 글쓰기 응답
+    private void processInsertTimeline(JSONObject object) {
+        try {
+            int code = object.getInt(Global.CODE);
+            Log.d(TAG, "타임라인 글쓰기 응답");
+            Log.d(TAG, "object = " + object);
+
+            Intent intent = new Intent(context, TimelineWriteActivity.class);
+            intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE);
+            intent.putExtra(Global.CODE, code);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (code == SocketException.SUCCESS) {
+                JSONObject timelineObject = object.getJSONObject(Global.TIMELINE);
+                TimelineCardDto dto = new TimelineCardDto(timelineObject);
+                intent.putExtra(Global.TIMELINE, dto);
+            }
+            context.startActivity(intent);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -250,8 +301,16 @@ public class SocketIO {
             if (code == SocketException.SUCCESS) {
                 // 성공
                 JSONObject userObject = object.getJSONObject(Global.USER);
-                Gson gson = new Gson();
-                UserEntity user = gson.fromJson(userObject.toString(), UserEntity.class);
+//                String id = userObject.getString(Global.ID);
+//                String picture = userObject.getString(Global.PICTURE);
+//                String phone = userObject.getString(Global.PHONE);
+//                String realName = userObject.getString(Global.REAL_NAME);
+//                String name = userObject.getString(Global.NAME);
+//                String hasExtraProfile = userObject.getString(Global.HAS_EXTRA_PROFILE);
+//                int sex = userObject.getInt(Global.SEX);
+//                int userType = userObject.getInt(Global.USER_TYPE);
+//                int schoolId = userObject.getInt(Global.SCHOOL_ID);
+                UserEntity user = new UserEntity(userObject);
                 intent.putExtra(Global.USER, user);
             }
             context.startActivity(intent);
@@ -368,7 +427,7 @@ public class SocketIO {
             int from = object.getInt(Global.FROM);
 
             Intent intent;
-            if (from == 0)
+            if (from == 1)
                 intent = new Intent(context, TimelineWriteActivity.class);
             else
                 intent = new Intent(context, ProductDetailActivity.class);
@@ -435,7 +494,7 @@ public class SocketIO {
                 Global.OnDeleted.onException();
 
             Intent intent;
-            if (from == 0)
+            if (from == 1)
                 intent = new Intent(context, ProductDetailActivity.class);
             else
                 intent = new Intent(context, TimelineDetailActivity.class);
@@ -505,14 +564,14 @@ public class SocketIO {
     }
 
 
-    // TODO: 15. 11. 23. 타임라인 업데이트 응답
-    private void processInsertTimeline(JSONObject object) {
+    // TODO: 15. 11. 23. 타임라인 글쓰기 응답
+    private void processInsertProduct(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
 
             Intent intent = new Intent(context, AddProductsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE);
+            intent.putExtra(Global.COMMAND, Global.INSERT_PRODUCT);
             intent.putExtra(Global.CODE, code);
 
             if (code == SocketException.SUCCESS) {
@@ -648,7 +707,7 @@ public class SocketIO {
             int from = object.getInt(Global.FROM);
 
             Intent intent;
-            if (from == 0)
+            if (from == 1)
                 intent = new Intent(context, ProductDetailActivity.class);
             else
                 intent = new Intent(context, TimelineDetailActivity.class);
@@ -693,12 +752,13 @@ public class SocketIO {
             int from = object.getInt(Global.FROM);
 
             Intent intent;
-            if (from == 0)
+            if (from == 1)
                 intent = new Intent(context, MainActivity.class);
             else
                 intent = new Intent(context, SchoolRankingPushService.class);
 
-            intent.putExtra(Global.GET_SCHOOL_RANKING, code);
+            intent.putExtra(Global.CODE, code);
+            intent.putExtra(Global.COMMAND, Global.GET_SCHOOL_RANKING);
 
             if (code == SocketException.SUCCESS) {
                 // 성공
@@ -713,7 +773,7 @@ public class SocketIO {
             }
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            if (from == 0)
+            if (from == 1)
                 context.startActivity(intent);
             else
                 context.startService(intent);
@@ -1165,13 +1225,14 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 글 쓰기
-    public void insertTimeline(int schoolId, String timelineContent) {
+    public void insertTimeline(int schoolId, String timelineContent, String id) {
         try {
             Log.d(TAG, "schoolId = " + schoolId);
             Log.d(TAG, "timelineContent = " + timelineContent);
 
             JSONObject object = new JSONObject();
             object.put(Global.SCHOOL_ID, schoolId);
+            object.put(Global.USER_ID, id);
             object.put(Global.TIMELINE_CONTENT, timelineContent);
             Log.d(TAG, "insertTimeline Object = " + object);
             socket.emit(Global.INSERT_TIMELINE, object);

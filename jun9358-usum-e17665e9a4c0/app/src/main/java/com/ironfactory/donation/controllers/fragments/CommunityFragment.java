@@ -2,6 +2,7 @@ package com.ironfactory.donation.controllers.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.ironfactory.donation.socketIo.SocketService;
 import java.util.ArrayList;
 
 public class CommunityFragment extends SlidingBaseFragment {
+    private static final String TAG = "CommunityFragment";
     private class ViewHolder {
         public SchoolRankingRecyclerView schoolRankings;
         public LinearLayout mySchoolRankingCardContainer;
@@ -112,6 +114,8 @@ public class CommunityFragment extends SlidingBaseFragment {
 
 //        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
         SchoolEntity mySchoolEntity = schoolManager.selectSchool(Global.userEntity.schoolId);
+        Log.d(TAG, "schoolId = " + Global.userEntity.schoolId);
+        Log.d(TAG, "schoolName = " + mySchoolEntity.schoolname);
         viewHolder.mySchoolRankingCardView.setSchoolEntity(mySchoolEntity);
 
         int myRanking = 0;

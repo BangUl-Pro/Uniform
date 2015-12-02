@@ -228,8 +228,9 @@ public class SocketService extends Service {
     private void processInsertTimeline(Intent intent) {
         int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
         String timelineContent = intent.getStringExtra(Global.TIMELINE_CONTENT);
+        String id = intent.getStringExtra(Global.USER_ID);
 
-        socketIO.insertTimeline(schoolId, timelineContent);
+        socketIO.insertTimeline(schoolId, timelineContent, id);
     }
 
 

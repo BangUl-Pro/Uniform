@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 public class SchoolRanking implements Serializable {
+    private static final String TAG = "SchoolRanking";
+
     public long point;
     public int school_id;
     public String schoolname;
@@ -37,7 +39,11 @@ public class SchoolRanking implements Serializable {
 
     public void set(JSONObject object) {
         try {
-            this.point = object.getLong(SchoolPointEntity.PROPERTY_POINT);
+            if (object.get(SchoolPointEntity.PROPERTY_POINT).equals(null)) {
+                this.point = 0;
+            } else {
+                this.point = object.getLong(SchoolPointEntity.PROPERTY_POINT);
+            }
             this.school_id = object.getInt(SchoolEntity.PROPERTY_ID);
             this.schoolname = object.getString(SchoolEntity.PROPERTY_SCHOOLNAME);
             this.address = object.getString(SchoolEntity.PROPERTY_ADDRESS);

@@ -14,10 +14,10 @@ public class TimelineEntity implements Parcelable {
 //    public static final String PROPERTY_UUID = BaasioEntity.PROPERTY_UUID;
     public static final String PROPERTY_ID = "id";
     public static final String PROPERTY_SCHOOL_ID = "school_id";
-    public static final String PROPERTY_USER_UUID = "user_uuid";
+    public static final String PROPERTY_USER_UUID = "user_id";
 //    public static final String PROPERTY_CREATED = BaasioEntity.PROPERTY_CREATED;
     public static final String PROPERTY_CREATED = "created";
-    public static final String PROPERTY_CONTENTS = "contents";
+    public static final String PROPERTY_CONTENTS = "content";
 
 //    public String uuid;
     public String id;

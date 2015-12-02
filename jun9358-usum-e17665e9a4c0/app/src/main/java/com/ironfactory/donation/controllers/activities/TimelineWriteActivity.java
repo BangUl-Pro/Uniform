@@ -120,6 +120,7 @@ public class TimelineWriteActivity extends BaseActivity {
                     intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE);
                     intent.putExtra(Global.SCHOOL_ID, userEntity.schoolId);
                     intent.putExtra(Global.TIMELINE_CONTENT, contents);
+                    intent.putExtra(Global.USER_ID, userEntity.id);
                     startService(intent);
 
 //                    RequestManager.insertTimeline(userEntity.schoolId, contents, timelineInsertCallback);
@@ -251,7 +252,7 @@ public class TimelineWriteActivity extends BaseActivity {
                 intent1.putExtra(Global.COMMAND, Global.INSERT_FILE);
                 intent1.putExtra(Global.PRODUCT_ID, parentUuid);
                 intent1.putExtra(Global.PATH, selectedUri);
-                startActivity(intent1);
+                startService(intent1);
 
                 Global.OnInsertFile = new Global.onInsertFile() {
                     @Override
@@ -265,7 +266,7 @@ public class TimelineWriteActivity extends BaseActivity {
                             intent.putExtra(Global.COMMAND, Global.INSERT_FILE);
                             intent.putExtra(Global.PRODUCT_ID, parentUuid);
                             intent.putExtra(Global.PATH, selectedUri);
-                            startActivity(intent);
+                            startService(intent);
                         } else {
                             onWriteAfter(true);
                         }
