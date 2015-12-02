@@ -74,15 +74,15 @@ public class ProfileView extends LinearLayout {
                 .error(R.drawable.ic_launcher)
                 .load(userEntity.picture);
         viewHolder.name.setText(userEntity.realName);
-        if (userEntity.sex == UserEntity.SexType.MAN) {
+        if (userEntity.sex == Global.MAN) {
             viewHolder.sex.setText("남자");
-        } else if (userEntity.sex == UserEntity.SexType.WOMAN) {
+        } else if (userEntity.sex == Global.WOMAN) {
             viewHolder.sex.setText("여자");
         }
         viewHolder.schoolname.setText(schoolEntity.schoolname);
-        if (userEntity.userType == UserEntity.UserType.PARENT) {
+        if (userEntity.userType == Global.PARENT) {
             viewHolder.usertype.setText("학부모");
-        } else if (userEntity.userType == UserEntity.UserType.STUDENT) {
+        } else if (userEntity.userType == Global.STUDENT) {
             viewHolder.usertype.setText("학생/졸업생");
         }
         viewHolder.phone.setText(userEntity.phone);

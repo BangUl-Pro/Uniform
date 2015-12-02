@@ -122,8 +122,8 @@ public class SocketService extends Service {
 
     // TODO: 15. 11. 28. 카카오 로그인
     private void processSignInKakao(Intent intent) {
-        String token = intent.getStringExtra(Global.TOKEN);
-        socketIO.signInKakao(token);
+        long id = intent.getLongExtra(Global.ID, -1);
+        socketIO.signInKakao(id);
     }
 
 

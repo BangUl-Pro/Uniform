@@ -73,14 +73,14 @@ public class TimelineCardView extends CardView {
 
     private void setViewVisibilityByAuth() {
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 viewHolder.commentButton.setVisibility(View.GONE);
                 viewHolder.divider.setVisibility(View.GONE);
                 viewHolder.likeButton.setVisibility(View.GONE);
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 break;
-            case PARENT:
+            case Global.PARENT:
                 viewHolder.commentButton.setVisibility(View.GONE);
                 viewHolder.divider.setVisibility(View.GONE);
                 viewHolder.likeButton.setVisibility(View.GONE);

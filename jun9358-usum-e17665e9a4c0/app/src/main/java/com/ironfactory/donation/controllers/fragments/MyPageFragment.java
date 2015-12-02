@@ -42,12 +42,12 @@ public class MyPageFragment extends SlidingBaseFragment {
         super.onResume();
 
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 initProfileView();
                 break;
-            case PARENT:
+            case Global.PARENT:
                 initProfileView();
                 break;
         }
@@ -56,12 +56,12 @@ public class MyPageFragment extends SlidingBaseFragment {
     @Override
     public void onPageSelected() {
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 BaseActivity.showGuestBlockedDialog();
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 break;
-            case PARENT:
+            case Global.PARENT:
                 break;
         }
     }

@@ -10,6 +10,7 @@ import com.ironfactory.donation.sqlite.SchoolDBAdapter;
 import java.util.ArrayList;
 
 public class SchoolManager {
+    private static final String TAG = "SchoolManager";
     private SchoolDBAdapter adapter;
 
     public SchoolManager(Context context) {

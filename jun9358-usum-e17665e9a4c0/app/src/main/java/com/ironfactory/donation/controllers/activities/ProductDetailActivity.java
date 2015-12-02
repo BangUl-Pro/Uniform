@@ -97,7 +97,7 @@ public class ProductDetailActivity extends BaseActivity {
                 intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE_COMMENT);
                 intent.putExtra(Global.TIMELINE_ITEM_ID, timelineItemUuid);
                 intent.putExtra(Global.COMMENT_CONTENT, commentContents);
-                intent.putExtra(Global.FROM, 0);
+                intent.putExtra(Global.FROM, 1);
                 startService(intent);
 
 //                RequestManager.insertTimelineComment(
@@ -236,12 +236,12 @@ public class ProductDetailActivity extends BaseActivity {
         super.onResume();
 
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 viewHolder.commentsLayout.setVisibility(View.GONE);
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 break;
-            case PARENT:
+            case Global.PARENT:
                 break;
         }
     }
@@ -275,7 +275,7 @@ public class ProductDetailActivity extends BaseActivity {
     public void requestTimelineComments() {
         Intent intent = new Intent(getApplicationContext(), SocketService.class);
         intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
-        intent.putExtra(Global.FROM, 0);
+        intent.putExtra(Global.FROM, 1);
         intent.putExtra(Global.ID, productCardDto.productEntity.user_id);
         startService(intent);
 

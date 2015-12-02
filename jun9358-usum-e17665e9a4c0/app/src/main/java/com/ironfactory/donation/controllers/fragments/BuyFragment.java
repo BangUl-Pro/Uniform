@@ -80,11 +80,11 @@ public class BuyFragment extends SlidingBaseFragment {
     @Override
     public void onPageSelected() {
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 break;
-            case PARENT:
+            case Global.PARENT:
                 break;
         }
     }

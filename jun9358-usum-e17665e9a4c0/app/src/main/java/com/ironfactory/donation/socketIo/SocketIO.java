@@ -34,7 +34,13 @@ import com.ironfactory.donation.reservation.SchoolRankingPushService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -63,8 +69,6 @@ public class SocketIO {
         if (socket != null) {
             socketConnect();
         }
-
-
         setListener();
     }
 
@@ -89,13 +93,6 @@ public class SocketIO {
                 // 연결 끊김
                 Log.d(TAG, "소켓 연결 끊김");
                 socketConnect();
-            }
-        }).on(Global.GET_SCHOOL, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                // 학교 정보 응답
-                JSONObject object = (JSONObject) args[0];
-                processGetSchool(object);
             }
         }).on(Global.SIGN_UP, new Emitter.Listener() {
             @Override
@@ -229,6 +226,12 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processSignInKakao(object);
             }
+        }).on(Global.GET_SCHOOL, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                processGetSchool(object);
+            }
         });
     }
 
@@ -237,9 +240,12 @@ public class SocketIO {
     private void processSignInKakao(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "카카오 로그인 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, SignUpActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Global.COMMAND, Global.SIGN_IN_KAKAO);
             intent.putExtra(Global.CODE, code);
             if (code == SocketException.SUCCESS) {
                 // 성공
@@ -606,7 +612,7 @@ public class SocketIO {
             int code = object.getInt(Global.CODE);
 
             Intent intent;
-            if (object.getInt(Global.FROM) == 0 || object.getInt(Global.FROM) == 2)
+            if (object.getInt(Global.FROM) == 1 || object.getInt(Global.FROM) == 3)
                 intent = new Intent(context, ProductDetailActivity.class);
             else
                 intent = new Intent(context, TimelineDetailActivity.class);
@@ -776,14 +782,16 @@ public class SocketIO {
     private void processGetSchool(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
-            JSONArray array = object.getJSONArray(Global.SCHOOL);
+
             Intent intent = new Intent(context, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Global.COMMAND, Global.GET_SCHOOL);
-            intent.putExtra(Global.CODE, code);
+            intent.putExtra(Global.CODE, 200);
 
             if (code == SocketException.SUCCESS) {
+                JSONArray array = object.getJSONArray(Global.SCHOOL);
                 ArrayList<SchoolEntity> schoolEntities = new ArrayList<>();
+
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject schoolObject = array.getJSONObject(i);
                     schoolEntities.add(new SchoolEntity(schoolObject));
@@ -793,7 +801,6 @@ public class SocketIO {
 
             context.startActivity(intent);
 
-            SocketException.printErrMsg(code);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -843,8 +850,8 @@ public class SocketIO {
 
         String userId = userEntity.id;
         String realName = userEntity.realName;
-        int sex = userEntity.sex.ordinal();
-        int userType = userEntity.userType.ordinal();
+        int sex = userEntity.sex;
+        int userType = userEntity.userType;
         String phone = userEntity.phone;
         int schoolId = userEntity.schoolId;
 
@@ -888,6 +895,162 @@ public class SocketIO {
     public void getSchool() {
         Log.d(TAG, "학교 정보 요청");
         socket.emit(Global.GET_SCHOOL, "");
+    }
+
+
+    private void insertSchool() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+//                    String serviceKey = "AgIevc%2B9UJQ8VK0tGD%2FcO1BTMIPNnklsq7Vsa7LT%2Bu6aBTy5b42HH2r9Y4cI1mNdf%2Bp%2BZ%2B%2Bsg5Unml1IJcChuw%3D%3D";
+//                    serviceKey = URLEncoder.encode(serviceKey, "UTF-8");
+                    String urlStr = "http://api.data.go.kr/openapi/4e1a3cda-db21-40b3-b4f8-a1e7de2993bd?s_page=1&s_list=10000&type=xml&encoding=UTF-8&serviceKey=AgIevc%2B9UJQ8VK0tGD%2FcO1BTMIPNnklsq7Vsa7LT%2Bu6aBTy5b42HH2r9Y4cI1mNdf%2Bp%2BZ%2B%2Bsg5Unml1IJcChuw%3D%3D";
+//                    urlStr = URLEncoder.encode(urlStr, "UTF-8");
+                    java.net.URL url = new URL(urlStr);
+                    try {
+                        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                        XmlPullParser parser = factory.newPullParser();
+                        parser.setInput(url.openStream(), "UTF-8");
+                        int eventType = parser.getEventType();
+
+                        final String CATEGORY = "학교급";
+                        final String MIDDLE_SCHOOL = "중학교";
+                        final String HIGH_SCHOOL = "고등학교";
+
+                        final String ADDRESS = "소재지지번주소";
+                        final String NAME = "학교명";
+                        final String START = "com.google.gson.internal.LinkedTreeMap";
+
+                        ArrayList<SchoolEntity> schoolEntities = new ArrayList<>();
+                        SchoolEntity schoolEntity = null;
+
+                        boolean isCategory = false;
+                        boolean isAddress = false;
+                        boolean isName = false;
+                        boolean isTarget = false;
+                        boolean isText = false;
+
+                        while (eventType != XmlPullParser.END_DOCUMENT) {
+                            switch (eventType) {
+                                case XmlPullParser.START_TAG:
+                                    String tag = parser.getName();
+                                    if (tag.equals(START)) {
+                                        schoolEntity = new SchoolEntity();
+                                        Log.d(TAG, "시작");
+                                    }
+                                    isText = true;
+                                    break;
+
+                                case XmlPullParser.TEXT:
+                                    String text = parser.getText();
+                                    if (text.equals(CATEGORY)) {
+                                        isCategory = true;
+                                    } else if (text.equals(ADDRESS)) {
+                                        isAddress = true;
+                                    } else if (text.equals(NAME)) {
+                                        isName = true;
+                                    } else if (isCategory) {
+                                        // 학교급
+                                        if (text.equals(MIDDLE_SCHOOL) || text.equals(HIGH_SCHOOL)) {
+                                            schoolEntity.category = text;
+                                            Log.d(TAG, "타겟임 " + text);
+                                            isTarget = true;
+                                            isCategory = false;
+                                        } else if (isText) {
+                                            Log.d(TAG, "타겟아님 " + text);
+                                            isTarget = false;
+                                            isCategory = false;
+                                        }
+                                    } else if (isAddress) {
+                                        // 주소
+                                        if (isTarget && isText) {
+                                            Log.d(TAG, text);
+                                            schoolEntity = setAddress(schoolEntity, text);
+                                            isAddress = false;
+                                        }
+                                    } else if (isName) {
+                                        if (isTarget && isText) {
+                                            Log.d(TAG, text);
+                                            schoolEntity.schoolname = text;
+                                            isName = false;
+                                        }
+                                    }
+                                    break;
+
+                                case XmlPullParser.END_TAG:
+                                    String endTag = parser.getName();
+                                    if (endTag.equals(START)) {
+                                        if (isTarget) {
+                                            schoolEntity.id = schoolEntities.size() + 1;
+                                            schoolEntities.add(schoolEntity);
+                                            Log.d(TAG, "끝");
+                                        }
+                                    }
+
+                                    isText = false;
+                                    break;
+                            }
+
+                            eventType = parser.next();
+                        }
+
+                        Gson gson = new Gson();
+                        String json = gson.toJson(schoolEntities);
+                        JSONArray array = new JSONArray(json);
+                        Log.d(TAG, "array = " + array);
+                        socket.emit("insertSchool", array);
+                    } catch (XmlPullParserException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+//                    Log.d(TAG, "urlStr = " + urlStr);
+//                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+//                    httpURLConnection.setRequestMethod("GET");
+//                    if (httpURLConnection != null) {
+//                        int resCode = httpURLConnection.getResponseCode();
+//                        if (resCode == HttpURLConnection.HTTP_OK) {
+//                            StringBuilder sb = new StringBuilder();
+//                            BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), "UTF-8"));
+//                            while (true) {
+//                                String line = reader.readLine();
+//                                if (line == null)
+//                                    break;
+//                                sb.append(line);
+//                            }
+//                            String school = sb.toString();
+//                            Log.d(TAG, "school = " + school);
+//                            reader.close();
+//                            processGetSchool(school);
+//                    httpURLConnection.disconnect();
+//
+//
+//                        }
+//                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+
+
+    private SchoolEntity setAddress(SchoolEntity schoolEntity, String address) {
+        schoolEntity.address = address;
+
+        int firstSpace = address.indexOf(" ");
+        int secondSpace = address.indexOf(" ", firstSpace + 1);
+
+        schoolEntity.city = address.substring(0, firstSpace).trim();
+        schoolEntity.gu = address.substring(firstSpace, secondSpace).trim();
+
+        Log.d(TAG, "city = " + schoolEntity.city);
+        Log.d(TAG, "gu = " + schoolEntity.gu);
+        return schoolEntity;
     }
 
 
@@ -1220,10 +1383,10 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 28. 카카오 로그인
-    public void signInKakao(String token) {
+    public void signInKakao(long id) {
         try {
             JSONObject object = new JSONObject();
-            object.put(Global.TOKEN, token);
+            object.put(Global.ID, String.valueOf(id));
             Log.d(TAG, "signInKakao Object = " + object);
             socket.emit(Global.SIGN_IN_KAKAO, object);
         } catch (JSONException e) {

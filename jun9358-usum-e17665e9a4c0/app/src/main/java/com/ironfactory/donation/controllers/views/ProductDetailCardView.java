@@ -268,7 +268,7 @@ public class ProductDetailCardView extends CardView {
                 intent = new Intent(getContext(), SocketService.class);
                 intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
                 intent.putExtra(Global.ID, productCardDto.productEntity.user_id);
-                intent.putExtra(Global.FROM, 2);
+                intent.putExtra(Global.FROM, 3);
                 getContext().startService(intent);
 
 //                RequestManager.getTimelineComments(productCardDto.productEntity.user_id, new RequestManager.TypedBaasioQueryCallback<TimelineCommentCardDto>() {
@@ -399,13 +399,13 @@ public class ProductDetailCardView extends CardView {
         });
 
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 viewHolder.donateButton.setVisibility(View.GONE);
                 viewHolder.cancelButton.setVisibility(View.GONE);
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 break;
-            case PARENT:
+            case Global.PARENT:
                 break;
         }
     }

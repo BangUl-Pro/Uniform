@@ -22,7 +22,11 @@ import com.ironfactory.donation.entities.SchoolEntity;
 import com.ironfactory.donation.entities.UserEntity;
 import com.ironfactory.donation.managers.SchoolManager;
 
+import java.util.ArrayList;
+
 public class UserProfileForm extends ScrollView {
+    private static final String TAG = "UserProfileForm";
+    private long id;
     private class ViewHolder {
         public EditText realNameEditText;
         public RadioGroup sexRadioGroup;
@@ -65,11 +69,12 @@ public class UserProfileForm extends ScrollView {
 
         schoolManager = new SchoolManager(getContext());
 
+        ArrayList<SchoolEntity> schoolEntities = schoolManager.selectSchools();
         // 값 초기화
         ArrayAdapter<SchoolEntity> arrayAdapter = new SchoolAutoCompleteArrayAdapter(
                 getContext(),
                 R.layout.school_info_autocomplete_item,
-                schoolManager.selectSchools()
+                schoolEntities
         );
         viewHolder.schoolNameAutoCompleteTextView.setAdapter(arrayAdapter);
         viewHolder.schoolNameAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -126,24 +131,24 @@ public class UserProfileForm extends ScrollView {
         selectedSchoolId = userEntity.schoolId;
     }
 
-    private int getSexResId(UserEntity.SexType sexType) {
+    private int getSexResId(int sexType) {
         switch (sexType) {
-            case MAN:
+            case Global.MAN:
                 return R.id.sex_man;
-            case WOMAN:
+            case Global.WOMAN:
                 return R.id.sex_woman;
             default:
                 return 0;
         }
     }
 
-    private int getUserTypeResId(UserEntity.UserType userType) {
+    private int getUserTypeResId(int userType) {
         switch (userType) {
-            case GUEST:
+            case Global.GUEST:
                 return 0;
-            case STUDENT:
+            case Global.STUDENT:
                 return R.id.usertype_student;
-            case PARENT:
+            case Global.PARENT:
                 return R.id.usertype_parents;
             default:
                 return 0;
@@ -180,30 +185,36 @@ public class UserProfileForm extends ScrollView {
         userEntity.schoolId = selectedSchoolId;
 
         //
-        userEntity.id = userEntity.phone;
+        userEntity.id = String.valueOf(id);
 
         return userEntity;
     }
 
-    private UserEntity.SexType getUserSex() {
+
+    public void setUserId(long id) {
+        this.id = id;
+    }
+
+
+    private int getUserSex() {
         switch (viewHolder.sexRadioGroup.getCheckedRadioButtonId()) {
             case R.id.sex_man:
-                return UserEntity.SexType.MAN;
+                return Global.MAN;
             case R.id.sex_woman:
-                return UserEntity.SexType.WOMAN;
+                return Global.WOMAN;
             default:
-                return UserEntity.SexType.MAN;
+                return Global.MAN;
         }
     }
 
-    private UserEntity.UserType getUserType() {
+    private int getUserType() {
         switch (viewHolder.userTypeRadioGroup.getCheckedRadioButtonId()) {
             case R.id.usertype_student:
-                return UserEntity.UserType.STUDENT;
+                return Global.STUDENT;
             case R.id.usertype_parents:
-                return UserEntity.UserType.PARENT;
+                return Global.PARENT;
             default:
-                return UserEntity.UserType.STUDENT;
+                return Global.STUDENT;
         }
     }
 

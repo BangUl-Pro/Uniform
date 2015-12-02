@@ -167,8 +167,8 @@ public class LoginActivity extends BaseActivity {
 
 //        UserEntity guest = new UserEntity(Baas.io().getSignedInUser());
         guest.realName = "방문자";
-        guest.sex = UserEntity.SexType.MAN;
-        guest.userType = UserEntity.UserType.GUEST;
+        guest.sex = Global.MAN;
+        guest.userType = Global.GUEST;
         guest.phone = "0";
         guest.schoolId = 0;
 

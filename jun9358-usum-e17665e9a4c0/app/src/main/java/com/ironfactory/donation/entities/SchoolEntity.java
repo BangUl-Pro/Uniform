@@ -30,7 +30,7 @@ public class SchoolEntity implements Parcelable {
         }
     };
     public int id;
-    public String uuid;
+//    public String uuid;
     public String schoolname;
     public String address;
     public String city;

@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.ironfactory.donation.Global;
 import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.activities.BaseActivity;
 import com.ironfactory.donation.controllers.activities.FaqActivity;
@@ -145,12 +146,12 @@ public class SupportFragment extends SlidingBaseFragment {
     @Override
     public void onPageSelected() {
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 BaseActivity.showGuestBlockedDialog();
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 break;
-            case PARENT:
+            case Global.PARENT:
                 break;
         }
     }

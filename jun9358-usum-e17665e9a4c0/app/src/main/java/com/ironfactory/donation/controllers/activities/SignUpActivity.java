@@ -7,17 +7,22 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.kakao.Session;
 import com.ironfactory.donation.Global;
 import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.views.UserProfileForm;
 import com.ironfactory.donation.entities.UserEntity;
 import com.ironfactory.donation.socketIo.SocketException;
 import com.ironfactory.donation.socketIo.SocketService;
+import com.kakao.APIErrorResult;
+import com.kakao.MeResponseCallback;
+import com.kakao.Session;
+import com.kakao.UserManagement;
+import com.kakao.UserProfile;
 
 
 public class SignUpActivity extends BaseActivity {
     private static final String TAG = "SignUpActivity";
+    private long id;
 
     private class ViewHolder {
         public CheckBox termsAggreementCheckBox;
@@ -44,6 +49,7 @@ public class SignUpActivity extends BaseActivity {
 
         // 컨트롤변수 초기화
         viewHolder = new ViewHolder(getWindow().getDecorView());
+        viewHolder.userProfileForm.setUserId(id);
         viewHolder.userProfileForm.setOnSubmitListener(new UserProfileForm.OnSubmitListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +148,8 @@ public class SignUpActivity extends BaseActivity {
 
 
     private void processSignInKakao(int code, Intent intent) {
+        Log.d(TAG, "카카오톡 로그인");
+        Log.d(TAG, "code = " + code);
         if (code == SocketException.SUCCESS) {
             // 성공
             UserEntity userEntity = intent.getParcelableExtra(Global.USER);
@@ -151,6 +159,11 @@ public class SignUpActivity extends BaseActivity {
             } else {
                 initViews(R.layout.activity_sign_up);
             }
+        } else if (code == 482) {
+            Intent intent1 = new Intent(getApplicationContext(), SocketService.class);
+            intent1.putExtra(Global.COMMAND, Global.SIGN_IN_KAKAO);
+            intent1.putExtra(Global.ID, id);
+            startService(intent1);
         } else {
             new MaterialDialog.Builder(BaseActivity.context)
                     .title(R.string.app_name)
@@ -165,10 +178,58 @@ public class SignUpActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         String kakaoToken = Session.getCurrentSession().getAccessToken();
 
-        Intent intent = new Intent(getApplicationContext(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.SIGN_IN_KAKAO);
-        intent.putExtra(Global.TOKEN, kakaoToken);
-        startService(intent);
+//        Intent intent = new Intent(getApplicationContext(), SocketService.class);
+//        intent.putExtra(Global.COMMAND, Global.SIGN_IN_KAKAO);
+//        intent.putExtra(Global.TOKEN, kakaoToken);
+//        startService(intent);
+
+//        KakaoTalkService.requestProfile(new KakaoTalkHttpResponseHandler<KakaoTalkProfile>() {
+//            @Override
+//            protected void onNotKakaoTalkUser() {
+//
+//            }
+//
+//            @Override
+//            protected void onFailure(APIErrorResult errorResult) {
+//
+//            }
+//
+//            @Override
+//            protected void onHttpSuccess(KakaoTalkProfile resultObj) {
+//            }
+//
+//            @Override
+//            protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
+//
+//            }
+//        });
+
+        UserManagement.requestMe(new MeResponseCallback() {
+            @Override
+            protected void onSuccess(UserProfile userProfile) {
+                id = userProfile.getId();
+                Log.d(TAG, "userProfile = " + id);
+                Intent intent = new Intent(getApplicationContext(), SocketService.class);
+                intent.putExtra(Global.COMMAND, Global.SIGN_IN_KAKAO);
+                intent.putExtra(Global.ID, id);
+                startService(intent);
+            }
+
+            @Override
+            protected void onNotSignedUp() {
+
+            }
+
+            @Override
+            protected void onSessionClosedFailure(APIErrorResult errorResult) {
+
+            }
+
+            @Override
+            protected void onFailure(APIErrorResult errorResult) {
+
+            }
+        });
 
 //        BaasioUser.signInViaKakaotalkInBackground(
 //                this,
@@ -193,5 +254,13 @@ public class SignUpActivity extends BaseActivity {
 //                                .show();
 //                    }
 //                });
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent intent = new Intent(getApplicationContext(), SocketService.class);
+        stopService(intent);
     }
 }

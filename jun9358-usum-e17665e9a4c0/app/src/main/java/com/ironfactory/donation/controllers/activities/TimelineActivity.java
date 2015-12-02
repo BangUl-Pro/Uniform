@@ -65,12 +65,12 @@ public class TimelineActivity extends BaseActivity {
         super.onResume();
 
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 viewHolder.writeTimelineButton.setVisibility(View.GONE);
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 break;
-            case PARENT:
+            case Global.PARENT:
                 viewHolder.writeTimelineButton.setVisibility(View.GONE);
                 break;
         }
@@ -215,13 +215,13 @@ public class TimelineActivity extends BaseActivity {
         super.onCreateOptionsMenu(menu);
 
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 queryTypeMenuItem = menu.add(0, 0, 0, "내가쓴글");
                 queryTypeMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
                 break;
-            case PARENT:
+            case Global.PARENT:
                 break;
         }
 

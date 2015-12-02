@@ -45,7 +45,7 @@ public class SchoolRankingPushService extends IntentService {
         SchoolManager schoolManager = new SchoolManager(getApplicationContext());
         Intent intent = new Intent(getApplicationContext(), SocketService.class);
         intent.putExtra(Global.COMMAND, Global.GET_SCHOOL_RANKING);
-        intent.putExtra(Global.FROM, 1);
+        intent.putExtra(Global.FROM, 2);
         startService(intent);
 
 //        RequestManager.getSchoolRankingsInBackground(schoolManager,

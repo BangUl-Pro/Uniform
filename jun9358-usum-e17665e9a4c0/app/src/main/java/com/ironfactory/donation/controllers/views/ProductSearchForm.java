@@ -2,6 +2,7 @@ package com.ironfactory.donation.controllers.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,6 +32,7 @@ import com.ironfactory.donation.managers.SchoolManager;
 import java.util.ArrayList;
 
 public class ProductSearchForm extends LinearLayout {
+    private static final String TAG = "ProductSearchFrom";
     private ViewHolder viewHolder;
     private int selectedSchoolId;
     private ArrayAdapter<String> sexAdapter;
@@ -58,10 +60,11 @@ public class ProductSearchForm extends LinearLayout {
         viewHolder = new ViewHolder(this);
 
         final SchoolManager schoolManager = new SchoolManager(getContext());
+        ArrayList<SchoolEntity> list = schoolManager.selectSchools();
         ArrayAdapter<SchoolEntity> arrayAdapter = new SchoolAutoCompleteArrayAdapter(
                 getContext(),
                 R.layout.school_info_autocomplete_item,
-                schoolManager.selectSchools()
+                list
         );
         viewHolder.schoolName.setAdapter(arrayAdapter);
         viewHolder.schoolName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -164,10 +167,10 @@ public class ProductSearchForm extends LinearLayout {
         });
 
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 viewHolder.useReservationPushContainer.setVisibility(View.INVISIBLE);
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 UserEntity userEntity = Global.userEntity;
                 if (userEntity.schoolId != 0) {
                     SchoolEntity schoolEntity = schoolManager.selectSchool(userEntity.schoolId);
@@ -177,9 +180,9 @@ public class ProductSearchForm extends LinearLayout {
                 viewHolder.schoolName.setEnabled(false);
                 viewHolder.schoolName.clearFocus();
 
-                viewHolder.sex.setSelection(userEntity.sex.ordinal());
+                viewHolder.sex.setSelection(userEntity.sex);
                 break;
-            case PARENT:
+            case Global.PARENT:
                 break;
         }
     }

@@ -56,7 +56,7 @@ public class CommunityFragment extends SlidingBaseFragment {
         final SchoolManager schoolManager = new SchoolManager(getActivity());
         Intent intent = new Intent(getActivity(), SocketService.class);
         intent.putExtra(Global.COMMAND, Global.GET_SCHOOL_RANKING);
-        intent.putExtra(Global.FROM, 0);
+        intent.putExtra(Global.FROM, 1);
         getActivity().startService(intent);
 
 //        RequestManager.getSchoolRankingsInBackground(schoolManager, new BaasioQueryCallback() {
@@ -96,12 +96,12 @@ public class CommunityFragment extends SlidingBaseFragment {
         super.onResume();
 
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 viewHolder.mySchoolRankingCardContainer.setVisibility(View.GONE);
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 break;
-            case PARENT:
+            case Global.PARENT:
                 viewHolder.mySchoolRankingCardContainer.setVisibility(View.GONE);
                 break;
         }

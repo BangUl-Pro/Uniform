@@ -65,6 +65,17 @@ public class Global {
     public static final String LIKE = "like";
     public static final String TOKEN = "token";
 
+    // sex
+    public static final int MAN = 1;
+    public static final int WOMAN = 2;
+
+
+    // user_type
+    public static final int GUEST = 1;
+    public static final int STUDENT = 2;
+    public static final int PARENT = 3;
+
+
     public static onDeleted OnDeleted;
     public static onInsertFile OnInsertFile;
 

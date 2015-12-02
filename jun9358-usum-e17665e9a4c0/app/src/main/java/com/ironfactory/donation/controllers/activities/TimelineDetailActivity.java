@@ -63,13 +63,13 @@ public class TimelineDetailActivity extends BaseActivity {
         super.onResume();
 
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 viewHolder.commentContents.setVisibility(View.GONE);
                 viewHolder.writeCommentButton.setVisibility(View.GONE);
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 break;
-            case PARENT:
+            case Global.PARENT:
                 viewHolder.commentContents.setVisibility(View.GONE);
                 viewHolder.writeCommentButton.setVisibility(View.GONE);
                 break;
@@ -81,7 +81,7 @@ public class TimelineDetailActivity extends BaseActivity {
         Intent intent = new Intent(getApplicationContext(), SocketService.class);
         intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
         intent.putExtra(Global.ID, timelineCardDto.timelineEntity.id);
-        intent.putExtra(Global.FROM, 1);
+        intent.putExtra(Global.FROM, 2);
         startService(intent);
 
 //        RequestManager.getTimelineComments(timelineCardDto.timelineEntity.id, new RequestManager.TypedBaasioQueryCallback<TimelineCommentCardDto>() {
@@ -233,7 +233,7 @@ public class TimelineDetailActivity extends BaseActivity {
                 intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE_COMMENT);
                 intent.putExtra(Global.TIMELINE_ITEM_ID, timelineItemUuid);
                 intent.putExtra(Global.COMMENT_CONTENT, commentContents);
-                intent.putExtra(Global.FROM, 1);
+                intent.putExtra(Global.FROM, 2);
 
 //                RequestManager.insertTimelineComment(
 //                        timelineItemUuid,

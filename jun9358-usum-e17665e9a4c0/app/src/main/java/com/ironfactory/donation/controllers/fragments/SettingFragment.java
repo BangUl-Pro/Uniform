@@ -16,6 +16,7 @@ import android.widget.Switch;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.ironfactory.donation.Global;
 import com.kakao.APIErrorResult;
 import com.kakao.LogoutResponseCallback;
 import com.kakao.UnlinkResponseCallback;
@@ -69,12 +70,12 @@ public class SettingFragment extends SlidingBaseFragment {
     @Override
     public void onPageSelected() {
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 BaseActivity.showGuestBlockedDialog();
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 break;
-            case PARENT:
+            case Global.PARENT:
                 viewHolder.useTimelinePush.setEnabled(false);
                 break;
         }

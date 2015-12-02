@@ -33,8 +33,8 @@ public class UserEntity implements Parcelable {
     public String picture;
     public String realName;
     public int schoolId;
-    public SexType sex;
-    public UserType userType;
+    public int sex;
+    public int userType;
 
     public static final Creator<UserEntity> CREATOR = new Creator<UserEntity>() {
         public UserEntity createFromParcel(Parcel in) {
@@ -68,8 +68,8 @@ public class UserEntity implements Parcelable {
         this.picture = bundle.getString(PROPERTY_PICTURE);
         this.realName = bundle.getString(PROPERTY_REAL_NAME);
         this.schoolId = bundle.getInt(PROPERTY_SCHOOL_ID);
-        this.sex = SexType.values()[bundle.getInt(PROPERTY_SEX)];
-        this.userType = UserType.values()[bundle.getInt(PROPERTY_USER_TYPE)];
+        this.sex = bundle.getInt(PROPERTY_SEX);
+        this.userType = bundle.getInt(PROPERTY_USER_TYPE);
     }
 
     public void set(JSONObject entity) {
@@ -105,10 +105,10 @@ public class UserEntity implements Parcelable {
                 this.schoolId = entity.getInt(PROPERTY_SCHOOL_ID);
             }
             if (entity.getInt(PROPERTY_SEX) != -1) {
-                this.sex = SexType.values()[entity.getInt(PROPERTY_SEX)];
+                this.sex = entity.getInt(PROPERTY_SEX);
             }
             if (entity.getInt(PROPERTY_USER_TYPE) != -1) {
-                this.userType = UserType.values()[entity.getInt(PROPERTY_USER_TYPE)];
+                this.userType = entity.getInt(PROPERTY_USER_TYPE);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -126,8 +126,8 @@ public class UserEntity implements Parcelable {
         bundle.putString(PROPERTY_PICTURE, this.picture);
         bundle.putString(PROPERTY_REAL_NAME, this.realName);
         bundle.putInt(PROPERTY_SCHOOL_ID, this.schoolId);
-        bundle.putInt(PROPERTY_SEX, this.sex.ordinal());
-        bundle.putInt(PROPERTY_USER_TYPE, this.userType.ordinal());
+        bundle.putInt(PROPERTY_SEX, this.sex);
+        bundle.putInt(PROPERTY_USER_TYPE, this.userType);
 
         return bundle;
     }
@@ -159,11 +159,4 @@ public class UserEntity implements Parcelable {
         dest.writeBundle(getBundle());
     }
 
-    public enum SexType {
-        MAN, WOMAN
-    }
-
-    public enum UserType {
-        GUEST, STUDENT, PARENT
-    }
 }

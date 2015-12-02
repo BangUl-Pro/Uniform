@@ -163,9 +163,9 @@ public class ProductAddForm extends CardView {
 
         SchoolManager schoolManager = new SchoolManager(getContext());
         switch (AuthManager.getSignedInUserType()) {
-            case GUEST:
+            case Global.GUEST:
                 break;
-            case STUDENT:
+            case Global.STUDENT:
                 UserEntity userEntity = Global.userEntity;
                 if (userEntity.schoolId != 0) {
                     SchoolEntity schoolEntity = schoolManager.selectSchool(userEntity.schoolId);
@@ -175,9 +175,9 @@ public class ProductAddForm extends CardView {
                 }
                 viewHolder.schoolName.setEnabled(false);
 
-                viewHolder.sex.setSelection(userEntity.sex.ordinal());
+                viewHolder.sex.setSelection(userEntity.sex);
                 break;
-            case PARENT:
+            case Global.PARENT:
                 break;
         }
     }
