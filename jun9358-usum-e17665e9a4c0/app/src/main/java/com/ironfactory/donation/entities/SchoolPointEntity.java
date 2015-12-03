@@ -6,7 +6,7 @@ import org.json.JSONObject;
 public class SchoolPointEntity {
     public static final String COLLECTION_NAME = "school_point_2s";
     public static final String PROPERTY_SCHOOL_ID = "school_id";
-    public static final String PROPERTY_POINT = "point";
+    public static final String PROPERTY_POINT = "school_point";
 
     public long point;
     public int school_id;

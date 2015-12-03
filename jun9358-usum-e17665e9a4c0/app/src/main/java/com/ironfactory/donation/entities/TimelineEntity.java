@@ -12,12 +12,12 @@ public class TimelineEntity implements Parcelable {
     public static final String COLLECTION_NAME = "timeline_items";
 
 //    public static final String PROPERTY_UUID = BaasioEntity.PROPERTY_UUID;
-    public static final String PROPERTY_ID = "id";
-    public static final String PROPERTY_SCHOOL_ID = "school_id";
-    public static final String PROPERTY_USER_UUID = "user_id";
+    public static final String PROPERTY_ID = "timeline_id";
+    public static final String PROPERTY_SCHOOL_ID = "timeline_school_id";
+    public static final String PROPERTY_USER_UUID = "timeline_user_id";
 //    public static final String PROPERTY_CREATED = BaasioEntity.PROPERTY_CREATED;
-    public static final String PROPERTY_CREATED = "created";
-    public static final String PROPERTY_CONTENTS = "content";
+    public static final String PROPERTY_CREATED = "timeline_created";
+    public static final String PROPERTY_CONTENTS = "timeline_content";
 
 //    public String uuid;
     public String id;
@@ -64,6 +64,46 @@ public class TimelineEntity implements Parcelable {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUser_uuid() {
+        return user_uuid;
+    }
+
+    public void setUserId(String user_uuid) {
+        this.user_uuid = user_uuid;
+    }
+
+    public int getSchool_id() {
+        return school_id;
+    }
+
+    public void setSchoolId(int school_id) {
+        this.school_id = school_id;
+    }
+
+    public long getCreated() {
+        return created;
+    }
+
+    public void setCreated(long created) {
+        this.created = created;
+    }
+
+    public String getContents() {
+        return contents;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 
     public void set(Bundle bundle) {

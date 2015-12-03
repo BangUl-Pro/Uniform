@@ -251,8 +251,9 @@ public class SocketService extends Service {
     // TODO: 15. 11. 23. 타임라인 글 모두 불러오기
     private void processGetAllTimeline(Intent intent) {
         int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
+        String userId = intent.getStringExtra(Global.USER_ID);
         if (schoolId != -1)
-            socketIO.getAllTimeline(schoolId);
+            socketIO.getAllTimeline(schoolId, userId);
     }
 
 

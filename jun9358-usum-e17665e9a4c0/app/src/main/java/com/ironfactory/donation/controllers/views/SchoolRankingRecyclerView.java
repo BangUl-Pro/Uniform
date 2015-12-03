@@ -16,6 +16,7 @@ import com.ironfactory.donation.dtos.SchoolRanking;
 import java.util.ArrayList;
 
 public class SchoolRankingRecyclerView extends RecyclerView {
+    private static final String TAG = "SchoolRankRecyclerView";
     private ArrayList<SchoolRanking> schoolRankings;
 
     public SchoolRankingRecyclerView(Context context) {

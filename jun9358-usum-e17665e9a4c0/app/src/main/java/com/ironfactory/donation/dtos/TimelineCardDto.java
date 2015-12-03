@@ -80,6 +80,26 @@ public class TimelineCardDto implements Parcelable {
     }
 
 
+    public void setTimeline(JSONObject object) {
+        timelineEntity = new TimelineEntity(object);
+    }
+
+
+    public void setUser(JSONObject object) {
+        userEntity = new UserEntity(object);
+    }
+
+
+    public void setLike(JSONObject object) {
+        likeEntity = new LikeEntity(object);
+    }
+
+
+    public void setFile(JSONObject object) {
+        fileEntities = new ArrayList<>();
+    }
+
+
     public void set(Bundle bundle) {
         this.timelineEntity = bundle.getParcelable(PROPERTY_TIMELINE_ENTITY);
         this.userEntity = bundle.getParcelable(PROPERTY_USER_ENTITY);

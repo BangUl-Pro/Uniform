@@ -13,13 +13,13 @@ import java.util.HashMap;
 
 public class SchoolEntity implements Parcelable {
     public static final String COLLECTION_NAME = "schools";
-    public static final String PROPERTY_ID = "id";
+    public static final String PROPERTY_ID = "school_id";
 //    public static final String PROPERTY_UUID = "uuid";
-    public static final String PROPERTY_SCHOOLNAME = "schoolname";
-    public static final String PROPERTY_ADDRESS = "address";
-    public static final String PROPERTY_CITY = "city";
-    public static final String PROPERTY_CATEGORY = "category";
-    public static final String PROPERTY_GU = "gu";
+    public static final String PROPERTY_SCHOOLNAME = "school_schoolname";
+    public static final String PROPERTY_ADDRESS = "school_address";
+    public static final String PROPERTY_CITY = "school_city";
+    public static final String PROPERTY_CATEGORY = "school_category";
+    public static final String PROPERTY_GU = "school_gu";
     public static final Creator<SchoolEntity> CREATOR = new Creator<SchoolEntity>() {
         public SchoolEntity createFromParcel(Parcel in) {
             return new SchoolEntity(in);

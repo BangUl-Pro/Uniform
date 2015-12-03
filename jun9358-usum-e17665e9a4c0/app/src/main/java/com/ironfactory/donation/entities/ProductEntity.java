@@ -16,7 +16,7 @@ public class ProductEntity implements Parcelable {
 //    public static final String PROPERTY_USER_UUID = "user_uuid";
     public static final String PROPERTY_USER_ID = "user_id";
 //    public static final String PROPERTY_UUID = BaasioBaseEntity.PROPERTY_UUID;
-    public static final String PROPERTY_ID = "id";
+    public static final String PROPERTY_ID = "product_id";
     public static final String PROPERTY_PRODUCT_NAME = "product_name";
     public static final String PROPERTY_SCHOOL_ID = "school_id";
     public static final String PROPERTY_CATEGORY = "category";

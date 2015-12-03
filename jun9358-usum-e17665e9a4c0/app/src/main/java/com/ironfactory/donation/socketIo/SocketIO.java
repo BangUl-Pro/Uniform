@@ -275,8 +275,7 @@ public class SocketIO {
             intent.putExtra(Global.CODE, code);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             if (code == SocketException.SUCCESS) {
-                JSONObject timelineObject = object.getJSONObject(Global.TIMELINE);
-                TimelineCardDto dto = new TimelineCardDto(timelineObject);
+                TimelineCardDto dto = new TimelineCardDto(object);
                 intent.putExtra(Global.TIMELINE, dto);
             }
             context.startActivity(intent);
@@ -324,6 +323,8 @@ public class SocketIO {
     private void processGetProduct(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "제품 요청 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, ReservationPushService.class);
 //            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -353,6 +354,8 @@ public class SocketIO {
     private void processInsertLike(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "좋아요 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, TimelineDetailActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -376,6 +379,8 @@ public class SocketIO {
     private void processDeleteLike(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "좋아요 삭제 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, TimelineDetailActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -392,6 +397,8 @@ public class SocketIO {
     private void processDeleteTimeline(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "타임라인 지우기 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, TimelineDetailActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -408,6 +415,8 @@ public class SocketIO {
     private void processUpdateProduct(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "제품 업데이트 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, ProductDetailActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -425,6 +434,8 @@ public class SocketIO {
         try {
             int code = object.getInt(Global.CODE);
             int from = object.getInt(Global.FROM);
+            Log.d(TAG, "파일삭제 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent;
             if (from == 1)
@@ -446,6 +457,9 @@ public class SocketIO {
     private void processDeleteProduct(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "제품 삭제 응답");
+            Log.d(TAG, "object = " + object);
+
             Intent intent = new Intent(context, ProductDetailActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Global.COMMAND, Global.DELETE_PRODUCT);
@@ -461,6 +475,8 @@ public class SocketIO {
         try {
             int code = object.getInt(Global.CODE);
             int status = object.getInt(Global.STATUS);
+            Log.d(TAG, "updateTransactionStatus 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, ProductDetailActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -487,6 +503,8 @@ public class SocketIO {
         try {
             int code = object.getInt(Global.CODE);
             int from = object.getInt(Global.FROM);
+            Log.d(TAG, "댓글 삭제 응답");
+            Log.d(TAG, "object = " + object);
 
             if (code == SocketException.SUCCESS)
                 Global.OnDeleted.onSuccess();
@@ -511,6 +529,8 @@ public class SocketIO {
     private void processGetMyProduct(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "내 제품 요청 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -539,6 +559,8 @@ public class SocketIO {
     private void processSearchProduct(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "제품 검색 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -568,6 +590,8 @@ public class SocketIO {
     private void processInsertProduct(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "타임라인 글쓰기 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, AddProductsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -597,6 +621,8 @@ public class SocketIO {
     private void processUpdateTimeline(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "타임라인 업데이트 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, TimelineWriteActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -613,6 +639,8 @@ public class SocketIO {
     private void processGetAllTimeline(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "타임라인 글 모두 불러오기 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, TimelineActivity.class);
             intent.putExtra(Global.COMMAND, Global.GET_ALL_TIMELINE);
@@ -624,8 +652,11 @@ public class SocketIO {
                 JSONArray timelineArray = object.getJSONArray(Global.TIMELINE);
                 for (int i = 0; i < timelineArray.length(); i++) {
                     JSONObject timelineObject = timelineArray.getJSONObject(i);
-                    Gson gson = new Gson();
-                    TimelineCardDto timelineCardDto = gson.fromJson(timelineObject.toString(), TimelineCardDto.class);
+                    TimelineCardDto timelineCardDto = new TimelineCardDto();
+                    timelineCardDto.setTimeline(timelineObject);
+                    timelineCardDto.setUser(timelineObject);
+                    timelineCardDto.setLike(timelineObject);
+                    timelineCardDto.setFile(timelineObject);
                     timelineCardDtos.add(timelineCardDto);
                 }
                 intent.putExtra(Global.TIMELINE, timelineCardDtos);
@@ -637,10 +668,12 @@ public class SocketIO {
     }
 
 
-    // TODO: 15. 11. 23. 타임라인 글 모두 불러오기 응답
+    // TODO: 15. 11. 23. 타임라인 내 글 불러오기 응답
     private void processGetMyTimeline(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "타임라인 내 글 불러오기 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, TimelineActivity.class);
             intent.putExtra(Global.COMMAND, Global.GET_MY_TIMELINE);
@@ -669,6 +702,8 @@ public class SocketIO {
     private void processGetTimelineComment(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "타임라인 글 댓글 불러오기 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent;
             if (object.getInt(Global.FROM) == 1 || object.getInt(Global.FROM) == 3)
@@ -705,6 +740,8 @@ public class SocketIO {
         try {
             int code = object.getInt(Global.CODE);
             int from = object.getInt(Global.FROM);
+            Log.d(TAG, "타임라인 게시글에 댓글달기 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent;
             if (from == 1)
@@ -726,6 +763,8 @@ public class SocketIO {
     private void processUpdateUserProfile(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "유저 프로필 업데이트 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, EditProfileActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -750,6 +789,8 @@ public class SocketIO {
         try {
             int code = object.getInt(Global.CODE);
             int from = object.getInt(Global.FROM);
+            Log.d(TAG, "학교 랭킹 요청 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent;
             if (from == 1)
@@ -842,6 +883,8 @@ public class SocketIO {
     private void processGetSchool(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
+            Log.d(TAG, "학교 정보 요청 응답");
+            Log.d(TAG, "object = " + object);
 
             Intent intent = new Intent(context, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -955,6 +998,7 @@ public class SocketIO {
     public void getSchool() {
         Log.d(TAG, "학교 정보 요청");
         socket.emit(Global.GET_SCHOOL, "");
+//        insertSchool();
     }
 
 
@@ -1198,10 +1242,11 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 글 모두 불러오기
-    public void getAllTimeline(int schoolId) {
+    public void getAllTimeline(int schoolId, String userId) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.SCHOOL_ID, schoolId);
+            object.put(Global.USER_ID, userId);
             Log.d(TAG, "getAllTimeline Object = " + object);
             socket.emit(Global.GET_ALL_TIMELINE, object);
         } catch (JSONException e) {
@@ -1217,7 +1262,7 @@ public class SocketIO {
             object.put(Global.SCHOOL_ID, schoolId);
             object.put(Global.USER_ID, userId);
             Log.d(TAG, "getMyTimeline Object = " + object);
-            socket.emit(Global.GET_ALL_TIMELINE, object);
+            socket.emit(Global.GET_MY_TIMELINE, object);
         } catch (JSONException e) {
             e.printStackTrace();
         }

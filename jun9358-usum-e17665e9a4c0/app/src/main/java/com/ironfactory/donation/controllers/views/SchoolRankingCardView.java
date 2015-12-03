@@ -3,6 +3,7 @@ package com.ironfactory.donation.controllers.views;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class SchoolRankingCardView extends LinearLayout {
             public void onClick(View v) {
                 Intent intent = new Intent(BaseActivity.context, TimelineActivity.class);
                 intent.putExtra("schoolEntity", schoolEntity);
+                Log.d(TAG, "schoolEntity = " + schoolEntity);
                 BaseActivity.startActivityUsingStack(intent);
             }
         });

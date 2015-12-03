@@ -11,14 +11,14 @@ public class LikeEntity implements Parcelable {
     public static final String COLLECTION_NAME = "likes";
 
 //    public static final String PROPERTY_UUID = BaasioBaseEntity.PROPERTY_UUID;
-    public static final String PROPERTY_ID = "id";
-    public static final String PROPERTY_TIMELINE_UUID = "timeline_id";
-    public static final String PROPERTY_USER_UUID = "user_id";
+    public static final String PROPERTY_ID = "like_id";
+    public static final String PROPERTY_TIMELINE_UUID = "like_timeline_id";
+    public static final String PROPERTY_USER_UUID = "like_user_id";
 
 //    public String uuid;
-    public String id;
-    public String timeline_uuid;
-    public String user_uuid;
+    public String id = "";
+    public String timeline_uuid = "";
+    public String user_uuid = "";
 
     public static final Creator<LikeEntity> CREATOR = new Creator<LikeEntity>() {
         public LikeEntity createFromParcel(Parcel in) {
@@ -52,7 +52,9 @@ public class LikeEntity implements Parcelable {
 
     public void set(JSONObject object) {
         try {
-            this.id = object.getString(PROPERTY_ID);
+            if (object.getString(PROPERTY_ID) != null) {
+                this.id = object.getString(PROPERTY_ID);
+            }
             if (object.getString(PROPERTY_TIMELINE_UUID) != null) {
                 this.timeline_uuid = object.getString(PROPERTY_TIMELINE_UUID);
             }

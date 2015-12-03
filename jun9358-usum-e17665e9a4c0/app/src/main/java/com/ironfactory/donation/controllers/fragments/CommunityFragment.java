@@ -116,7 +116,10 @@ public class CommunityFragment extends SlidingBaseFragment {
         SchoolEntity mySchoolEntity = schoolManager.selectSchool(Global.userEntity.schoolId);
         Log.d(TAG, "schoolId = " + Global.userEntity.schoolId);
         Log.d(TAG, "schoolName = " + mySchoolEntity.schoolname);
-        viewHolder.mySchoolRankingCardView.setSchoolEntity(mySchoolEntity);
+        Log.d(TAG, "mySchoolEntity = " + mySchoolEntity);
+        Log.d(TAG, "mySchoolEntity.Id = " + mySchoolEntity.id);
+        if (mySchoolEntity != null)
+            viewHolder.mySchoolRankingCardView.setSchoolEntity(mySchoolEntity);
 
         int myRanking = 0;
         int myProgress = 0;

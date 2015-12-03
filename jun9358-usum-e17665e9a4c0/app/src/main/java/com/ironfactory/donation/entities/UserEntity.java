@@ -13,16 +13,16 @@ public class UserEntity implements Parcelable {
     public static final String COLLECTION_NAME = "users";
 
 //    public static final String PROPERTY_UUID = BaasioEntity.PROPERTY_UUID;
-    public static final String PROPERTY_ID = "id";
-    public static final String PROPERTY_NAME = "name";
-    public static final String PROPERTY_HAS_EXTRA_PROFILE = "has_extra_profile";
-    public static final String PROPERTY_KAKAOTALK = "kakaotalk";
-    public static final String PROPERTY_PHONE = "phone";
-    public static final String PROPERTY_PICTURE = "picture";
-    public static final String PROPERTY_REAL_NAME = "real_name";
-    public static final String PROPERTY_SCHOOL_ID = "school_id";
-    public static final String PROPERTY_SEX = "sex";
-    public static final String PROPERTY_USER_TYPE = "user_type";
+    public static final String PROPERTY_ID = "user_id";
+    public static final String PROPERTY_NAME = "user_name";
+    public static final String PROPERTY_HAS_EXTRA_PROFILE = "user_has_extra_profile";
+    public static final String PROPERTY_KAKAOTALK = "user_kakaotalk";
+    public static final String PROPERTY_PHONE = "user_phone";
+    public static final String PROPERTY_PICTURE = "user_picture";
+    public static final String PROPERTY_REAL_NAME = "user_real_name";
+    public static final String PROPERTY_SCHOOL_ID = "user_school_id";
+    public static final String PROPERTY_SEX = "user_sex";
+    public static final String PROPERTY_USER_TYPE = "user_user_type";
 
 //    public String uuid;
     public String id;
@@ -56,6 +56,86 @@ public class UserEntity implements Parcelable {
 
     public UserEntity(JSONObject entity) {
         set(entity);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isHasExtraProfile() {
+        return hasExtraProfile;
+    }
+
+    public void setHasExtraProfile(boolean hasExtraProfile) {
+        this.hasExtraProfile = hasExtraProfile;
+    }
+
+    public KakaoProfile getKakaotalk() {
+        return kakaotalk;
+    }
+
+    public void setKakaotalk(KakaoProfile kakaotalk) {
+        this.kakaotalk = kakaotalk;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public int getSchoolId() {
+        return schoolId;
+    }
+
+    public void setSchoolId(int schoolId) {
+        this.schoolId = schoolId;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public int getUserType() {
+        return userType;
+    }
+
+    public void setUserType(int userType) {
+        this.userType = userType;
     }
 
     public void set(Bundle bundle) {
@@ -103,13 +183,13 @@ public class UserEntity implements Parcelable {
             if (entity.getString(PROPERTY_REAL_NAME) != null) {
                 this.realName = entity.getString(PROPERTY_REAL_NAME);
             }
-            if (entity.getInt(PROPERTY_SCHOOL_ID) != -1) {
+            if (!entity.get(PROPERTY_SCHOOL_ID).equals(null)) {
                 this.schoolId = entity.getInt(PROPERTY_SCHOOL_ID);
             }
-            if (entity.getInt(PROPERTY_SEX) != -1) {
+            if (!entity.get(PROPERTY_SEX).equals(null)) {
                 this.sex = entity.getInt(PROPERTY_SEX);
             }
-            if (entity.getInt(PROPERTY_USER_TYPE) != -1) {
+            if (!entity.get(PROPERTY_USER_TYPE).equals(null)) {
                 this.userType = entity.getInt(PROPERTY_USER_TYPE);
             }
             if (entity.get(PROPERTY_KAKAOTALK).equals(null)) {

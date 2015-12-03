@@ -39,17 +39,17 @@ public class Global {
     public static final String ID = "id";
     public static final String USER = "user";
     public static final String SCHOOL = "school";
-    public static final String USER_ID = "userId";
-    public static final String REAL_NAME = "real_name";
+    public static final String USER_ID = "user_id";
+    public static final String REAL_NAME = "realName";
     public static final String NAME = "name";
     public static final String HAS_EXTRA_PROFILE = "has_extra_profile";
     public static final String SEX = "sex";
     public static final String CATEGORY = "category";
     public static final String SIZE = "size";
-    public static final String USER_TYPE = "user_type";
+    public static final String USER_TYPE = "userType";
     public static final String PICTURE = "picture";
     public static final String PHONE = "phone";
-    public static final String SCHOOL_ID = "schoolId";
+    public static final String SCHOOL_ID = "school_id";
     public static final String PRODUCT_CARD = "productCard";
     public static final String TIMELINE = "timeline";
     public static final String TIMELINE_COMMENT = "timelineComment";
@@ -67,6 +67,8 @@ public class Global {
     public static final String PATH = "path";
     public static final String LIKE = "like";
     public static final String TOKEN = "token";
+    public static final String CREATED = "created";
+    public static final String CONTENT = "content";
 
     // sex
     public static final int MAN = 1;

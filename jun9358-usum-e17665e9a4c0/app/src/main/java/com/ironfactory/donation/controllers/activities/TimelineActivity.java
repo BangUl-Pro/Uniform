@@ -42,6 +42,7 @@ public class TimelineActivity extends BaseActivity {
 //    private BaasioQuery timelineCardDtoQuery;
     private Intent intent;
     private SchoolEntity schoolEntity;
+    private boolean isGetTimeline = false;
 
     private MenuItem queryTypeMenuItem;
 
@@ -52,6 +53,7 @@ public class TimelineActivity extends BaseActivity {
 
         Intent intent = getIntent();
         schoolEntity = intent.getParcelableExtra("schoolEntity");
+        Log.d(TAG, "schoolEntity = " + schoolEntity);
 
         timelineCardDtos = new ArrayList<>();
         setQueryToAllTimelines();
@@ -77,12 +79,17 @@ public class TimelineActivity extends BaseActivity {
 
         timelineCardDtos.clear();
 //        RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
-        startService(intent);
+        if (!isGetTimeline) {
+            startService(intent);
+            isGetTimeline = true;
+        }
     }
 
     private void setQueryToAllTimelines() {
         intent = new Intent(getApplicationContext(), SocketService.class);
         intent.putExtra(Global.COMMAND, Global.GET_ALL_TIMELINE);
+        intent.putExtra(Global.USER_ID, Global.userEntity.id);
+        Log.d(TAG, "schoolEntity = " + schoolEntity);
         intent.putExtra(Global.SCHOOL_ID, schoolEntity.id);
 
 //        timelineCardDtoQuery = new BaasioQuery();
@@ -188,7 +195,9 @@ public class TimelineActivity extends BaseActivity {
         viewHolder.writeTimelineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BaseActivity.startActivityUsingStack(TimelineWriteActivity.class);
+                Intent intent = new Intent(getApplicationContext(), TimelineWriteActivity.class);
+                startActivity(intent);
+                isGetTimeline = false;
             }
         });
 
