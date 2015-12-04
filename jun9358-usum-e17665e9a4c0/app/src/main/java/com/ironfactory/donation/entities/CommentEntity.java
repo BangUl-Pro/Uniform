@@ -12,9 +12,9 @@ public class CommentEntity implements Parcelable {
     public static final String COLLECTION_NAME = "timeline_comments";
 //    public static final String PROPERTY_UUID = BaasioEntity.PROPERTY_UUID;
     public static final String PROPERTY_ID = "comment_id";
-    // FIXME: timeline_item_uuid => timeline_uuid
-    public static final String PROPERTY_TIMELINE_ITEM_UUID = "comment_timeline_item_id";
-    public static final String PROPERTY_USER_UUID = "comment_user_id";
+    // FIXME: timeline_item_id => timeline_uuid
+    public static final String PROPERTY_timeline_item_id = "comment_timeline_item_id";
+    public static final String PROPERTY_user_id = "comment_user_id";
     public static final String PROPERTY_CREATED = "comment_created";
     public static final String PROPERTY_CONTENTS = "comment_content";
     public static final Creator<CommentEntity> CREATOR = new Creator<CommentEntity>() {
@@ -28,8 +28,8 @@ public class CommentEntity implements Parcelable {
     };
 //    public String uuid;
     public String id;
-    public String timeline_item_uuid;
-    public String user_uuid;
+    public String timeline_item_id;
+    public String user_id;
     public long created;
     public String contents;
 
@@ -50,11 +50,11 @@ public class CommentEntity implements Parcelable {
             if (object.getString(PROPERTY_ID) != null) {
                 this.id = object.getString(PROPERTY_ID).toString();
             }
-            if (object.getString(PROPERTY_TIMELINE_ITEM_UUID) != null) {
-                this.user_uuid = object.getString(PROPERTY_TIMELINE_ITEM_UUID);
+            if (object.getString(PROPERTY_timeline_item_id) != null) {
+                this.timeline_item_id = object.getString(PROPERTY_timeline_item_id);
             }
-            if (object.getString(PROPERTY_USER_UUID) != null) {
-                this.user_uuid = object.getString(PROPERTY_USER_UUID);
+            if (object.getString(PROPERTY_user_id) != null) {
+                this.user_id = object.getString(PROPERTY_user_id);
             }
             this.created = object.getLong(PROPERTY_CREATED);
             if (object.getString(PROPERTY_CONTENTS) != null) {
@@ -67,8 +67,8 @@ public class CommentEntity implements Parcelable {
 
     public void set(Bundle bundle) {
         this.id = bundle.getString(PROPERTY_ID);
-        this.timeline_item_uuid = bundle.getString(PROPERTY_TIMELINE_ITEM_UUID);
-        this.user_uuid = bundle.getString(PROPERTY_USER_UUID);
+        this.timeline_item_id = bundle.getString(PROPERTY_timeline_item_id);
+        this.user_id = bundle.getString(PROPERTY_user_id);
         this.created = bundle.getLong(PROPERTY_CREATED);
         this.contents = bundle.getString(PROPERTY_CONTENTS);
     }
@@ -77,8 +77,8 @@ public class CommentEntity implements Parcelable {
 //        BaasioBaseEntity entity = new BaasioBaseEntity();
 //        entity.setType(COLLECTION_NAME);
 //        entity.setUuid(UUID.fromString(this.uuid));
-//        entity.setProperty(PROPERTY_TIMELINE_ITEM_UUID, this.timeline_item_uuid);
-//        entity.setProperty(PROPERTY_USER_UUID, this.user_uuid);
+//        entity.setProperty(PROPERTY_timeline_item_id, this.timeline_item_id);
+//        entity.setProperty(PROPERTY_user_id, this.user_id);
 //        entity.setProperty(PROPERTY_CREATED, this.created);
 //        entity.setProperty(PROPERTY_CONTENTS, this.contents);
 //
@@ -90,8 +90,8 @@ public class CommentEntity implements Parcelable {
 //        object.setType(COLLECTION_NAME);
         try {
             object.put(PROPERTY_ID, id);
-            object.put(PROPERTY_TIMELINE_ITEM_UUID, this.timeline_item_uuid);
-            object.put(PROPERTY_USER_UUID, this.user_uuid);
+            object.put(PROPERTY_timeline_item_id, this.timeline_item_id);
+            object.put(PROPERTY_user_id, this.user_id);
             object.put(PROPERTY_CREATED, this.created);
             object.put(PROPERTY_CONTENTS, this.contents);
         } catch (JSONException e) {
@@ -103,8 +103,8 @@ public class CommentEntity implements Parcelable {
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(PROPERTY_ID, this.id);
-        bundle.putString(PROPERTY_TIMELINE_ITEM_UUID, this.timeline_item_uuid);
-        bundle.putString(PROPERTY_USER_UUID, this.user_uuid);
+        bundle.putString(PROPERTY_timeline_item_id, this.timeline_item_id);
+        bundle.putString(PROPERTY_user_id, this.user_id);
         bundle.putLong(PROPERTY_CREATED, this.created);
         bundle.putString(PROPERTY_CONTENTS, this.contents);
 

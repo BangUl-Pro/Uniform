@@ -256,9 +256,9 @@ public class SocketIO {
         try {
             int code = object.getInt(Global.CODE);
             if (code == SocketException.SUCCESS)
-                Global.OnInsertFile.onSuccess();
+                Global.onInsertFile.onSuccess();
             else
-                Global.OnInsertFile.onException(code);
+                Global.onInsertFile.onException(code);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -331,7 +331,7 @@ public class SocketIO {
 
             Intent intent = new Intent(context, ReservationPushService.class);
 //            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.INSERT_LIKE);
+            intent.putExtra(Global.COMMAND, Global.GET_PRODUCT);
             intent.putExtra(Global.CODE, code);
 
             if (code == SocketException.SUCCESS) {
@@ -356,22 +356,27 @@ public class SocketIO {
     // TODO: 15. 11. 25. 좋아요
     private void processInsertLike(JSONObject object) {
         try {
-            int code = object.getInt(Global.CODE);
+            final int code = object.getInt(Global.CODE);
             Log.d(TAG, "좋아요 응답");
             Log.d(TAG, "object = " + object);
 
-            Intent intent = new Intent(context, TimelineDetailActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.INSERT_LIKE);
-            intent.putExtra(Global.CODE, code);
-
             if (code == SocketException.SUCCESS) {
                 JSONObject likeObject = object.getJSONObject(Global.LIKE);
-                Gson gson = new Gson();
-                LikeEntity likeEntity = gson.fromJson(likeObject.toString(), LikeEntity.class);
-                intent.putExtra(Global.LIKE, likeEntity);
+                final LikeEntity likeEntity = new LikeEntity(likeObject);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Global.onInsertLike.onSuccess(likeEntity);
+                    }
+                });
+            } else {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Global.onInsertLike.onException(code);
+                    }
+                });
             }
-            context.startActivity(intent);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -381,15 +386,19 @@ public class SocketIO {
     // TODO: 15. 11. 25. 좋아요 삭제
     private void processDeleteLike(JSONObject object) {
         try {
-            int code = object.getInt(Global.CODE);
+            final int code = object.getInt(Global.CODE);
             Log.d(TAG, "좋아요 삭제 응답");
             Log.d(TAG, "object = " + object);
 
-            Intent intent = new Intent(context, TimelineDetailActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.DELETE_LIKE);
-            intent.putExtra(Global.CODE, code);
-            context.startActivity(intent);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (code == SocketException.SUCCESS)
+                        Global.onDeleteLike.onSuccess();
+                    else
+                        Global.onDeleteLike.onException(code);
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -412,9 +421,9 @@ public class SocketIO {
                 @Override
                 public void run() {
                     if (code == SocketException.SUCCESS)
-                        Global.OnDeleteTimeline.onSuccess();
+                        Global.onDeleteTimeline.onSuccess();
                     else
-                        Global.OnDeleteTimeline.onException(code);
+                        Global.onDeleteTimeline.onException(code);
                 }
             });
         } catch (JSONException e) {
@@ -519,9 +528,9 @@ public class SocketIO {
             Log.d(TAG, "object = " + object);
 
             if (code == SocketException.SUCCESS)
-                Global.OnDeleted.onSuccess();
+                Global.onDeleted.onSuccess();
             else
-                Global.OnDeleted.onException();
+                Global.onDeleted.onException();
 
             Intent intent;
             if (from == 1)
@@ -1351,19 +1360,12 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 24. 댓글 삭제 요청
-    public void deleteComment(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos, int from) {
+    public void deleteComment(TimelineCommentCardDto timelineCommentCardDto, int from) {
         try {
             JSONObject object = new JSONObject();
-            JSONArray array = new JSONArray();
-            for (int i = 0; i < timelineCommentCardDtos.size(); i++) {
-                TimelineCommentCardDto dto = timelineCommentCardDtos.get(i);
-                JSONObject commentObject = new JSONObject();
-                commentObject.put(Global.ID, dto.commentEntity.id);
-                commentObject.put(Global.TIMELINE_ITEM_ID, dto.commentEntity.timeline_item_uuid);
-                commentObject.put(Global.USER_ID, dto.commentEntity.user_uuid);
-                array.put(commentObject);
-            }
-            object.put(Global.COMMENT, array);
+            object.put(Global.ID, timelineCommentCardDto.commentEntity.id);
+            object.put(Global.TIMELINE_ITEM_ID, timelineCommentCardDto.commentEntity.timeline_item_id);
+            object.put(Global.USER_ID, timelineCommentCardDto.commentEntity.user_id);
             object.put(Global.FROM, from);
             Log.d(TAG, "deleteComment Object = " + object);
             socket.emit(Global.DELETE_COMMENT, object);

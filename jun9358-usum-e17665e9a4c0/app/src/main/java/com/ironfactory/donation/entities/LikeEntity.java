@@ -3,22 +3,24 @@ package com.ironfactory.donation.entities;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LikeEntity implements Parcelable {
+    private static final String TAG = "LikeEntity";
     public static final String COLLECTION_NAME = "likes";
 
 //    public static final String PROPERTY_UUID = BaasioBaseEntity.PROPERTY_UUID;
     public static final String PROPERTY_ID = "like_id";
-    public static final String PROPERTY_TIMELINE_UUID = "like_timeline_id";
-    public static final String PROPERTY_USER_UUID = "like_user_id";
+    public static final String PROPERTY_timeline_id = "like_timeline_id";
+    public static final String PROPERTY_user_id = "like_user_id";
 
 //    public String uuid;
     public String id = "";
-    public String timeline_uuid = "";
-    public String user_uuid = "";
+    public String timeline_id = "";
+    public String user_id = "";
 
     public static final Creator<LikeEntity> CREATOR = new Creator<LikeEntity>() {
         public LikeEntity createFromParcel(Parcel in) {
@@ -32,8 +34,8 @@ public class LikeEntity implements Parcelable {
 
     public LikeEntity() {
         this.id = "";
-        this.timeline_uuid = "";
-        this.user_uuid = "";
+        this.timeline_id = "";
+        this.user_id = "";
     }
 
     public LikeEntity(Parcel in) {
@@ -46,20 +48,21 @@ public class LikeEntity implements Parcelable {
 
     public void set(Bundle bundle) {
         this.id = bundle.getString(PROPERTY_ID);
-        this.timeline_uuid = bundle.getString(PROPERTY_TIMELINE_UUID);
-        this.user_uuid = bundle.getString(PROPERTY_USER_UUID);
+        this.timeline_id = bundle.getString(PROPERTY_timeline_id);
+        this.user_id = bundle.getString(PROPERTY_user_id);
     }
 
     public void set(JSONObject object) {
         try {
-            if (object.getString(PROPERTY_ID) != null) {
+            if (!object.get(PROPERTY_ID).equals(null)) {
                 this.id = object.getString(PROPERTY_ID);
+                Log.d(TAG, "id = " + id);
             }
-            if (object.getString(PROPERTY_TIMELINE_UUID) != null) {
-                this.timeline_uuid = object.getString(PROPERTY_TIMELINE_UUID);
+            if (object.getString(PROPERTY_timeline_id) != null) {
+                this.timeline_id = object.getString(PROPERTY_timeline_id);
             }
-            if (object.getString(PROPERTY_USER_UUID) != null) {
-                this.user_uuid = object.getString(PROPERTY_USER_UUID);
+            if (object.getString(PROPERTY_user_id) != null) {
+                this.user_id = object.getString(PROPERTY_user_id);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -69,8 +72,8 @@ public class LikeEntity implements Parcelable {
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(PROPERTY_ID, this.id);
-        bundle.putString(PROPERTY_TIMELINE_UUID, this.timeline_uuid);
-        bundle.putString(PROPERTY_USER_UUID, this.user_uuid);
+        bundle.putString(PROPERTY_timeline_id, this.timeline_id);
+        bundle.putString(PROPERTY_user_id, this.user_id);
 
         return bundle;
     }
@@ -78,8 +81,8 @@ public class LikeEntity implements Parcelable {
 //    public BaasioBaseEntity getBaasioBaseEntity() {
 //        BaasioBaseEntity entity = new BaasioBaseEntity();
 //        entity.setUuid(UUID.fromString(this.uuid));
-//        entity.setProperty(PROPERTY_TIMELINE_UUID, this.timeline_uuid);
-//        entity.setProperty(PROPERTY_USER_UUID, this.user_uuid);
+//        entity.setProperty(PROPERTY_timeline_id, this.timeline_id);
+//        entity.setProperty(PROPERTY_user_id, this.user_id);
 //
 //        return entity;
 //    }

@@ -254,7 +254,7 @@ public class TimelineWriteActivity extends BaseActivity {
                 intent1.putExtra(Global.PATH, selectedUri);
                 startService(intent1);
 
-                Global.OnInsertFile = new Global.onInsertFile() {
+                Global.onInsertFile = new Global.OnInsertFile() {
                     @Override
                     public void onSuccess() {
                         if (0 < selectedImageUris.size()) {

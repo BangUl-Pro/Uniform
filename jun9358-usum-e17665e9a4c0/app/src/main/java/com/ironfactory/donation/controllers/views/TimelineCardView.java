@@ -131,7 +131,7 @@ public class TimelineCardView extends CardView {
                         intent.putExtra(Global.TIMELINE, timelineCardDto);
                         getContext().startService(intent);
 
-                        Global.OnDeleteTimeline = new Global.onDeleteTimeline() {
+                        Global.onDeleteTimeline = new Global.OnDeleteTimeline() {
                             @Override
                             public void onSuccess() {
                                 processDeleteTimeline(200);
@@ -270,6 +270,19 @@ public class TimelineCardView extends CardView {
                     intent.putExtra(Global.LIKE, timelineCardDto.likeEntity);
                     getContext().startService(intent);
 
+                    Global.onDeleteLike = new Global.OnDeleteLike() {
+                        @Override
+                        public void onSuccess() {
+                            timelineCardDto.likeEntity = new LikeEntity();
+                            viewHolder.likeButton.setActivated(true);
+                        }
+
+                        @Override
+                        public void onException(int code) {
+                            viewHolder.likeButton.setActivated(true);
+                        }
+                    };
+
 //                    RequestManager.deleteLike(timelineCardDto.likeEntity, new BaasioCallback<BaasioEntity>() {
 //                        @Override
 //                        public void onResponse(BaasioEntity baasioEntity) {
@@ -289,6 +302,19 @@ public class TimelineCardView extends CardView {
                     intent.putExtra(Global.USER_ID, Global.userEntity.id);
                     getContext().startService(intent);
 
+                    Global.onInsertLike = new Global.OnInsertLike() {
+                        @Override
+                        public void onSuccess(LikeEntity likeEntity) {
+                            timelineCardDto.likeEntity = likeEntity;
+                            viewHolder.likeButton.setActivated(true);
+                        }
+
+                        @Override
+                        public void onException(int code) {
+                            viewHolder.likeButton.setActivated(true);
+                        }
+                    };
+
 //                    RequestManager.insertLike(timelineCardDto.timelineEntity.uuid, new BaasioCallback<BaasioEntity>() {
 //                        @Override
 //                        public void onResponse(BaasioEntity baasioEntity) {
@@ -307,28 +333,6 @@ public class TimelineCardView extends CardView {
 
         // 내용 표시
         viewHolder.contents.setText(timelineCardDto.timelineEntity.contents);
-    }
-
-
-    // TODO: 15. 11. 25. 좋아요 삭제
-    public void processDeleteLike(int code) {
-        if (code == SocketException.SUCCESS) {
-            timelineCardDto.likeEntity = new LikeEntity();
-            viewHolder.likeButton.setActivated(true);
-        } else {
-            viewHolder.likeButton.setActivated(true);
-        }
-    }
-
-
-    // TODO: 15. 11. 25. 좋아요
-    public void processInsertLike(int code, LikeEntity likeEntity) {
-        if (code == SocketException.SUCCESS) {
-            timelineCardDto.likeEntity = likeEntity;
-            viewHolder.likeButton.setActivated(true);
-        } else {
-            viewHolder.likeButton.setActivated(true);
-        }
     }
 
 

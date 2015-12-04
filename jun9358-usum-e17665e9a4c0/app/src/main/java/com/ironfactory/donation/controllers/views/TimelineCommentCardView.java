@@ -21,6 +21,7 @@ import com.ironfactory.donation.entities.UserEntity;
 import com.ironfactory.donation.socketIo.SocketService;
 
 public class TimelineCommentCardView extends CardView {
+    private static final String TAG = "TimelineCommentCardView";
     private TimelineCommentCardDto timelineCommentCardDto;
     private TimelineCardView.TimelineActionCallback timelineActionCallback;
     private int from;
@@ -60,7 +61,7 @@ public class TimelineCommentCardView extends CardView {
 
         PopupMenu popup = new PopupMenu(getContext(), viewHolder.writerView.moreButton);
         popup.getMenuInflater().inflate(R.menu.menu_writer_more, popup.getMenu());
-        if (timelineCommentCardDto.commentEntity.user_uuid.equals(userEntity.id)) {
+        if (timelineCommentCardDto.commentEntity.user_id.equals(userEntity.id)) {
             popup.getMenu().findItem(R.id.action_delete).setVisible(true);
         } else {
             popup.getMenu().findItem(R.id.action_report).setVisible(true);
@@ -89,9 +90,10 @@ public class TimelineCommentCardView extends CardView {
                         Intent intent = new Intent(getContext(), SocketService.class);
                         intent.putExtra(Global.COMMAND, Global.DELETE_COMMENT);
                         intent.putExtra(Global.TIMELINE_COMMENT, timelineCommentCardDto);
+                        Log.d(TAG, "timelineId = " + timelineCommentCardDto.commentEntity.timeline_item_id);
                         intent.putExtra(Global.FROM, from);
                         getContext().startService(intent);
-                        Global.OnDeleted = new Global.onDeleted() {
+                        Global.onDeleted = new Global.OnDeleted() {
                             @Override
                             public void onSuccess() {
                                 BaseActivity.hideLoadingView();
@@ -151,8 +153,8 @@ public class TimelineCommentCardView extends CardView {
                 GMailSender sender = new GMailSender("usum.sender@gmail.com", "!@#usumsender123");
                 UserEntity userEntity = Global.userEntity;
                 sender.sendMail(
-                        "교복통 타임라인 댓글 신고접수(" + timelineCommentCardDto.commentEntity.timeline_item_uuid + ")",
-                        "COMMENT UUID: " + timelineCommentCardDto.commentEntity.timeline_item_uuid + "\n" +
+                        "교복통 타임라인 댓글 신고접수(" + timelineCommentCardDto.commentEntity.timeline_item_id + ")",
+                        "COMMENT UUID: " + timelineCommentCardDto.commentEntity.timeline_item_id + "\n" +
                                 "내용: " + timelineCommentCardDto.commentEntity.contents + "\n" +
                                 "작성자: " + timelineCommentCardDto.userEntity.realName + "\n" +
                                 "신고자: " + userEntity.realName + "(" + userEntity.id + ")",

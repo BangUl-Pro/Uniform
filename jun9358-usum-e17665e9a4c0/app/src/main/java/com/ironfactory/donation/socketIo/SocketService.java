@@ -214,8 +214,8 @@ public class SocketService extends Service {
     // TODO: 15. 11. 24. 댓글 삭제
     private void processDeleteComment(Intent intent) {
         int from = intent.getIntExtra(Global.FROM, -1);
-        ArrayList<TimelineCommentCardDto> commentCardDtos = intent.getParcelableArrayListExtra(Global.TIMELINE_COMMENT);
-        socketIO.deleteComment(commentCardDtos, from);
+        TimelineCommentCardDto commentCardDto = intent.getParcelableExtra(Global.TIMELINE_COMMENT);
+        socketIO.deleteComment(commentCardDto, from);
     }
 
 

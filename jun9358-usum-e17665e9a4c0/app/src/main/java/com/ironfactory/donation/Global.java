@@ -1,5 +1,6 @@
 package com.ironfactory.donation;
 
+import com.ironfactory.donation.entities.LikeEntity;
 import com.ironfactory.donation.entities.UserEntity;
 
 /**
@@ -82,21 +83,35 @@ public class Global {
     public static final int PARENT = 3;
 
 
-    public static onDeleted OnDeleted;
-    public static onInsertFile OnInsertFile;
-    public static onDeleteTimeline OnDeleteTimeline;
+    public static OnDeleted onDeleted;
+    public static OnInsertFile onInsertFile;
+    public static OnDeleteTimeline onDeleteTimeline;
+    public static OnDeleteLike onDeleteLike;
+    public static OnInsertLike onInsertLike;
 
-    public interface onDeleted {
+    public interface OnDeleted {
         void onSuccess();
         void onException();
     }
 
-    public interface onDeleteTimeline {
+    public interface OnDeleteTimeline {
         void onSuccess();
         void onException(int code);
     }
 
-    public interface onInsertFile {
+
+    public interface OnDeleteLike {
+        void onSuccess();
+        void onException(int code);
+    }
+
+
+    public interface OnInsertLike {
+        void onSuccess(LikeEntity likeEntity);
+        void onException(int code);
+    }
+
+    public interface OnInsertFile {
         void onSuccess();
         void onException(int code);
     }

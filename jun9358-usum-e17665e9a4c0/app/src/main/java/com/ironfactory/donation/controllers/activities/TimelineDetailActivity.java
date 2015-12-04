@@ -15,7 +15,6 @@ import com.ironfactory.donation.controllers.views.TimelineCardView;
 import com.ironfactory.donation.controllers.views.TimelineCommentRecyclerView;
 import com.ironfactory.donation.dtos.TimelineCardDto;
 import com.ironfactory.donation.dtos.TimelineCommentCardDto;
-import com.ironfactory.donation.entities.LikeEntity;
 import com.ironfactory.donation.managers.AuthManager;
 import com.ironfactory.donation.socketIo.SocketException;
 import com.ironfactory.donation.socketIo.SocketService;
@@ -118,12 +117,6 @@ public class TimelineDetailActivity extends BaseActivity {
                     } else if (command.equals(Global.INSERT_TIMELINE_COMMENT)) {
                         // 타임라인 댓글 입력 응답
                         processInsertTimelineComment(code);
-                    } else if (command.equals(Global.DELETE_LIKE)) {
-                        // 좋아요 지우기
-                        processDeleteLike(code);
-                    } else if (command.equals(Global.INSERT_LIKE)) {
-                        // 좋아요
-                        processInsertLike(code, intent);
                     }
                 }
             }
@@ -131,23 +124,17 @@ public class TimelineDetailActivity extends BaseActivity {
     }
 
 
-    // TODO: 15. 11. 25. 좋아요
-    private void processInsertLike(int code, Intent intent) {
-        LikeEntity likeEntity = intent.getParcelableExtra(Global.LIKE);
-        viewHolder.timelineCardView.processInsertLike(code, likeEntity);
-    }
-
-
-    // TODO: 15. 11. 25. 좋아요 지우기
-    private void processDeleteLike(int code) {
-        viewHolder.timelineCardView.processDeleteLike(code);
-    }
-
-
-    // TODO: 15. 11. 25. 타임라인 지우기
-    private void processDeleteTimeline(int code) {
-        viewHolder.timelineCardView.processDeleteTimeline(code);
-    }
+//    // TODO: 15. 11. 25. 좋아요
+//    private void processInsertLike(int code, Intent intent) {
+//        LikeEntity likeEntity = intent.getParcelableExtra(Global.LIKE);
+//        viewHolder.timelineCardView.processInsertLike(code, likeEntity);
+//    }
+//
+//
+//    // TODO: 15. 11. 25. 타임라인 지우기
+//    private void processDeleteTimeline(int code) {
+//        viewHolder.timelineCardView.processDeleteTimeline(code);
+//    }
 
 
     // TODO: 15. 11. 23. 타임라인 댓글 작성 응답
