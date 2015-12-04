@@ -93,7 +93,7 @@ public class TimelineCardView extends CardView {
 
         PopupMenu popup = new PopupMenu(getContext(), viewHolder.writerView.moreButton);
         popup.getMenuInflater().inflate(R.menu.menu_writer_more, popup.getMenu());
-        if (timelineCardDto.timelineEntity.user_uuid.equals(userEntity.id)) {
+        if (timelineCardDto.timelineEntity.user_id.equals(userEntity.id)) {
             popup.getMenu().findItem(R.id.action_update).setVisible(true);
             popup.getMenu().findItem(R.id.action_delete).setVisible(true);
         } else {
@@ -130,6 +130,18 @@ public class TimelineCardView extends CardView {
                         intent.putExtra(Global.COMMAND, Global.DELETE_TIMELINE);
                         intent.putExtra(Global.TIMELINE, timelineCardDto);
                         getContext().startService(intent);
+
+                        Global.OnDeleteTimeline = new Global.onDeleteTimeline() {
+                            @Override
+                            public void onSuccess() {
+                                processDeleteTimeline(200);
+                            }
+
+                            @Override
+                            public void onException(int code) {
+                                processDeleteTimeline(code);
+                            }
+                        };
 
 //                        RequestManager.deleteTimeline(timelineCardDto, new BaasioCallback<BaasioEntity>() {
 //                            @Override
@@ -274,6 +286,7 @@ public class TimelineCardView extends CardView {
                     Intent intent = new Intent(getContext(), SocketService.class);
                     intent.putExtra(Global.COMMAND, Global.INSERT_LIKE);
                     intent.putExtra(Global.TIMELINE_ITEM_ID, timelineCardDto.timelineEntity.id);
+                    intent.putExtra(Global.USER_ID, Global.userEntity.id);
                     getContext().startService(intent);
 
 //                    RequestManager.insertLike(timelineCardDto.timelineEntity.uuid, new BaasioCallback<BaasioEntity>() {

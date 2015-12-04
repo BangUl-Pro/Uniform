@@ -112,6 +112,8 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.SIGN_IN_KAKAO)) {
                     // 카카오 로그인
                     processSignInKakao(intent);
+                } else if (command.equals(Global.CREATE)) {
+                    socketIO.setListener();
                 }
             }
         }
@@ -157,7 +159,8 @@ public class SocketService extends Service {
     // TODO: 15. 11. 25. 좋아요
     private void processInsertLike(Intent intent) {
         String timelineItemId = intent.getStringExtra(Global.TIMELINE_ITEM_ID);
-        socketIO.insertLike(timelineItemId);
+        String userId = intent.getStringExtra(Global.USER_ID);
+        socketIO.insertLike(timelineItemId, userId);
     }
 
 
@@ -211,7 +214,7 @@ public class SocketService extends Service {
     // TODO: 15. 11. 24. 댓글 삭제
     private void processDeleteComment(Intent intent) {
         int from = intent.getIntExtra(Global.FROM, -1);
-        ArrayList<TimelineCommentCardDto> commentCardDtos = (ArrayList) intent.getSerializableExtra(Global.TIMELINE_COMMENT);
+        ArrayList<TimelineCommentCardDto> commentCardDtos = intent.getParcelableArrayListExtra(Global.TIMELINE_COMMENT);
         socketIO.deleteComment(commentCardDtos, from);
     }
 
@@ -280,8 +283,9 @@ public class SocketService extends Service {
         String timelineItemId = intent.getStringExtra(Global.TIMELINE_ITEM_ID);
         String commentContent = intent.getStringExtra(Global.COMMENT_CONTENT);
         int from = intent.getIntExtra(Global.FROM, -1);
+        String userId = intent.getStringExtra(Global.USER_ID);
 
-        socketIO.insertTimelineComment(timelineItemId, commentContent, from);
+        socketIO.insertTimelineComment(timelineItemId, commentContent, from, userId);
     }
 
 

@@ -212,6 +212,10 @@ public class SignUpActivity extends BaseActivity {
                 id = userProfile.getId();
                 Log.d(TAG, "userProfile = " + id);
                 Intent intent = new Intent(getApplicationContext(), SocketService.class);
+                intent.putExtra(Global.COMMAND, Global.CREATE);
+                startService(intent);
+
+                intent = new Intent(getApplicationContext(), SocketService.class);
                 intent.putExtra(Global.COMMAND, Global.SIGN_IN_KAKAO);
                 intent.putExtra(Global.ID, id);
                 startService(intent);

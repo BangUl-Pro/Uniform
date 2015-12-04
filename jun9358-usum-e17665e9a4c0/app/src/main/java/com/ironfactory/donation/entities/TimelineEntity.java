@@ -14,14 +14,14 @@ public class TimelineEntity implements Parcelable {
 //    public static final String PROPERTY_UUID = BaasioEntity.PROPERTY_UUID;
     public static final String PROPERTY_ID = "timeline_id";
     public static final String PROPERTY_SCHOOL_ID = "timeline_school_id";
-    public static final String PROPERTY_USER_UUID = "timeline_user_id";
+    public static final String PROPERTY_user_id = "timeline_user_id";
 //    public static final String PROPERTY_CREATED = BaasioEntity.PROPERTY_CREATED;
     public static final String PROPERTY_CREATED = "timeline_created";
     public static final String PROPERTY_CONTENTS = "timeline_content";
 
 //    public String uuid;
     public String id;
-    public String user_uuid;
+    public String user_id;
     public int school_id;
     public long created;
     public String contents;
@@ -51,8 +51,8 @@ public class TimelineEntity implements Parcelable {
     public void set(JSONObject object) {
         try {
             this.id = object.getString(PROPERTY_ID);
-            if (object.getString(PROPERTY_USER_UUID) != null) {
-                this.user_uuid = object.getString(PROPERTY_USER_UUID);
+            if (object.getString(PROPERTY_user_id) != null) {
+                this.user_id = object.getString(PROPERTY_user_id);
             }
             if (object.getInt(PROPERTY_SCHOOL_ID) != -1) {
                 this.school_id = object.getInt(PROPERTY_SCHOOL_ID);
@@ -74,12 +74,12 @@ public class TimelineEntity implements Parcelable {
         this.id = id;
     }
 
-    public String getUser_uuid() {
-        return user_uuid;
+    public String getuser_id() {
+        return user_id;
     }
 
-    public void setUserId(String user_uuid) {
-        this.user_uuid = user_uuid;
+    public void setUserId(String user_id) {
+        this.user_id = user_id;
     }
 
     public int getSchool_id() {
@@ -108,7 +108,7 @@ public class TimelineEntity implements Parcelable {
 
     public void set(Bundle bundle) {
         this.id = bundle.getString(PROPERTY_ID);
-        this.user_uuid = bundle.getString(PROPERTY_USER_UUID);
+        this.user_id = bundle.getString(PROPERTY_user_id);
         this.school_id = bundle.getInt(PROPERTY_SCHOOL_ID);
         this.created = bundle.getLong(PROPERTY_CREATED);
         this.contents = bundle.getString(PROPERTY_CONTENTS);
@@ -118,7 +118,7 @@ public class TimelineEntity implements Parcelable {
 //        BaasioBaseEntity entity = new BaasioBaseEntity();
 //        entity.setType(COLLECTION_NAME);
 //        entity.setUuid(UUID.fromString(this.uuid));
-//        entity.setProperty(PROPERTY_USER_UUID, this.user_uuid);
+//        entity.setProperty(PROPERTY_user_id, this.user_id);
 //        entity.setProperty(PROPERTY_SCHOOL_ID, this.school_id);
 //        entity.setProperty(PROPERTY_CREATED, this.created);
 //        entity.setProperty(PROPERTY_CONTENTS, this.contents);
@@ -130,7 +130,7 @@ public class TimelineEntity implements Parcelable {
 //        BaasioEntity entity = new BaasioEntity();
 //        entity.setType(COLLECTION_NAME);
 //        entity.setUuid(UUID.fromString(this.uuid));
-//        entity.setProperty(PROPERTY_USER_UUID, this.user_uuid);
+//        entity.setProperty(PROPERTY_user_id, this.user_id);
 //        entity.setProperty(PROPERTY_SCHOOL_ID, this.school_id);
 //        entity.setProperty(PROPERTY_CREATED, this.created);
 //        entity.setProperty(PROPERTY_CONTENTS, this.contents);
@@ -141,7 +141,7 @@ public class TimelineEntity implements Parcelable {
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(PROPERTY_ID, this.id);
-        bundle.putString(PROPERTY_USER_UUID, this.user_uuid);
+        bundle.putString(PROPERTY_user_id, this.user_id);
         bundle.putInt(PROPERTY_SCHOOL_ID, this.school_id);
         bundle.putLong(PROPERTY_CREATED, this.created);
         bundle.putString(PROPERTY_CONTENTS, this.contents);

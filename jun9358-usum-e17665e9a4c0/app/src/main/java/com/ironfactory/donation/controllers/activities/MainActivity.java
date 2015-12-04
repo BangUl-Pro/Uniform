@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -47,8 +48,12 @@ public class MainActivity extends BaseActivity {
         Log.d(TAG, "액티비티 시작");
         context = this;
         if (savedInstanceState == null) {
+            if (getIntent().getParcelableExtra(Global.USER) == null) {
+                Toast.makeText(getApplicationContext(), "로그인 중 에러가 발생했습니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
             Global.userEntity = getIntent().getParcelableExtra(Global.USER);
-            Log.d(TAG, "schoolId = " + Global.userEntity.schoolId);
             ArrayList<SlidingBaseFragment> tabFragments = new ArrayList<>();
 
             communityFragment = new CommunityFragment();

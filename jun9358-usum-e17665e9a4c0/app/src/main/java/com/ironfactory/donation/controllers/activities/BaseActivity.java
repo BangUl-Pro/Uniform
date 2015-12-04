@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ironfactory.donation.R;
+import com.ironfactory.donation.socketIo.SocketService;
 
 public abstract class BaseActivity extends ActionBarActivity {
     public static Context context;
@@ -87,5 +88,12 @@ public abstract class BaseActivity extends ActionBarActivity {
         }
 
         materialDialog.hide();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent intent = new Intent(getApplicationContext(), SocketService.class);
+        stopService(intent);
     }
 }

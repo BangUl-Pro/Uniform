@@ -2,6 +2,7 @@ package com.ironfactory.donation.socketIo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 
 import com.github.nkzawa.emitter.Emitter;
@@ -48,6 +49,7 @@ import java.util.ArrayList;
  */
 public class SocketIO {
 
+    private Handler handler = new Handler();
     private static final String URL = "http://uniform-test.herokuapp.com";
     private static final String TAG = "SocketIO";
 
@@ -60,6 +62,7 @@ public class SocketIO {
     }
 
     private void init() {
+        Log.d(TAG, "init");
         try {
             socket = IO.socket(URL);
         } catch (Exception e) {
@@ -69,11 +72,11 @@ public class SocketIO {
         if (socket != null) {
             socketConnect();
         }
-        setListener();
     }
 
 
-    private void setListener() {
+    public void setListener() {
+        Log.d(TAG, "setListener");
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -396,7 +399,7 @@ public class SocketIO {
     // TODO: 15. 11. 25. 타임라인 지우기
     private void processDeleteTimeline(JSONObject object) {
         try {
-            int code = object.getInt(Global.CODE);
+            final int code = object.getInt(Global.CODE);
             Log.d(TAG, "타임라인 지우기 응답");
             Log.d(TAG, "object = " + object);
 
@@ -404,7 +407,16 @@ public class SocketIO {
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Global.COMMAND, Global.DELETE_TIMELINE);
             intent.putExtra(Global.CODE, code);
-            context.startActivity(intent);
+//            context.startActivity(intent);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (code == SocketException.SUCCESS)
+                        Global.OnDeleteTimeline.onSuccess();
+                    else
+                        Global.OnDeleteTimeline.onException(code);
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -685,8 +697,11 @@ public class SocketIO {
                 JSONArray timelineArray = object.getJSONArray(Global.TIMELINE);
                 for (int i = 0; i < timelineArray.length(); i++) {
                     JSONObject timelineObject = timelineArray.getJSONObject(i);
-                    Gson gson = new Gson();
-                    TimelineCardDto timelineCardDto = gson.fromJson(timelineObject.toString(), TimelineCardDto.class);
+                    TimelineCardDto timelineCardDto = new TimelineCardDto();
+                    timelineCardDto.setTimeline(timelineObject);
+                    timelineCardDto.setUser(timelineObject);
+                    timelineCardDto.setLike(timelineObject);
+                    timelineCardDto.setFile(timelineObject);
                     timelineCardDtos.add(timelineCardDto);
                 }
                 intent.putExtra(Global.TIMELINE, timelineCardDtos);
@@ -716,13 +731,11 @@ public class SocketIO {
 
             if (code == SocketException.SUCCESS) {
                 // 성공
-                Gson gson = new Gson();
                 ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
                 JSONArray timelineCommentArray = object.getJSONArray(Global.TIMELINE_COMMENT);
                 for (int i = 0; i < timelineCommentArray.length(); i++) {
                     JSONObject timelineCommentObject = timelineCommentArray.getJSONObject(i);
-                    TimelineCommentCardDto comment = gson.fromJson(timelineCommentObject.toString(), TimelineCommentCardDto.class);
-//                    TimelineCommentCardDto comment = new TimelineCommentCardDto();
+                    TimelineCommentCardDto comment = new TimelineCommentCardDto(timelineCommentObject);
                     timelineCommentCardDtos.add(comment);
                 }
                 intent.putExtra(Global.TIMELINE_COMMENT, timelineCommentCardDtos);
@@ -1213,11 +1226,12 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 게시글에 댓글 달기
-    public void insertTimelineComment(String timelineItemId, String commentContent, int from) {
+    public void insertTimelineComment(String timelineItemId, String commentContent, int from, String userId) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
             object.put(Global.COMMENT_CONTENT, commentContent);
+            object.put(Global.USER_ID, userId);
             object.put(Global.FROM, from);
             Log.d(TAG, "insertTimelineComment Object = " + object);
             socket.emit(Global.INSERT_TIMELINE_COMMENT, object);
@@ -1450,10 +1464,11 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 좋아요
-    public void insertLike(String timelineItemId) {
+    public void insertLike(String timelineItemId, String userId) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
+            object.put(Global.USER_ID, userId);
             Log.d(TAG, "insertLike Object = " + object);
             socket.emit(Global.INSERT_LIKE, object);
         } catch (JSONException e) {

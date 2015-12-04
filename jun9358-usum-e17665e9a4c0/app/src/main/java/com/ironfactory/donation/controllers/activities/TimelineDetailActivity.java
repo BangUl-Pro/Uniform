@@ -118,9 +118,6 @@ public class TimelineDetailActivity extends BaseActivity {
                     } else if (command.equals(Global.INSERT_TIMELINE_COMMENT)) {
                         // 타임라인 댓글 입력 응답
                         processInsertTimelineComment(code);
-                    } else if (command.equals(Global.DELETE_TIMELINE)) {
-                        // 타임라인 지우기
-                        processDeleteTimeline(code);
                     } else if (command.equals(Global.DELETE_LIKE)) {
                         // 좋아요 지우기
                         processDeleteLike(code);
@@ -233,7 +230,9 @@ public class TimelineDetailActivity extends BaseActivity {
                 intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE_COMMENT);
                 intent.putExtra(Global.TIMELINE_ITEM_ID, timelineItemUuid);
                 intent.putExtra(Global.COMMENT_CONTENT, commentContents);
+                intent.putExtra(Global.USER_ID, Global.userEntity.id);
                 intent.putExtra(Global.FROM, 2);
+                startService(intent);
 
 //                RequestManager.insertTimelineComment(
 //                        timelineItemUuid,

@@ -11,12 +11,12 @@ public class CommentEntity implements Parcelable {
     // FIXME: comment_items => comments
     public static final String COLLECTION_NAME = "timeline_comments";
 //    public static final String PROPERTY_UUID = BaasioEntity.PROPERTY_UUID;
-    public static final String PROPERTY_ID = "id";
+    public static final String PROPERTY_ID = "comment_id";
     // FIXME: timeline_item_uuid => timeline_uuid
-    public static final String PROPERTY_TIMELINE_ITEM_UUID = "timeline_item_uuid";
-    public static final String PROPERTY_USER_UUID = "user_uuid";
-    public static final String PROPERTY_CREATED = "created";
-    public static final String PROPERTY_CONTENTS = "contents";
+    public static final String PROPERTY_TIMELINE_ITEM_UUID = "comment_timeline_item_id";
+    public static final String PROPERTY_USER_UUID = "comment_user_id";
+    public static final String PROPERTY_CREATED = "comment_created";
+    public static final String PROPERTY_CONTENTS = "comment_content";
     public static final Creator<CommentEntity> CREATOR = new Creator<CommentEntity>() {
         public CommentEntity createFromParcel(Parcel in) {
             return new CommentEntity(in);

@@ -35,6 +35,7 @@ public class Global {
     public static final String INSERT_FILE = "insertFile";
     public static final String INSERT_LIKE = "insertLike";
     public static final String INSERT_TRANSACTION = "insertTransaction";
+    public static final String CREATE = "create";
 
     public static final String ID = "id";
     public static final String USER = "user";
@@ -83,10 +84,16 @@ public class Global {
 
     public static onDeleted OnDeleted;
     public static onInsertFile OnInsertFile;
+    public static onDeleteTimeline OnDeleteTimeline;
 
     public interface onDeleted {
         void onSuccess();
         void onException();
+    }
+
+    public interface onDeleteTimeline {
+        void onSuccess();
+        void onException(int code);
     }
 
     public interface onInsertFile {
