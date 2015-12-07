@@ -1,6 +1,67 @@
 package com.ironfactory.donation.managers;
 
+import com.ironfactory.donation.dtos.ProductCardDto;
+import com.ironfactory.donation.dtos.TimelineCardDto;
+import com.ironfactory.donation.entities.LikeEntity;
+
+import java.util.ArrayList;
+
 public class RequestManager {
+    public static OnDeleteComment onDeleteComment;
+    public static OnInsertFile onInsertFile;
+    public static OnDeleteTimeline onDeleteTimeline;
+    public static OnDeleteLike onDeleteLike;
+    public static OnInsertLike onInsertLike;
+    public static OnGetAllTimeline onGetAllTimeline;
+    public static OnGetMyTimeline onGetMyTimeline;
+    public static OnGetMyProduct onGetMyProduct;
+    public static OnInsertTimeline onInsertTimeline;
+
+    public interface OnInsertTimeline {
+        void onSuccess(TimelineCardDto timelineCardDto);
+        void onException();
+    }
+
+
+    public interface OnGetMyProduct {
+        void onSuccess(ArrayList<ProductCardDto> productCardDtos);
+        void onException(int code);
+    }
+
+    public interface OnDeleteComment {
+        void onSuccess();
+        void onException();
+    }
+
+    public interface OnDeleteTimeline {
+        void onSuccess();
+        void onException(int code);
+    }
+
+    public interface OnDeleteLike {
+        void onSuccess();
+        void onException(int code);
+    }
+
+    public interface OnInsertLike {
+        void onSuccess(LikeEntity likeEntity);
+        void onException(int code);
+    }
+
+    public interface OnInsertFile {
+        void onSuccess();
+        void onException(int code);
+    }
+
+    public interface OnGetAllTimeline {
+        void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos);
+        void onException(int code);
+    }
+
+    public interface OnGetMyTimeline {
+        void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos);
+        void onException(int code);
+    }
 //    public static void getSchoolsInBackground(BaasioQuery query, BaasioQueryCallback callback) {
 //        query.queryInBackground(callback);
 //    }

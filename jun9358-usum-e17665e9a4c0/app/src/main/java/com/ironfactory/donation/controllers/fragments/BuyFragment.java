@@ -24,6 +24,9 @@ import com.ironfactory.donation.socketIo.SocketService;
 import java.util.ArrayList;
 
 public class BuyFragment extends SlidingBaseFragment {
+
+    private static final String TAG = "BuyFragment";
+    private int position = 1;
     private class ViewHolder {
         public ProductSearchSlidingLayer productSearchSlidingLayer;
         public ProductRecyclerView products;
@@ -98,7 +101,8 @@ public class BuyFragment extends SlidingBaseFragment {
             @Override
             public void onRefresh() {
                 productCardDtos.clear();
-                getProduct();
+                getSearchProduct(1);
+                position++;
 //                RequestManager.getProductsInBackground(productCardDtoQuery, false, productCardDtoQueryCallback);
             }
         });
@@ -107,7 +111,7 @@ public class BuyFragment extends SlidingBaseFragment {
             @Override
             public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
 //                RequestManager.getNextProductsInBackground(productCardDtoQuery, false, productCardDtoQueryCallback);
-                getProduct();
+                getSearchProduct(position);
             }
         });
 
@@ -123,7 +127,7 @@ public class BuyFragment extends SlidingBaseFragment {
             public void onClick(View v) {
 //                productCardDtoQuery = viewHolder.productSearchSlidingLayer.getProductSearchForm().getSearchQuery();
 
-                getProduct();
+                getSearchProduct(1);
 
                 viewHolder.productSearchSlidingLayer.closeLayer(true);
                 productCardDtos.clear();
@@ -135,7 +139,7 @@ public class BuyFragment extends SlidingBaseFragment {
     }
 
 
-    private void getProduct() {
+    private void getSearchProduct(int position) {
         ProductSearchForm form = viewHolder.productSearchSlidingLayer.getProductSearchForm();
         int schoolId = form.getSelectedSchoolId();
         int sex = form.getSex();
@@ -147,6 +151,7 @@ public class BuyFragment extends SlidingBaseFragment {
         intent.putExtra(Global.SCHOOL_ID, schoolId);
         intent.putExtra(Global.SEX, sex);
         intent.putExtra(Global.CATEGORY, category);
+        intent.putExtra(Global.POSITION, position);
         intent.putExtra(Global.SIZE, size);
         getActivity().startService(intent);
     }

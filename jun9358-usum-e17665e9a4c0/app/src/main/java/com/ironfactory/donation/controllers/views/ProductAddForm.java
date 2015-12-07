@@ -213,7 +213,7 @@ public class ProductAddForm extends CardView {
 
     private TransactionEntity getTransactionEntity() {
         TransactionEntity transactionEntity = new TransactionEntity();
-        transactionEntity.status = TransactionEntity.STATUS_TYPE.REGISTERED;
+        transactionEntity.status = Global.REGISTERED;
         return transactionEntity;
     }
 

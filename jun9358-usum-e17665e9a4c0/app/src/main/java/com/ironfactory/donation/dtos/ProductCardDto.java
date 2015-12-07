@@ -9,6 +9,8 @@ import com.ironfactory.donation.entities.FileEntity;
 import com.ironfactory.donation.entities.ProductEntity;
 import com.ironfactory.donation.entities.TransactionEntity;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class ProductCardDto implements Parcelable {
@@ -40,6 +42,18 @@ public class ProductCardDto implements Parcelable {
     public ProductCardDto(Parcel in) {
         set(in.readBundle(ProductCardDto.class.getClassLoader()));
     }
+
+    public ProductCardDto(JSONObject object) {
+        set(object);
+    }
+
+    private  void set(JSONObject object) {
+        productEntity = new ProductEntity(object);
+        transactionEntity = new TransactionEntity(object);
+        uris = new ArrayList<>();
+        fileEntities = new ArrayList<>();
+    }
+
 
     public void set(Bundle bundle) {
         this.productEntity = bundle.getParcelable(PROPERTY_PRODUCT_ENTITY);

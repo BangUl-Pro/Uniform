@@ -12,18 +12,18 @@ import java.util.UUID;
 public class ProductEntity implements Parcelable {
     public static final String COLLECTION_NAME = "products";
 //    public static final String PROPERTY_CREATED = BaasioBaseEntity.PROPERTY_CREATED;
-    public static final String PROPERTY_CREATED = "created";
+    public static final String PROPERTY_CREATED = "product_created";
 //    public static final String PROPERTY_USER_UUID = "user_uuid";
-    public static final String PROPERTY_USER_ID = "user_id";
+    public static final String PROPERTY_USER_ID = "product_user_id";
 //    public static final String PROPERTY_UUID = BaasioBaseEntity.PROPERTY_UUID;
     public static final String PROPERTY_ID = "product_id";
     public static final String PROPERTY_PRODUCT_NAME = "product_name";
-    public static final String PROPERTY_SCHOOL_ID = "school_id";
-    public static final String PROPERTY_CATEGORY = "category";
-    public static final String PROPERTY_SIZE = "size";
-    public static final String PROPERTY_CONDITION = "condition";
-    public static final String PROPERTY_SEX = "sex";
-    public static final String PROPERTY_CONTENTS = "contents";
+    public static final String PROPERTY_SCHOOL_ID = "product_school_id";
+    public static final String PROPERTY_CATEGORY = "product_category";
+    public static final String PROPERTY_SIZE = "product_size";
+    public static final String PROPERTY_CONDITION = "product_condition";
+    public static final String PROPERTY_SEX = "product_sex";
+    public static final String PROPERTY_CONTENTS = "product_content";
     public static final Creator<ProductEntity> CREATOR = new Creator<ProductEntity>() {
         public ProductEntity createFromParcel(Parcel in) {
             return new ProductEntity(in);

@@ -111,7 +111,7 @@ public class AddProductsActivity extends BaseActivity {
             Intent transactionIntent = new Intent(getApplicationContext(), SocketService.class);
             transactionIntent.putExtra(Global.COMMAND, Global.INSERT_TRANSACTION);
             transactionIntent.putExtra(Global.PRODUCT, productEntities);
-            startActivity(transactionIntent);
+            startService(transactionIntent);
 
 //            RequestManager.insertTransactionsInBackground(productEntities, new BaasioCallback<List<BaasioEntity>>() {
 //                @Override

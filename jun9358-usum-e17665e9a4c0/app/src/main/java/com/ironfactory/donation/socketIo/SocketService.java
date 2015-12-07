@@ -2,6 +2,7 @@ package com.ironfactory.donation.socketIo;
 
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -112,8 +113,6 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.SIGN_IN_KAKAO)) {
                     // 카카오 로그인
                     processSignInKakao(intent);
-                } else if (command.equals(Global.CREATE)) {
-                    socketIO.setListener();
                 }
             }
         }
@@ -137,10 +136,10 @@ public class SocketService extends Service {
         for (ProductEntity product :
                 productEntities) {
             TransactionEntity transactionEntity = new TransactionEntity();
-            transactionEntity.status = TransactionEntity.STATUS_TYPE.REGISTERED;
-            transactionEntity.donator_uuid = product.user_id;
-            transactionEntity.receiver_uuid = "";
-            transactionEntity.product_uuid = product.id;
+            transactionEntity.status = Global.REGISTERED;
+            transactionEntity.donator_id = product.user_id;
+            transactionEntity.receiver_id = "";
+            transactionEntity.product_id = product.id;
             transactionEntity.product_name = product.product_name;
             transactionEntities.add(transactionEntity);
         }
@@ -182,8 +181,7 @@ public class SocketService extends Service {
     private void processInsertFile(Intent intent) {
         String id = intent.getStringExtra(Global.PRODUCT_ID);
         String path = intent.getStringExtra(Global.PATH);
-        String fileName = intent.getStringExtra(Global.FILE);
-        socketIO.insertFile(id, path, fileName);
+        socketIO.insertFile(id, path);
     }
 
 
@@ -232,8 +230,9 @@ public class SocketService extends Service {
         int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
         String timelineContent = intent.getStringExtra(Global.TIMELINE_CONTENT);
         String id = intent.getStringExtra(Global.USER_ID);
+        ArrayList<Uri> files = intent.getParcelableArrayListExtra(Global.PATH);
 
-        socketIO.insertTimeline(schoolId, timelineContent, id);
+        socketIO.insertTimeline(schoolId, timelineContent, id, files);
     }
 
 
@@ -309,8 +308,9 @@ public class SocketService extends Service {
         int sex = intent.getIntExtra(Global.SEX, -1);
         int category = intent.getIntExtra(Global.CATEGORY, -1);
         int size = intent.getIntExtra(Global.SIZE, -1);
+        int position = intent.getIntExtra(Global.POSITION, -1);
 
-        socketIO.searchProduct(schoolId, sex, category, size);
+        socketIO.searchProduct(schoolId, sex, category, size, position);
     }
 
 

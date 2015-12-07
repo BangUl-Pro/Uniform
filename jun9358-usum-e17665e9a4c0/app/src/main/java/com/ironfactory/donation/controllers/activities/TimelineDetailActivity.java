@@ -38,7 +38,7 @@ public class TimelineDetailActivity extends BaseActivity {
             writeCommentButton = (Button) view.findViewById(R.id.write_comment);
 
             comments = (TimelineCommentRecyclerView) view.findViewById(R.id.comments);
-            comments.setFrom(1);
+            comments.setFrom(2);
         }
     }
 

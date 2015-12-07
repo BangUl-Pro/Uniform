@@ -24,6 +24,7 @@ import com.ironfactory.donation.dtos.TimelineCardDto;
 import com.ironfactory.donation.entities.LikeEntity;
 import com.ironfactory.donation.entities.UserEntity;
 import com.ironfactory.donation.managers.AuthManager;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.socketIo.SocketException;
 import com.ironfactory.donation.socketIo.SocketService;
 
@@ -131,7 +132,7 @@ public class TimelineCardView extends CardView {
                         intent.putExtra(Global.TIMELINE, timelineCardDto);
                         getContext().startService(intent);
 
-                        Global.onDeleteTimeline = new Global.OnDeleteTimeline() {
+                        RequestManager.onDeleteTimeline = new RequestManager.OnDeleteTimeline() {
                             @Override
                             public void onSuccess() {
                                 processDeleteTimeline(200);
@@ -270,7 +271,7 @@ public class TimelineCardView extends CardView {
                     intent.putExtra(Global.LIKE, timelineCardDto.likeEntity);
                     getContext().startService(intent);
 
-                    Global.onDeleteLike = new Global.OnDeleteLike() {
+                    RequestManager.onDeleteLike = new RequestManager.OnDeleteLike() {
                         @Override
                         public void onSuccess() {
                             timelineCardDto.likeEntity = new LikeEntity();
@@ -302,7 +303,7 @@ public class TimelineCardView extends CardView {
                     intent.putExtra(Global.USER_ID, Global.userEntity.id);
                     getContext().startService(intent);
 
-                    Global.onInsertLike = new Global.OnInsertLike() {
+                    RequestManager.onInsertLike = new RequestManager.OnInsertLike() {
                         @Override
                         public void onSuccess(LikeEntity likeEntity) {
                             timelineCardDto.likeEntity = likeEntity;

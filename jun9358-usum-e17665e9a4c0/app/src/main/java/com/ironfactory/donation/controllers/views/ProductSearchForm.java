@@ -2,7 +2,6 @@ package com.ironfactory.donation.controllers.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -223,6 +222,8 @@ public class ProductSearchForm extends LinearLayout {
         int categoryPosition = viewHolder.category.getSelectedItemPosition();
         HashBiMap<String, Integer> inverseCategory = Category.getHashBiMap(getSex()).inverse();
         int selectedCategory = inverseCategory.get(categoryAdapter.getItem(categoryPosition));
+        if (selectedCategory == 0)
+            selectedCategory = -1;
         return selectedCategory;
     }
 
@@ -231,6 +232,8 @@ public class ProductSearchForm extends LinearLayout {
         int sizePosition = viewHolder.size.getSelectedItemPosition();
         HashBiMap<String, Integer> inverseSize = Size.getHashBiMap(getCategory()).inverse();
         int selectedSize = inverseSize.get(sizeAdapter.getItem(sizePosition));
+        if (selectedSize == 0)
+            selectedSize = -1;
         return selectedSize;
     }
 

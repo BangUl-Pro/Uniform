@@ -1,6 +1,5 @@
 package com.ironfactory.donation;
 
-import com.ironfactory.donation.entities.LikeEntity;
 import com.ironfactory.donation.entities.UserEntity;
 
 /**
@@ -15,7 +14,6 @@ public class Global {
     public static final String SIGN_UP = "signUp";
     public static final String SIGN_IN = "signIn";
     public static final String SIGN_IN_KAKAO = "signInKakao";
-    public static final String INSERT_TIMELINE_COMMENT = "insertTimelineComment";
     public static final String GET_TIMELINE_COMMENT = "getTimelineComment";
     public static final String GET_PRODUCT = "getProduct";
     public static final String GET_ALL_TIMELINE = "getAllTimeline";
@@ -36,7 +34,7 @@ public class Global {
     public static final String INSERT_FILE = "insertFile";
     public static final String INSERT_LIKE = "insertLike";
     public static final String INSERT_TRANSACTION = "insertTransaction";
-    public static final String CREATE = "create";
+    public static final String INSERT_TIMELINE_COMMENT = "insertTimelineComment";
 
     public static final String ID = "id";
     public static final String USER = "user";
@@ -47,6 +45,7 @@ public class Global {
     public static final String HAS_EXTRA_PROFILE = "has_extra_profile";
     public static final String SEX = "sex";
     public static final String CATEGORY = "category";
+    public static final String POSITION = "position";
     public static final String SIZE = "size";
     public static final String USER_TYPE = "userType";
     public static final String PICTURE = "picture";
@@ -72,6 +71,8 @@ public class Global {
     public static final String CREATED = "created";
     public static final String CONTENT = "content";
 
+    public static boolean isCreated = false;
+
     // sex
     public static final int MAN = 1;
     public static final int WOMAN = 2;
@@ -83,38 +84,12 @@ public class Global {
     public static final int PARENT = 3;
 
 
-    public static OnDeleted onDeleted;
-    public static OnInsertFile onInsertFile;
-    public static OnDeleteTimeline onDeleteTimeline;
-    public static OnDeleteLike onDeleteLike;
-    public static OnInsertLike onInsertLike;
+    // transaction
+    public static final int REGISTERED = 1;
+    public static final int REQUESTED = 2;
+    public static final int SENDED = 3;
+    public static final int RECEIVED = 4;
 
-    public interface OnDeleted {
-        void onSuccess();
-        void onException();
-    }
-
-    public interface OnDeleteTimeline {
-        void onSuccess();
-        void onException(int code);
-    }
-
-
-    public interface OnDeleteLike {
-        void onSuccess();
-        void onException(int code);
-    }
-
-
-    public interface OnInsertLike {
-        void onSuccess(LikeEntity likeEntity);
-        void onException(int code);
-    }
-
-    public interface OnInsertFile {
-        void onSuccess();
-        void onException(int code);
-    }
 
     public static UserEntity userEntity;
 }

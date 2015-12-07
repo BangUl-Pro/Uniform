@@ -37,7 +37,7 @@ public class ProductDetailActivity extends BaseActivity {
         public ViewHolder(View view) {
             productDetailCardView = (ProductDetailCardView) view.findViewById(R.id.product_detail_card_view);
             comments = (TimelineCommentRecyclerView) view.findViewById(R.id.comments);
-            comments.setFrom(0);
+            comments.setFrom(1);
             commentsLayout = (LinearLayout) view.findViewById(R.id.comments_layout);
             commentContents = (TextView) view.findViewById(R.id.comment_contents);
             writeCommentButton = (Button) view.findViewById(R.id.write_comment);
@@ -199,7 +199,7 @@ public class ProductDetailActivity extends BaseActivity {
                     timelineCommentCardDto.userEntity.picture = "";
                     if (timelineCommentCardDto.userEntity.id.equals(productCardDto.productEntity.user_id    )) {
                         timelineCommentCardDto.userEntity.realName = "기부자";
-                    } else if (timelineCommentCardDto.userEntity.id.equals(productCardDto.transactionEntity.receiver_uuid)) {
+                    } else if (timelineCommentCardDto.userEntity.id.equals(productCardDto.transactionEntity.receiver_id)) {
                         timelineCommentCardDto.userEntity.realName = "구매자";
                     } else {
                         timelineCommentCardDto.userEntity.realName = "이방인";

@@ -20,7 +20,7 @@ import com.ironfactory.donation.controllers.views.WriterView;
 import com.ironfactory.donation.dtos.TimelineCardDto;
 import com.ironfactory.donation.entities.FileEntity;
 import com.ironfactory.donation.entities.UserEntity;
-import com.ironfactory.donation.socketIo.SocketException;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.socketIo.SocketService;
 
 import java.io.File;
@@ -113,15 +113,20 @@ public class TimelineWriteActivity extends BaseActivity {
                     intent.putExtra(Global.TIMELINE, timelineCardDtoForUpdate);
                     startService(intent);
 
+                    setHandler();
 //                    RequestManager.deleteFileEntities(timelineCardDtoForUpdate.fileEntities);
 //                    RequestManager.updateTimeline(timelineCardDtoForUpdate, timelineInsertCallback);
                 } else {
                     Intent intent = new Intent(getApplicationContext(), SocketService.class);
                     intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE);
                     intent.putExtra(Global.SCHOOL_ID, userEntity.schoolId);
+                    intent.putExtra(Global.PATH, selectedImageUris);
                     intent.putExtra(Global.TIMELINE_CONTENT, contents);
                     intent.putExtra(Global.USER_ID, userEntity.id);
                     startService(intent);
+
+                    setHandler();
+
 
 //                    RequestManager.insertTimeline(userEntity.schoolId, contents, timelineInsertCallback);
                 }
@@ -130,6 +135,63 @@ public class TimelineWriteActivity extends BaseActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    private void setHandler() {
+        RequestManager.onInsertTimeline = new RequestManager.OnInsertTimeline() {
+            @Override
+            public void onSuccess(TimelineCardDto timelineCardDto) {
+                // 성공
+                if (0 < selectedImageUris.size()) {
+                    Uri selectedUri = selectedImageUris.get(0);
+                    selectedImageUris.remove(0);
+
+//                                TimelineCardDto timelineCardDto = intent.getParcelableExtra(Global.TIMELINE);
+//                String parentUuid = baasioEntity.getUuid().toString();
+                    final String parentUuid = timelineCardDto.timelineEntity.id;
+
+                    Intent intent1 = new Intent(getApplicationContext(), SocketService.class);
+                    intent1.putExtra(Global.COMMAND, Global.INSERT_FILE);
+                    intent1.putExtra(Global.PRODUCT_ID, parentUuid);
+                    intent1.putExtra(Global.PATH, selectedUri.toString());
+                    startService(intent1);
+
+                    RequestManager.onInsertFile = new RequestManager.OnInsertFile() {
+                        @Override
+                        public void onSuccess() {
+                            if (0 < selectedImageUris.size()) {
+                                Uri selectedUri = selectedImageUris.get(0);
+                                selectedImageUris.remove(0);
+
+//                            String parentUuid = baasioFile.getProperty("parent_uuid").asText();
+                                Intent intent = new Intent(getApplicationContext(), SocketService.class);
+                                intent.putExtra(Global.COMMAND, Global.INSERT_FILE);
+                                intent.putExtra(Global.PRODUCT_ID, parentUuid);
+                                intent.putExtra(Global.PATH, selectedUri);
+                                startService(intent);
+                            } else {
+                                onWriteAfter(true);
+                            }
+                        }
+
+                        @Override
+                        public void onException(int code) {
+                            onWriteAfter(false);
+                        }
+                    };
+//                RequestManager.insertFile(parentUuid, selectedUri, fileUploadCallback);
+                } else {
+                    onWriteAfter(true);
+                }
+            }
+
+            @Override
+            public void onException() {
+                onWriteAfter(false);
+            }
+        };
+    }
+
 
     private void onWriteBefore() {
         menu.getItem(0).setEnabled(false);
@@ -204,8 +266,12 @@ public class TimelineWriteActivity extends BaseActivity {
                 }
 
                 selectedImageUris.clear();
+
                 for (Parcelable parcelableUri : parcelableUris) {
                     selectedImageUris.add(Uri.parse(parcelableUri.toString()));
+//                    Cursor cursor = getContentResolver().query(Uri.parse(parcelableUri.toString()), null, null, null, null);
+//                    cursor.moveToNext();
+//                    Log.d(TAG, "절대경로 = " + cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA)));
                 }
 
                 viewHolder.selectedImages.setUris(selectedImageUris);
@@ -214,78 +280,16 @@ public class TimelineWriteActivity extends BaseActivity {
     }
 
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        if (intent != null) {
-            String command = intent.getStringExtra(Global.COMMAND);
-            if (command != null) {
-                int code = intent.getIntExtra(Global.CODE, -1);
-                if (code != -1) {
-                    SocketException.printErrMsg(code);
-                    SocketException.toastErrMsg(code);
-                    if (command.equals(Global.UPDATE_TIMELINE)) {
-                        // 타임라인 업데이트
-                        processInsertTimeline(code, intent);
-                    } else if (command.equals(Global.INSERT_TIMELINE)) {
-                        // 타임라인 글 쓰기
-                        processInsertTimeline(code, intent);
-                    }
-                }
-            }
-        }
-    }
-
-
-    // TODO: 15. 11. 28. 타임라인 삽입 응답
-    private void processInsertTimeline(int code, Intent intent) {
-        if (code == SocketException.SUCCESS) {
-            // 성공
-            if (0 < selectedImageUris.size()) {
-                Uri selectedUri = selectedImageUris.get(0);
-                selectedImageUris.remove(0);
-
-                TimelineCardDto timelineCardDto = intent.getParcelableExtra(Global.TIMELINE);
-//                String parentUuid = baasioEntity.getUuid().toString();
-                final String parentUuid = timelineCardDto.timelineEntity.id;
-
-                Intent intent1 = new Intent(getApplicationContext(), SocketService.class);
-                intent1.putExtra(Global.COMMAND, Global.INSERT_FILE);
-                intent1.putExtra(Global.PRODUCT_ID, parentUuid);
-                intent1.putExtra(Global.PATH, selectedUri);
-                startService(intent1);
-
-                Global.onInsertFile = new Global.OnInsertFile() {
-                    @Override
-                    public void onSuccess() {
-                        if (0 < selectedImageUris.size()) {
-                            Uri selectedUri = selectedImageUris.get(0);
-                            selectedImageUris.remove(0);
-
-//                            String parentUuid = baasioFile.getProperty("parent_uuid").asText();
-                            Intent intent = new Intent(getApplicationContext(), SocketService.class);
-                            intent.putExtra(Global.COMMAND, Global.INSERT_FILE);
-                            intent.putExtra(Global.PRODUCT_ID, parentUuid);
-                            intent.putExtra(Global.PATH, selectedUri);
-                            startService(intent);
-                        } else {
-                            onWriteAfter(true);
-                        }
-                    }
-
-                    @Override
-                    public void onException(int code) {
-                        onWriteAfter(false);
-                    }
-                };
-//                RequestManager.insertFile(parentUuid, selectedUri, fileUploadCallback);
-            } else {
-                onWriteAfter(true);
-            }
-        } else {
-            // 실패
-            onWriteAfter(false);
-        }
-    }
+//    // TODO: 15. 11. 28. 타임라인 삽입 응답
+//    private void processInsertTimeline(int code, Intent intent) {
+//        Log.d(TAG, "타임라인 삽입 응답");
+//        if (code == SocketException.SUCCESS) {
+//
+//        } else {
+//            // 실패
+//
+//        }
+//    }
 
 
 //    private class TimelineInsertCallback implements BaasioCallback<BaasioEntity> {

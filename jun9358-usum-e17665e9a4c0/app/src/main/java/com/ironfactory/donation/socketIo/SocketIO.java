@@ -2,6 +2,7 @@ package com.ironfactory.donation.socketIo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
 
@@ -16,7 +17,6 @@ import com.ironfactory.donation.controllers.activities.LoginActivity;
 import com.ironfactory.donation.controllers.activities.MainActivity;
 import com.ironfactory.donation.controllers.activities.ProductDetailActivity;
 import com.ironfactory.donation.controllers.activities.SignUpActivity;
-import com.ironfactory.donation.controllers.activities.TimelineActivity;
 import com.ironfactory.donation.controllers.activities.TimelineDetailActivity;
 import com.ironfactory.donation.controllers.activities.TimelineWriteActivity;
 import com.ironfactory.donation.dtos.ProductCardDto;
@@ -29,6 +29,7 @@ import com.ironfactory.donation.entities.ProductEntity;
 import com.ironfactory.donation.entities.SchoolEntity;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.entities.UserEntity;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.reservation.ReservationPushService;
 import com.ironfactory.donation.reservation.SchoolRankingPushService;
 
@@ -39,7 +40,14 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -50,7 +58,7 @@ import java.util.ArrayList;
 public class SocketIO {
 
     private Handler handler = new Handler();
-    private static final String URL = "http://uniform-test.herokuapp.com";
+    private static final String SERVER_URL = "http://uniform-test.herokuapp.com";
     private static final String TAG = "SocketIO";
 
     public static Socket socket;
@@ -64,7 +72,7 @@ public class SocketIO {
     private void init() {
         Log.d(TAG, "init");
         try {
-            socket = IO.socket(URL);
+            socket = IO.socket(SERVER_URL);
         } catch (Exception e) {
             Log.e(TAG, "init 에러 = " + e.getMessage());
         }
@@ -72,10 +80,14 @@ public class SocketIO {
         if (socket != null) {
             socketConnect();
         }
+
+        if (!Global.isCreated)
+            setListener();
+        Global.isCreated = true;
     }
 
 
-    public void setListener() {
+    private void setListener() {
         Log.d(TAG, "setListener");
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
@@ -254,11 +266,16 @@ public class SocketIO {
     // TODO: 15. 12. 2. 파일 입력 응답
     private void processInsertFile(JSONObject object) {
         try {
-            int code = object.getInt(Global.CODE);
-            if (code == SocketException.SUCCESS)
-                Global.onInsertFile.onSuccess();
-            else
-                Global.onInsertFile.onException(code);
+            final int code = object.getInt(Global.CODE);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (code == SocketException.SUCCESS)
+                        RequestManager.onInsertFile.onSuccess();
+                    else
+                        RequestManager.onInsertFile.onException(code);
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -271,18 +288,24 @@ public class SocketIO {
         try {
             int code = object.getInt(Global.CODE);
             Log.d(TAG, "타임라인 글쓰기 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent = new Intent(context, TimelineWriteActivity.class);
-            intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE);
-            intent.putExtra(Global.CODE, code);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             if (code == SocketException.SUCCESS) {
-                TimelineCardDto dto = new TimelineCardDto(object);
-                intent.putExtra(Global.TIMELINE, dto);
+                final JSONObject timelineJson = object.getJSONObject(Global.TIMELINE);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        TimelineCardDto dto = new TimelineCardDto(timelineJson);
+                        RequestManager.onInsertTimeline.onSuccess(dto);
+                    }
+                });
+            } else {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        RequestManager.onInsertTimeline.onException();
+                    }
+                });
             }
-            context.startActivity(intent);
-
+            Log.d(TAG, "object = " + object);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -366,14 +389,14 @@ public class SocketIO {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Global.onInsertLike.onSuccess(likeEntity);
+                        RequestManager.onInsertLike.onSuccess(likeEntity);
                     }
                 });
             } else {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Global.onInsertLike.onException(code);
+                        RequestManager.onInsertLike.onException(code);
                     }
                 });
             }
@@ -394,9 +417,9 @@ public class SocketIO {
                 @Override
                 public void run() {
                     if (code == SocketException.SUCCESS)
-                        Global.onDeleteLike.onSuccess();
+                        RequestManager.onDeleteLike.onSuccess();
                     else
-                        Global.onDeleteLike.onException(code);
+                        RequestManager.onDeleteLike.onException(code);
                 }
             });
         } catch (JSONException e) {
@@ -421,9 +444,9 @@ public class SocketIO {
                 @Override
                 public void run() {
                     if (code == SocketException.SUCCESS)
-                        Global.onDeleteTimeline.onSuccess();
+                        RequestManager.onDeleteTimeline.onSuccess();
                     else
-                        Global.onDeleteTimeline.onException(code);
+                        RequestManager.onDeleteTimeline.onException(code);
                 }
             });
         } catch (JSONException e) {
@@ -522,15 +545,20 @@ public class SocketIO {
     // TODO: 15. 11. 24. 댓글 삭제
     private void processDeleteComment(JSONObject object) {
         try {
-            int code = object.getInt(Global.CODE);
+            final int code = object.getInt(Global.CODE);
             int from = object.getInt(Global.FROM);
             Log.d(TAG, "댓글 삭제 응답");
             Log.d(TAG, "object = " + object);
 
-            if (code == SocketException.SUCCESS)
-                Global.onDeleted.onSuccess();
-            else
-                Global.onDeleted.onException();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (code == SocketException.SUCCESS)
+                        RequestManager.onDeleteComment.onSuccess();
+                    else
+                        RequestManager.onDeleteComment.onException();
+                }
+            });
 
             Intent intent;
             if (from == 1)
@@ -549,27 +577,33 @@ public class SocketIO {
     // TODO: 15. 11. 24. 내 제품 요청 응답
     private void processGetMyProduct(JSONObject object) {
         try {
-            int code = object.getInt(Global.CODE);
+            final int code = object.getInt(Global.CODE);
             Log.d(TAG, "내 제품 요청 응답");
             Log.d(TAG, "object = " + object);
 
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.CODE, code);
-
             if (code == SocketException.SUCCESS) {
-                ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
-                JSONArray array = object.getJSONArray(Global.PRODUCT_CARD);
+                final ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
+                JSONArray array = object.getJSONArray(Global.PRODUCT);
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject productObject = array.getJSONObject(i);
-                    Gson gson = new Gson();
-                    ProductCardDto dto = gson.fromJson(productObject.toString(), ProductCardDto.class);
+                    ProductCardDto dto = new ProductCardDto(productObject);
                     productCardDtos.add(dto);
                 }
-                intent.putExtra(Global.PRODUCT_CARD, productCardDtos);
-            }
 
-            context.startActivity(intent);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        RequestManager.onGetMyProduct.onSuccess(productCardDtos);
+                    }
+                });
+            } else {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        RequestManager.onGetMyProduct.onException(code);
+                    }
+                });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -590,11 +624,10 @@ public class SocketIO {
 
             if (code == SocketException.SUCCESS) {
                 ArrayList<ProductCardDto> products = new ArrayList<>();
-                JSONArray array = object.getJSONArray(Global.PRODUCT_CARD);
+                JSONArray array = object.getJSONArray(Global.PRODUCT);
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject productJson = array.getJSONObject(i);
-                    Gson gson = new Gson();
-                    ProductCardDto dto = gson.fromJson(productJson.toString(), ProductCardDto.class);
+                    ProductCardDto dto = new ProductCardDto(productJson);
                     products.add(dto);
                 }
                 intent.putExtra(Global.PRODUCT_CARD, products);
@@ -607,12 +640,11 @@ public class SocketIO {
     }
 
 
-    // TODO: 15. 11. 23. 타임라인 글쓰기 응답
+    // TODO: 15. 11. 23. 제품 등록 응답
     private void processInsertProduct(JSONObject object) {
         try {
             int code = object.getInt(Global.CODE);
-            Log.d(TAG, "타임라인 글쓰기 응답");
-            Log.d(TAG, "object = " + object);
+            Log.d(TAG, "제품 등록 응답 object = " + object);
 
             Intent intent = new Intent(context, AddProductsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -624,8 +656,7 @@ public class SocketIO {
                 ArrayList<ProductEntity> productEntities = new ArrayList<>();
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject productJson = array.getJSONObject(i);
-                    Gson gson = new Gson();
-                    ProductEntity productEntity = gson.fromJson(productJson.toString(), ProductEntity.class);
+                    ProductEntity productEntity = new ProductEntity(productJson);
                     productEntities.add(productEntity);
                 }
                 intent.putExtra(Global.PRODUCT, productEntities);
@@ -641,15 +672,24 @@ public class SocketIO {
     // TODO: 15. 11. 23. 타임라인 업데이트 응답
     private void processUpdateTimeline(JSONObject object) {
         try {
-            int code = object.getInt(Global.CODE);
-            Log.d(TAG, "타임라인 업데이트 응답");
-            Log.d(TAG, "object = " + object);
+            final int code = object.getInt(Global.CODE);
+            Log.d(TAG, "타임라인 업데이트 object = " + object);
 
-            Intent intent = new Intent(context, TimelineWriteActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.UPDATE_TIMELINE);
-            intent.putExtra(Global.CODE, code);
-            context.startActivity(intent);
+//            Intent intent = new Intent(context, TimelineWriteActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra(Global.COMMAND, Global.UPDATE_TIMELINE);
+//            intent.putExtra(Global.CODE, code);
+//            context.startActivity(intent);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (code == SocketException.SUCCESS) {
+                        RequestManager.onInsertTimeline.onSuccess(null);
+                    } else {
+                        RequestManager.onInsertTimeline.onException();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -659,17 +699,13 @@ public class SocketIO {
     // TODO: 15. 11. 23. 타임라인 글 모두 불러오기 응답
     private void processGetAllTimeline(JSONObject object) {
         try {
-            int code = object.getInt(Global.CODE);
+            final int code = object.getInt(Global.CODE);
             Log.d(TAG, "타임라인 글 모두 불러오기 응답");
             Log.d(TAG, "object = " + object);
 
-            Intent intent = new Intent(context, TimelineActivity.class);
-            intent.putExtra(Global.COMMAND, Global.GET_ALL_TIMELINE);
-            intent.putExtra(Global.CODE, code);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             if (code == SocketException.SUCCESS) {
                 // 성공
-                ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
+                final ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
                 JSONArray timelineArray = object.getJSONArray(Global.TIMELINE);
                 for (int i = 0; i < timelineArray.length(); i++) {
                     JSONObject timelineObject = timelineArray.getJSONObject(i);
@@ -680,9 +716,20 @@ public class SocketIO {
                     timelineCardDto.setFile(timelineObject);
                     timelineCardDtos.add(timelineCardDto);
                 }
-                intent.putExtra(Global.TIMELINE, timelineCardDtos);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        RequestManager.onGetAllTimeline.onSuccess(timelineCardDtos);
+                    }
+                });
+            } else {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        RequestManager.onGetAllTimeline.onException(code);
+                    }
+                });
             }
-            context.startActivity(intent);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -692,17 +739,13 @@ public class SocketIO {
     // TODO: 15. 11. 23. 타임라인 내 글 불러오기 응답
     private void processGetMyTimeline(JSONObject object) {
         try {
-            int code = object.getInt(Global.CODE);
+            final int code = object.getInt(Global.CODE);
             Log.d(TAG, "타임라인 내 글 불러오기 응답");
             Log.d(TAG, "object = " + object);
 
-            Intent intent = new Intent(context, TimelineActivity.class);
-            intent.putExtra(Global.COMMAND, Global.GET_MY_TIMELINE);
-            intent.putExtra(Global.CODE, code);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             if (code == SocketException.SUCCESS) {
                 // 성공
-                ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
+                final ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
                 JSONArray timelineArray = object.getJSONArray(Global.TIMELINE);
                 for (int i = 0; i < timelineArray.length(); i++) {
                     JSONObject timelineObject = timelineArray.getJSONObject(i);
@@ -713,9 +756,20 @@ public class SocketIO {
                     timelineCardDto.setFile(timelineObject);
                     timelineCardDtos.add(timelineCardDto);
                 }
-                intent.putExtra(Global.TIMELINE, timelineCardDtos);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        RequestManager.onGetMyTimeline.onSuccess(timelineCardDtos);
+                    }
+                });
+            } else {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        RequestManager.onGetMyTimeline.onException(code);
+                    }
+                });
             }
-            context.startActivity(intent);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1033,7 +1087,7 @@ public class SocketIO {
 //                    serviceKey = URLEncoder.encode(serviceKey, "UTF-8");
                     String urlStr = "http://api.data.go.kr/openapi/4e1a3cda-db21-40b3-b4f8-a1e7de2993bd?s_page=1&s_list=10000&type=xml&encoding=UTF-8&serviceKey=AgIevc%2B9UJQ8VK0tGD%2FcO1BTMIPNnklsq7Vsa7LT%2Bu6aBTy5b42HH2r9Y4cI1mNdf%2Bp%2BZ%2B%2Bsg5Unml1IJcChuw%3D%3D";
 //                    urlStr = URLEncoder.encode(urlStr, "UTF-8");
-                    java.net.URL url = new URL(urlStr);
+                    URL url = new URL(urlStr);
                     try {
                         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                         XmlPullParser parser = factory.newPullParser();
@@ -1187,7 +1241,7 @@ public class SocketIO {
     }
 
     // TODO: 15. 11. 20. 제품검색
-    public void searchProduct(int schoolId, int sex, int category, int size) {
+    public void searchProduct(int schoolId, int sex, int category, int size, int position) {
         Log.d(TAG, "제품 검색");
         try {
             JSONObject object = new JSONObject();
@@ -1195,6 +1249,7 @@ public class SocketIO {
             object.put(Global.SEX, sex);
             object.put(Global.CATEGORY, category);
             object.put(Global.SIZE, size);
+            object.put(Global.POSITION, position);
             Log.d(TAG, "searchProduct Object = " + object);
             socket.emit(Global.SEARCH_PRODUCT, object);
         } catch (JSONException e) {
@@ -1293,15 +1348,18 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 글 쓰기
-    public void insertTimeline(int schoolId, String timelineContent, String id) {
+    public void insertTimeline(int schoolId, String timelineContent, String id, ArrayList<Uri> files) {
         try {
             Log.d(TAG, "schoolId = " + schoolId);
             Log.d(TAG, "timelineContent = " + timelineContent);
 
+            Gson gson = new Gson();
+            JSONArray array = new JSONArray(gson.toJson(files));
             JSONObject object = new JSONObject();
             object.put(Global.SCHOOL_ID, schoolId);
             object.put(Global.USER_ID, id);
             object.put(Global.TIMELINE_CONTENT, timelineContent);
+            object.put(Global.FILE, array);
             Log.d(TAG, "insertTimeline Object = " + object);
             socket.emit(Global.INSERT_TIMELINE, object);
         } catch (JSONException e) {
@@ -1420,17 +1478,123 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 파일 입력
-    public void insertFile(String id, String path, String fileName) {
-        try {
-            JSONObject object = new JSONObject();
-            object.put(Global.PRODUCT_ID, id);
-            object.put(Global.PATH, path);
-            object.put(Global.FILE, fileName);
-            Log.d(TAG, "insertFile Object = " + object);
-            socket.emit(Global.INSERT_FILE, object);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public void insertFile(String id, String path) {
+//        try {
+            String serverUrl = SERVER_URL + ":5000/insertFile";
+
+            Log.d(TAG, "productId = " + id);
+            Log.d(TAG, "path = " + path);
+
+            upload(serverUrl, path);
+
+//            object.put(Global.PRODUCT_ID, id);
+//            object.put(Global.PATH, path);
+//            object.put(Global.FILE, fileName);
+//            Log.d(TAG, "insertFile Object = " + object);
+//            socket.emit(Global.INSERT_FILE, object);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+
+    private void upload(final String serverUrl, final String fileUrl) {
+        Log.d(TAG, "fileUrl = " + fileUrl);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection conn = null;
+                DataOutputStream dos = null;
+
+                final String LINE_END = "\r\n";
+                final String TWO_HYPHENS = "--";
+                final String BOUNDARY = "*****";
+                int bytesRead, bytesAvailable, bufferSize;
+                byte[] buffer;
+                final int MAX_BUFFER_SIZE = 1024 * 1024;
+                File file = new File(fileUrl);
+
+                if (!file.isFile()) {
+                    Log.e(TAG, "파일아님 = " + fileUrl);
+                    return;
+                }
+
+                try {
+                    FileInputStream fis = new FileInputStream(file);
+                    URL url = new URL(serverUrl);
+
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setUseCaches(false);
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Connection", "Keep-Alive");
+                    conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                    conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + BOUNDARY);
+                    conn.setRequestProperty("uploaded_file", fileUrl);
+
+                    dos = new DataOutputStream(conn.getOutputStream());
+                    dos.writeBytes(TWO_HYPHENS + BOUNDARY + LINE_END);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
+                            + fileUrl + "\"" + LINE_END);
+                    dos.writeBytes(LINE_END);
+
+                    bytesAvailable = fis.available();
+
+                    bufferSize = Math.min(bytesAvailable, MAX_BUFFER_SIZE);
+                    buffer = new byte[bufferSize];
+
+                    bytesRead = fis.read(buffer, 0, bufferSize);
+
+                    while (bytesRead > 0) {
+                        dos.write(buffer, 0, bufferSize);
+                        bytesAvailable = fis.available();
+                        bufferSize = Math.min(bytesAvailable, MAX_BUFFER_SIZE);
+                        bytesRead = fis.read(buffer, 0, bufferSize);
+                    }
+
+                    dos.writeBytes(LINE_END);
+                    dos.writeBytes(TWO_HYPHENS + BOUNDARY + TWO_HYPHENS + LINE_END);
+
+                    final int serverResCode = conn.getResponseCode();
+                    String serverResMsg = conn.getResponseMessage();
+
+                    if (serverResCode == 200) {
+                        Log.d(TAG, "서버 메세지 = " + serverResMsg);
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        final StringBuilder sb = new StringBuilder();
+                        String str = null;
+                        while ((str = bufferedReader.readLine()) != null) {
+                            sb.append(str);
+                        }
+                        serverResMsg = sb.toString();
+                        Log.d(TAG, "서버 메세지2 = " + serverResMsg);
+                        bufferedReader.close();
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                RequestManager.onInsertFile.onSuccess();
+                            }
+                        });
+                    } else {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                RequestManager.onInsertFile.onException(serverResCode);
+                            }
+                        });
+                    }
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 

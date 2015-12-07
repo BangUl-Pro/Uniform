@@ -8,8 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.malinskiy.superrecyclerview.OnMoreListener;
-import com.melnykov.fab.FloatingActionButton;
 import com.ironfactory.donation.Global;
 import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.views.TimelineRecyclerView;
@@ -17,8 +15,10 @@ import com.ironfactory.donation.dtos.TimelineCardDto;
 import com.ironfactory.donation.entities.SchoolEntity;
 import com.ironfactory.donation.entities.UserEntity;
 import com.ironfactory.donation.managers.AuthManager;
-import com.ironfactory.donation.socketIo.SocketException;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.socketIo.SocketService;
+import com.malinskiy.superrecyclerview.OnMoreListener;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -42,7 +42,6 @@ public class TimelineActivity extends BaseActivity {
 //    private BaasioQuery timelineCardDtoQuery;
     private Intent intent;
     private SchoolEntity schoolEntity;
-    private boolean isGetTimeline = false;
 
     private MenuItem queryTypeMenuItem;
 
@@ -79,18 +78,29 @@ public class TimelineActivity extends BaseActivity {
 
         timelineCardDtos.clear();
 //        RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
-        if (!isGetTimeline) {
-            startService(intent);
-            isGetTimeline = true;
-        }
+        startService(intent);
+        Log.d(TAG, "요청1");
     }
 
     private void setQueryToAllTimelines() {
         intent = new Intent(getApplicationContext(), SocketService.class);
         intent.putExtra(Global.COMMAND, Global.GET_ALL_TIMELINE);
         intent.putExtra(Global.USER_ID, Global.userEntity.id);
-        Log.d(TAG, "schoolEntity = " + schoolEntity);
         intent.putExtra(Global.SCHOOL_ID, schoolEntity.id);
+
+        RequestManager.onGetAllTimeline = new RequestManager.OnGetAllTimeline() {
+            @Override
+            public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
+                viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
+                viewHolder.timelines.hideMoreProgress();
+                Log.d(TAG, "성공");
+            }
+
+            @Override
+            public void onException(int code) {
+                viewHolder.timelines.hideMoreProgress();
+            }
+        };
 
 //        timelineCardDtoQuery = new BaasioQuery();
 //        timelineCardDtoQuery.setType(TimelineEntity.COLLECTION_NAME);
@@ -106,6 +116,18 @@ public class TimelineActivity extends BaseActivity {
         intent.putExtra(Global.COMMAND, Global.GET_MY_TIMELINE);
         intent.putExtra(Global.SCHOOL_ID, schoolEntity.id);
         intent.putExtra(Global.USER_ID, Global.userEntity.id);
+
+        RequestManager.onGetMyTimeline = new RequestManager.OnGetMyTimeline() {
+            @Override
+            public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
+                viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
+            }
+
+            @Override
+            public void onException(int code) {
+                viewHolder.timelines.hideMoreProgress();
+            }
+        };
 
 //        timelineCardDtoQuery = new BaasioQuery();
 //        timelineCardDtoQuery.setType(TimelineEntity.COLLECTION_NAME);
@@ -136,46 +158,24 @@ public class TimelineActivity extends BaseActivity {
 //    }
 
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        if (intent != null) {
-            String command = intent.getStringExtra(Global.COMMAND);
-            if (command != null) {
-                int code = intent.getIntExtra(Global.CODE, -1);
-                if (code != -1) {
-                    SocketException.toastErrMsg(code);
-                    SocketException.printErrMsg(code);
-                    if (command.equals(Global.GET_ALL_TIMELINE)) {
-                        // 타임라인 모두 받아오기 응답
-                        processGetAllTimeline(code, intent);
-                    } else if (command.equals(Global.GET_MY_TIMELINE)) {
-                        // 타임라인 내 글 받아오기 응답
-                        processGetMyTimeline(code, intent);
-                    }
-                }
-            }
-        }
-    }
+//    // TODO: 15. 11. 23. 타임라인 모두 받아오기 응답
+//    private void processGetAllTimeline(int code, Intent intent) {
+//        if (code == SocketException.SUCCESS) {
+//            ArrayList<TimelineCardDto> timelineCardDtos = intent.getParcelableArrayListExtra(Global.TIMELINE);
+//            viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
+//        }
+//        viewHolder.timelines.hideMoreProgress();
+//    }
 
 
-    // TODO: 15. 11. 23. 타임라인 모두 받아오기 응답
-    private void processGetAllTimeline(int code, Intent intent) {
-        if (code == SocketException.SUCCESS) {
-            ArrayList<TimelineCardDto> timelineCardDtos = intent.getParcelableArrayListExtra(Global.TIMELINE);
-            viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
-        }
-        viewHolder.timelines.hideMoreProgress();
-    }
-
-
-    // TODO: 15. 11. 23. 타임라인 모두 받아오기 응답
-    private void processGetMyTimeline(int code, Intent intent) {
-        if (code == SocketException.SUCCESS) {
-            ArrayList<TimelineCardDto> timelineCardDtos = intent.getParcelableArrayListExtra(Global.TIMELINE);
-            viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
-        }
-        viewHolder.timelines.hideMoreProgress();
-    }
+//    // TODO: 15. 11. 23. 타임라인 모두 받아오기 응답
+//    private void processGetMyTimeline(int code, Intent intent) {
+//        if (code == SocketException.SUCCESS) {
+//            ArrayList<TimelineCardDto> timelineCardDtos = intent.getParcelableArrayListExtra(Global.TIMELINE);
+//            viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
+//        }
+//        viewHolder.timelines.hideMoreProgress();
+//    }
 
 
     @Override
@@ -197,7 +197,6 @@ public class TimelineActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), TimelineWriteActivity.class);
                 startActivity(intent);
-                isGetTimeline = false;
             }
         });
 
@@ -253,6 +252,7 @@ public class TimelineActivity extends BaseActivity {
                     setQueryToAllTimelines();
                 }
                 startService(intent);
+                Log.d(TAG, "요청4");
 //                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
 
                 return true;

@@ -139,21 +139,9 @@ public class MainActivity extends BaseActivity {
                     } else if (command.equals(Global.SEARCH_PRODUCT)) {
                         // 제품 검색
                         processSearchProduct(code, intent);
-                    } else if (command.equals(Global.GET_MY_PRODUCT)) {
-                        // 내 제품 요청 응답
-                        processGetMyProduct(code, intent);
                     }
                 }
             }
-        }
-    }
-
-
-    // TODO: 15. 11. 24. 내 제품 요청 응답
-    private void processGetMyProduct(int code, Intent intent) {
-        if (code == SocketException.SUCCESS) {
-            ArrayList<ProductCardDto> productCardDtos = intent.getParcelableArrayListExtra(Global.PRODUCT_CARD);
-            myPageFragment.setProduct(productCardDtos);
         }
     }
 

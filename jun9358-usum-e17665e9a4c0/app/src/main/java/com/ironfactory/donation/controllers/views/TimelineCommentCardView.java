@@ -18,6 +18,7 @@ import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.activities.BaseActivity;
 import com.ironfactory.donation.dtos.TimelineCommentCardDto;
 import com.ironfactory.donation.entities.UserEntity;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.socketIo.SocketService;
 
 public class TimelineCommentCardView extends CardView {
@@ -93,7 +94,7 @@ public class TimelineCommentCardView extends CardView {
                         Log.d(TAG, "timelineId = " + timelineCommentCardDto.commentEntity.timeline_item_id);
                         intent.putExtra(Global.FROM, from);
                         getContext().startService(intent);
-                        Global.onDeleted = new Global.OnDeleted() {
+                        RequestManager.onDeleteComment = new RequestManager.OnDeleteComment() {
                             @Override
                             public void onSuccess() {
                                 BaseActivity.hideLoadingView();

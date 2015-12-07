@@ -213,7 +213,7 @@ public class ProductDetailCardView extends CardView {
                     Intent intent = new Intent(getContext(), SocketService.class);
                     intent.putExtra(Global.COMMAND, Global.UPDATE_TRANSACTION_STATUS);
                     intent.putExtra(Global.TRANSACTION, productCardDto.transactionEntity);
-                    intent.putExtra(Global.STATUS, TransactionEntity.STATUS_TYPE.RECEIVED.ordinal());
+                    intent.putExtra(Global.STATUS, Global.RECEIVED);
                     getContext().startService(intent);
 
 //                    RequestManager.updateTransactionStatus(productCardDto.transactionEntity, TransactionEntity.STATUS_TYPE.RECEIVED, callback);
@@ -226,19 +226,19 @@ public class ProductDetailCardView extends CardView {
                 getContext().startService(intent);
 
                 switch (productCardDto.transactionEntity.status) {
-                    case REGISTERED:
-                        intent.putExtra(Global.STATUS, TransactionEntity.STATUS_TYPE.REQUESTED.ordinal());
+                    case Global.REGISTERED:
+                        intent.putExtra(Global.STATUS, Global.REQUESTED);
 //                        RequestManager.updateTransactionStatus(productCardDto.transactionEntity, TransactionEntity.STATUS_TYPE.REQUESTED, callback);
                         break;
-                    case REQUESTED:
-                        intent.putExtra(Global.STATUS, TransactionEntity.STATUS_TYPE.SENDED.ordinal());
+                    case Global.REQUESTED:
+                        intent.putExtra(Global.STATUS, Global.SENDED);
 //                        RequestManager.updateTransactionStatus(productCardDto.transactionEntity, TransactionEntity.STATUS_TYPE.SENDED, callback);
                         break;
-                    case SENDED:
-                        intent.putExtra(Global.STATUS, TransactionEntity.STATUS_TYPE.RECEIVED.ordinal());
+                    case Global.SENDED:
+                        intent.putExtra(Global.STATUS, Global.RECEIVED);
 //                        RequestManager.updateTransactionStatus(productCardDto.transactionEntity, TransactionEntity.STATUS_TYPE.RECEIVED, callback);
                         break;
-                    case RECEIVED:
+                    case Global.RECEIVED:
                         break;
                 }
             }
@@ -479,28 +479,28 @@ public class ProductDetailCardView extends CardView {
         String pushMessage = "";
         String signedUserUuid = Global.userEntity.id;
         switch (productCardDto.transactionEntity.status) {
-            case REGISTERED:
+            case Global.REGISTERED:
                 writeCommentToShareMyProfile();
 
-                if (productCardDto.transactionEntity.donator_uuid.equals(signedUserUuid)) {
-                    targetUserUuids.add(productCardDto.transactionEntity.receiver_uuid);
-                } else if (productCardDto.transactionEntity.receiver_uuid.equals(signedUserUuid)) {
-                    targetUserUuids.add(productCardDto.transactionEntity.donator_uuid);
+                if (productCardDto.transactionEntity.donator_id.equals(signedUserUuid)) {
+                    targetUserUuids.add(productCardDto.transactionEntity.receiver_id);
+                } else if (productCardDto.transactionEntity.receiver_id.equals(signedUserUuid)) {
+                    targetUserUuids.add(productCardDto.transactionEntity.donator_id);
                 }
                 pushMessage = "진행중이던 거래가 취소되었습니다.";
                 break;
-            case REQUESTED:
+            case Global.REQUESTED:
                 writeCommentToShareMyProfile();
 
-                targetUserUuids.add(productCardDto.transactionEntity.donator_uuid);
+                targetUserUuids.add(productCardDto.transactionEntity.donator_id);
                 pushMessage = "기부요청이 들어왔습니다.";
                 break;
-            case SENDED:
-                targetUserUuids.add(productCardDto.transactionEntity.receiver_uuid);
+            case Global.SENDED:
+                targetUserUuids.add(productCardDto.transactionEntity.receiver_id);
                 pushMessage = "기부자가 상품을 발송하였습니다.";
                 break;
-            case RECEIVED:
-                if (productCardDto.transactionEntity.donator_uuid.equals(signedUserUuid)) {
+            case Global.RECEIVED:
+                if (productCardDto.transactionEntity.donator_id.equals(signedUserUuid)) {
                     new MaterialDialog.Builder(BaseActivity.context)
                             .title(R.string.app_name)
                             .content("정상적으로 처리되었습니다.")
@@ -553,7 +553,7 @@ public class ProductDetailCardView extends CardView {
                         .show();
                 writeTimelineThatTransactionCompleted();
 
-                targetUserUuids.add(productCardDto.transactionEntity.donator_uuid);
+                targetUserUuids.add(productCardDto.transactionEntity.donator_id);
                 pushMessage = "구매자가 상품을 수취하였습니다.";
 
                 // activity가 닫혀서 dialog가 표시안되서 특별처리
@@ -594,10 +594,13 @@ public class ProductDetailCardView extends CardView {
 
 
     public void processGetTimelineComment(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
-        Intent intent = new Intent(getContext(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.DELETE_COMMENT);
-        intent.putExtra(Global.TIMELINE_COMMENT, timelineCommentCardDtos);
-        getContext().startService(intent);
+        for (TimelineCommentCardDto timelineComment :
+                timelineCommentCardDtos) {
+            Intent intent = new Intent(getContext(), SocketService.class);
+            intent.putExtra(Global.COMMAND, Global.DELETE_COMMENT);
+            intent.putExtra(Global.TIMELINE_COMMENT, timelineComment);
+            getContext().startService(intent);
+        }
 
 //        for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
 //            RequestManager.deleteComment(timelineCommentCardDto, new BaasioCallback<BaasioEntity>() {
@@ -661,6 +664,7 @@ public class ProductDetailCardView extends CardView {
         Intent intent = new Intent(getContext(), SocketService.class);
         intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE);
         intent.putExtra(Global.SCHOOL_ID, productCardDto.productEntity.school_id);
+        intent.putExtra(Global.USER_ID, Global.userEntity.id);
         intent.putExtra(Global.TIMELINE_CONTENT, "교복기부로 점수획득!");
         getContext().startService(intent);
 
@@ -686,7 +690,7 @@ public class ProductDetailCardView extends CardView {
 
         UserEntity userEntity = Global.userEntity;
         if (productCardDto.productEntity.user_id.equals(userEntity.id) &&
-                productCardDto.transactionEntity.status == TransactionEntity.STATUS_TYPE.REGISTERED) {
+                productCardDto.transactionEntity.status == Global.REGISTERED) {
             viewHolder.cancelButton.setVisibility(GONE);
             viewHolder.updateButton.setVisibility(VISIBLE);
         }
@@ -698,12 +702,12 @@ public class ProductDetailCardView extends CardView {
     }
 
     private void notifyTransactionStatusChanged() {
-        String donatorUuid = productCardDto.transactionEntity.donator_uuid;
-        String receiverUuid = productCardDto.transactionEntity.receiver_uuid;
+        String donatorUuid = productCardDto.transactionEntity.donator_id;
+        String receiverUuid = productCardDto.transactionEntity.receiver_id;
 //        String signedUserUuid = Baas.io().getSignedInUser().getUuid().toString();
         String signedUserUuid = Global.userEntity.id;
         switch (productCardDto.transactionEntity.status) {
-            case REGISTERED:
+            case Global.REGISTERED:
                 if (donatorUuid.equals(signedUserUuid)) {
                     viewHolder.donateButton.setVisibility(View.GONE);
                     viewHolder.cancelButton.setVisibility(View.GONE);
@@ -718,7 +722,7 @@ public class ProductDetailCardView extends CardView {
                     viewHolder.donateButton.setText("기부요청");
                 }
                 break;
-            case REQUESTED:
+            case Global.REQUESTED:
                 if (donatorUuid.equals(signedUserUuid)) {
                     viewHolder.donateButton.setVisibility(View.VISIBLE);
                     viewHolder.cancelButton.setVisibility(View.VISIBLE);
@@ -740,7 +744,7 @@ public class ProductDetailCardView extends CardView {
                     viewHolder.deleteButton.setVisibility(View.GONE);
                 }
                 break;
-            case SENDED:
+            case Global.SENDED:
                 if (donatorUuid.equals(signedUserUuid)) {
                     viewHolder.donateButton.setVisibility(View.GONE);
                     viewHolder.cancelButton.setVisibility(View.GONE);
@@ -767,7 +771,7 @@ public class ProductDetailCardView extends CardView {
                     viewHolder.deleteButton.setVisibility(View.GONE);
                 }
                 break;
-            case RECEIVED:
+            case Global.RECEIVED:
                 viewHolder.donateButton.setVisibility(View.GONE);
                 viewHolder.cancelButton.setVisibility(View.GONE);
                 viewHolder.updateButton.setVisibility(View.GONE);

@@ -14,6 +14,7 @@ import com.ironfactory.donation.controllers.views.ProfileView;
 import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.managers.AuthManager;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.slidingtab.SlidingBaseFragment;
 import com.ironfactory.donation.socketIo.SocketService;
 
@@ -74,6 +75,18 @@ public class MyPageFragment extends SlidingBaseFragment {
         intent.putExtra(TransactionEntity.PROPERTY_DONATOR_UUID, Global.userEntity.id);
         intent.putExtra(TransactionEntity.PROPERTY_RECEIVER_UUID, Global.userEntity.id);
         getActivity().startService(intent);
+
+        RequestManager.onGetMyProduct = new RequestManager.OnGetMyProduct() {
+            @Override
+            public void onSuccess(ArrayList<ProductCardDto> productCardDtos) {
+                setProduct(productCardDtos);
+            }
+
+            @Override
+            public void onException(int code) {
+
+            }
+        };
 
 //        RequestManager.getMyProductsInBackground(new RequestManager.TypedBaasioQueryCallback<ProductCardDto>() {
 //            @Override
