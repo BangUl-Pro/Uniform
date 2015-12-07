@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-v11/values-v11.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/values-v11/values-v11.xml -->
     <eat-comment/>
     <style name="Base.TextAppearance.AppCompat.Inverse">
         <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
@@ -54,7 +54,7 @@
     </style>
     <style name="Base.Widget.AppCompat.ProgressBar.Horizontal" parent="android:Widget.Holo.ProgressBar.Horizontal">
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/values-v11/values-v11.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.afollestad.material-dialogs/core/0.8.5.2/res/values-v11/values-v11.xml -->
     <eat-comment/>
     <style name="MD_Dark" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:windowMinWidthMajor">@dimen/abc_dialog_min_width_major</item>
@@ -90,7 +90,7 @@
         <item name="android:windowAnimationStyle">@style/MD_WindowAnimation</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-v11/values-v11.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/values-v11/values-v11.xml -->
     <eat-comment/>
     <style name="Platform.AppCompat" parent="Platform.V11.AppCompat"/>
     <style name="Platform.AppCompat.Light" parent="Platform.V11.AppCompat.Light"/>

@@ -12,4 +12,4 @@
 
     <include layout="@layout/md_stub_actionbuttons" />
 
-</com.afollestad.materialdialogs.internal.MDRootLayout><!-- From: file:/Users/afollestad/Projects/material-dialogs/library/src/main/res/layout/md_dialog_progress_indeterminate.xml --><!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.9.1/res/layout/md_dialog_progress_indeterminate.xml -->
+</com.afollestad.materialdialogs.internal.MDRootLayout><!-- From: file:/home/jitpack/build/core/src/main/res/layout/md_dialog_progress_indeterminate.xml --><!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.afollestad.material-dialogs/core/0.8.5.2/res/layout/md_dialog_progress_indeterminate.xml -->

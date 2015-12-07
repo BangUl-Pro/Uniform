@@ -8,13 +8,13 @@ package com.github.johnkil.print;
 
 public final class R {
 	public static final class attr {
-		public static final int iconColor = 0x7f01008a;
-		public static final int iconFont = 0x7f01008c;
-		public static final int iconSize = 0x7f01008b;
-		public static final int iconText = 0x7f010089;
+		public static final int iconColor = 0x7f010092;
+		public static final int iconFont = 0x7f010094;
+		public static final int iconSize = 0x7f010093;
+		public static final int iconText = 0x7f010091;
 	}
 	public static final class styleable {
-		public static final int[] PrintView = { 0x7f010089, 0x7f01008a, 0x7f01008b, 0x7f01008c };
+		public static final int[] PrintView = { 0x7f010091, 0x7f010092, 0x7f010093, 0x7f010094 };
 		public static final int PrintView_iconColor = 1;
 		public static final int PrintView_iconFont = 3;
 		public static final int PrintView_iconSize = 2;

@@ -7,7 +7,7 @@
         <item>@string/com_kakao_other_kakaoaccount</item>
         <item>@string/com_kakao_account_cancel</item>
     </string-array>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-ko/values-ko.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/values-ko/values-ko.xml -->
     <eat-comment/>
     <string msgid="4600421777120114993" name="abc_action_bar_home_description">"홈 탐색"</string>
     <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s, %2$s"</string>
@@ -17,6 +17,8 @@
     <string msgid="4076576682505996667" name="abc_action_mode_done">"완료"</string>
     <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"전체 보기"</string>
     <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"앱 선택"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"사용 안함"</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"사용"</string>
     <string msgid="7723749260725869598" name="abc_search_hint">"검색..."</string>
     <string msgid="3691816814315814921" name="abc_searchview_description_clear">"검색어 삭제"</string>
     <string msgid="2550479030709304392" name="abc_searchview_description_query">"검색어"</string>
@@ -77,7 +79,7 @@
     <string msgid="6006316683626838685" name="common_google_play_services_update_title">"Google Play 서비스 업데이트"</string>
     <string msgid="9071884888741449141" name="common_signin_button_text">"로그인"</string>
     <string msgid="2429381841831957106" name="common_signin_button_text_long">"Google 계정으로 로그인"</string>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-ko/values-ko.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/values-ko/values-ko.xml -->
     <eat-comment/>
     <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

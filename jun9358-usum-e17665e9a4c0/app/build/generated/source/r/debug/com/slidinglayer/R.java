@@ -8,23 +8,23 @@ package com.slidinglayer;
 
 public final class R {
 	public static final class attr {
-		public static final int closeOnTapEnabled = 0x7f0100a0;
-		public static final int enableShadow = 0x7f01009e;
-		public static final int layerShadowWidth = 0x7f01009f;
-		public static final int offsetWidth = 0x7f0100a2;
-		public static final int openOnTapEnabled = 0x7f0100a1;
-		public static final int stickTo = 0x7f0100a3;
+		public static final int closeOnTapEnabled = 0x7f0100a8;
+		public static final int enableShadow = 0x7f0100a6;
+		public static final int layerShadowWidth = 0x7f0100a7;
+		public static final int offsetWidth = 0x7f0100aa;
+		public static final int openOnTapEnabled = 0x7f0100a9;
+		public static final int stickTo = 0x7f0100ab;
 	}
 	public static final class id {
-		public static final int auto = 0x7f0a002d;
-		public static final int bottom = 0x7f0a002e;
-		public static final int left = 0x7f0a002f;
+		public static final int auto = 0x7f0a0030;
+		public static final int bottom = 0x7f0a0031;
+		public static final int left = 0x7f0a0032;
 		public static final int middle = 0x7f0a0022;
-		public static final int right = 0x7f0a0030;
-		public static final int top = 0x7f0a0031;
+		public static final int right = 0x7f0a0033;
+		public static final int top = 0x7f0a0034;
 	}
 	public static final class styleable {
-		public static final int[] SlidingLayer = { 0x7f01009e, 0x7f01009f, 0x7f0100a0, 0x7f0100a1, 0x7f0100a2, 0x7f0100a3 };
+		public static final int[] SlidingLayer = { 0x7f0100a6, 0x7f0100a7, 0x7f0100a8, 0x7f0100a9, 0x7f0100aa, 0x7f0100ab };
 		public static final int SlidingLayer_closeOnTapEnabled = 2;
 		public static final int SlidingLayer_enableShadow = 0;
 		public static final int SlidingLayer_layerShadowWidth = 1;

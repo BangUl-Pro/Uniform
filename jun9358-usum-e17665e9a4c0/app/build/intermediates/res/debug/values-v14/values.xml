@@ -5,7 +5,7 @@
     <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light">
         <!-- API 14 theme customizations can go here. -->
     </style>
-    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-v14/values-v14.xml -->
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/values-v14/values-v14.xml -->
     <eat-comment/>
     <style name="Base.TextAppearance.AppCompat.Button">
         <item name="android:textSize">@dimen/abc_text_size_button_material</item>
@@ -33,4 +33,22 @@
     </style>
     <style name="TextAppearance.StatusBar.EventContent.Time"/>
     <style name="TextAppearance.StatusBar.EventContent.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title"/>
+    <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.github.afollestad.material-dialogs/core/0.8.5.2/res/values-v14/values-v14.xml -->
+    <eat-comment/>
+    <style name="Widget.MaterialProgressBar.ProgressBar" parent="android:Widget.ProgressBar">
+        <item name="android:indeterminateDrawable">@null</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:maxWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:maxHeight">48dp</item>
+    </style>
+    <style name="Widget.MaterialProgressBar.ProgressBar.Horizontal" parent="android:Widget.ProgressBar.Horizontal">
+        <!--
+        Disabled for correct behavior on Android 4.x
+        <item name="android:progressDrawable">@null</item>
+        -->
+        <item name="android:indeterminateDrawable">@null</item>
+        <item name="android:minHeight">16dp</item>
+        <item name="android:maxHeight">16dp</item>
+    </style>
 </resources>
