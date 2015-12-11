@@ -25,6 +25,7 @@ import com.ironfactory.donation.dtos.TimelineCommentCardDto;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.entities.UserEntity;
 import com.ironfactory.donation.managers.AuthManager;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.socketIo.SocketException;
 import com.ironfactory.donation.socketIo.SocketService;
 
@@ -351,6 +352,24 @@ public class ProductDetailCardView extends CardView {
                 intent.putExtra(Global.COMMAND, Global.DELETE_FILE);
                 intent.putExtra(Global.FILE, productCardDto.fileEntities);
                 getContext().startService(intent);
+
+                RequestManager.onDeleteFile = new RequestManager.OnDeleteFile() {
+                    @Override
+                    public void onSuccess() {
+                        BaseActivity.hideLoadingView();
+                        ((Activity) BaseActivity.context).finish();
+                    }
+
+                    @Override
+                    public void onException() {
+                        BaseActivity.hideLoadingView();
+
+                        new MaterialDialog.Builder(BaseActivity.context)
+                                .title(R.string.app_name)
+                                .content("상품을 삭제하는 중에 문제가 발생하였습니다.")
+                                .show();
+                    }
+                };
 
                 intent = new Intent(getContext(), SocketService.class);
                 intent.putExtra(Global.COMMAND, Global.UPDATE_PRODUCT);

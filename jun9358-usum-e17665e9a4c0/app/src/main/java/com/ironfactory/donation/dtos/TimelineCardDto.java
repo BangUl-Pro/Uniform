@@ -4,14 +4,11 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.ironfactory.donation.Global;
 import com.ironfactory.donation.entities.FileEntity;
 import com.ironfactory.donation.entities.LikeEntity;
 import com.ironfactory.donation.entities.TimelineEntity;
 import com.ironfactory.donation.entities.UserEntity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -57,13 +54,29 @@ public class TimelineCardDto implements Parcelable {
             timelineEntity = new TimelineEntity(object);
             userEntity = new UserEntity(object);
             likeEntity = new LikeEntity(object);
-            JSONArray fileArray = object.getJSONArray(Global.FILE);
-            for (int i = 0; i < fileArray.length(); i++) {
-                JSONObject fileObject = fileArray.getJSONObject(i);
-                FileEntity fileEntity = new FileEntity(fileObject);
-                fileEntities.add(fileEntity);
-            }
-        } catch (JSONException e) {
+            fileEntities = new ArrayList<>();
+            fileEntities.add(new FileEntity(object));
+//            if (!object.get(Global.TIMELINE).equals(null)) {
+//                JSONObject timelineObject = object.getJSONObject(Global.TIMELINE);
+//                timelineEntity = new TimelineEntity(timelineObject);
+//            }
+//            if (!object.get(Global.USER).equals(null)) {
+//                JSONObject userObject = object.getJSONObject(Global.USER);
+//                userEntity = new UserEntity(userObject);
+//            }
+//            if (!object.get(Global.LIKE).equals(null)) {
+//                JSONObject likeObject = object.getJSONObject(Global.USER);
+//                likeEntity = new LikeEntity(likeObject);
+//            }
+//            if (!object.get(Global.FILE).equals(null)) {
+//                JSONArray fileArray = object.getJSONArray(Global.FILE);
+//                for (int i = 0; i < fileArray.length(); i++) {
+//                    JSONObject fileObject = fileArray.getJSONObject(i);
+//                    FileEntity fileEntity = new FileEntity(fileObject);
+//                    fileEntities.add(fileEntity);
+//                }
+//            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -86,6 +99,7 @@ public class TimelineCardDto implements Parcelable {
 
     public void setFile(JSONObject object) {
         fileEntities = new ArrayList<>();
+        fileEntities.add(new FileEntity(object));
     }
 
 

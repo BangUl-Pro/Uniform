@@ -12,7 +12,7 @@ public class FileEntity implements Parcelable {
 
 //    public static final String PROPERTY_UUID = BaasioBaseEntity.PROPERTY_UUID;
     public static final String PROPERTY_ID = "file_id";
-    public static final String PROPERTY_PARENT_UUID = "file_parent_uuid";
+    public static final String PROPERTY_PARENT_UUID = "file_parent_id";
 
 //    public String uuid;
     public String id;

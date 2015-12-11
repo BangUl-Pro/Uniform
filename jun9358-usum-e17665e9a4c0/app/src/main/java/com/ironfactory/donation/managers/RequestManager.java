@@ -1,12 +1,27 @@
 package com.ironfactory.donation.managers;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
 import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.dtos.TimelineCardDto;
 import com.ironfactory.donation.entities.LikeEntity;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class RequestManager {
+    public static Context context;
+    private static final String TAG = "RequestManager";
+
     public static OnDeleteComment onDeleteComment;
     public static OnInsertFile onInsertFile;
     public static OnDeleteTimeline onDeleteTimeline;
@@ -16,6 +31,59 @@ public class RequestManager {
     public static OnGetMyTimeline onGetMyTimeline;
     public static OnGetMyProduct onGetMyProduct;
     public static OnInsertTimeline onInsertTimeline;
+    public static OnDeleteFile onDeleteFile;
+
+
+    public static void downloadImage(final String path, final File file, final OnDownloadImage onDownloadImage) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(path);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    if (conn != null) {
+                        int statusCode = conn.getResponseCode();
+
+                        if (statusCode != HttpURLConnection.HTTP_OK) {
+                            Log.d(TAG, "Http 연결 오류 = " + statusCode);
+                            onDownloadImage.onExecption();
+                            return;
+                        }
+
+                        InputStream is = conn.getInputStream();
+                        Bitmap bitmap = BitmapFactory.decodeStream(is);
+
+                        FileOutputStream fos = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+
+                        onDownloadImage.onSuccess();
+                        fos.close();
+                        is.close();
+                    }
+
+                    conn.disconnect();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    onDownloadImage.onExecption();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    onDownloadImage.onExecption();
+                }
+            }
+        }).start();
+    }
+
+
+    public interface OnDownloadImage {
+        void onSuccess();
+        void onExecption();
+    }
+
+    public interface OnDeleteFile {
+        void onSuccess();
+        void onException();
+    }
 
     public interface OnInsertTimeline {
         void onSuccess(TimelineCardDto timelineCardDto);

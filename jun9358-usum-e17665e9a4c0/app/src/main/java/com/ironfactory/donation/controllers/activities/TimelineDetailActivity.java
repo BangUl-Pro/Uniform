@@ -52,6 +52,7 @@ public class TimelineDetailActivity extends BaseActivity {
         Log.d(TAG, "액티비티 시작");
 
         timelineCardDto = getIntent().getParcelableExtra("timelineCardDto");
+        Log.d(TAG, "size = " + timelineCardDto.fileEntities.size());
 
         initViews(R.layout.activity_timeline_detail);
         requestTimelineComments();

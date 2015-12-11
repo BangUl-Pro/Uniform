@@ -192,9 +192,9 @@ public class UserEntity implements Parcelable {
             if (!entity.get(PROPERTY_USER_TYPE).equals(null)) {
                 this.userType = entity.getInt(PROPERTY_USER_TYPE);
             }
-            if (entity.get(PROPERTY_KAKAOTALK).equals(null)) {
-                this.kakaotalk = new KakaoProfile(entity.getJSONObject(PROPERTY_KAKAOTALK));
-            }
+//            if (entity.get(PROPERTY_KAKAOTALK).equals(null)) {
+//                this.kakaotalk = new KakaoProfile(entity.getJSONObject(PROPERTY_KAKAOTALK));
+//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

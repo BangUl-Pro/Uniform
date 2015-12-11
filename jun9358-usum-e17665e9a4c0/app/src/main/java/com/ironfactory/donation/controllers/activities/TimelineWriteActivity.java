@@ -108,6 +108,18 @@ public class TimelineWriteActivity extends BaseActivity {
                     intent.putExtra(Global.FILE, timelineCardDtoForUpdate.fileEntities);
                     startService(intent);
 
+                    RequestManager.onDeleteFile = new RequestManager.OnDeleteFile() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onException() {
+
+                        }
+                    };
+
                     intent = new Intent(getApplicationContext(), SocketService.class);
                     intent.putExtra(Global.COMMAND, Global.UPDATE_TIMELINE);
                     intent.putExtra(Global.TIMELINE, timelineCardDtoForUpdate);

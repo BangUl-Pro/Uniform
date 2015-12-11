@@ -18,7 +18,6 @@ import com.ironfactory.donation.controllers.activities.MainActivity;
 import com.ironfactory.donation.controllers.activities.ProductDetailActivity;
 import com.ironfactory.donation.controllers.activities.SignUpActivity;
 import com.ironfactory.donation.controllers.activities.TimelineDetailActivity;
-import com.ironfactory.donation.controllers.activities.TimelineWriteActivity;
 import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.dtos.SchoolRanking;
 import com.ironfactory.donation.dtos.TimelineCardDto;
@@ -199,12 +198,12 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processDeleteProduct(object);
             }
-        }).on(Global.DELETE_FILE, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processDeleteFile(object);
-            }
+//        }).on(Global.DELETE_FILE, new Emitter.Listener() {
+//            @Override
+//            public void call(Object... args) {
+//                JSONObject object = (JSONObject) args[0];
+//                processDeleteFile(object);
+//            }
         }).on(Global.UPDATE_PRODUCT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -253,12 +252,12 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processInsertTimeline(object);
             }
-        }).on(Global.INSERT_FILE, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processInsertFile(object);
-            }
+//        }).on(Global.INSERT_FILE, new Emitter.Listener() {
+//            @Override
+//            public void call(Object... args) {
+//                JSONObject object = (JSONObject) args[0];
+//                processInsertFile(object);
+//            }
         });
     }
 
@@ -473,28 +472,26 @@ public class SocketIO {
     }
 
 
-    // TODO: 15. 11. 25. 파일 삭제
-    private void processDeleteFile(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            int from = object.getInt(Global.FROM);
-            Log.d(TAG, "파일삭제 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent;
-            if (from == 1)
-                intent = new Intent(context, TimelineWriteActivity.class);
-            else
-                intent = new Intent(context, ProductDetailActivity.class);
-
-            intent.putExtra(Global.COMMAND, Global.DELETE_FILE);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.CODE, code);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    // TODO: 15. 11. 25. 파일 삭제
+//    private void processDeleteFile(JSONObject object) {
+//        try {
+//            final int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "파일삭제 응답");
+//            Log.d(TAG, "object = " + object);
+//            handler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (code == SocketException.SUCCESS) {
+//                        RequestManager.onDeleteFile.onSuccess();
+//                    } else {
+//                        RequestManager.onDeleteFile.onExection();
+//                    }
+//                }
+//            });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 25. 제품 삭제 응답
@@ -530,8 +527,7 @@ public class SocketIO {
             if (code == SocketException.SUCCESS) {
                 // 성공
                 JSONObject transactionJson = object.getJSONObject(Global.TRANSACTION);
-                Gson gson = new Gson();
-                TransactionEntity transactionEntity = gson.fromJson(transactionJson.toString(), TransactionEntity.class);
+                TransactionEntity transactionEntity = new TransactionEntity(transactionJson);
                 intent.putExtra(Global.TRANSACTION, transactionEntity);
             }
             context.startActivity(intent);
@@ -1480,12 +1476,12 @@ public class SocketIO {
     // TODO: 15. 11. 25. 파일 입력
     public void insertFile(String id, String path) {
 //        try {
-            String serverUrl = SERVER_URL + ":5000/insertFile";
+            String serverUrl = SERVER_URL + "/api/photo";
 
             Log.d(TAG, "productId = " + id);
             Log.d(TAG, "path = " + path);
 
-            upload(serverUrl, path);
+            upload(serverUrl, path, id);
 
 //            object.put(Global.PRODUCT_ID, id);
 //            object.put(Global.PATH, path);
@@ -1498,7 +1494,7 @@ public class SocketIO {
     }
 
 
-    private void upload(final String serverUrl, final String fileUrl) {
+    private void upload(final String serverUrl, final String fileUrl, final String id) {
         Log.d(TAG, "fileUrl = " + fileUrl);
         new Thread(new Runnable() {
             @Override
@@ -1520,6 +1516,7 @@ public class SocketIO {
                 }
 
                 try {
+                    Log.d(TAG, "파일은 맞음");
                     FileInputStream fis = new FileInputStream(file);
                     URL url = new URL(serverUrl);
 
@@ -1532,6 +1529,7 @@ public class SocketIO {
                     conn.setRequestProperty("ENCTYPE", "multipart/form-data");
                     conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + BOUNDARY);
                     conn.setRequestProperty("uploaded_file", fileUrl);
+                    conn.setRequestProperty("parent_id", id);
 
                     dos = new DataOutputStream(conn.getOutputStream());
                     dos.writeBytes(TWO_HYPHENS + BOUNDARY + LINE_END);
@@ -1555,7 +1553,7 @@ public class SocketIO {
 
                     dos.writeBytes(LINE_END);
                     dos.writeBytes(TWO_HYPHENS + BOUNDARY + TWO_HYPHENS + LINE_END);
-
+                    Log.d(TAG, "연결");
                     final int serverResCode = conn.getResponseCode();
                     String serverResMsg = conn.getResponseMessage();
 
@@ -1594,7 +1592,7 @@ public class SocketIO {
                     e.printStackTrace();
                 }
             }
-        });
+        }).start();
     }
 
 

@@ -8,11 +8,12 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-import com.koushikdutta.ion.Ion;
 import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.activities.BaseActivity;
 import com.ironfactory.donation.controllers.activities.PhotoViewActivity;
 import com.ironfactory.donation.entities.FileEntity;
+import com.ironfactory.donation.managers.RequestManager;
+import com.koushikdutta.ion.Ion;
 
 import java.io.File;
 
@@ -63,7 +64,7 @@ public class ImageCardView extends CardView {
     }
 
     public void setFileEntity(final FileEntity fileEntity) {
-
+        Log.d(TAG, "setFileEntity");
         File file = new File(BaseActivity.context.getCacheDir() + fileEntity.id);
         if (file.exists()) {
             // 성공
@@ -72,7 +73,17 @@ public class ImageCardView extends CardView {
             return;
         }
 
-        Log.d(TAG, "파일 다운로드 구현해야함");
+        RequestManager.downloadImage("http://uniform-test.herokuapp.com/imgs/" + fileEntity.id, file, new RequestManager.OnDownloadImage() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "이미지 다운로드 성공");
+            }
+
+            @Override
+            public void onExecption() {
+                Log.d(TAG, "이미지 다운로드 실패");            }
+        });
+
 
 //        BaasioFile baasioFile = fileEntity.getBaasioFile();
 //        baasioFile.fileDownloadInBackground(BaseActivity.context.getCacheDir() + fileEntity.id, baasioDownloadCallback);
