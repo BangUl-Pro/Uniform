@@ -53,10 +53,12 @@ public class SchoolRankingCardView extends LinearLayout {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BaseActivity.context, TimelineActivity.class);
-                intent.putExtra("schoolEntity", schoolEntity);
-                Log.d(TAG, "schoolEntity = " + schoolEntity);
-                BaseActivity.startActivityUsingStack(intent);
+                if (schoolEntity != null) {
+                    Intent intent = new Intent(BaseActivity.context, TimelineActivity.class);
+                    intent.putExtra("schoolEntity", schoolEntity);
+                    Log.d(TAG, "schoolEntity = " + schoolEntity);
+                    BaseActivity.startActivityUsingStack(intent);
+                }
             }
         });
         viewHolder.numberProgressBar.setProgressTextVisibility(NumberProgressBar.ProgressTextVisibility.Invisible);

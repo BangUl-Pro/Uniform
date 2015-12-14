@@ -134,6 +134,20 @@ public class TimelineCardDto implements Parcelable {
 
     }
 
+
+    public void addFile(JSONObject object) {
+        FileEntity fileEntity = new FileEntity(object);
+        fileEntities.add(fileEntity);
+    }
+
+
+    public boolean isSame(TimelineCardDto timelineCardDto) {
+        if (timelineEntity.isSame(timelineCardDto.timelineEntity) && userEntity.isSame(timelineCardDto.userEntity))
+            return true;
+        return false;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;

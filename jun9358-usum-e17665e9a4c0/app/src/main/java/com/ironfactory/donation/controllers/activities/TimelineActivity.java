@@ -83,24 +83,26 @@ public class TimelineActivity extends BaseActivity {
     }
 
     private void setQueryToAllTimelines() {
-        intent = new Intent(getApplicationContext(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.GET_ALL_TIMELINE);
-        intent.putExtra(Global.USER_ID, Global.userEntity.id);
-        intent.putExtra(Global.SCHOOL_ID, schoolEntity.id);
+        if (schoolEntity != null) {
+            intent = new Intent(getApplicationContext(), SocketService.class);
+            intent.putExtra(Global.COMMAND, Global.GET_ALL_TIMELINE);
+            intent.putExtra(Global.USER_ID, Global.userEntity.id);
+            intent.putExtra(Global.SCHOOL_ID, schoolEntity.id);
 
-        RequestManager.onGetAllTimeline = new RequestManager.OnGetAllTimeline() {
-            @Override
-            public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
-                viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
-                viewHolder.timelines.hideMoreProgress();
-                Log.d(TAG, "성공");
-            }
+            RequestManager.onGetAllTimeline = new RequestManager.OnGetAllTimeline() {
+                @Override
+                public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
+                    viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
+                    viewHolder.timelines.hideMoreProgress();
+                    Log.d(TAG, "성공");
+                }
 
-            @Override
-            public void onException(int code) {
-                viewHolder.timelines.hideMoreProgress();
-            }
-        };
+                @Override
+                public void onException(int code) {
+                    viewHolder.timelines.hideMoreProgress();
+                }
+            };
+        }
 
 //        timelineCardDtoQuery = new BaasioQuery();
 //        timelineCardDtoQuery.setType(TimelineEntity.COLLECTION_NAME);

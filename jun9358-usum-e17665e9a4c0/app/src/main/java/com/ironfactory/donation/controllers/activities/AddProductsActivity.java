@@ -16,6 +16,8 @@ import com.ironfactory.donation.controllers.views.ProductAddForm;
 import com.ironfactory.donation.controllers.views.ProductRecyclerView;
 import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.entities.ProductEntity;
+import com.ironfactory.donation.entities.TransactionEntity;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.socketIo.SocketException;
 import com.ironfactory.donation.socketIo.SocketService;
 
@@ -179,10 +181,30 @@ public class AddProductsActivity extends BaseActivity {
 
                 showLoadingView();
 
-                Intent intent = new Intent(getApplicationContext(), SocketService.class);
-                intent.putExtra(Global.COMMAND, Global.INSERT_PRODUCT);
-                intent.putExtra(Global.PRODUCT_CARD, productCardDtos);
-                startService(intent);
+                RequestManager.insertProducts(productCardDtos, new RequestManager.OnInsertProduct() {
+                    @Override
+                    public void onSuccess(ProductCardDto productCardDto) {
+                        TransactionEntity transactionEntity = new TransactionEntity();
+                        transactionEntity.donator_id = productCardDto.productEntity.user_id;
+                        transactionEntity.receiver_id = "";
+                        transactionEntity.product_id = productCardDto.productEntity.id;
+                        transactionEntity.product_name = productCardDto.productEntity.product_name;
+                        RequestManager.insertTransaction(transactionEntity);
+
+                        hideLoadingView();
+                        finish();
+                    }
+
+                    @Override
+                    public void onException() {
+
+                    }
+                });
+
+//                Intent intent = new Intent(getApplicationContext(), SocketService.class);
+//                intent.putExtra(Global.COMMAND, Global.INSERT_PRODUCT);
+//                intent.putExtra(Global.PRODUCT_CARD, productCardDtos);
+//                startService(intent);
 
 
 //                RequestManager.insertProductsInBackground(productCardDtos, new BaasioCallback<List<BaasioEntity>>() {

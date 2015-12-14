@@ -12,12 +12,12 @@ import org.json.JSONObject;
 public class TransactionEntity implements Parcelable {
     public static final String COLLECTION_NAME = "transactions";
 //    public static final String PROPERTY_UUID = BaasioBaseEntity.PROPERTY_UUID;
-    public static final String PROPERTY_MODIFIED = "modified";
-    public static final String PROPERTY_STATUS = "status";
-    public static final String PROPERTY_DONATOR_UUID = "donator_id";
-    public static final String PROPERTY_RECEIVER_UUID = "receiver_id";
-    public static final String PROPERTY_PRODUCT_ID = "product_id";
-    public static final String PROPERTY_PRODUCT_NAME = "product_name";
+    public static final String PROPERTY_MODIFIED = "transaction_modified";
+    public static final String PROPERTY_STATUS = "transaction_status";
+    public static final String PROPERTY_DONATOR_UUID = "transaction_donator_id";
+    public static final String PROPERTY_RECEIVER_UUID = "transaction_receiver_id";
+    public static final String PROPERTY_PRODUCT_ID = "transaction_product_id";
+    public static final String PROPERTY_PRODUCT_NAME = "transaction_product_name";
 
 
     public long modified;
@@ -105,7 +105,7 @@ public class TransactionEntity implements Parcelable {
             if (object.getString(PROPERTY_PRODUCT_NAME) != null) {
                 this.product_name = object.getString(PROPERTY_PRODUCT_NAME);
             }
-            if (object.getLong(PROPERTY_MODIFIED) != -1) {
+            if (!object.get(PROPERTY_MODIFIED).equals(null)) {
                 this.modified = object.getLong(PROPERTY_MODIFIED);
             }
         } catch (JSONException e) {

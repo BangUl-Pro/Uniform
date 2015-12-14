@@ -11,7 +11,6 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 import com.ironfactory.donation.Global;
-import com.ironfactory.donation.controllers.activities.AddProductsActivity;
 import com.ironfactory.donation.controllers.activities.EditProfileActivity;
 import com.ironfactory.donation.controllers.activities.LoginActivity;
 import com.ironfactory.donation.controllers.activities.MainActivity;
@@ -56,7 +55,7 @@ import java.util.ArrayList;
  */
 public class SocketIO {
 
-    private Handler handler = new Handler();
+    private static Handler handler = new Handler();
     private static final String SERVER_URL = "http://uniform-test.herokuapp.com";
     private static final String TAG = "SocketIO";
 
@@ -161,24 +160,6 @@ public class SocketIO {
             public void call(Object... args) {
                 JSONObject object = (JSONObject) args[0];
                 processUpdateTimeline(object);
-            }
-        }).on(Global.INSERT_PRODUCT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processInsertProduct(object);
-            }
-        }).on(Global.SEARCH_PRODUCT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processSearchProduct(object);
-            }
-        }).on(Global.GET_MY_PRODUCT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processGetMyProduct(object);
             }
         }).on(Global.DELETE_COMMENT, new Emitter.Listener() {
             @Override
@@ -571,98 +552,98 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 24. 내 제품 요청 응답
-    private void processGetMyProduct(JSONObject object) {
-        try {
-            final int code = object.getInt(Global.CODE);
-            Log.d(TAG, "내 제품 요청 응답");
-            Log.d(TAG, "object = " + object);
-
-            if (code == SocketException.SUCCESS) {
-                final ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
-                JSONArray array = object.getJSONArray(Global.PRODUCT);
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject productObject = array.getJSONObject(i);
-                    ProductCardDto dto = new ProductCardDto(productObject);
-                    productCardDtos.add(dto);
-                }
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RequestManager.onGetMyProduct.onSuccess(productCardDtos);
-                    }
-                });
-            } else {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RequestManager.onGetMyProduct.onException(code);
-                    }
-                });
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void processGetMyProduct(JSONObject object) {
+//        try {
+//            final int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "내 제품 요청 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            if (code == SocketException.SUCCESS) {
+//                final ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
+//                JSONArray array = object.getJSONArray(Global.PRODUCT);
+//                for (int i = 0; i < array.length(); i++) {
+//                    JSONObject productObject = array.getJSONObject(i);
+//                    ProductCardDto dto = new ProductCardDto(productObject);
+//                    productCardDtos.add(dto);
+//                }
+//
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        RequestManager.onGetMyProduct.onSuccess(productCardDtos);
+//                    }
+//                });
+//            } else {
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        RequestManager.onGetMyProduct.onException(code);
+//                    }
+//                });
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 23. 제품 검색 응답
-    private void processSearchProduct(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            Log.d(TAG, "제품 검색 응답");
-            Log.d(TAG, "object = " + object);
+//    private void processSearchProduct(JSONObject object) {
+//        try {
+//            int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "제품 검색 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            Intent intent = new Intent(context, MainActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra(Global.COMMAND, Global.SEARCH_PRODUCT);
+//            intent.putExtra(Global.CODE, code);
+//
+//            if (code == SocketException.SUCCESS) {
+//                ArrayList<ProductCardDto> products = new ArrayList<>();
+//                JSONArray array = object.getJSONArray(Global.PRODUCT);
+//                for (int i = 0; i < array.length(); i++) {
+//                    JSONObject productJson = array.getJSONObject(i);
+//                    ProductCardDto dto = new ProductCardDto(productJson);
+//                    products.add(dto);
+//                }
+//                intent.putExtra(Global.PRODUCT_CARD, products);
+//            }
+//            context.startActivity(intent);
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.SEARCH_PRODUCT);
-            intent.putExtra(Global.CODE, code);
 
-            if (code == SocketException.SUCCESS) {
-                ArrayList<ProductCardDto> products = new ArrayList<>();
-                JSONArray array = object.getJSONArray(Global.PRODUCT);
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject productJson = array.getJSONObject(i);
-                    ProductCardDto dto = new ProductCardDto(productJson);
-                    products.add(dto);
-                }
-                intent.putExtra(Global.PRODUCT_CARD, products);
-            }
-            context.startActivity(intent);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    // TODO: 15. 11. 23. 제품 등록 응답
-    private void processInsertProduct(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            Log.d(TAG, "제품 등록 응답 object = " + object);
-
-            Intent intent = new Intent(context, AddProductsActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.INSERT_PRODUCT);
-            intent.putExtra(Global.CODE, code);
-
-            if (code == SocketException.SUCCESS) {
-                JSONArray array = object.getJSONArray(Global.PRODUCT);
-                ArrayList<ProductEntity> productEntities = new ArrayList<>();
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject productJson = array.getJSONObject(i);
-                    ProductEntity productEntity = new ProductEntity(productJson);
-                    productEntities.add(productEntity);
-                }
-                intent.putExtra(Global.PRODUCT, productEntities);
-            }
-
-            context.startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    // TODO: 15. 11. 23. 제품 등록 응답
+//    private void processInsertProduct(JSONObject object) {
+//        try {
+//            int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "제품 등록 응답 object = " + object);
+//
+//            Intent intent = new Intent(context, AddProductsActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra(Global.COMMAND, Global.INSERT_PRODUCT);
+//            intent.putExtra(Global.CODE, code);
+//
+//            if (code == SocketException.SUCCESS) {
+//                JSONArray array = object.getJSONArray(Global.PRODUCT);
+//                ArrayList<ProductEntity> productEntities = new ArrayList<>();
+//                for (int i = 0; i < array.length(); i++) {
+//                    JSONObject productJson = array.getJSONObject(i);
+//                    ProductEntity productEntity = new ProductEntity(productJson);
+//                    productEntities.add(productEntity);
+//                }
+//                intent.putExtra(Global.PRODUCT, productEntities);
+//            }
+//
+//            context.startActivity(intent);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 23. 타임라인 업데이트 응답
@@ -709,8 +690,12 @@ public class SocketIO {
                     timelineCardDto.setTimeline(timelineObject);
                     timelineCardDto.setUser(timelineObject);
                     timelineCardDto.setLike(timelineObject);
-                    timelineCardDto.setFile(timelineObject);
-                    timelineCardDtos.add(timelineCardDto);
+                    if (i != 0 && timelineCardDto.isSame(timelineCardDtos.get(i - 1))) {
+                        timelineCardDtos.get(i - 1).addFile(timelineObject);
+                    } else {
+                        timelineCardDto.setFile(timelineObject);
+                        timelineCardDtos.add(timelineCardDto);
+                    }
                 }
                 handler.post(new Runnable() {
                     @Override
@@ -1237,7 +1222,7 @@ public class SocketIO {
     }
 
     // TODO: 15. 11. 20. 제품검색
-    public void searchProduct(int schoolId, int sex, int category, int size, int position) {
+    public static void searchProduct(int schoolId, int sex, int category, int size, int position, final RequestManager.OnSearchProduct onSearchProduct) {
         Log.d(TAG, "제품 검색");
         try {
             JSONObject object = new JSONObject();
@@ -1248,23 +1233,94 @@ public class SocketIO {
             object.put(Global.POSITION, position);
             Log.d(TAG, "searchProduct Object = " + object);
             socket.emit(Global.SEARCH_PRODUCT, object);
+            socket.once(Global.SEARCH_PRODUCT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject reqObject = getJson(args);
+                        int code = getCode(reqObject);
+                        if (code == SocketException.SUCCESS) {
+                            final ArrayList<ProductCardDto> products = new ArrayList<>();
+                            JSONArray array = reqObject.getJSONArray(Global.PRODUCT);
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject productJson = array.getJSONObject(i);
+                                ProductCardDto dto = new ProductCardDto(productJson);
+                                products.add(dto);
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSearchProduct.onSuccess(products);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSearchProduct.onException();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
 
+    private static JSONObject getJson(Object... args) {
+        JSONObject object = (JSONObject) args[0];
+        return object;
+    }
+
+
+    private static int getCode(JSONObject object) throws JSONException{
+        return object.getInt(Global.CODE);
+    }
+
+
     // TODO: 15. 11. 20. 제품 등록
-    public void insertProduct(ArrayList<ProductCardDto> productCardDtos) {
+    public static void insertProduct(ProductCardDto productCardDto, final RequestManager.OnInsertProduct onInsertProduct) {
         try {
             Gson gson = new Gson();
-            String json = gson.toJson(productCardDtos);
-            JSONArray array = new JSONArray(json);
-
-            JSONObject object = new JSONObject();
-            object.put(Global.PRODUCT, array);
+            JSONObject object = new JSONObject(gson.toJson(productCardDto.productEntity));
             Log.d(TAG, "insertProduct Object = " + object);
             socket.emit(Global.INSERT_PRODUCT, object);
+            socket.once(Global.INSERT_PRODUCT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject reqObject = (JSONObject) args[0];
+                        int code = reqObject.getInt(Global.CODE);
+                        Log.d(TAG, "제품 등록 응답 = " + reqObject);
+
+                        if (code == SocketException.SUCCESS) {
+                            JSONObject productJson = reqObject.getJSONObject(Global.PRODUCT);
+                            final ProductCardDto resProductCardDto = new ProductCardDto();
+                            resProductCardDto.productEntity = new ProductEntity(productJson);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onInsertProduct.onSuccess(resProductCardDto);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onInsertProduct.onException();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1400,13 +1456,47 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 24. 내 제품 요청
-    public void getMyProduct(String donatorId, String receiverId) {
+    public static void getMyProduct(String userId, final RequestManager.OnGetMyProduct onGetMyProduct) {
         try {
             JSONObject object = new JSONObject();
-            object.put(TransactionEntity.PROPERTY_DONATOR_UUID, donatorId);
-            object.put(TransactionEntity.PROPERTY_RECEIVER_UUID, receiverId);
+            object.put(TransactionEntity.PROPERTY_DONATOR_UUID, userId);
+            object.put(TransactionEntity.PROPERTY_RECEIVER_UUID, userId);
             Log.d(TAG, "getMyProduct Object = " + object);
             socket.emit(Global.GET_MY_PRODUCT, object);
+            socket.once(Global.GET_MY_PRODUCT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject reqObject = (JSONObject) args[0];
+                        final int code = reqObject.getInt(Global.CODE);
+                        if (code == SocketException.SUCCESS) {
+                            final ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
+                            JSONArray array = reqObject.getJSONArray(Global.PRODUCT);
+                            Log.d(TAG, "array = " + array);
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject productObject = array.getJSONObject(i);
+                                ProductCardDto dto = new ProductCardDto(productObject);
+                                productCardDtos.add(dto);
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetMyProduct.onSuccess(productCardDtos);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetMyProduct.onException(code);
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1654,13 +1744,12 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 28.
-    public void insertTransaction(ArrayList<TransactionEntity> transactionEntities) {
+    public static void insertTransaction(TransactionEntity transactionEntity) {
         try {
             Gson gson = new Gson();
-            String json = gson.toJson(transactionEntities);
-            JSONArray array = new JSONArray(json);
-            Log.d(TAG, "insertTransaction Array = " + array.toString());
-            socket.emit(Global.INSERT_TRANSACTION, array);
+            JSONObject jsonObject = new JSONObject(gson.toJson(transactionEntity));
+            Log.d(TAG, "insertTransaction object = " + jsonObject);
+            socket.emit(Global.INSERT_TRANSACTION, jsonObject);
         } catch (JSONException e) {
             e.printStackTrace();
         }

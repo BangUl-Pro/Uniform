@@ -8,6 +8,9 @@ import android.util.Log;
 import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.dtos.TimelineCardDto;
 import com.ironfactory.donation.entities.LikeEntity;
+import com.ironfactory.donation.entities.TransactionEntity;
+import com.ironfactory.donation.entities.UserEntity;
+import com.ironfactory.donation.socketIo.SocketIO;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,7 +32,6 @@ public class RequestManager {
     public static OnInsertLike onInsertLike;
     public static OnGetAllTimeline onGetAllTimeline;
     public static OnGetMyTimeline onGetMyTimeline;
-    public static OnGetMyProduct onGetMyProduct;
     public static OnInsertTimeline onInsertTimeline;
     public static OnDeleteFile onDeleteFile;
 
@@ -47,7 +49,7 @@ public class RequestManager {
 
                         if (statusCode != HttpURLConnection.HTTP_OK) {
                             Log.d(TAG, "Http 연결 오류 = " + statusCode);
-                            onDownloadImage.onExecption();
+                            onDownloadImage.onException();
                             return;
                         }
 
@@ -55,7 +57,7 @@ public class RequestManager {
                         Bitmap bitmap = BitmapFactory.decodeStream(is);
 
                         FileOutputStream fos = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
 
                         onDownloadImage.onSuccess();
                         fos.close();
@@ -65,19 +67,54 @@ public class RequestManager {
                     conn.disconnect();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
-                    onDownloadImage.onExecption();
+                    onDownloadImage.onException();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    onDownloadImage.onExecption();
+                    onDownloadImage.onException();
                 }
             }
         }).start();
     }
 
 
+    public static void insertProducts(final ArrayList<ProductCardDto> productCardDtos, final OnInsertProduct onInsertProduct) {
+        for (ProductCardDto product :
+                productCardDtos) {
+            SocketIO.insertProduct(product, onInsertProduct);
+        }
+    }
+
+
+    public static void insertTransaction(final TransactionEntity transactionEntity) {
+        SocketIO.insertTransaction(transactionEntity);
+    }
+
+
+    public static void getMyProduct(UserEntity userEntity, RequestManager.OnGetMyProduct onGetMyProduct) {
+        SocketIO.getMyProduct(userEntity.id, onGetMyProduct);
+    }
+
+
+    public static void searchProduct(int schoolId, int sex, int category, int position, int size, OnSearchProduct onSearchProduct) {
+        SocketIO.searchProduct(schoolId, sex, category, position, size, onSearchProduct);
+    }
+
+
+    public interface OnSearchProduct {
+        void onSuccess(ArrayList<ProductCardDto> productCardDtos);
+        void onException();
+    }
+
+
+    public interface OnInsertProduct {
+        void onSuccess(ProductCardDto productCardDto);
+        void onException();
+    }
+
+
     public interface OnDownloadImage {
         void onSuccess();
-        void onExecption();
+        void onException();
     }
 
     public interface OnDeleteFile {

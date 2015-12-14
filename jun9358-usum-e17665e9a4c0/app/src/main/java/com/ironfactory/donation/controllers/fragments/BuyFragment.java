@@ -1,14 +1,11 @@
 package com.ironfactory.donation.controllers.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.malinskiy.superrecyclerview.OnMoreListener;
-import com.melnykov.fab.FloatingActionButton;
 import com.ironfactory.donation.Global;
 import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.activities.AddProductsActivity;
@@ -18,8 +15,10 @@ import com.ironfactory.donation.controllers.views.ProductSearchForm;
 import com.ironfactory.donation.controllers.views.ProductSearchSlidingLayer;
 import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.managers.AuthManager;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.slidingtab.SlidingBaseFragment;
-import com.ironfactory.donation.socketIo.SocketService;
+import com.malinskiy.superrecyclerview.OnMoreListener;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -146,14 +145,25 @@ public class BuyFragment extends SlidingBaseFragment {
         int category = form.getCategory();
         int size = form.getSize();
 
-        Intent intent = new Intent(getActivity(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.SEARCH_PRODUCT);
-        intent.putExtra(Global.SCHOOL_ID, schoolId);
-        intent.putExtra(Global.SEX, sex);
-        intent.putExtra(Global.CATEGORY, category);
-        intent.putExtra(Global.POSITION, position);
-        intent.putExtra(Global.SIZE, size);
-        getActivity().startService(intent);
+        RequestManager.searchProduct(schoolId, sex, category, position, size, new RequestManager.OnSearchProduct() {
+            @Override
+            public void onSuccess(ArrayList<ProductCardDto> productCardDtos) {
+                setProductCard(productCardDtos);
+            }
+
+            @Override
+            public void onException() {
+                setProductCard(null);
+            }
+        });
+//        Intent intent = new Intent(getActivity(), SocketService.class);
+//        intent.putExtra(Global.COMMAND, Global.SEARCH_PRODUCT);
+//        intent.putExtra(Global.SCHOOL_ID, schoolId);
+//        intent.putExtra(Global.SEX, sex);
+//        intent.putExtra(Global.CATEGORY, category);
+//        intent.putExtra(Global.POSITION, position);
+//        intent.putExtra(Global.SIZE, size);
+//        getActivity().startService(intent);
     }
 
 

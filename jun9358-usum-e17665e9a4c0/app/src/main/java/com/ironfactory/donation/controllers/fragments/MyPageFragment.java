@@ -1,6 +1,5 @@
 package com.ironfactory.donation.controllers.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +11,9 @@ import com.ironfactory.donation.controllers.activities.BaseActivity;
 import com.ironfactory.donation.controllers.views.ProductRecyclerView;
 import com.ironfactory.donation.controllers.views.ProfileView;
 import com.ironfactory.donation.dtos.ProductCardDto;
-import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.managers.AuthManager;
 import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.slidingtab.SlidingBaseFragment;
-import com.ironfactory.donation.socketIo.SocketService;
 
 import java.util.ArrayList;
 
@@ -70,13 +67,7 @@ public class MyPageFragment extends SlidingBaseFragment {
     private void initProfileView() {
         viewHolder.profileView.setUserEntity(Global.userEntity);
 
-        Intent intent = new Intent(getActivity(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.GET_MY_PRODUCT);
-        intent.putExtra(TransactionEntity.PROPERTY_DONATOR_UUID, Global.userEntity.id);
-        intent.putExtra(TransactionEntity.PROPERTY_RECEIVER_UUID, Global.userEntity.id);
-        getActivity().startService(intent);
-
-        RequestManager.onGetMyProduct = new RequestManager.OnGetMyProduct() {
+        RequestManager.getMyProduct(Global.userEntity, new RequestManager.OnGetMyProduct() {
             @Override
             public void onSuccess(ArrayList<ProductCardDto> productCardDtos) {
                 setProduct(productCardDtos);
@@ -86,7 +77,24 @@ public class MyPageFragment extends SlidingBaseFragment {
             public void onException(int code) {
 
             }
-        };
+        });
+
+//        Intent intent = new Intent(getActivity(), SocketService.class);
+//        intent.putExtra(Global.COMMAND, Global.GET_MY_PRODUCT);
+//        intent.putExtra(TransactionEntity.PROPERTY_DONATOR_UUID, Global.userEntity.id);
+//        intent.putExtra(TransactionEntity.PROPERTY_RECEIVER_UUID, Global.userEntity.id);
+//        getActivity().startService(intent);
+
+//        RequestManager.onGetMyProduct = new RequestManager.OnGetMyProduct() {
+//            @Override
+//            public void onSuccess(ArrayList<ProductCardDto> productCardDtos) {
+//            }
+//
+//            @Override
+//            public void onException(int code) {
+//
+//            }
+//        };
 
 //        RequestManager.getMyProductsInBackground(new RequestManager.TypedBaasioQueryCallback<ProductCardDto>() {
 //            @Override

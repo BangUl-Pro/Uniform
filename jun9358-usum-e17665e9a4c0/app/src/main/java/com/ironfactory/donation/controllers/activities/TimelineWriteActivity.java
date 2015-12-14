@@ -152,7 +152,7 @@ public class TimelineWriteActivity extends BaseActivity {
     private void setHandler() {
         RequestManager.onInsertTimeline = new RequestManager.OnInsertTimeline() {
             @Override
-            public void onSuccess(TimelineCardDto timelineCardDto) {
+            public void onSuccess(final TimelineCardDto timelineCardDto) {
                 // 성공
                 if (0 < selectedImageUris.size()) {
                     Uri selectedUri = selectedImageUris.get(0);
@@ -175,11 +175,13 @@ public class TimelineWriteActivity extends BaseActivity {
                                 Uri selectedUri = selectedImageUris.get(0);
                                 selectedImageUris.remove(0);
 
+                                String parentUuid = timelineCardDto.timelineEntity.id;
 //                            String parentUuid = baasioFile.getProperty("parent_uuid").asText();
+                                Log.d(TAG, "uri = " + selectedUri);
                                 Intent intent = new Intent(getApplicationContext(), SocketService.class);
                                 intent.putExtra(Global.COMMAND, Global.INSERT_FILE);
                                 intent.putExtra(Global.PRODUCT_ID, parentUuid);
-                                intent.putExtra(Global.PATH, selectedUri);
+                                intent.putExtra(Global.PATH, selectedUri.toString());
                                 startService(intent);
                             } else {
                                 onWriteAfter(true);

@@ -234,6 +234,31 @@ public class UserEntity implements Parcelable {
 //        return entity;
 //    }
 
+
+    public boolean isSame(UserEntity userEntity) {
+        if (!id.equals(userEntity.id))
+            return false;
+        if (!name.equals(userEntity.name))
+            return false;
+        if (hasExtraProfile != userEntity.hasExtraProfile)
+            return false;
+//        if (kakaotalk != userEntity.kakaotalk)
+//            return false;
+        if (!phone.equals(userEntity.phone))
+            return false;
+        if (!picture.equals(userEntity.picture))
+            return false;
+        if (!realName.equals(userEntity.realName))
+            return false;
+        if (schoolId != userEntity.schoolId)
+            return false;
+        if (sex != userEntity.sex)
+            return false;
+        if (userType != userEntity.userType)
+            return false;
+        return true;
+    }
+
     @Override
     public int describeContents() {
         return 0;

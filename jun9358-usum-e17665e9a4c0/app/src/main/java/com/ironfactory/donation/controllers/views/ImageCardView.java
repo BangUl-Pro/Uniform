@@ -77,11 +77,14 @@ public class ImageCardView extends CardView {
             @Override
             public void onSuccess() {
                 Log.d(TAG, "이미지 다운로드 성공");
+                imageUrl = BaseActivity.context.getCacheDir() + fileEntity.id;
+                loadImage(imageUrl);
             }
 
             @Override
-            public void onExecption() {
-                Log.d(TAG, "이미지 다운로드 실패");            }
+            public void onException() {
+                Log.d(TAG, "이미지 다운로드 실패");
+            }
         });
 
 

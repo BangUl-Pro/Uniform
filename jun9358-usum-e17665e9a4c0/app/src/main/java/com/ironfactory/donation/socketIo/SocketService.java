@@ -12,7 +12,6 @@ import com.ironfactory.donation.dtos.TimelineCardDto;
 import com.ironfactory.donation.dtos.TimelineCommentCardDto;
 import com.ironfactory.donation.entities.FileEntity;
 import com.ironfactory.donation.entities.LikeEntity;
-import com.ironfactory.donation.entities.ProductEntity;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.entities.UserEntity;
 
@@ -47,9 +46,6 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.GET_SCHOOL_RANKING)) {
                     // 학교 랭킹
                     processGetSchoolRanking(intent);
-                } else if (command.equals(Global.SEARCH_PRODUCT)) {
-                    // 제품 검색
-                    processSearchProduct(intent);
                 } else if (command.equals(Global.INSERT_PRODUCT)) {
                     // 제품 등록
                     processInsertProduct(intent);
@@ -77,9 +73,6 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.INSERT_TIMELINE)) {
                     // 타임라인 글 쓰기
                     processInsertTimeline(intent);
-                } else if (command.equals(Global.GET_MY_PRODUCT)) {
-                    // 내 글 쓰기
-                    processGetMyProduct(intent);
                 } else if (command.equals(Global.DELETE_COMMENT)) {
                     // 댓글 삭제
                     processDeleteComment(intent);
@@ -107,9 +100,6 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.GET_PRODUCT)) {
                     // 제품 요청
                     processGetProduct(intent);
-                } else if (command.equals(Global.INSERT_TRANSACTION)) {
-                    //
-                    processInsertTransaction(intent);
                 } else if (command.equals(Global.SIGN_IN_KAKAO)) {
                     // 카카오 로그인
                     processSignInKakao(intent);
@@ -129,23 +119,23 @@ public class SocketService extends Service {
 
 
     // TODO: 15. 11. 28.
-    private void processInsertTransaction(Intent intent) {
-        ArrayList<ProductEntity> productEntities = intent.getParcelableArrayListExtra(Global.PRODUCT);
-        ArrayList<TransactionEntity> transactionEntities = new ArrayList<>();
-
-        for (ProductEntity product :
-                productEntities) {
-            TransactionEntity transactionEntity = new TransactionEntity();
-            transactionEntity.status = Global.REGISTERED;
-            transactionEntity.donator_id = product.user_id;
-            transactionEntity.receiver_id = "";
-            transactionEntity.product_id = product.id;
-            transactionEntity.product_name = product.product_name;
-            transactionEntities.add(transactionEntity);
-        }
-
-        socketIO.insertTransaction(transactionEntities);
-    }
+//    private void processInsertTransaction(Intent intent) {
+//        ArrayList<ProductEntity> productEntities = intent.getParcelableArrayListExtra(Global.PRODUCT);
+//        ArrayList<TransactionEntity> transactionEntities = new ArrayList<>();
+//
+//        for (ProductEntity product :
+//                productEntities) {
+//            TransactionEntity transactionEntity = new TransactionEntity();
+//            transactionEntity.status = Global.REGISTERED;
+//            transactionEntity.donator_id = product.user_id;
+//            transactionEntity.receiver_id = "";
+//            transactionEntity.product_id = product.id;
+//            transactionEntity.product_name = product.product_name;
+//            transactionEntities.add(transactionEntity);
+//        }
+//
+//        socketIO.insertTransaction(transactionEntities);
+//    }
 
 
     // TODO: 15. 11. 25. 제품 요청
@@ -181,6 +171,7 @@ public class SocketService extends Service {
     private void processInsertFile(Intent intent) {
         String id = intent.getStringExtra(Global.PRODUCT_ID);
         String path = intent.getStringExtra(Global.PATH);
+        Log.d(TAG, "path = " + path);
         socketIO.insertFile(id, path);
     }
 
@@ -217,12 +208,12 @@ public class SocketService extends Service {
     }
 
 
-    // TODO: 15. 11. 24. 내 제품 요청
-    private void processGetMyProduct(Intent intent) {
-        String donatorId = intent.getStringExtra(TransactionEntity.PROPERTY_DONATOR_UUID);
-        String receiverId = intent.getStringExtra(TransactionEntity.PROPERTY_RECEIVER_UUID);
-        socketIO.getMyProduct(donatorId, receiverId);
-    }
+//    // TODO: 15. 11. 24. 내 제품 요청
+//    private void processGetMyProduct(Intent intent) {
+//        String donatorId = intent.getStringExtra(TransactionEntity.PROPERTY_DONATOR_UUID);
+//        String receiverId = intent.getStringExtra(TransactionEntity.PROPERTY_RECEIVER_UUID);
+//        socketIO.getMyProduct(donatorId, receiverId);
+//    }
 
 
     // TODO: 15. 11. 23. 타임라인 글 쓰기
@@ -298,20 +289,29 @@ public class SocketService extends Service {
     // TODO: 15. 11. 20. 제품 등록
     private void processInsertProduct(Intent intent) {
         ArrayList<ProductCardDto> productCardDtos = intent.getParcelableArrayListExtra(Global.PRODUCT_CARD);
-        socketIO.insertProduct(productCardDtos);
+//        socketIO.insertProduct(productCardDtos, new RequestManager.OnInsertProduct() {
+//            @Override
+//            public void onSuccess() {
+//            }
+//
+//            @Override
+//            public void onException() {
+//
+//            }
+//        });
     }
 
 
-    // TODO: 15. 11. 20. 제품검색
-    private void processSearchProduct(Intent intent) {
-        int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
-        int sex = intent.getIntExtra(Global.SEX, -1);
-        int category = intent.getIntExtra(Global.CATEGORY, -1);
-        int size = intent.getIntExtra(Global.SIZE, -1);
-        int position = intent.getIntExtra(Global.POSITION, -1);
-
-        socketIO.searchProduct(schoolId, sex, category, size, position);
-    }
+//    // TODO: 15. 11. 20. 제품검색
+//    private void processSearchProduct(Intent intent) {
+//        int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
+//        int sex = intent.getIntExtra(Global.SEX, -1);
+//        int category = intent.getIntExtra(Global.CATEGORY, -1);
+//        int size = intent.getIntExtra(Global.SIZE, -1);
+//        int position = intent.getIntExtra(Global.POSITION, -1);
+//
+//        socketIO.searchProduct(schoolId, sex, category, size, position);
+//    }
 
 
     // TODO: 15. 11. 20. 학교 랭킹 요청

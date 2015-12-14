@@ -136,23 +136,9 @@ public class MainActivity extends BaseActivity {
                     if (command.equals(Global.GET_SCHOOL_RANKING)) {
                         // 학교 랭킹 응답
                         processGetSchoolRanking(code, intent);
-                    } else if (command.equals(Global.SEARCH_PRODUCT)) {
-                        // 제품 검색
-                        processSearchProduct(code, intent);
                     }
                 }
             }
-        }
-    }
-
-
-    // TODO: 15. 11. 24. 제품 검색 응답
-    private void processSearchProduct(int code, Intent intent) {
-        if (code == SocketException.SUCCESS) {
-            ArrayList<ProductCardDto> productCardDtos = intent.getParcelableArrayListExtra(Global.PRODUCT_CARD);
-            buyFragment.setProductCard(productCardDtos);
-        } else {
-            buyFragment.setProductCard(null);
         }
     }
 

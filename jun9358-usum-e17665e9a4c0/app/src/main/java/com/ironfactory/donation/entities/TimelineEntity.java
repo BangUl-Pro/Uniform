@@ -138,6 +138,21 @@ public class TimelineEntity implements Parcelable {
 //        return entity;
 //    }
 
+    public boolean isSame(TimelineEntity timelineEntity) {
+        if (!id.equals(timelineEntity.id))
+            return false;
+        if (!user_id.equals(timelineEntity.user_id))
+            return false;
+        if (school_id != timelineEntity.school_id)
+            return false;
+        if (created != timelineEntity.created)
+            return false;
+        if (!contents.equals(timelineEntity.contents))
+            return false;
+        return true;
+    }
+
+
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(PROPERTY_ID, this.id);
