@@ -16,7 +16,6 @@ import com.ironfactory.donation.controllers.activities.LoginActivity;
 import com.ironfactory.donation.controllers.activities.MainActivity;
 import com.ironfactory.donation.controllers.activities.ProductDetailActivity;
 import com.ironfactory.donation.controllers.activities.SignUpActivity;
-import com.ironfactory.donation.controllers.activities.TimelineDetailActivity;
 import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.dtos.SchoolRanking;
 import com.ironfactory.donation.dtos.TimelineCardDto;
@@ -131,83 +130,17 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processUpdateUserProfile(object);
             }
-        }).on(Global.INSERT_TIMELINE_COMMENT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processInsertTimelineComment(object);
-            }
-        }).on(Global.GET_TIMELINE_COMMENT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processGetTimelineComment(object);
-            }
-        }).on(Global.GET_ALL_TIMELINE, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processGetAllTimeline(object);
-            }
-        }).on(Global.GET_MY_TIMELINE, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processGetMyTimeline(object);
-            }
-        }).on(Global.UPDATE_TIMELINE, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processUpdateTimeline(object);
-            }
-        }).on(Global.DELETE_COMMENT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processDeleteComment(object);
-            }
         }).on(Global.UPDATE_TRANSACTION_STATUS, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 JSONObject object = (JSONObject) args[0];
                 processUpdateTransactionStatus(object);
             }
-        }).on(Global.DELETE_PRODUCT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processDeleteProduct(object);
-            }
-//        }).on(Global.DELETE_FILE, new Emitter.Listener() {
-//            @Override
-//            public void call(Object... args) {
-//                JSONObject object = (JSONObject) args[0];
-//                processDeleteFile(object);
-//            }
         }).on(Global.UPDATE_PRODUCT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 JSONObject object = (JSONObject) args[0];
                 processUpdateProduct(object);
-            }
-        }).on(Global.DELETE_TIMELINE, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processDeleteTimeline(object);
-            }
-        }).on(Global.DELETE_LIKE, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processDeleteLike(object);
-            }
-        }).on(Global.INSERT_LIKE, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processInsertLike(object);
             }
         }).on(Global.GET_PRODUCT, new Emitter.Listener() {
             @Override
@@ -215,114 +148,90 @@ public class SocketIO {
                 JSONObject object = (JSONObject) args[0];
                 processGetProduct(object);
             }
-        }).on(Global.SIGN_IN_KAKAO, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processSignInKakao(object);
-            }
-        }).on(Global.GET_SCHOOL, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processGetSchool(object);
-            }
-        }).on(Global.INSERT_TIMELINE, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processInsertTimeline(object);
-            }
-//        }).on(Global.INSERT_FILE, new Emitter.Listener() {
-//            @Override
-//            public void call(Object... args) {
-//                JSONObject object = (JSONObject) args[0];
-//                processInsertFile(object);
-//            }
         });
     }
 
 
     // TODO: 15. 12. 2. 파일 입력 응답
-    private void processInsertFile(JSONObject object) {
-        try {
-            final int code = object.getInt(Global.CODE);
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (code == SocketException.SUCCESS)
-                        RequestManager.onInsertFile.onSuccess();
-                    else
-                        RequestManager.onInsertFile.onException(code);
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void processInsertFile(JSONObject object) {
+//        try {
+//            final int code = object.getInt(Global.CODE);
+//            handler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (code == SocketException.SUCCESS)
+//                        RequestManager.onInsertFile.onSuccess();
+//                    else
+//                        RequestManager.onInsertFile.onException(code);
+//                }
+//            });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 
-    // TODO: 15. 12. 2. 타임라인 글쓰기 응답
-    private void processInsertTimeline(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            Log.d(TAG, "타임라인 글쓰기 응답");
-            if (code == SocketException.SUCCESS) {
-                final JSONObject timelineJson = object.getJSONObject(Global.TIMELINE);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        TimelineCardDto dto = new TimelineCardDto(timelineJson);
-                        RequestManager.onInsertTimeline.onSuccess(dto);
-                    }
-                });
-            } else {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RequestManager.onInsertTimeline.onException();
-                    }
-                });
-            }
-            Log.d(TAG, "object = " + object);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    // TODO: 15. 12. 2. 타임라인 글쓰기 응답
+//    private void processInsertTimeline(JSONObject object) {
+//        try {
+//            int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "타임라인 글쓰기 응답");
+//            if (code == SocketException.SUCCESS) {
+//                final JSONObject timelineJson = object.getJSONObject(Global.TIMELINE);
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        TimelineCardDto dto = new TimelineCardDto(timelineJson);
+//                        RequestManager.onInsertTimeline.onSuccess(dto);
+//                    }
+//                });
+//            } else {
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        RequestManager.onInsertTimeline.onException();
+//                    }
+//                });
+//            }
+//            Log.d(TAG, "object = " + object);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 28. 카카오 로그인 응답
-    private void processSignInKakao(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            Log.d(TAG, "카카오 로그인 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent = new Intent(context, SignUpActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.SIGN_IN_KAKAO);
-            intent.putExtra(Global.CODE, code);
-            if (code == SocketException.SUCCESS) {
-                // 성공
-                JSONObject userObject = object.getJSONObject(Global.USER);
-//                String id = userObject.getString(Global.ID);
-//                String picture = userObject.getString(Global.PICTURE);
-//                String phone = userObject.getString(Global.PHONE);
-//                String realName = userObject.getString(Global.REAL_NAME);
-//                String name = userObject.getString(Global.NAME);
-//                String hasExtraProfile = userObject.getString(Global.HAS_EXTRA_PROFILE);
-//                int sex = userObject.getInt(Global.SEX);
-//                int userType = userObject.getInt(Global.USER_TYPE);
-//                int schoolId = userObject.getInt(Global.SCHOOL_ID);
-                UserEntity user = new UserEntity(userObject);
-                intent.putExtra(Global.USER, user);
-            }
-            context.startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void processSignInKakao(JSONObject object) {
+//        try {
+//            int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "카카오 로그인 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            Intent intent = new Intent(context, SignUpActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra(Global.COMMAND, Global.SIGN_IN_KAKAO);
+//            intent.putExtra(Global.CODE, code);
+//            if (code == SocketException.SUCCESS) {
+//                // 성공
+//                JSONObject userObject = object.getJSONObject(Global.USER);
+////                String id = userObject.getString(Global.ID);
+////                String picture = userObject.getString(Global.PICTURE);
+////                String phone = userObject.getString(Global.PHONE);
+////                String realName = userObject.getString(Global.REAL_NAME);
+////                String name = userObject.getString(Global.NAME);
+////                String hasExtraProfile = userObject.getString(Global.HAS_EXTRA_PROFILE);
+////                int sex = userObject.getInt(Global.SEX);
+////                int userType = userObject.getInt(Global.USER_TYPE);
+////                int schoolId = userObject.getInt(Global.SCHOOL_ID);
+//                UserEntity user = new UserEntity(userObject);
+//                intent.putExtra(Global.USER, user);
+//            }
+//            context.startActivity(intent);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 25. 제품 요청 응답
@@ -357,82 +266,82 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 좋아요
-    private void processInsertLike(JSONObject object) {
-        try {
-            final int code = object.getInt(Global.CODE);
-            Log.d(TAG, "좋아요 응답");
-            Log.d(TAG, "object = " + object);
-
-            if (code == SocketException.SUCCESS) {
-                JSONObject likeObject = object.getJSONObject(Global.LIKE);
-                final LikeEntity likeEntity = new LikeEntity(likeObject);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RequestManager.onInsertLike.onSuccess(likeEntity);
-                    }
-                });
-            } else {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RequestManager.onInsertLike.onException(code);
-                    }
-                });
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void processInsertLike(JSONObject object) {
+//        try {
+//            final int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "좋아요 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            if (code == SocketException.SUCCESS) {
+//                JSONObject likeObject = object.getJSONObject(Global.LIKE);
+//                final LikeEntity likeEntity = new LikeEntity(likeObject);
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        RequestManager.onInsertLike.onSuccess(likeEntity);
+//                    }
+//                });
+//            } else {
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        RequestManager.onInsertLike.onException(code);
+//                    }
+//                });
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 25. 좋아요 삭제
-    private void processDeleteLike(JSONObject object) {
-        try {
-            final int code = object.getInt(Global.CODE);
-            Log.d(TAG, "좋아요 삭제 응답");
-            Log.d(TAG, "object = " + object);
-
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (code == SocketException.SUCCESS)
-                        RequestManager.onDeleteLike.onSuccess();
-                    else
-                        RequestManager.onDeleteLike.onException(code);
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void processDeleteLike(JSONObject object) {
+//        try {
+//            final int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "좋아요 삭제 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            handler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (code == SocketException.SUCCESS)
+//                        RequestManager.onDeleteLike.onSuccess();
+//                    else
+//                        RequestManager.onDeleteLike.onException(code);
+//                }
+//            });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 25. 타임라인 지우기
-    private void processDeleteTimeline(JSONObject object) {
-        try {
-            final int code = object.getInt(Global.CODE);
-            Log.d(TAG, "타임라인 지우기 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent = new Intent(context, TimelineDetailActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.DELETE_TIMELINE);
-            intent.putExtra(Global.CODE, code);
-//            context.startActivity(intent);
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (code == SocketException.SUCCESS)
-                        RequestManager.onDeleteTimeline.onSuccess();
-                    else
-                        RequestManager.onDeleteTimeline.onException(code);
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void processDeleteTimeline(JSONObject object) {
+//        try {
+//            final int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "타임라인 지우기 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            Intent intent = new Intent(context, TimelineDetailActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra(Global.COMMAND, Global.DELETE_TIMELINE);
+//            intent.putExtra(Global.CODE, code);
+////            context.startActivity(intent);
+//            handler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (code == SocketException.SUCCESS)
+//                        RequestManager.onDeleteTimeline.onSuccess();
+//                    else
+//                        RequestManager.onDeleteTimeline.onException(code);
+//                }
+//            });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 25. 제품 업데이트
@@ -475,22 +384,22 @@ public class SocketIO {
 //    }
 
 
-    // TODO: 15. 11. 25. 제품 삭제 응답
-    private void processDeleteProduct(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            Log.d(TAG, "제품 삭제 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent = new Intent(context, ProductDetailActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.DELETE_PRODUCT);
-            intent.putExtra(Global.CODE, code);
-            context.startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    // TODO: 15. 11. 25. 제품 삭제 응답
+//    private void processDeleteProduct(JSONObject object) {
+//        try {
+//            int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "제품 삭제 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            Intent intent = new Intent(context, ProductDetailActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra(Global.COMMAND, Global.DELETE_PRODUCT);
+//            intent.putExtra(Global.CODE, code);
+//            context.startActivity(intent);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     private void processUpdateTransactionStatus(JSONObject object) {
@@ -520,35 +429,35 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 24. 댓글 삭제
-    private void processDeleteComment(JSONObject object) {
-        try {
-            final int code = object.getInt(Global.CODE);
-            int from = object.getInt(Global.FROM);
-            Log.d(TAG, "댓글 삭제 응답");
-            Log.d(TAG, "object = " + object);
-
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (code == SocketException.SUCCESS)
-                        RequestManager.onDeleteComment.onSuccess();
-                    else
-                        RequestManager.onDeleteComment.onException();
-                }
-            });
-
-            Intent intent;
-            if (from == 1)
-                intent = new Intent(context, ProductDetailActivity.class);
-            else
-                intent = new Intent(context, TimelineDetailActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.CODE, code);
-            context.startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void processDeleteComment(JSONObject object) {
+//        try {
+//            final int code = object.getInt(Global.CODE);
+//            int from = object.getInt(Global.FROM);
+//            Log.d(TAG, "댓글 삭제 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            handler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (code == SocketException.SUCCESS)
+//                        RequestManager.onDeleteComment.onSuccess();
+//                    else
+//                        RequestManager.onDeleteComment.onException();
+//                }
+//            });
+//
+//            Intent intent;
+//            if (from == 1)
+//                intent = new Intent(context, ProductDetailActivity.class);
+//            else
+//                intent = new Intent(context, TimelineDetailActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra(Global.CODE, code);
+//            context.startActivity(intent);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 24. 내 제품 요청 응답
@@ -646,174 +555,141 @@ public class SocketIO {
 //    }
 
 
-    // TODO: 15. 11. 23. 타임라인 업데이트 응답
-    private void processUpdateTimeline(JSONObject object) {
-        try {
-            final int code = object.getInt(Global.CODE);
-            Log.d(TAG, "타임라인 업데이트 object = " + object);
-
-//            Intent intent = new Intent(context, TimelineWriteActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//            intent.putExtra(Global.COMMAND, Global.UPDATE_TIMELINE);
-//            intent.putExtra(Global.CODE, code);
-//            context.startActivity(intent);
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (code == SocketException.SUCCESS) {
-                        RequestManager.onInsertTimeline.onSuccess(null);
-                    } else {
-                        RequestManager.onInsertTimeline.onException();
-                    }
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    // TODO: 15. 11. 23. 타임라인 업데이트 응답
+//    private void processUpdateTimeline(JSONObject object) {
+//        try {
+//            final int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "타임라인 업데이트 object = " + object);
+//
+////            Intent intent = new Intent(context, TimelineWriteActivity.class);
+////            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+////            intent.putExtra(Global.COMMAND, Global.UPDATE_TIMELINE);
+////            intent.putExtra(Global.CODE, code);
+////            context.startActivity(intent);
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 23. 타임라인 글 모두 불러오기 응답
-    private void processGetAllTimeline(JSONObject object) {
-        try {
-            final int code = object.getInt(Global.CODE);
-            Log.d(TAG, "타임라인 글 모두 불러오기 응답");
-            Log.d(TAG, "object = " + object);
-
-            if (code == SocketException.SUCCESS) {
-                // 성공
-                final ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
-                JSONArray timelineArray = object.getJSONArray(Global.TIMELINE);
-                for (int i = 0; i < timelineArray.length(); i++) {
-                    JSONObject timelineObject = timelineArray.getJSONObject(i);
-                    TimelineCardDto timelineCardDto = new TimelineCardDto();
-                    timelineCardDto.setTimeline(timelineObject);
-                    timelineCardDto.setUser(timelineObject);
-                    timelineCardDto.setLike(timelineObject);
-                    if (i != 0 && timelineCardDto.isSame(timelineCardDtos.get(i - 1))) {
-                        timelineCardDtos.get(i - 1).addFile(timelineObject);
-                    } else {
-                        timelineCardDto.setFile(timelineObject);
-                        timelineCardDtos.add(timelineCardDto);
-                    }
-                }
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RequestManager.onGetAllTimeline.onSuccess(timelineCardDtos);
-                    }
-                });
-            } else {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RequestManager.onGetAllTimeline.onException(code);
-                    }
-                });
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void processGetAllTimeline(JSONObject object) {
+//        try {
+//            final int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "타임라인 글 모두 불러오기 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            if (code == SocketException.SUCCESS) {
+//                // 성공
+//                final ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
+//                JSONArray timelineArray = object.getJSONArray(Global.TIMELINE);
+//                for (int i = 0; i < timelineArray.length(); i++) {
+//                    JSONObject timelineObject = timelineArray.getJSONObject(i);
+//                    TimelineCardDto timelineCardDto = new TimelineCardDto();
+//                    timelineCardDto.setTimeline(timelineObject);
+//                    timelineCardDto.setUser(timelineObject);
+//                    timelineCardDto.setLike(timelineObject);
+//                    if (i != 0 && timelineCardDto.isSame(timelineCardDtos.get(i - 1))) {
+//                        timelineCardDtos.get(i - 1).addFile(timelineObject);
+//                    } else {
+//                        timelineCardDto.setFile(timelineObject);
+//                        timelineCardDtos.add(timelineCardDto);
+//                    }
+//                }
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        RequestManager.onGetAllTimeline.onSuccess(timelineCardDtos);
+//                    }
+//                });
+//            } else {
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        RequestManager.onGetAllTimeline.onException(code);
+//                    }
+//                });
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 23. 타임라인 내 글 불러오기 응답
-    private void processGetMyTimeline(JSONObject object) {
-        try {
-            final int code = object.getInt(Global.CODE);
-            Log.d(TAG, "타임라인 내 글 불러오기 응답");
-            Log.d(TAG, "object = " + object);
-
-            if (code == SocketException.SUCCESS) {
-                // 성공
-                final ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
-                JSONArray timelineArray = object.getJSONArray(Global.TIMELINE);
-                for (int i = 0; i < timelineArray.length(); i++) {
-                    JSONObject timelineObject = timelineArray.getJSONObject(i);
-                    TimelineCardDto timelineCardDto = new TimelineCardDto();
-                    timelineCardDto.setTimeline(timelineObject);
-                    timelineCardDto.setUser(timelineObject);
-                    timelineCardDto.setLike(timelineObject);
-                    timelineCardDto.setFile(timelineObject);
-                    timelineCardDtos.add(timelineCardDto);
-                }
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RequestManager.onGetMyTimeline.onSuccess(timelineCardDtos);
-                    }
-                });
-            } else {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RequestManager.onGetMyTimeline.onException(code);
-                    }
-                });
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void processGetMyTimeline(JSONObject object) {
+//        try {
+//            final int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "타임라인 내 글 불러오기 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            if (code == SocketException.SUCCESS) {
+//                // 성공
+//                final ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
+//                JSONArray timelineArray = object.getJSONArray(Global.TIMELINE);
+//                for (int i = 0; i < timelineArray.length(); i++) {
+//                    JSONObject timelineObject = timelineArray.getJSONObject(i);
+//                    TimelineCardDto timelineCardDto = new TimelineCardDto();
+//                    timelineCardDto.setTimeline(timelineObject);
+//                    timelineCardDto.setUser(timelineObject);
+//                    timelineCardDto.setLike(timelineObject);
+//                    timelineCardDto.setFile(timelineObject);
+//                    timelineCardDtos.add(timelineCardDto);
+//                }
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        RequestManager.onGetMyTimeline.onSuccess(timelineCardDtos);
+//                    }
+//                });
+//            } else {
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        RequestManager.onGetMyTimeline.onException(code);
+//                    }
+//                });
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 23. 타임라인 글 댓글 불러오기 응답
-    private void processGetTimelineComment(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            Log.d(TAG, "타임라인 글 댓글 불러오기 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent;
-            if (object.getInt(Global.FROM) == 1 || object.getInt(Global.FROM) == 3)
-                intent = new Intent(context, ProductDetailActivity.class);
-            else
-                intent = new Intent(context, TimelineDetailActivity.class);
-            intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
-            intent.putExtra(Global.CODE, code);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            if (code == SocketException.SUCCESS) {
-                // 성공
-                ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
-                JSONArray timelineCommentArray = object.getJSONArray(Global.TIMELINE_COMMENT);
-                for (int i = 0; i < timelineCommentArray.length(); i++) {
-                    JSONObject timelineCommentObject = timelineCommentArray.getJSONObject(i);
-                    TimelineCommentCardDto comment = new TimelineCommentCardDto(timelineCommentObject);
-                    timelineCommentCardDtos.add(comment);
-                }
-                intent.putExtra(Global.TIMELINE_COMMENT, timelineCommentCardDtos);
-            }
-
-            context.startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    // TODO: 15. 11. 23. 타임라인 게시글에 댓글 달기 응답
-    private void processInsertTimelineComment(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            int from = object.getInt(Global.FROM);
-            Log.d(TAG, "타임라인 게시글에 댓글달기 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent;
-            if (from == 1)
-                intent = new Intent(context, ProductDetailActivity.class);
-            else
-                intent = new Intent(context, TimelineDetailActivity.class);
-
-            intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE_COMMENT);
-            intent.putExtra(Global.CODE, code);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void processGetTimelineComment(JSONObject object) {
+//        try {
+//            int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "타임라인 글 댓글 불러오기 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            Intent intent;
+//            if (object.getInt(Global.FROM) == 1 || object.getInt(Global.FROM) == 3)
+//                intent = new Intent(context, ProductDetailActivity.class);
+//            else
+//                intent = new Intent(context, TimelineDetailActivity.class);
+//            intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
+//            intent.putExtra(Global.CODE, code);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//            if (code == SocketException.SUCCESS) {
+//                // 성공
+//                ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
+//                JSONArray timelineCommentArray = object.getJSONArray(Global.TIMELINE_COMMENT);
+//                for (int i = 0; i < timelineCommentArray.length(); i++) {
+//                    JSONObject timelineCommentObject = timelineCommentArray.getJSONObject(i);
+//                    TimelineCommentCardDto comment = new TimelineCommentCardDto(timelineCommentObject);
+//                    timelineCommentCardDtos.add(comment);
+//                }
+//                intent.putExtra(Global.TIMELINE_COMMENT, timelineCommentCardDtos);
+//            }
+//
+//            context.startActivity(intent);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     // TODO: 15. 11. 21. 유저 프로필 업데이트 응답
@@ -937,34 +813,34 @@ public class SocketIO {
     /**
      * TODO: 학교 정보
      * */
-    private void processGetSchool(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            Log.d(TAG, "학교 정보 요청 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent = new Intent(context, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.GET_SCHOOL);
-            intent.putExtra(Global.CODE, 200);
-
-            if (code == SocketException.SUCCESS) {
-                JSONArray array = object.getJSONArray(Global.SCHOOL);
-                ArrayList<SchoolEntity> schoolEntities = new ArrayList<>();
-
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject schoolObject = array.getJSONObject(i);
-                    schoolEntities.add(new SchoolEntity(schoolObject));
-                }
-                intent.putExtra(Global.SCHOOL, schoolEntities);
-            }
-
-            context.startActivity(intent);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void processGetSchool(JSONObject object) {
+//        try {
+//            int code = object.getInt(Global.CODE);
+//            Log.d(TAG, "학교 정보 요청 응답");
+//            Log.d(TAG, "object = " + object);
+//
+//            Intent intent = new Intent(context, LoginActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra(Global.COMMAND, Global.GET_SCHOOL);
+//            intent.putExtra(Global.CODE, 200);
+//
+//            if (code == SocketException.SUCCESS) {
+//                JSONArray array = object.getJSONArray(Global.SCHOOL);
+//                ArrayList<SchoolEntity> schoolEntities = new ArrayList<>();
+//
+//                for (int i = 0; i < array.length(); i++) {
+//                    JSONObject schoolObject = array.getJSONObject(i);
+//                    schoolEntities.add(new SchoolEntity(schoolObject));
+//                }
+//                intent.putExtra(Global.SCHOOL, schoolEntities);
+//            }
+//
+//            context.startActivity(intent);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     /**
@@ -1052,9 +928,43 @@ public class SocketIO {
     /**
      * TODO: 학교 정보 요청
      * */
-    public void getSchool() {
+    public static void getSchool(final RequestManager.OnGetSchool onGetSchool) {
         Log.d(TAG, "학교 정보 요청");
         socket.emit(Global.GET_SCHOOL, "");
+        socket.once(Global.GET_SCHOOL, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    JSONObject resObject = getJson(args);
+                    final int code = getCode(resObject);
+
+                    if (code == SocketException.SUCCESS) {
+                        JSONArray array = resObject.getJSONArray(Global.SCHOOL);
+                        final ArrayList<SchoolEntity> schoolEntities = new ArrayList<>();
+
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject schoolObject = array.getJSONObject(i);
+                            schoolEntities.add(new SchoolEntity(schoolObject));
+                        }
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onGetSchool.onSuccess(schoolEntities);
+                            }
+                        });
+                    } else {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onGetSchool.onException();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 //        insertSchool();
     }
 
@@ -1245,11 +1155,19 @@ public class SocketIO {
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject productJson = array.getJSONObject(i);
                                 ProductCardDto dto = new ProductCardDto(productJson);
+                                if (i != 0) {
+                                    ProductCardDto curDto = products.get(products.size() - 1);
+                                    if (curDto.isSame(dto)) {
+                                        curDto.addFile(dto.fileEntities.get(0));
+                                        continue;
+                                    }
+                                }
                                 products.add(dto);
                             }
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    Log.d(TAG, "제품 검색 크기 = " + products.size());
                                     onSearchProduct.onSuccess(products);
                                 }
                             });
@@ -1342,15 +1260,35 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 게시글에 댓글 달기
-    public void insertTimelineComment(String timelineItemId, String commentContent, int from, String userId) {
+    public static void insertTimelineComment(String timelineItemId, String commentContent, String userId, final RequestManager.OnInsertTimelineComment onInsertTimelineComment) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
             object.put(Global.COMMENT_CONTENT, commentContent);
             object.put(Global.USER_ID, userId);
-            object.put(Global.FROM, from);
             Log.d(TAG, "insertTimelineComment Object = " + object);
             socket.emit(Global.INSERT_TIMELINE_COMMENT, object);
+            socket.once(Global.INSERT_TIMELINE_COMMENT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (code == SocketException.SUCCESS) {
+                                    onInsertTimelineComment.onSuccess();
+                                } else {
+                                    onInsertTimelineComment.onException();
+                                }
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1358,13 +1296,49 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 게시글 댓글 불러오기
-    public void getTimelineComment(String id, int from) {
+    public static void getTimelineComment(String timelineId, final RequestManager.OnGetTimelineComment onGetTimelineComment) {
         try {
             JSONObject object = new JSONObject();
-            object.put(Global.ID, id);
-            object.put(Global.FROM, from);
+            object.put(Global.ID, timelineId);
             Log.d(TAG, "getTimelineComment Object = " + object);
             socket.emit(Global.GET_TIMELINE_COMMENT, object);
+            socket.once(Global.GET_TIMELINE_COMMENT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            final ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
+                            JSONArray timelineCommentArray = resObject.getJSONArray(Global.TIMELINE_COMMENT);
+                            for (int i = 0; i < timelineCommentArray.length(); i++) {
+                                JSONObject timelineCommentObject = timelineCommentArray.getJSONObject(i);
+                                TimelineCommentCardDto comment = new TimelineCommentCardDto(timelineCommentObject);
+                                timelineCommentCardDtos.add(comment);
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetTimelineComment.onSuccess(timelineCommentCardDtos);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetTimelineComment.onException();
+                                }
+                            });
+                        }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1372,13 +1346,56 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 글 모두 불러오기
-    public void getAllTimeline(int schoolId, String userId) {
+    public static void getAllTimeline(int schoolId, String userId, final RequestManager.OnGetAllTimeline onGetAllTimeline) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.SCHOOL_ID, schoolId);
             object.put(Global.USER_ID, userId);
             Log.d(TAG, "getAllTimeline Object = " + object);
             socket.emit(Global.GET_ALL_TIMELINE, object);
+            socket.once(Global.GET_ALL_TIMELINE, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            final ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
+                            JSONArray timelineArray = resObject.getJSONArray(Global.TIMELINE);
+                            for (int i = 0; i < timelineArray.length(); i++) {
+                                JSONObject timelineObject = timelineArray.getJSONObject(i);
+                                TimelineCardDto timelineCardDto = new TimelineCardDto();
+                                timelineCardDto.setTimeline(timelineObject);
+                                timelineCardDto.setUser(timelineObject);
+                                timelineCardDto.setLike(timelineObject);
+                                if (i != 0 && timelineCardDto.isSame(timelineCardDtos.get(i - 1))) {
+                                    timelineCardDtos.get(i - 1).addFile(timelineObject);
+                                } else {
+                                    timelineCardDto.setFile(timelineObject);
+                                    timelineCardDtos.add(timelineCardDto);
+                                }
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetAllTimeline.onSuccess(timelineCardDtos);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetAllTimeline.onException(code);
+                                }
+                            });
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1386,13 +1403,52 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 내 글 불러오기
-    public void getMyTimeline(int schoolId, String userId) {
+    public static void getMyTimeline(int schoolId, String userId, final RequestManager.OnGetMyTimeline onGetMyTimeline) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.SCHOOL_ID, schoolId);
             object.put(Global.USER_ID, userId);
             Log.d(TAG, "getMyTimeline Object = " + object);
             socket.emit(Global.GET_MY_TIMELINE, object);
+            socket.once(Global.GET_MY_TIMELINE, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            final ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
+                            JSONArray timelineArray = resObject.getJSONArray(Global.TIMELINE);
+                            for (int i = 0; i < timelineArray.length(); i++) {
+                                JSONObject timelineObject = timelineArray.getJSONObject(i);
+                                TimelineCardDto timelineCardDto = new TimelineCardDto();
+                                timelineCardDto.setTimeline(timelineObject);
+                                timelineCardDto.setUser(timelineObject);
+                                timelineCardDto.setLike(timelineObject);
+                                timelineCardDto.setFile(timelineObject);
+                                timelineCardDtos.add(timelineCardDto);
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetMyTimeline.onSuccess(timelineCardDtos);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetMyTimeline.onException(code);
+                                }
+                            });
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1400,7 +1456,7 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 글 쓰기
-    public void insertTimeline(int schoolId, String timelineContent, String id, ArrayList<Uri> files) {
+    public static void insertTimeline(int schoolId, String timelineContent, String id, ArrayList<Uri> files, final RequestManager.OnInsertTimeline onInsertTimeline) {
         try {
             Log.d(TAG, "schoolId = " + schoolId);
             Log.d(TAG, "timelineContent = " + timelineContent);
@@ -1414,6 +1470,34 @@ public class SocketIO {
             object.put(Global.FILE, array);
             Log.d(TAG, "insertTimeline Object = " + object);
             socket.emit(Global.INSERT_TIMELINE, object);
+            socket.once(Global.INSERT_TIMELINE, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        if (code == SocketException.SUCCESS) {
+                            final JSONObject timelineJson = resObject.getJSONObject(Global.TIMELINE);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TimelineCardDto dto = new TimelineCardDto(timelineJson);
+                                    onInsertTimeline.onSuccess(dto);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onInsertTimeline.onException();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1421,11 +1505,17 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 파일 지우기
-    public void deleteFile(ArrayList<FileEntity> files) {
+    public static void deleteFile(ArrayList<FileEntity> files, final RequestManager.OnDeleteFile onDeleteFile) {
         try {
             for (int i = 0; i < files.size(); i++) {
                 Log.d(TAG, i + "번째 id = " + files.get(i).id);
                 Log.d(TAG, i + "번째 parent_uuid = " + files.get(i).parent_uuid);
+
+                if (files.get(i).id == null || files.get(i).id.equals(null))
+                    return;
+
+                if (files.get(i).parent_uuid == null || files.get(i).parent_uuid.equals(null))
+                    return;
             }
 
             Gson gson = new Gson();
@@ -1435,6 +1525,27 @@ public class SocketIO {
             object.put(Global.FILE, array);
             Log.d(TAG, "deleteFile Object = " + object);
             socket.emit(Global.DELETE_FILE, object);
+            socket.once(Global.DELETE_FILE, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (code == SocketException.SUCCESS) {
+                                    onDeleteFile.onSuccess();
+                                } else {
+                                    onDeleteFile.onException();
+                                }
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1442,13 +1553,41 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 업데이트
-    public void updateTimeline(TimelineCardDto timelineCardDto) {
+    public static void updateTimeline(TimelineCardDto timelineCardDto, final RequestManager.OnInsertTimeline onInsertTimeline) {
         try {
             Gson gson = new Gson();
             String json = gson.toJson(timelineCardDto);
             JSONObject object = new JSONObject(json);
             Log.d(TAG, "updateTimeline Object = " + object);
             socket.emit(Global.UPDATE_TIMELINE, object);
+            socket.once(Global.UPDATE_TIMELINE, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        final JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        if (code == SocketException.SUCCESS) {
+                            JSONObject timelineJson = resObject.getJSONObject(Global.TIMELINE);
+                            final TimelineCardDto resTimelineCardDto = new TimelineCardDto(timelineJson);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onInsertTimeline.onSuccess(resTimelineCardDto);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onInsertTimeline.onException();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1472,12 +1611,19 @@ public class SocketIO {
                         if (code == SocketException.SUCCESS) {
                             final ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
                             JSONArray array = reqObject.getJSONArray(Global.PRODUCT);
-                            Log.d(TAG, "array = " + array);
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject productObject = array.getJSONObject(i);
                                 ProductCardDto dto = new ProductCardDto(productObject);
+                                if (i != 0) {
+                                    ProductCardDto curDto = productCardDtos.get(productCardDtos.size() - 1);
+                                    if (curDto.isSame(dto)) {
+                                        curDto.addFile(dto.fileEntities.get(0));
+                                        continue;
+                                    }
+                                }
                                 productCardDtos.add(dto);
                             }
+
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1504,15 +1650,35 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 24. 댓글 삭제 요청
-    public void deleteComment(TimelineCommentCardDto timelineCommentCardDto, int from) {
+    public static void deleteComment(TimelineCommentCardDto timelineCommentCardDto, final RequestManager.OnDeleteComment onDeleteComment) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.ID, timelineCommentCardDto.commentEntity.id);
             object.put(Global.TIMELINE_ITEM_ID, timelineCommentCardDto.commentEntity.timeline_item_id);
             object.put(Global.USER_ID, timelineCommentCardDto.commentEntity.user_id);
-            object.put(Global.FROM, from);
             Log.d(TAG, "deleteComment Object = " + object);
             socket.emit(Global.DELETE_COMMENT, object);
+            socket.once(Global.DELETE_COMMENT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (code == SocketException.SUCCESS)
+                                    onDeleteComment.onSuccess();
+                                else
+                                    onDeleteComment.onException();
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1537,12 +1703,33 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 제품 삭제
-    public void deleteProduct(ProductCardDto productCardDto) {
+    public static void deleteProduct(String productId, final RequestManager.OnDeleteProduct onDeleteProduct) {
         try {
             JSONObject object = new JSONObject();
-            object.put(Global.PRODUCT_ID, productCardDto.productEntity.id);
+            object.put(Global.PRODUCT_ID, productId);
             Log.d(TAG, "deleteProduct Object = " + object);
             socket.emit(Global.DELETE_PRODUCT, object);
+            socket.once(Global.DELETE_PRODUCT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (code == SocketException.SUCCESS) {
+                                    onDeleteProduct.onSuccess();
+                                } else {
+                                    onDeleteProduct.onException();
+                                }
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1550,13 +1737,34 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 제품 수정
-    public void updateProduct(ProductCardDto productCardDto) {
+    public static void updateProduct(ProductCardDto productCardDto, final RequestManager.OnUpdateProduct onUpdateProduct) {
         try {
             Gson gson = new Gson();
             String json = gson.toJson(productCardDto);
             JSONObject object = new JSONObject(json);
             Log.d(TAG, "updateProduct Object = " + object);
             socket.emit(Global.UPDATE_PRODUCT, object);
+            socket.once(Global.UPDATE_PRODUCT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (code == SocketException.SUCCESS) {
+                                    onUpdateProduct.onSuccess();
+                                } else {
+                                    onUpdateProduct.onException();
+                                }
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1564,14 +1772,14 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 파일 입력
-    public void insertFile(String id, String path) {
+    public static void insertFile(String id, String path, RequestManager.OnInsertFile onInsertFile) {
 //        try {
             String serverUrl = SERVER_URL + "/api/photo";
 
             Log.d(TAG, "productId = " + id);
             Log.d(TAG, "path = " + path);
 
-            upload(serverUrl, path, id);
+            upload(serverUrl, path, id, onInsertFile);
 
 //            object.put(Global.PRODUCT_ID, id);
 //            object.put(Global.PATH, path);
@@ -1584,7 +1792,7 @@ public class SocketIO {
     }
 
 
-    private void upload(final String serverUrl, final String fileUrl, final String id) {
+    private static void upload(final String serverUrl, final String fileUrl, final String id, final RequestManager.OnInsertFile onInsertFile) {
         Log.d(TAG, "fileUrl = " + fileUrl);
         new Thread(new Runnable() {
             @Override
@@ -1662,14 +1870,14 @@ public class SocketIO {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                RequestManager.onInsertFile.onSuccess();
+                                onInsertFile.onSuccess();
                             }
                         });
                     } else {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                RequestManager.onInsertFile.onException(serverResCode);
+                                onInsertFile.onException(serverResCode);
                             }
                         });
                     }
@@ -1687,7 +1895,7 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 타임라인 지우기
-    public void deleteTimeline(TimelineCardDto timelineCardDto) {
+    public static void deleteTimeline(TimelineCardDto timelineCardDto, final RequestManager.OnDeleteTimeline onDeleteTimeline) {
         String timelineId = timelineCardDto.timelineEntity.id;
         String userId = timelineCardDto.userEntity.id;
 
@@ -1697,6 +1905,27 @@ public class SocketIO {
             object.put(Global.USER_ID, userId);
             Log.d(TAG, "deleteTimeLine Object = " + object);
             socket.emit(Global.DELETE_TIMELINE, object);
+            socket.once(Global.DELETE_TIMELINE, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (code == SocketException.SUCCESS)
+                                    onDeleteTimeline.onSuccess();
+                                else
+                                    onDeleteTimeline.onException(code);
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1704,13 +1933,34 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 좋아요 지우기
-    public void deleteLike(LikeEntity likeEntity) {
+    public static void deleteLike(LikeEntity likeEntity, final RequestManager.OnDeleteLike onDeleteLike) {
         try {
             Gson gson = new Gson();
             String json = gson.toJson(likeEntity);
             JSONObject object = new JSONObject(json);
             Log.d(TAG, "deleteLike Object = " + object);
             socket.emit(Global.DELETE_LIKE, object);
+            socket.once(Global.DELETE_LIKE, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (code == SocketException.SUCCESS)
+                                    onDeleteLike.onSuccess();
+                                else
+                                    onDeleteLike.onException(code);
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1718,13 +1968,42 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 좋아요
-    public void insertLike(String timelineItemId, String userId) {
+    public static void insertLike(String timelineItemId, String userId, final RequestManager.OnInsertLike onInsertLike) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
             object.put(Global.USER_ID, userId);
             Log.d(TAG, "insertLike Object = " + object);
             socket.emit(Global.INSERT_LIKE, object);
+            socket.once(Global.INSERT_LIKE, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        if (code == SocketException.SUCCESS) {
+                            JSONObject likeObject = resObject.getJSONObject(Global.LIKE);
+                            final LikeEntity likeEntity = new LikeEntity(likeObject);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onInsertLike.onSuccess(likeEntity);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onInsertLike.onException(code);
+                                }
+                            });
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1757,12 +2036,41 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 28. 카카오 로그인
-    public void signInKakao(long id) {
+    public static void signInKakao(long id, final RequestManager.OnSignInKakao onSignInKakao) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.ID, String.valueOf(id));
             Log.d(TAG, "signInKakao Object = " + object);
             socket.emit(Global.SIGN_IN_KAKAO, object);
+            socket.once(Global.SIGN_IN_KAKAO, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            JSONObject userObject = resObject.getJSONObject(Global.USER);
+//                            String id = userObject.getString(Global.ID);
+//                            String picture = userObject.getString(Global.PICTURE);
+//                            String phone = userObject.getString(Global.PHONE);
+//                            String realName = userObject.getString(Global.REAL_NAME);
+//                            String name = userObject.getString(Global.NAME);
+//                            String hasExtraProfile = userObject.getString(Global.HAS_EXTRA_PROFILE);
+//                            int sex = userObject.getInt(Global.SEX);
+//                            int userType = userObject.getInt(Global.USER_TYPE);
+//                            int schoolId = userObject.getInt(Global.SCHOOL_ID);
+                            UserEntity user = new UserEntity(userObject);
+                            onSignInKakao.onSuccess(user);
+                        } else {
+                            onSignInKakao.onException(code);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }

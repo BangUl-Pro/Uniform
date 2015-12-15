@@ -16,7 +16,6 @@ import com.ironfactory.donation.entities.SchoolEntity;
 import com.ironfactory.donation.entities.UserEntity;
 import com.ironfactory.donation.managers.AuthManager;
 import com.ironfactory.donation.managers.RequestManager;
-import com.ironfactory.donation.socketIo.SocketService;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 
 public class TimelineActivity extends BaseActivity {
     private static final String TAG = "TimelineActivity";
+    private int timelineStatus = 0;
 
     private class ViewHolder {
         public TimelineRecyclerView timelines;
@@ -40,7 +40,6 @@ public class TimelineActivity extends BaseActivity {
 //    private RequestManager.TypedBaasioQueryCallback<TimelineCardDto> timelineCardDtoQueryCallback;
     private ArrayList<TimelineCardDto> timelineCardDtos;
 //    private BaasioQuery timelineCardDtoQuery;
-    private Intent intent;
     private SchoolEntity schoolEntity;
 
     private MenuItem queryTypeMenuItem;
@@ -78,30 +77,44 @@ public class TimelineActivity extends BaseActivity {
 
         timelineCardDtos.clear();
 //        RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
-        startService(intent);
-        Log.d(TAG, "요청1");
+
+        getTimeline();
     }
 
-    private void setQueryToAllTimelines() {
-        if (schoolEntity != null) {
-            intent = new Intent(getApplicationContext(), SocketService.class);
-            intent.putExtra(Global.COMMAND, Global.GET_ALL_TIMELINE);
-            intent.putExtra(Global.USER_ID, Global.userEntity.id);
-            intent.putExtra(Global.SCHOOL_ID, schoolEntity.id);
 
-            RequestManager.onGetAllTimeline = new RequestManager.OnGetAllTimeline() {
+    private void getTimeline() {
+        if (timelineStatus == 0) {
+            RequestManager.getAllTimeline(Global.userEntity.id, schoolEntity.id, new RequestManager.OnGetAllTimeline() {
                 @Override
                 public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
                     viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
                     viewHolder.timelines.hideMoreProgress();
-                    Log.d(TAG, "성공");
                 }
 
                 @Override
                 public void onException(int code) {
                     viewHolder.timelines.hideMoreProgress();
                 }
-            };
+            });
+        } else if (timelineStatus == 1) {
+            RequestManager.getMyTimeline(Global.userEntity.id, schoolEntity.id, new RequestManager.OnGetMyTimeline() {
+                @Override
+                public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
+                    viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
+                }
+
+                @Override
+                public void onException(int code) {
+                    viewHolder.timelines.hideMoreProgress();
+                }
+            });
+        }
+    }
+
+
+    private void setQueryToAllTimelines() {
+        if (schoolEntity != null) {
+            timelineStatus = 0;
         }
 
 //        timelineCardDtoQuery = new BaasioQuery();
@@ -114,23 +127,7 @@ public class TimelineActivity extends BaseActivity {
     }
 
     private void setQueryToMyTimelines() {
-        intent = new Intent(getApplicationContext(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.GET_MY_TIMELINE);
-        intent.putExtra(Global.SCHOOL_ID, schoolEntity.id);
-        intent.putExtra(Global.USER_ID, Global.userEntity.id);
-
-        RequestManager.onGetMyTimeline = new RequestManager.OnGetMyTimeline() {
-            @Override
-            public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
-                viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
-            }
-
-            @Override
-            public void onException(int code) {
-                viewHolder.timelines.hideMoreProgress();
-            }
-        };
-
+        timelineStatus = 1;
 //        timelineCardDtoQuery = new BaasioQuery();
 //        timelineCardDtoQuery.setType(TimelineEntity.COLLECTION_NAME);
 //        timelineCardDtoQuery.setWheres(
@@ -206,7 +203,7 @@ public class TimelineActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 timelineCardDtos.clear();
-                startService(intent);
+                getTimeline();
 //                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
             }
         });
@@ -214,7 +211,7 @@ public class TimelineActivity extends BaseActivity {
         viewHolder.timelines.setOnMoreListener(new OnMoreListener() {
             @Override
             public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
-                startService(intent);
+                getTimeline();
 //                RequestManager.getNextTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
             }
         });
@@ -253,8 +250,7 @@ public class TimelineActivity extends BaseActivity {
                     queryTypeMenuItem.setTitle("내가쓴글");
                     setQueryToAllTimelines();
                 }
-                startService(intent);
-                Log.d(TAG, "요청4");
+                getTimeline();
 //                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
 
                 return true;

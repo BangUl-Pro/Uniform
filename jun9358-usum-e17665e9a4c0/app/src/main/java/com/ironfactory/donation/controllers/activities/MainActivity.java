@@ -18,7 +18,6 @@ import com.ironfactory.donation.controllers.fragments.CommunityFragment;
 import com.ironfactory.donation.controllers.fragments.MyPageFragment;
 import com.ironfactory.donation.controllers.fragments.SettingFragment;
 import com.ironfactory.donation.controllers.fragments.SupportFragment;
-import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.dtos.SchoolRanking;
 import com.ironfactory.donation.entities.AlarmEntity;
 import com.ironfactory.donation.slidingtab.SlidingBaseFragment;

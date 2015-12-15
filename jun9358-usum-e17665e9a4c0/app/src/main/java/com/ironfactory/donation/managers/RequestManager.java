@@ -3,11 +3,16 @@ package com.ironfactory.donation.managers;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
 
 import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.dtos.TimelineCardDto;
+import com.ironfactory.donation.dtos.TimelineCommentCardDto;
+import com.ironfactory.donation.entities.FileEntity;
 import com.ironfactory.donation.entities.LikeEntity;
+import com.ironfactory.donation.entities.SchoolEntity;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.entities.UserEntity;
 import com.ironfactory.donation.socketIo.SocketIO;
@@ -24,17 +29,7 @@ import java.util.ArrayList;
 public class RequestManager {
     public static Context context;
     private static final String TAG = "RequestManager";
-
-    public static OnDeleteComment onDeleteComment;
-    public static OnInsertFile onInsertFile;
-    public static OnDeleteTimeline onDeleteTimeline;
-    public static OnDeleteLike onDeleteLike;
-    public static OnInsertLike onInsertLike;
-    public static OnGetAllTimeline onGetAllTimeline;
-    public static OnGetMyTimeline onGetMyTimeline;
-    public static OnInsertTimeline onInsertTimeline;
-    public static OnDeleteFile onDeleteFile;
-
+    private static Handler handler = new Handler();
 
     public static void downloadImage(final String path, final File file, final OnDownloadImage onDownloadImage) {
         new Thread(new Runnable() {
@@ -49,7 +44,12 @@ public class RequestManager {
 
                         if (statusCode != HttpURLConnection.HTTP_OK) {
                             Log.d(TAG, "Http 연결 오류 = " + statusCode);
-                            onDownloadImage.onException();
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onDownloadImage.onException();
+                                }
+                            });
                             return;
                         }
 
@@ -59,7 +59,12 @@ public class RequestManager {
                         FileOutputStream fos = new FileOutputStream(file);
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
 
-                        onDownloadImage.onSuccess();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onDownloadImage.onSuccess();
+                            }
+                        });
                         fos.close();
                         is.close();
                     }
@@ -77,11 +82,8 @@ public class RequestManager {
     }
 
 
-    public static void insertProducts(final ArrayList<ProductCardDto> productCardDtos, final OnInsertProduct onInsertProduct) {
-        for (ProductCardDto product :
-                productCardDtos) {
-            SocketIO.insertProduct(product, onInsertProduct);
-        }
+    public static void insertProduct(ProductCardDto productCardDto, final OnInsertProduct onInsertProduct) {
+        SocketIO.insertProduct(productCardDto, onInsertProduct);
     }
 
 
@@ -96,7 +98,113 @@ public class RequestManager {
 
 
     public static void searchProduct(int schoolId, int sex, int category, int position, int size, OnSearchProduct onSearchProduct) {
-        SocketIO.searchProduct(schoolId, sex, category, position, size, onSearchProduct);
+        SocketIO.searchProduct(schoolId, sex, category, size, position, onSearchProduct);
+    }
+
+
+    public static void deleteProduct(String productId, OnDeleteProduct onDeleteProduct) {
+        SocketIO.deleteProduct(productId, onDeleteProduct);
+    }
+
+    public static void updateProduct(ProductCardDto productCardDto, OnUpdateProduct onUpdateProduct) {
+        SocketIO.updateProduct(productCardDto, onUpdateProduct);
+    }
+
+
+    public static void insertFile(String productId, String path, OnInsertFile onInsertFile) {
+        SocketIO.insertFile(productId, path, onInsertFile);
+    }
+
+    public static void deleteFile(ArrayList<FileEntity> fileEntities, OnDeleteFile onDeleteFile) {
+        SocketIO.deleteFile(fileEntities, onDeleteFile);
+    }
+
+
+    public static void updateTimeline(TimelineCardDto timelineCardDto, OnInsertTimeline onInsertTimeline) {
+        SocketIO.updateTimeline(timelineCardDto, onInsertTimeline);
+    }
+
+
+    public static void insertTimeline(int schoolId, ArrayList<Uri> uris, String content, String userId, OnInsertTimeline onInsertTimeline) {
+        SocketIO.insertTimeline(schoolId, content, userId, uris, onInsertTimeline);
+    }
+
+    public static void insertLike(String timelineItemId, String userId, OnInsertLike onInsertLike) {
+        SocketIO.insertLike(timelineItemId, userId, onInsertLike);
+    }
+
+
+    public static void getAllTimeline(String userId, int schoolId, OnGetAllTimeline onGetAllTimeline) {
+        SocketIO.getAllTimeline(schoolId, userId, onGetAllTimeline);
+    }
+
+    public static void getMyTimeline(String userId, int schoolId, OnGetMyTimeline onGetMyTimeline) {
+        SocketIO.getMyTimeline(schoolId, userId, onGetMyTimeline);
+    }
+
+    public static void deleteComment(TimelineCommentCardDto timelineCommentCardDto, OnDeleteComment onDeleteComment) {
+        SocketIO.deleteComment(timelineCommentCardDto, onDeleteComment);
+    }
+
+    public static void deleteLike(LikeEntity likeEntity, OnDeleteLike onDeleteLike) {
+        SocketIO.deleteLike(likeEntity, onDeleteLike);
+    }
+
+    public static void deleteTimeline(TimelineCardDto timelineCardDto, OnDeleteTimeline onDeleteTimeline) {
+        SocketIO.deleteTimeline(timelineCardDto, onDeleteTimeline);
+    }
+
+    public static void signInKakao(long id, OnSignInKakao onSignInKakao) {
+        SocketIO.signInKakao(id, onSignInKakao);
+    }
+
+
+    public static void getSchool(OnGetSchool onGetSchool) {
+        SocketIO.getSchool(onGetSchool);
+    }
+
+
+    public static void insertTimelineComment(String timelineId, String comment, String userId, OnInsertTimelineComment onInsertTimelineComment) {
+        SocketIO.insertTimelineComment(timelineId, comment, userId, onInsertTimelineComment);
+    }
+
+
+    public static void getTimelineComment(String timelineId, OnGetTimelineComment onGetTimelineComment) {
+        SocketIO.getTimelineComment(timelineId, onGetTimelineComment);
+    }
+
+
+    public interface OnGetTimelineComment {
+        void onSuccess(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos);
+        void onException();
+    }
+
+
+    public interface OnInsertTimelineComment {
+        void onSuccess();
+        void onException();
+    }
+
+    public interface OnGetSchool {
+        void onSuccess(ArrayList<SchoolEntity> schoolEntities);
+        void onException();
+    }
+
+
+    public interface OnSignInKakao {
+        void onSuccess(UserEntity userEntity);
+        void onException(int code);
+    }
+
+    public interface OnUpdateProduct {
+        void onSuccess();
+        void onException();
+    }
+
+
+    public interface OnDeleteProduct {
+        void onSuccess();
+        void onException();
     }
 
 

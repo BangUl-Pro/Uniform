@@ -18,8 +18,8 @@ import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.dtos.TimelineCommentCardDto;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.managers.AuthManager;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.socketIo.SocketException;
-import com.ironfactory.donation.socketIo.SocketService;
 import com.ironfactory.donation.utils.StringUtil;
 
 import java.util.ArrayList;
@@ -37,7 +37,6 @@ public class ProductDetailActivity extends BaseActivity {
         public ViewHolder(View view) {
             productDetailCardView = (ProductDetailCardView) view.findViewById(R.id.product_detail_card_view);
             comments = (TimelineCommentRecyclerView) view.findViewById(R.id.comments);
-            comments.setFrom(1);
             commentsLayout = (LinearLayout) view.findViewById(R.id.comments_layout);
             commentContents = (TextView) view.findViewById(R.id.comment_contents);
             writeCommentButton = (Button) view.findViewById(R.id.write_comment);
@@ -93,12 +92,30 @@ public class ProductDetailActivity extends BaseActivity {
 
                 viewHolder.writeCommentButton.setEnabled(false);
 
-                Intent intent = new Intent(getApplicationContext(), SocketService.class);
-                intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE_COMMENT);
-                intent.putExtra(Global.TIMELINE_ITEM_ID, timelineItemUuid);
-                intent.putExtra(Global.COMMENT_CONTENT, commentContents);
-                intent.putExtra(Global.FROM, 1);
-                startService(intent);
+                RequestManager.insertTimelineComment(
+                        timelineItemUuid,
+                        commentContents,
+                        Global.userEntity.id,
+                        new RequestManager.OnInsertTimelineComment() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d(TAG, "성공2");
+                                requestTimelineComments();
+                                viewHolder.commentContents.setText("");
+                                viewHolder.commentContents.clearFocus();
+                                viewHolder.writeCommentButton.setEnabled(true);
+                            }
+
+                            @Override
+                            public void onException() {
+                                new MaterialDialog.Builder(BaseActivity.context)
+                                        .title(R.string.app_name)
+                                        .content("댓글을 작성하는 도중에 문제가 발생하였습니다.")
+                                        .show();
+                                viewHolder.writeCommentButton.setEnabled(true);
+                            }
+                        }
+                );
 
 //                RequestManager.insertTimelineComment(
 //                        timelineItemUuid,
@@ -130,13 +147,7 @@ public class ProductDetailActivity extends BaseActivity {
                     SocketException.printErrMsg(code);
                     SocketException.toastErrMsg(code);
 
-                    if (command.equals(Global.INSERT_TIMELINE_COMMENT)) {
-                        // 타임라인 게시글에 댓글달기 응답
-                        processInsertTimelineComment(code);
-                    } else if (command.equals(Global.GET_TIMELINE_COMMENT)) {
-                        // 타임라인 게시글 댓글 불러오기 응답
-                        processGetTimelineComment(code, intent);
-                    } else if (command.equals(Global.DELETE_COMMENT)) {
+                    if (command.equals(Global.DELETE_COMMENT)) {
                         // 댓글 삭제
 //                        processDeleteComment(code);
                     } else if (command.equals(Global.UPDATE_TRANSACTION_STATUS)) {
@@ -181,55 +192,6 @@ public class ProductDetailActivity extends BaseActivity {
     }
 
 
-//    // TODO: 15. 11. 24. 댓글 삭제
-//    private void processDeleteComment(int code) {
-//        if (SocketException.SUCCESS != code) {
-//            viewHolder.comments.
-//        }
-//    }
-
-
-    // TODO: 15. 11. 23. 타임라인 게시글 댓글 불러오기 응답
-    private void processGetTimelineComment(int code, Intent intent) {
-        if (code == SocketException.SUCCESS) {
-            int from = intent.getIntExtra(Global.FROM, -1);
-            ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = (ArrayList) intent.getSerializableExtra(Global.TIMELINE_COMMENT);
-            if (from == 0) {
-                for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
-                    timelineCommentCardDto.userEntity.picture = "";
-                    if (timelineCommentCardDto.userEntity.id.equals(productCardDto.productEntity.user_id    )) {
-                        timelineCommentCardDto.userEntity.realName = "기부자";
-                    } else if (timelineCommentCardDto.userEntity.id.equals(productCardDto.transactionEntity.receiver_id)) {
-                        timelineCommentCardDto.userEntity.realName = "구매자";
-                    } else {
-                        timelineCommentCardDto.userEntity.realName = "이방인";
-                    }
-                }
-
-                viewHolder.comments.setTimelineCommentCardDtos(timelineCommentCardDtos);
-            } else if (from == 2) {
-                viewHolder.productDetailCardView.processGetTimelineComment(timelineCommentCardDtos);
-            }
-        }
-    }
-
-
-    // TODO: 15. 11. 23. 타임라인 게시글에 댓글 달기 응답
-    private void processInsertTimelineComment(int code) {
-        if (code == SocketException.SUCCESS) {
-            requestTimelineComments();
-            viewHolder.commentContents.setText("");
-            viewHolder.commentContents.clearFocus();
-            viewHolder.writeCommentButton.setEnabled(true);
-        } else {
-            new MaterialDialog.Builder(BaseActivity.context)
-                    .title(R.string.app_name)
-                    .content("댓글을 작성하는 도중에 문제가 발생하였습니다.")
-                    .show();
-            viewHolder.writeCommentButton.setEnabled(true);
-        }
-    }
-
 
     @Override
     public void onResume() {
@@ -273,11 +235,34 @@ public class ProductDetailActivity extends BaseActivity {
     }
 
     public void requestTimelineComments() {
-        Intent intent = new Intent(getApplicationContext(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
-        intent.putExtra(Global.FROM, 1);
-        intent.putExtra(Global.ID, productCardDto.productEntity.user_id);
-        startService(intent);
+        RequestManager.getTimelineComment(productCardDto.productEntity.user_id, new RequestManager.OnGetTimelineComment() {
+            @Override
+            public void onSuccess(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
+                for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
+                    timelineCommentCardDto.userEntity.picture = "";
+                    if (timelineCommentCardDto.userEntity.id.equals(productCardDto.productEntity.user_id    )) {
+                        timelineCommentCardDto.userEntity.realName = "기부자";
+                    } else if (timelineCommentCardDto.userEntity.id.equals(productCardDto.transactionEntity.receiver_id)) {
+                        timelineCommentCardDto.userEntity.realName = "구매자";
+                    } else {
+                        timelineCommentCardDto.userEntity.realName = "이방인";
+                    }
+                }
+                Log.d(TAG, "comment size = " + timelineCommentCardDtos.size());
+                viewHolder.comments.setTimelineCommentCardDtos(timelineCommentCardDtos);
+            }
+
+            @Override
+            public void onException() {
+
+            }
+        });
+
+//        Intent intent = new Intent(getApplicationContext(), SocketService.class);
+//        intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
+//        intent.putExtra(Global.FROM, 1);
+//        intent.putExtra(Global.ID, productCardDto.productEntity.user_id);
+//        startService(intent);
 
 //        RequestManager.getTimelineComments(productCardDto.productEntity.user_id, new RequestManager.TypedBaasioQueryCallback<TimelineCommentCardDto>() {
 //            @Override

@@ -15,11 +15,9 @@ import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.views.ProductAddForm;
 import com.ironfactory.donation.controllers.views.ProductRecyclerView;
 import com.ironfactory.donation.dtos.ProductCardDto;
-import com.ironfactory.donation.entities.ProductEntity;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.socketIo.SocketException;
-import com.ironfactory.donation.socketIo.SocketService;
 
 import java.util.ArrayList;
 
@@ -109,12 +107,6 @@ public class AddProductsActivity extends BaseActivity {
     // TODO: 15. 11. 25. 제품 입력
     private void processInsertProduct(int code, Intent intent) {
         if (code == SocketException.SUCCESS) {
-            ArrayList<ProductEntity> productEntities = intent.getParcelableArrayListExtra(Global.PRODUCT);
-            Intent transactionIntent = new Intent(getApplicationContext(), SocketService.class);
-            transactionIntent.putExtra(Global.COMMAND, Global.INSERT_TRANSACTION);
-            transactionIntent.putExtra(Global.PRODUCT, productEntities);
-            startService(transactionIntent);
-
 //            RequestManager.insertTransactionsInBackground(productEntities, new BaasioCallback<List<BaasioEntity>>() {
 //                @Override
 //                public void onResponse(List<BaasioEntity> baasioEntities) {
@@ -127,36 +119,6 @@ public class AddProductsActivity extends BaseActivity {
 //                }
 //            });
 
-            for (int i = 0; i < productEntities.size(); i++) {
-                for (Uri uri : productCardDtos.get(i).uris) {
-                    intent = new Intent(getApplicationContext(), SocketService.class);
-                    intent.putExtra(Global.COMMAND, Global.INSERT_FILE);
-                    intent.putExtra(Global.PRODUCT_ID, productEntities.get(i).id);
-                    intent.putExtra(Global.PATH, uri);
-                    startService(intent);
-
-//                    RequestManager.insertFile(
-//                            productEntities.get(i).uuid,
-//                            uri,
-//                            new BaasioUploadCallback() {
-//                                @Override
-//                                public void onResponse(BaasioFile baasioFile) {
-//
-//                                }
-//
-//                                @Override
-//                                public void onException(BaasioException e) {
-//
-//                                }
-//
-//                                @Override
-//                                public void onProgress(long l, long l2) {
-//
-//                                }
-//                            }
-//                    );
-                }
-            }
 
             hideLoadingView();
             finish();
@@ -181,30 +143,41 @@ public class AddProductsActivity extends BaseActivity {
 
                 showLoadingView();
 
-                RequestManager.insertProducts(productCardDtos, new RequestManager.OnInsertProduct() {
-                    @Override
-                    public void onSuccess(ProductCardDto productCardDto) {
-                        TransactionEntity transactionEntity = new TransactionEntity();
-                        transactionEntity.donator_id = productCardDto.productEntity.user_id;
-                        transactionEntity.receiver_id = "";
-                        transactionEntity.product_id = productCardDto.productEntity.id;
-                        transactionEntity.product_name = productCardDto.productEntity.product_name;
-                        RequestManager.insertTransaction(transactionEntity);
+                for (int i = 0; i < productCardDtos.size(); i++) {
+                    final int I = i;
+                    RequestManager.insertProduct(productCardDtos.get(i), new RequestManager.OnInsertProduct() {
+                        @Override
+                        public void onSuccess(ProductCardDto productCardDto) {
+                            TransactionEntity transactionEntity = new TransactionEntity();
+                            transactionEntity.donator_id = productCardDto.productEntity.user_id;
+                            transactionEntity.receiver_id = "";
+                            transactionEntity.product_id = productCardDto.productEntity.id;
+                            transactionEntity.product_name = productCardDto.productEntity.product_name;
+                            RequestManager.insertTransaction(transactionEntity);
 
-                        hideLoadingView();
-                        finish();
-                    }
 
-                    @Override
-                    public void onException() {
+                            for (Uri uri : productCardDtos.get(I).uris) {
+                                RequestManager.insertFile(productCardDto.productEntity.id, uri.toString(), new RequestManager.OnInsertFile() {
+                                    @Override
+                                    public void onSuccess() {
+                                        hideLoadingView();
+                                        finish();
+                                    }
 
-                    }
-                });
+                                    @Override
+                                    public void onException(int code) {
 
-//                Intent intent = new Intent(getApplicationContext(), SocketService.class);
-//                intent.putExtra(Global.COMMAND, Global.INSERT_PRODUCT);
-//                intent.putExtra(Global.PRODUCT_CARD, productCardDtos);
-//                startService(intent);
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onException() {
+
+                        }
+                    });
+                }
 
 
 //                RequestManager.insertProductsInBackground(productCardDtos, new BaasioCallback<List<BaasioEntity>>() {

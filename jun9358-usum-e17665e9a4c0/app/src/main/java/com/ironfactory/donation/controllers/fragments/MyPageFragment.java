@@ -1,6 +1,7 @@
 package com.ironfactory.donation.controllers.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.ironfactory.donation.slidingtab.SlidingBaseFragment;
 import java.util.ArrayList;
 
 public class MyPageFragment extends SlidingBaseFragment {
+    private static final String TAG = "MyPageFragment";
     private class ViewHolder {
         public ProfileView profileView;
         public ProductRecyclerView dealingProducts;
@@ -69,13 +71,13 @@ public class MyPageFragment extends SlidingBaseFragment {
 
         RequestManager.getMyProduct(Global.userEntity, new RequestManager.OnGetMyProduct() {
             @Override
-            public void onSuccess(ArrayList<ProductCardDto> productCardDtos) {
+            public void onSuccess(final ArrayList<ProductCardDto> productCardDtos) {
                 setProduct(productCardDtos);
             }
 
             @Override
             public void onException(int code) {
-
+                Log.d(TAG, "error");
             }
         });
 

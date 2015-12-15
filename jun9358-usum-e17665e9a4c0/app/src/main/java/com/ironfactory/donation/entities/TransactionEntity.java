@@ -69,6 +69,24 @@ public class TransactionEntity implements Parcelable {
         this.product_name = bundle.getString(PROPERTY_PRODUCT_NAME);
     }
 
+
+    public boolean isSame(TransactionEntity transactionEntity) {
+        if (modified != transactionEntity.modified)
+            return false;
+        if (status != transactionEntity.status)
+            return false;
+        if (!donator_id.equals(transactionEntity.donator_id))
+            return false;
+        if (!receiver_id.equals(transactionEntity.receiver_id))
+            return false;
+        if (!product_id.equals(transactionEntity.product_id))
+            return false;
+        if (!product_name.equals(transactionEntity.product_name))
+            return false;
+        return true;
+    }
+
+
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
 //        bundle.putString(PROPERTY_UUID, this.uuid);

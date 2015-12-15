@@ -2,16 +2,11 @@ package com.ironfactory.donation.socketIo;
 
 import android.app.Service;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.ironfactory.donation.Global;
 import com.ironfactory.donation.dtos.ProductCardDto;
-import com.ironfactory.donation.dtos.TimelineCardDto;
-import com.ironfactory.donation.dtos.TimelineCommentCardDto;
-import com.ironfactory.donation.entities.FileEntity;
-import com.ironfactory.donation.entities.LikeEntity;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.entities.UserEntity;
 
@@ -34,10 +29,7 @@ public class SocketService extends Service {
             String command = intent.getStringExtra(Global.COMMAND);
             if (command != null) {
                 Log.d(TAG, "command = " + command);
-                if (command.equals(Global.GET_SCHOOL)) {
-                    // 학교 정보 요청
-                    processGetSchool();
-                } else if (command.equals(Global.SIGN_UP)) {
+                if (command.equals(Global.SIGN_UP)) {
                     // 회원 가입
                     processSignUp(intent);
                 } else if (command.equals(Global.SIGN_IN)) {
@@ -52,57 +44,12 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.UPDATE_USER_PROFILE)) {
                     // 유저 프로필 업데이트
                     processUpdateUserProfile(intent);
-                } else if (command.equals(Global.INSERT_TIMELINE_COMMENT)) {
-                    // 타임라인 글에 댓글 달기
-                    processInsertTimelineComment(intent);
-                } else if (command.equals(Global.GET_TIMELINE_COMMENT)) {
-                    // 타임라인 글 댓글 불러오기
-                    processGetTimelineComment(intent);
-                } else if (command.equals(Global.GET_ALL_TIMELINE)) {
-                    // 타임라인 글 모두 불러오기
-                    processGetAllTimeline(intent);
-                } else if (command.equals(Global.GET_MY_TIMELINE)) {
-                    // 타임라인 글 내 글 불러오기
-                    processGetMyTimeline(intent);
-                } else if (command.equals(Global.DELETE_FILE)) {
-                    // 파일 지우기
-                    processDeleteFile(intent);
-                } else if (command.equals(Global.UPDATE_TIMELINE)) {
-                    // 타임라인 업데이트
-                    processUpdateTimeline(intent);
-                } else if (command.equals(Global.INSERT_TIMELINE)) {
-                    // 타임라인 글 쓰기
-                    processInsertTimeline(intent);
-                } else if (command.equals(Global.DELETE_COMMENT)) {
-                    // 댓글 삭제
-                    processDeleteComment(intent);
                 } else if (command.equals(Global.UPDATE_TRANSACTION_STATUS)) {
                     //
                     processUpdateTransactionStatus(intent);
-                } else if (command.equals(Global.DELETE_PRODUCT)) {
-                    // 제품 삭제
-                    processDeleteProduct(intent);
-                } else if (command.equals(Global.UPDATE_PRODUCT)) {
-                    // 제품 수정
-                    processUpdateProduct(intent);
-                } else if (command.equals(Global.INSERT_FILE)) {
-                    // 파일 입력
-                    processInsertFile(intent);
-                } else if (command.equals(Global.DELETE_TIMELINE)) {
-                    // 타임라인 지우기
-                    processDeleteTimeline(intent);
-                } else if (command.equals(Global.DELETE_LIKE)) {
-                    // 좋아요 지우기
-                    processDeleteLike(intent);
-                } else if (command.equals(Global.INSERT_LIKE)) {
-                    // 좋아요
-                    processInsertLike(intent);
                 } else if (command.equals(Global.GET_PRODUCT)) {
                     // 제품 요청
                     processGetProduct(intent);
-                } else if (command.equals(Global.SIGN_IN_KAKAO)) {
-                    // 카카오 로그인
-                    processSignInKakao(intent);
                 }
             }
         }
@@ -110,12 +57,6 @@ public class SocketService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-
-    // TODO: 15. 11. 28. 카카오 로그인
-    private void processSignInKakao(Intent intent) {
-        long id = intent.getLongExtra(Global.ID, -1);
-        socketIO.signInKakao(id);
-    }
 
 
     // TODO: 15. 11. 28.
@@ -145,137 +86,11 @@ public class SocketService extends Service {
     }
 
 
-    // TODO: 15. 11. 25. 좋아요
-    private void processInsertLike(Intent intent) {
-        String timelineItemId = intent.getStringExtra(Global.TIMELINE_ITEM_ID);
-        String userId = intent.getStringExtra(Global.USER_ID);
-        socketIO.insertLike(timelineItemId, userId);
-    }
-
-
-    // TODO: 15. 11. 25. 좋아요 지우기
-    private void processDeleteLike(Intent intent) {
-        LikeEntity likeEntity = intent.getParcelableExtra(Global.LIKE);
-        socketIO.deleteLike(likeEntity);
-    }
-
-
-    // TODO: 15. 11. 25. 타임라인 지우기
-    private void processDeleteTimeline(Intent intent) {
-        TimelineCardDto timelineCardDto = intent.getParcelableExtra(Global.TIMELINE);
-        socketIO.deleteTimeline(timelineCardDto);
-    }
-
-
-    // TODO: 15. 11. 25. 파일 입력
-    private void processInsertFile(Intent intent) {
-        String id = intent.getStringExtra(Global.PRODUCT_ID);
-        String path = intent.getStringExtra(Global.PATH);
-        Log.d(TAG, "path = " + path);
-        socketIO.insertFile(id, path);
-    }
-
-
-
-    // TODO: 15. 11. 25. 제품 수정
-    private void processUpdateProduct(Intent intent) {
-        ProductCardDto productCardDto = intent.getParcelableExtra(Global.PRODUCT_CARD);
-        socketIO.updateProduct(productCardDto);
-    }
-
-
-    // TODO: 15. 11. 25. 제품 삭제
-    private void processDeleteProduct(Intent intent) {
-        ProductCardDto dto = intent.getParcelableExtra(Global.PRODUCT_CARD);
-        socketIO.deleteProduct(dto);
-    }
-
-
     // TODO: 15. 11. 24.
     private void processUpdateTransactionStatus(Intent intent) {
         int status = intent.getIntExtra(Global.STATUS, -1);
         TransactionEntity transactionEntity = intent.getParcelableExtra(Global.TRANSACTION);
         socketIO.updateTransactionStatus(status, transactionEntity);
-    }
-
-
-
-    // TODO: 15. 11. 24. 댓글 삭제
-    private void processDeleteComment(Intent intent) {
-        int from = intent.getIntExtra(Global.FROM, -1);
-        TimelineCommentCardDto commentCardDto = intent.getParcelableExtra(Global.TIMELINE_COMMENT);
-        socketIO.deleteComment(commentCardDto, from);
-    }
-
-
-//    // TODO: 15. 11. 24. 내 제품 요청
-//    private void processGetMyProduct(Intent intent) {
-//        String donatorId = intent.getStringExtra(TransactionEntity.PROPERTY_DONATOR_UUID);
-//        String receiverId = intent.getStringExtra(TransactionEntity.PROPERTY_RECEIVER_UUID);
-//        socketIO.getMyProduct(donatorId, receiverId);
-//    }
-
-
-    // TODO: 15. 11. 23. 타임라인 글 쓰기
-    private void processInsertTimeline(Intent intent) {
-        int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
-        String timelineContent = intent.getStringExtra(Global.TIMELINE_CONTENT);
-        String id = intent.getStringExtra(Global.USER_ID);
-        ArrayList<Uri> files = intent.getParcelableArrayListExtra(Global.PATH);
-
-        socketIO.insertTimeline(schoolId, timelineContent, id, files);
-    }
-
-
-    // TODO: 15. 11. 23. 파일 지우기
-    private void processDeleteFile(Intent intent) {
-        ArrayList<FileEntity> files = intent.getParcelableArrayListExtra(Global.FILE);
-        socketIO.deleteFile(files);
-    }
-
-
-    // TODO: 15. 11. 23. 타임라인 업데이트
-    private void processUpdateTimeline(Intent intent) {
-        TimelineCardDto timeline = intent.getParcelableExtra(Global.TIMELINE);
-        socketIO.updateTimeline(timeline);
-    }
-
-
-    // TODO: 15. 11. 23. 타임라인 글 모두 불러오기
-    private void processGetAllTimeline(Intent intent) {
-        int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
-        String userId = intent.getStringExtra(Global.USER_ID);
-        if (schoolId != -1)
-            socketIO.getAllTimeline(schoolId, userId);
-    }
-
-
-    // TODO: 15. 11. 23. 타임라인 내 글 불러오기
-    private void processGetMyTimeline(Intent intent) {
-        int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
-        String userId = intent.getStringExtra(Global.USER_ID);
-        if (schoolId != -1 && userId != null)
-            socketIO.getMyTimeline(schoolId, userId);
-    }
-
-
-    // TODO: 15. 11. 23. 타임라인 글 댓글 불러오기
-    private void processGetTimelineComment(Intent intent) {
-        String id = intent.getStringExtra(Global.ID);
-        int from = intent.getIntExtra(Global.FROM, -1);
-
-        socketIO.getTimelineComment(id, from);
-    }
-
-
-    // TODO: 15. 11. 23. 타임라인 글에 댓글 달기
-    private void processInsertTimelineComment(Intent intent) {
-        String timelineItemId = intent.getStringExtra(Global.TIMELINE_ITEM_ID);
-        String commentContent = intent.getStringExtra(Global.COMMENT_CONTENT);
-        int from = intent.getIntExtra(Global.FROM, -1);
-        String userId = intent.getStringExtra(Global.USER_ID);
-
-        socketIO.insertTimelineComment(timelineItemId, commentContent, from, userId);
     }
 
 
@@ -302,28 +117,10 @@ public class SocketService extends Service {
     }
 
 
-//    // TODO: 15. 11. 20. 제품검색
-//    private void processSearchProduct(Intent intent) {
-//        int schoolId = intent.getIntExtra(Global.SCHOOL_ID, -1);
-//        int sex = intent.getIntExtra(Global.SEX, -1);
-//        int category = intent.getIntExtra(Global.CATEGORY, -1);
-//        int size = intent.getIntExtra(Global.SIZE, -1);
-//        int position = intent.getIntExtra(Global.POSITION, -1);
-//
-//        socketIO.searchProduct(schoolId, sex, category, size, position);
-//    }
-
-
     // TODO: 15. 11. 20. 학교 랭킹 요청
     private void processGetSchoolRanking(Intent intent) {
         int from = intent.getIntExtra(Global.FROM, -1);
         socketIO.getSchoolRanking(from);
-    }
-
-
-    // TODO 학교 정보 요청
-    private void processGetSchool() {
-        socketIO.getSchool();
     }
 
 

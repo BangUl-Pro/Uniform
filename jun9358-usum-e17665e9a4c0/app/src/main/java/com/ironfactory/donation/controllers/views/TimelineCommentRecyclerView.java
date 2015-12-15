@@ -3,6 +3,7 @@ package com.ironfactory.donation.controllers.views;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 public class TimelineCommentRecyclerView extends RecyclerView {
     private ArrayList<TimelineCommentCardDto> timelineCommentCardDtos;
+    private static final String TAG = "CommentRecyclerView";
 
     private TimelineCommentAdapter adapter;
 
@@ -32,21 +34,22 @@ public class TimelineCommentRecyclerView extends RecyclerView {
     private void initView() {
         timelineCommentCardDtos = new ArrayList<>();
         setLayoutManager(new RecyclerInScrollLayoutManager(getContext()));
+        adapter = new TimelineCommentAdapter(timelineCommentCardDtos);
+        setAdapter(adapter);
     }
 
     public void setTimelineCommentCardDtos(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
         this.timelineCommentCardDtos.clear();
         this.timelineCommentCardDtos.addAll(timelineCommentCardDtos);
+        Log.d(TAG, "setTimelineComments");
         getAdapter().notifyDataSetChanged();
     }
 
     private class TimelineCommentAdapter extends Adapter<TimelineCommentAdapter.ViewHolder> {
         private ArrayList<TimelineCommentCardDto> timelineCommentCardDtos;
-        private int from;
 
-        public TimelineCommentAdapter(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos, int from) {
+        public TimelineCommentAdapter(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
             this.timelineCommentCardDtos = timelineCommentCardDtos;
-            this.from = from;
         }
 
         @Override
@@ -81,24 +84,7 @@ public class TimelineCommentRecyclerView extends RecyclerView {
                 super(view);
 
                 timelineCommentCard = (TimelineCommentCardView) view.findViewWithTag("TimelineCommentCardView");
-                timelineCommentCard.setFrom(from);
             }
         }
-
-
-        public void processDeleteComment(int code) {
-
-        }
-    }
-
-
-    public void setFrom(int from) {
-        adapter = new TimelineCommentAdapter(timelineCommentCardDtos, from);
-        setAdapter(adapter);
-    }
-
-
-    public void processDeleteComment(int code) {
-        adapter.processDeleteComment(code);
     }
 }

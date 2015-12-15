@@ -101,15 +101,12 @@ public class BuyFragment extends SlidingBaseFragment {
             public void onRefresh() {
                 productCardDtos.clear();
                 getSearchProduct(1);
-                position++;
-//                RequestManager.getProductsInBackground(productCardDtoQuery, false, productCardDtoQueryCallback);
             }
         });
         viewHolder.products.hideMoreProgress();
         viewHolder.products.setOnMoreListener(new OnMoreListener() {
             @Override
             public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
-//                RequestManager.getNextProductsInBackground(productCardDtoQuery, false, productCardDtoQueryCallback);
                 getSearchProduct(position);
             }
         });
@@ -124,13 +121,9 @@ public class BuyFragment extends SlidingBaseFragment {
         viewHolder.productSearchSlidingLayer.getProductSearchForm().setOnSubmitListener(new ProductSearchForm.OnSubmitListener() {
             @Override
             public void onClick(View v) {
-//                productCardDtoQuery = viewHolder.productSearchSlidingLayer.getProductSearchForm().getSearchQuery();
-
                 getSearchProduct(1);
-
                 viewHolder.productSearchSlidingLayer.closeLayer(true);
                 productCardDtos.clear();
-//                RequestManager.getProductsInBackground(productCardDtoQuery, false, productCardDtoQueryCallback);
             }
         });
 
@@ -139,6 +132,7 @@ public class BuyFragment extends SlidingBaseFragment {
 
 
     private void getSearchProduct(int position) {
+        this.position = position + 1;
         ProductSearchForm form = viewHolder.productSearchSlidingLayer.getProductSearchForm();
         int schoolId = form.getSelectedSchoolId();
         int sex = form.getSex();
@@ -156,14 +150,6 @@ public class BuyFragment extends SlidingBaseFragment {
                 setProductCard(null);
             }
         });
-//        Intent intent = new Intent(getActivity(), SocketService.class);
-//        intent.putExtra(Global.COMMAND, Global.SEARCH_PRODUCT);
-//        intent.putExtra(Global.SCHOOL_ID, schoolId);
-//        intent.putExtra(Global.SEX, sex);
-//        intent.putExtra(Global.CATEGORY, category);
-//        intent.putExtra(Global.POSITION, position);
-//        intent.putExtra(Global.SIZE, size);
-//        getActivity().startService(intent);
     }
 
 

@@ -18,6 +18,7 @@ public class ProductCardDto implements Parcelable {
     public static final String PROPERTY_TRANSACTION_ENTITY = "transaction_entity";
     public static final String PROPERTY_URIS = "uris";
     public static final String PROPERTY_FILE_ENTITIES = "file_entities";
+    private static final String TAG = "ProductCardDto";
 
     public ProductEntity productEntity;
     public TransactionEntity transactionEntity;
@@ -52,6 +53,19 @@ public class ProductCardDto implements Parcelable {
         transactionEntity = new TransactionEntity(object);
         uris = new ArrayList<>();
         fileEntities = new ArrayList<>();
+        FileEntity fileEntity = new FileEntity(object);
+        fileEntities.add(fileEntity);
+    }
+
+    public boolean isSame(ProductCardDto productCardDto) {
+        if (productEntity.isSame(productCardDto.productEntity) && transactionEntity.isSame(productCardDto.transactionEntity))
+            return true;
+        return false;
+    }
+
+
+    public void addFile(FileEntity fileEntity) {
+        fileEntities.add(fileEntity);
     }
 
 

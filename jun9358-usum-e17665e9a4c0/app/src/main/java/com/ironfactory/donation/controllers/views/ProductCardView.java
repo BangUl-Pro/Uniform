@@ -3,6 +3,7 @@ package com.ironfactory.donation.controllers.views;
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import com.ironfactory.donation.entities.SchoolEntity;
 import com.ironfactory.donation.managers.SchoolManager;
 
 public class ProductCardView extends LinearLayout {
+    private static final String TAG = "ProductCardView";
     private TextView writtenTime;
     private SquareImageView photo;
     private TextView schoolname;
@@ -59,11 +61,15 @@ public class ProductCardView extends LinearLayout {
         writtenTime.setText(DateFormat.format("yyyy년 MM월 dd일 HH시 mm분에 작성", productCardDto.productEntity.created));
 
         photo.setImageResource(R.drawable.ic_launcher);
+        Log.d(TAG, "uris.size = " + productCardDto.uris.size());
+        Log.d(TAG, "files.size = " + productCardDto.fileEntities.size());
         if (0 < productCardDto.uris.size()) {
             photo.setImageURI(productCardDto.uris.get(0));
+            Log.d(TAG, "imageUri = " + productCardDto.uris.get(0));
         } else if (0 < productCardDto.fileEntities.size()) {
 //            String photoUrl = "https://portal-access-api.baas.io/usum/usum/files/" + productCardDto.fileEntities.get(0).id + "/data";
             String photoUrl = "http://uniform-test.herokuapp.com/imgs/" + productCardDto.fileEntities.get(0).id;
+            Log.d(TAG, "photoUrl = " + photoUrl);
             Ion.with(photo)
                     .placeholder(R.drawable.ic_launcher)
                     .error(R.drawable.ic_launcher)

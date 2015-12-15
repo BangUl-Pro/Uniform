@@ -10,16 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 
-import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.activities.BaseActivity;
 import com.ironfactory.donation.controllers.activities.ProductDetailActivity;
 import com.ironfactory.donation.dtos.ProductCardDto;
+import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
 import java.util.ArrayList;
 
 public class ProductRecyclerView extends SuperRecyclerView {
     private ArrayList<ProductCardDto> productCardDtos;
+    private static final String TAG = "ProductRecyclerView";
 
     public ProductRecyclerView(Context context) {
         this(context, null);

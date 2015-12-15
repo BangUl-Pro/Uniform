@@ -21,6 +21,7 @@ import com.ironfactory.donation.controllers.activities.ProductDetailActivity;
 import com.ironfactory.donation.controllers.fragments.SettingFragment;
 import com.ironfactory.donation.controllers.fragments.SupportFragment;
 import com.ironfactory.donation.dtos.ProductCardDto;
+import com.ironfactory.donation.dtos.TimelineCardDto;
 import com.ironfactory.donation.dtos.TimelineCommentCardDto;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.entities.UserEntity;
@@ -266,11 +267,35 @@ public class ProductDetailCardView extends CardView {
 //                    }
 //                });
 
-                intent = new Intent(getContext(), SocketService.class);
-                intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
-                intent.putExtra(Global.ID, productCardDto.productEntity.user_id);
-                intent.putExtra(Global.FROM, 3);
-                getContext().startService(intent);
+                RequestManager.getTimelineComment(productCardDto.productEntity.user_id, new RequestManager.OnGetTimelineComment() {
+                    @Override
+                    public void onSuccess(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
+                        for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
+                            RequestManager.deleteComment(timelineCommentCardDto, new RequestManager.OnDeleteComment() {
+                                @Override
+                                public void onSuccess() {
+
+                                }
+
+                                @Override
+                                public void onException() {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onException() {
+
+                    }
+                });
+
+//                intent = new Intent(getContext(), SocketService.class);
+//                intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
+//                intent.putExtra(Global.ID, productCardDto.productEntity.user_id);
+//                intent.putExtra(Global.FROM, 3);
+//                getContext().startService(intent);
 
 //                RequestManager.getTimelineComments(productCardDto.productEntity.user_id, new RequestManager.TypedBaasioQueryCallback<TimelineCommentCardDto>() {
 //                    @Override
@@ -307,10 +332,23 @@ public class ProductDetailCardView extends CardView {
             @Override
             public void onClick(View v) {
                 BaseActivity.showLoadingView();
-                Intent intent = new Intent(getContext(), SocketService.class);
-                intent.putExtra(Global.COMMAND, Global.DELETE_PRODUCT);
-                intent.putExtra(Global.PRODUCT_CARD, productCardDto);
-                getContext().startService(intent);
+                RequestManager.deleteProduct(productCardDto.productEntity.id, new RequestManager.OnDeleteProduct() {
+                    @Override
+                    public void onSuccess() {
+                        BaseActivity.hideLoadingView();
+                        ((Activity) BaseActivity.context).finish();
+                    }
+
+                    @Override
+                    public void onException() {
+                        BaseActivity.hideLoadingView();
+
+                        new MaterialDialog.Builder(BaseActivity.context)
+                                .title(R.string.app_name)
+                                .content("상품을 삭제하는 중에 문제가 발생하였습니다.")
+                                .show();
+                    }
+                });
 
 //                RequestManager.deleteProduct(productCardDto, new BaasioCallback<BaasioEntity>() {
 //                    @Override
@@ -348,33 +386,57 @@ public class ProductDetailCardView extends CardView {
                 productCardDtoForUpdate.productEntity.user_id = productCardDto.productEntity.user_id;
                 productCardDtoForUpdate.productEntity.product_name = productCardDto.productEntity.product_name;
 
-                Intent intent = new Intent(getContext(), SocketService.class);
-                intent.putExtra(Global.COMMAND, Global.DELETE_FILE);
-                intent.putExtra(Global.FILE, productCardDto.fileEntities);
-                getContext().startService(intent);
+                if (productCardDtoForUpdate.fileEntities != null && productCardDtoForUpdate.fileEntities.size() > 0) {
+                    RequestManager.deleteFile(productCardDto.fileEntities, new RequestManager.OnDeleteFile() {
+                        @Override
+                        public void onSuccess() {
+                            BaseActivity.hideLoadingView();
+                            ((Activity) BaseActivity.context).finish();
+                        }
 
-                RequestManager.onDeleteFile = new RequestManager.OnDeleteFile() {
+                        @Override
+                        public void onException() {
+                            BaseActivity.hideLoadingView();
+
+                            new MaterialDialog.Builder(BaseActivity.context)
+                                    .title(R.string.app_name)
+                                    .content("상품을 삭제하는 중에 문제가 발생하였습니다.")
+                                    .show();
+                        }
+                    });
+                }
+
+                RequestManager.updateProduct(productCardDtoForUpdate, new RequestManager.OnUpdateProduct() {
                     @Override
                     public void onSuccess() {
+                        for (Uri uri : productCardDtoForUpdate.uris) {
+                            RequestManager.insertFile(
+                                    productCardDtoForUpdate.productEntity.id,
+                                    uri.toString(),
+                                    new RequestManager.OnInsertFile() {
+                                        @Override
+                                        public void onSuccess() {
+
+                                        }
+
+                                        @Override
+                                        public void onException(int code) {
+
+                                        }
+                                    }
+                            );
+                        }
+
                         BaseActivity.hideLoadingView();
+                        viewHolder.productUpdateDialog.hide();
                         ((Activity) BaseActivity.context).finish();
                     }
 
                     @Override
                     public void onException() {
-                        BaseActivity.hideLoadingView();
 
-                        new MaterialDialog.Builder(BaseActivity.context)
-                                .title(R.string.app_name)
-                                .content("상품을 삭제하는 중에 문제가 발생하였습니다.")
-                                .show();
                     }
-                };
-
-                intent = new Intent(getContext(), SocketService.class);
-                intent.putExtra(Global.COMMAND, Global.UPDATE_PRODUCT);
-                intent.putExtra(Global.PRODUCT_CARD, productCardDtoForUpdate);
-                getContext().startService(intent);
+                });
 
 //                RequestManager.deleteFileEntities(productCardDto.fileEntities);
 //                RequestManager.updateProduct(productCardDtoForUpdate, new BaasioCallback<BaasioEntity>() {
@@ -615,23 +677,18 @@ public class ProductDetailCardView extends CardView {
     public void processGetTimelineComment(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
         for (TimelineCommentCardDto timelineComment :
                 timelineCommentCardDtos) {
-            Intent intent = new Intent(getContext(), SocketService.class);
-            intent.putExtra(Global.COMMAND, Global.DELETE_COMMENT);
-            intent.putExtra(Global.TIMELINE_COMMENT, timelineComment);
-            getContext().startService(intent);
-        }
+            RequestManager.deleteComment(timelineComment, new RequestManager.OnDeleteComment() {
+                @Override
+                public void onSuccess() {
 
-//        for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
-//            RequestManager.deleteComment(timelineCommentCardDto, new BaasioCallback<BaasioEntity>() {
-//                @Override
-//                public void onResponse(BaasioEntity baasioEntity) {
-//                }
-//
-//                @Override
-//                public void onException(BaasioException e) {
-//                }
-//            });
-//        }
+                }
+
+                @Override
+                public void onException() {
+
+                }
+            });
+        }
     }
 
 
@@ -656,11 +713,21 @@ public class ProductDetailCardView extends CardView {
                 "이름: " + userEntity.realName + "\n" +
                         "휴대폰번호: " + userEntity.phone;
 
-        Intent intent = new Intent(getContext(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE_COMMENT);
-        intent.putExtra(Global.USER_ID, productCardDto.productEntity.user_id);
-        intent.putExtra(Global.COMMENT_CONTENT, commentContents);
-        getContext().startService(intent);
+        RequestManager.insertTimelineComment(
+                productCardDto.productEntity.id,
+                commentContents,
+                Global.userEntity.id,
+                new RequestManager.OnInsertTimelineComment() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d(TAG, "성공");
+                    }
+
+                    @Override
+                    public void onException() {
+
+                    }
+                });
 
 //        RequestManager.insertTimelineComment(
 //                productCardDto.productEntity.uuid,
@@ -680,28 +747,17 @@ public class ProductDetailCardView extends CardView {
     }
 
     private void writeTimelineThatTransactionCompleted() {
-        Intent intent = new Intent(getContext(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.INSERT_TIMELINE);
-        intent.putExtra(Global.SCHOOL_ID, productCardDto.productEntity.school_id);
-        intent.putExtra(Global.USER_ID, Global.userEntity.id);
-        intent.putExtra(Global.TIMELINE_CONTENT, "교복기부로 점수획득!");
-        getContext().startService(intent);
+        RequestManager.insertTimeline(productCardDto.productEntity.school_id, null, Global.userEntity.id, "교복기부로 점수획득!", new RequestManager.OnInsertTimeline() {
+            @Override
+            public void onSuccess(TimelineCardDto timelineCardDto) {
 
-//        RequestManager.insertTimeline(
-//                productCardDto.productEntity.school_id,
-//                "교복기부로 점수획득!",
-//                new BaasioCallback<BaasioEntity>() {
-//                    @Override
-//                    public void onResponse(BaasioEntity baasioEntity) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onException(BaasioException e) {
-//
-//                    }
-//                }
-//        );
+            }
+
+            @Override
+            public void onException() {
+
+            }
+        });
     }
 
     public void setProductCardDto(ProductCardDto productCardDto) {

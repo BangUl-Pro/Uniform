@@ -76,9 +76,35 @@ public class ProductEntity implements Parcelable {
         this.contents = bundle.getString(PROPERTY_CONTENTS);
     }
 
+
+    public boolean isSame(ProductEntity productEntity) {
+        if (created != productEntity.created)
+            return false;
+        if (!id.equals(productEntity.id))
+            return false;
+        if (!product_name.equals(productEntity.product_name))
+            return false;
+        if (!user_id.equals(productEntity.user_id))
+            return false;
+        if (school_id != productEntity.school_id)
+            return false;
+        if (category != productEntity.category)
+            return false;
+        if (size != productEntity.size)
+            return false;
+        if (condition != productEntity.condition)
+            return false;
+        if (sex != productEntity.sex)
+            return false;
+        if (!contents.equals(productEntity.contents))
+            return false;
+        return true;
+    }
+
+
     public void set(JSONObject object) {
         try {
-            if (object.getLong(PROPERTY_CREATED) != -1) {
+            if (!object.get(PROPERTY_CREATED).equals(null)) {
                 this.created = object.getLong(PROPERTY_CREATED);
             }
 
@@ -97,19 +123,19 @@ public class ProductEntity implements Parcelable {
             if (object.getString(PROPERTY_USER_ID) != null) {
                 this.user_id = object.getString(PROPERTY_USER_ID);
             }
-            if (object.getInt(PROPERTY_SCHOOL_ID) != -1) {
+            if (!object.get(PROPERTY_SCHOOL_ID).equals(null)) {
                 this.school_id = object.getInt(PROPERTY_SCHOOL_ID);
             }
-            if (object.getInt(PROPERTY_CATEGORY) != -1) {
+            if (!object.get(PROPERTY_CATEGORY).equals(null)) {
                 this.category = object.getInt(PROPERTY_CATEGORY);
             }
-            if (object.getInt(PROPERTY_SIZE) != -1) {
+            if (!object.get(PROPERTY_SIZE).equals(null)) {
                 this.size = object.getInt(PROPERTY_SIZE);
             }
-            if (object.getInt(PROPERTY_CONDITION) != -1) {
+            if (!object.get(PROPERTY_CONDITION).equals(null)) {
                 this.condition = object.getInt(PROPERTY_CONDITION);
             }
-            if (object.getInt(PROPERTY_SEX) != -1) {
+            if (!object.get(PROPERTY_SEX).equals(null)) {
                 this.sex = object.getInt(PROPERTY_SEX);
             }
             if (object.getString(PROPERTY_CONTENTS) != null) {

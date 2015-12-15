@@ -1,7 +1,6 @@
 package com.ironfactory.donation.controllers.views;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
@@ -19,7 +18,6 @@ import com.ironfactory.donation.controllers.activities.BaseActivity;
 import com.ironfactory.donation.dtos.TimelineCommentCardDto;
 import com.ironfactory.donation.entities.UserEntity;
 import com.ironfactory.donation.managers.RequestManager;
-import com.ironfactory.donation.socketIo.SocketService;
 
 public class TimelineCommentCardView extends CardView {
     private static final String TAG = "TimelineCommentCardView";
@@ -88,13 +86,7 @@ public class TimelineCommentCardView extends CardView {
                     case R.id.action_delete:
                         BaseActivity.showLoadingView();
 
-                        Intent intent = new Intent(getContext(), SocketService.class);
-                        intent.putExtra(Global.COMMAND, Global.DELETE_COMMENT);
-                        intent.putExtra(Global.TIMELINE_COMMENT, timelineCommentCardDto);
-                        Log.d(TAG, "timelineId = " + timelineCommentCardDto.commentEntity.timeline_item_id);
-                        intent.putExtra(Global.FROM, from);
-                        getContext().startService(intent);
-                        RequestManager.onDeleteComment = new RequestManager.OnDeleteComment() {
+                        RequestManager.deleteComment(timelineCommentCardDto, new RequestManager.OnDeleteComment() {
                             @Override
                             public void onSuccess() {
                                 BaseActivity.hideLoadingView();
@@ -112,7 +104,7 @@ public class TimelineCommentCardView extends CardView {
                                         .content("댓글을 삭제하는 중에 문제가 발생하였습니다.")
                                         .show();
                             }
-                        };
+                        });
 
 //                        RequestManager.deleteComment(timelineCommentCardDto, new BaasioCallback<BaasioEntity>() {
 //                            @Override

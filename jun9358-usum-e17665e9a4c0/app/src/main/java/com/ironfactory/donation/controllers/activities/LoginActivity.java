@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.ironfactory.donation.managers.RequestManager;
+import com.ironfactory.donation.socketIo.SocketIO;
 import com.kakao.Session;
 import com.kakao.SessionCallback;
 import com.kakao.exception.KakaoException;
@@ -40,11 +42,33 @@ public class LoginActivity extends BaseActivity {
         schoolManager = new SchoolManager(this);
         if (schoolManager.isEmptyTable()) {
             showLoadingView();
+            new SocketIO(getApplicationContext());
 
             // 학교 정보 로딩 요청
-            Intent intent = new Intent(getApplicationContext(), SocketService.class);
-            intent.putExtra(Global.COMMAND, Global.GET_SCHOOL);
-            startService(intent);
+            RequestManager.getSchool(new RequestManager.OnGetSchool() {
+                @Override
+                public void onSuccess(final ArrayList<SchoolEntity> schoolEntities) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // DB에 저장한다.
+                            schoolManager.insertSchools(schoolEntities);
+                        }
+                    }).start();
+
+                    onLoadingSchoolsCompleted();
+                    hideLoadingView();
+                }
+
+                @Override
+                public void onException() {
+                    new MaterialDialog.Builder(BaseActivity.context)
+                            .title(R.string.app_name)
+                            .content("학교정보를 가져오는데 실패하였습니다.")
+                            .show();
+                    hideLoadingView();
+                }
+            });
 
 
 //            schoolsQuery = new BaasioQuery();
@@ -242,9 +266,7 @@ public class LoginActivity extends BaseActivity {
                 SocketException.printErrMsg(code);
                 SocketException.toastErrMsg(code);
                 if (code != -1) {
-                    if (command.equals(Global.GET_SCHOOL)) {
-                        processGetSchool(code, intent);
-                    } else if (command.equals(Global.SIGN_UP)) {
+                    if (command.equals(Global.SIGN_UP)) {
                         processSignUp(code);
                     } else if (command.equals(Global.SIGN_IN)) {
                         processSignIn(code, intent);

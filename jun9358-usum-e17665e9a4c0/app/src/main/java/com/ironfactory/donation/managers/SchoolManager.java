@@ -3,6 +3,7 @@ package com.ironfactory.donation.managers;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.ironfactory.donation.entities.SchoolEntity;
 import com.ironfactory.donation.sqlite.SchoolDBAdapter;
@@ -47,6 +48,7 @@ public class SchoolManager {
 
     public SchoolEntity selectSchool(int schoolId) {
         SQLiteDatabase db = adapter.getReadableDatabase();
+        Log.d(TAG, "schoolId = " + schoolId);
 
         Cursor cursor = db.query(
                 SchoolEntity.COLLECTION_NAME,
