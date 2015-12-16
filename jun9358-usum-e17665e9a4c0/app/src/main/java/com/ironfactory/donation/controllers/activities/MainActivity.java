@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.ironfactory.donation.Global;
 import com.ironfactory.donation.R;
@@ -18,11 +17,9 @@ import com.ironfactory.donation.controllers.fragments.CommunityFragment;
 import com.ironfactory.donation.controllers.fragments.MyPageFragment;
 import com.ironfactory.donation.controllers.fragments.SettingFragment;
 import com.ironfactory.donation.controllers.fragments.SupportFragment;
-import com.ironfactory.donation.dtos.SchoolRanking;
 import com.ironfactory.donation.entities.AlarmEntity;
 import com.ironfactory.donation.slidingtab.SlidingBaseFragment;
 import com.ironfactory.donation.slidingtab.SlidingTabsBasicFragment;
-import com.ironfactory.donation.socketIo.SocketException;
 
 import java.util.ArrayList;
 
@@ -53,6 +50,7 @@ public class MainActivity extends BaseActivity {
             }
 
             Global.userEntity = getIntent().getParcelableExtra(Global.USER);
+            Log.d(TAG, "id = " + Global.userEntity.id);
             ArrayList<SlidingBaseFragment> tabFragments = new ArrayList<>();
 
             communityFragment = new CommunityFragment();
@@ -120,42 +118,6 @@ public class MainActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        if (intent != null) {
-            String command = intent.getStringExtra(Global.COMMAND);
-            if (command != null) {
-                int code = intent.getIntExtra(Global.CODE, -1);
-                if (code != -1) {
-                    SocketException.printErrMsg(code);
-                    SocketException.toastErrMsg(code);
-
-                    if (command.equals(Global.GET_SCHOOL_RANKING)) {
-                        // 학교 랭킹 응답
-                        processGetSchoolRanking(code, intent);
-                    }
-                }
-            }
-        }
-    }
-
-
-    // TODO: 15. 11. 20. 학교 랭킹 응답
-    private void processGetSchoolRanking(int code, Intent intent) {
-        if (code == SocketException.SUCCESS) {
-            // 성공
-            ArrayList<SchoolRanking> schoolRankings = (ArrayList) intent.getSerializableExtra(Global.SCHOOL);
-            communityFragment.setSchoolRankings(schoolRankings);
-        } else {
-            new MaterialDialog.Builder(BaseActivity.context)
-                    .title(R.string.app_name)
-                    .content("학교순위를 가져오는 중에 문제가 발생하였습니다.")
-                    .show();
-        }
-    }
-
 
     @Override
     public void onResume() {

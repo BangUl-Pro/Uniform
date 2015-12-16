@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.ironfactory.donation.dtos.ProductCardDto;
+import com.ironfactory.donation.dtos.SchoolRanking;
 import com.ironfactory.donation.dtos.TimelineCardDto;
 import com.ironfactory.donation.dtos.TimelineCommentCardDto;
 import com.ironfactory.donation.entities.FileEntity;
@@ -82,7 +83,7 @@ public class RequestManager {
     }
 
 
-    public static void insertProduct(ProductCardDto productCardDto, final OnInsertProduct onInsertProduct) {
+    public static void insertProduct(ProductCardDto productCardDto, OnInsertProduct onInsertProduct) {
         SocketIO.insertProduct(productCardDto, onInsertProduct);
     }
 
@@ -171,6 +172,28 @@ public class RequestManager {
 
     public static void getTimelineComment(String timelineId, OnGetTimelineComment onGetTimelineComment) {
         SocketIO.getTimelineComment(timelineId, onGetTimelineComment);
+    }
+
+
+    public static void updateUserProfile(UserEntity userEntity, OnUpdateUserProfile onUpdateUserProfile) {
+        SocketIO.updateUserProfile(userEntity, onUpdateUserProfile);
+    }
+
+
+    public static void getSchoolRanking(OnGetSchoolRanking onGetSchoolRanking) {
+        SocketIO.getSchoolRanking(onGetSchoolRanking);
+    }
+
+
+    public interface OnGetSchoolRanking {
+        void onSuccess(ArrayList<SchoolRanking> schoolRankings);
+        void onException();
+    }
+
+
+    public interface OnUpdateUserProfile {
+        void onSuccess(UserEntity userEntity);
+        void onException();
     }
 
 

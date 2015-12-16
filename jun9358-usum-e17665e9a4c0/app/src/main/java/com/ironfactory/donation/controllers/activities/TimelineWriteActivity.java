@@ -29,6 +29,7 @@ import nl.changer.polypicker.ImagePickerActivity;
 
 public class TimelineWriteActivity extends BaseActivity {
     private static final String TAG = "TimelineWriteActivity";
+    private RequestManager.OnInsertFile onInsertFile;
 
     private class ViewHolder {
         public WriterView writerView;
@@ -127,7 +128,7 @@ public class TimelineWriteActivity extends BaseActivity {
                                 selectedImageUris.remove(0);
                                 final String parentUuid = timelineCardDto.timelineEntity.id;
 
-                                RequestManager.insertFile(parentUuid, selectedUri.toString(), new RequestManager.OnInsertFile() {
+                                onInsertFile = new RequestManager.OnInsertFile() {
                                     @Override
                                     public void onSuccess() {
                                         Log.d(TAG, "타임라인 파일 입력 성공");
@@ -138,17 +139,7 @@ public class TimelineWriteActivity extends BaseActivity {
                                             String parentUuid = timelineCardDto.timelineEntity.id;
                                             Log.d(TAG, "uri = " + selectedUri);
 
-                                            RequestManager.insertFile(parentUuid, selectedUri.toString(), new RequestManager.OnInsertFile() {
-                                                @Override
-                                                public void onSuccess() {
-                                                    Log.d(TAG, "타임라인 파일 입력 성공");
-                                                }
-
-                                                @Override
-                                                public void onException(int code) {
-
-                                                }
-                                            });
+                                            RequestManager.insertFile(parentUuid, selectedUri.toString(), onInsertFile);
                                         } else {
                                             onWriteAfter(true);
                                         }
@@ -158,7 +149,10 @@ public class TimelineWriteActivity extends BaseActivity {
                                     public void onException(int code) {
                                         onWriteAfter(false);
                                     }
-                                });
+                                };
+
+
+                                RequestManager.insertFile(parentUuid, selectedUri.toString(), onInsertFile);
                             } else {
                                 onWriteAfter(true);
                             }
@@ -181,7 +175,7 @@ public class TimelineWriteActivity extends BaseActivity {
                                 selectedImageUris.remove(0);
                                 final String parentUuid = timelineCardDto.timelineEntity.id;
 
-                                RequestManager.insertFile(parentUuid, selectedUri.toString(), new RequestManager.OnInsertFile() {
+                                onInsertFile = new RequestManager.OnInsertFile() {
                                     @Override
                                     public void onSuccess() {
                                         Log.d(TAG, "타임라인 파일 입력 성공");
@@ -192,17 +186,7 @@ public class TimelineWriteActivity extends BaseActivity {
                                             String parentUuid = timelineCardDto.timelineEntity.id;
                                             Log.d(TAG, "uri = " + selectedUri);
 
-                                            RequestManager.insertFile(parentUuid, selectedUri.toString(), new RequestManager.OnInsertFile() {
-                                                @Override
-                                                public void onSuccess() {
-                                                    Log.d(TAG, "타임라인 파일 입력 성공");
-                                                }
-
-                                                @Override
-                                                public void onException(int code) {
-
-                                                }
-                                            });
+                                            RequestManager.insertFile(parentUuid, selectedUri.toString(), onInsertFile);
                                         } else {
                                             onWriteAfter(true);
                                         }
@@ -212,7 +196,9 @@ public class TimelineWriteActivity extends BaseActivity {
                                     public void onException(int code) {
                                         onWriteAfter(false);
                                     }
-                                });
+                                };
+
+                                RequestManager.insertFile(parentUuid, selectedUri.toString(), onInsertFile);
                             } else {
                                 onWriteAfter(true);
                             }

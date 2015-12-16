@@ -1,6 +1,5 @@
 package com.ironfactory.donation.controllers.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,16 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ironfactory.donation.Global;
 import com.ironfactory.donation.R;
+import com.ironfactory.donation.controllers.activities.BaseActivity;
 import com.ironfactory.donation.controllers.views.SchoolRankingCardView;
 import com.ironfactory.donation.controllers.views.SchoolRankingRecyclerView;
 import com.ironfactory.donation.dtos.SchoolRanking;
 import com.ironfactory.donation.entities.SchoolEntity;
 import com.ironfactory.donation.managers.AuthManager;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.managers.SchoolManager;
 import com.ironfactory.donation.slidingtab.SlidingBaseFragment;
-import com.ironfactory.donation.socketIo.SocketService;
 
 import java.util.ArrayList;
 
@@ -56,10 +57,20 @@ public class CommunityFragment extends SlidingBaseFragment {
 
         viewHolder = new ViewHolder(view);
         final SchoolManager schoolManager = new SchoolManager(getActivity());
-        Intent intent = new Intent(getActivity(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.GET_SCHOOL_RANKING);
-        intent.putExtra(Global.FROM, 1);
-        getActivity().startService(intent);
+        RequestManager.getSchoolRanking(new RequestManager.OnGetSchoolRanking() {
+            @Override
+            public void onSuccess(ArrayList<SchoolRanking> schoolRankings) {
+                setSchoolRankings(schoolRankings);
+            }
+
+            @Override
+            public void onException() {
+                new MaterialDialog.Builder(BaseActivity.context)
+                        .title(R.string.app_name)
+                        .content("학교순위를 가져오는 중에 문제가 발생하였습니다.")
+                        .show();
+            }
+        });
 
 //        RequestManager.getSchoolRankingsInBackground(schoolManager, new BaasioQueryCallback() {
 //                    @Override

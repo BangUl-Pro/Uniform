@@ -73,7 +73,7 @@ public class ProductDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 //                String timelineItemUuid = productCardDto.productEntity.uuid;
-                String timelineItemUuid = productCardDto.productEntity.user_id;
+                String timelineItemUuid = productCardDto.productEntity.id;
                 String commentContents = viewHolder.commentContents.getText().toString();
 
                 if (StringUtil.isEmptyString(timelineItemUuid)) {
@@ -235,7 +235,7 @@ public class ProductDetailActivity extends BaseActivity {
     }
 
     public void requestTimelineComments() {
-        RequestManager.getTimelineComment(productCardDto.productEntity.user_id, new RequestManager.OnGetTimelineComment() {
+        RequestManager.getTimelineComment(productCardDto.productEntity.id, new RequestManager.OnGetTimelineComment() {
             @Override
             public void onSuccess(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
                 for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {

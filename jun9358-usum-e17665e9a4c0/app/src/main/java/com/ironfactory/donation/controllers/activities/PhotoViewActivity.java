@@ -54,7 +54,8 @@ public class PhotoViewActivity extends Activity {
                 .setCallback(new FutureCallback<ImageView>() {
                     @Override
                     public void onCompleted(Exception e, ImageView result) {
-                        mAttacher = new PhotoViewAttacher(result);
+                        if (result != null)
+                            mAttacher = new PhotoViewAttacher(result);
                     }
                 });
     }
@@ -63,6 +64,7 @@ public class PhotoViewActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
 
-        mAttacher.cleanup();
+        if (mAttacher != null)
+            mAttacher.cleanup();
     }
 }

@@ -6,11 +6,8 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.ironfactory.donation.Global;
-import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.entities.UserEntity;
-
-import java.util.ArrayList;
 
 public class SocketService extends Service {
     private static final String TAG = "SocketService";
@@ -35,15 +32,6 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.SIGN_IN)) {
                     // 로그인
                     processSignIn(intent);
-                } else if (command.equals(Global.GET_SCHOOL_RANKING)) {
-                    // 학교 랭킹
-                    processGetSchoolRanking(intent);
-                } else if (command.equals(Global.INSERT_PRODUCT)) {
-                    // 제품 등록
-                    processInsertProduct(intent);
-                } else if (command.equals(Global.UPDATE_USER_PROFILE)) {
-                    // 유저 프로필 업데이트
-                    processUpdateUserProfile(intent);
                 } else if (command.equals(Global.UPDATE_TRANSACTION_STATUS)) {
                     //
                     processUpdateTransactionStatus(intent);
@@ -91,36 +79,6 @@ public class SocketService extends Service {
         int status = intent.getIntExtra(Global.STATUS, -1);
         TransactionEntity transactionEntity = intent.getParcelableExtra(Global.TRANSACTION);
         socketIO.updateTransactionStatus(status, transactionEntity);
-    }
-
-
-    // TODO: 15. 11. 21. 유저 프로필 업데이트
-    private void processUpdateUserProfile(Intent intent) {
-        UserEntity user = intent.getParcelableExtra(Global.USER);
-        socketIO.updateUserProfile(user);
-    }
-
-
-    // TODO: 15. 11. 20. 제품 등록
-    private void processInsertProduct(Intent intent) {
-        ArrayList<ProductCardDto> productCardDtos = intent.getParcelableArrayListExtra(Global.PRODUCT_CARD);
-//        socketIO.insertProduct(productCardDtos, new RequestManager.OnInsertProduct() {
-//            @Override
-//            public void onSuccess() {
-//            }
-//
-//            @Override
-//            public void onException() {
-//
-//            }
-//        });
-    }
-
-
-    // TODO: 15. 11. 20. 학교 랭킹 요청
-    private void processGetSchoolRanking(Intent intent) {
-        int from = intent.getIntExtra(Global.FROM, -1);
-        socketIO.getSchoolRanking(from);
     }
 
 

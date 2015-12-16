@@ -267,7 +267,7 @@ public class ProductDetailCardView extends CardView {
 //                    }
 //                });
 
-                RequestManager.getTimelineComment(productCardDto.productEntity.user_id, new RequestManager.OnGetTimelineComment() {
+                RequestManager.getTimelineComment(productCardDto.productEntity.id, new RequestManager.OnGetTimelineComment() {
                     @Override
                     public void onSuccess(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
                         for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
@@ -409,6 +409,7 @@ public class ProductDetailCardView extends CardView {
                 RequestManager.updateProduct(productCardDtoForUpdate, new RequestManager.OnUpdateProduct() {
                     @Override
                     public void onSuccess() {
+                        Log.d(TAG, "업데이트 성공");
                         for (Uri uri : productCardDtoForUpdate.uris) {
                             RequestManager.insertFile(
                                     productCardDtoForUpdate.productEntity.id,

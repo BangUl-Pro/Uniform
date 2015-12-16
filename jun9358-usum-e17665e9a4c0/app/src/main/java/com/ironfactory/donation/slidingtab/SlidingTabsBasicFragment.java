@@ -1,5 +1,6 @@
 package com.ironfactory.donation.slidingtab;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ironfactory.donation.R;
+import com.ironfactory.donation.controllers.activities.LoginActivity;
 
 import java.util.ArrayList;
 
@@ -87,7 +89,14 @@ public class SlidingTabsBasicFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return fragments.size();
+            if (fragments == null) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+                return 0;
+            } else {
+                return fragments.size();
+            }
         }
 
         @Override

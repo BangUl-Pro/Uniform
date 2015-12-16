@@ -11,9 +11,7 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 import com.ironfactory.donation.Global;
-import com.ironfactory.donation.controllers.activities.EditProfileActivity;
 import com.ironfactory.donation.controllers.activities.LoginActivity;
-import com.ironfactory.donation.controllers.activities.MainActivity;
 import com.ironfactory.donation.controllers.activities.ProductDetailActivity;
 import com.ironfactory.donation.controllers.activities.SignUpActivity;
 import com.ironfactory.donation.dtos.ProductCardDto;
@@ -28,7 +26,6 @@ import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.entities.UserEntity;
 import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.reservation.ReservationPushService;
-import com.ironfactory.donation.reservation.SchoolRankingPushService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -117,18 +114,6 @@ public class SocketIO {
             public void call(Object... args) {
                 JSONObject object = (JSONObject) args[0];
                 processSignIn(object);
-            }
-        }).on(Global.GET_SCHOOL_RANKING, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processGetSchoolRanking(object);
-            }
-        }).on(Global.UPDATE_USER_PROFILE, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processUpdateUserProfile(object);
             }
         }).on(Global.UPDATE_TRANSACTION_STATUS, new Emitter.Listener() {
             @Override
@@ -692,71 +677,6 @@ public class SocketIO {
 //    }
 
 
-    // TODO: 15. 11. 21. 유저 프로필 업데이트 응답
-    private void processUpdateUserProfile(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            Log.d(TAG, "유저 프로필 업데이트 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent = new Intent(context, EditProfileActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.CODE, code);
-
-            if (code == SocketException.SUCCESS) {
-                // 성공
-                Gson gson = new Gson();
-                JSONObject userObject = object.getJSONObject(Global.USER);
-                UserEntity user = gson.fromJson(userObject.toString(), UserEntity.class);
-                intent.putExtra(Global.USER, user);
-            }
-            context.startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    // TODO: 15. 11. 20. 학교 랭킹 응답
-    private void processGetSchoolRanking(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            int from = object.getInt(Global.FROM);
-            Log.d(TAG, "학교 랭킹 요청 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent;
-            if (from == 1)
-                intent = new Intent(context, MainActivity.class);
-            else
-                intent = new Intent(context, SchoolRankingPushService.class);
-
-            intent.putExtra(Global.CODE, code);
-            intent.putExtra(Global.COMMAND, Global.GET_SCHOOL_RANKING);
-
-            if (code == SocketException.SUCCESS) {
-                // 성공
-                JSONArray schoolArray = object.getJSONArray(Global.SCHOOL);
-                ArrayList<SchoolRanking> schoolRankingList = new ArrayList<>();
-                for (int i = 0; i < schoolArray.length(); i++) {
-                    JSONObject schoolObject = schoolArray.getJSONObject(i);
-                    SchoolRanking schoolRanking = new SchoolRanking(schoolObject);
-                    schoolRankingList.add(schoolRanking);
-                }
-                intent.putExtra(Global.SCHOOL, schoolRankingList);
-            }
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            if (from == 1)
-                context.startActivity(intent);
-            else
-                context.startService(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     // TODO: 15. 11. 20. 로그인 응답
     private void processSignIn(JSONObject object) {
         Log.d(TAG, "로그인 응답");
@@ -1126,14 +1046,49 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 20. 학교 랭킹 요청
-    public void getSchoolRanking(int from) {
+    public static void getSchoolRanking(final RequestManager.OnGetSchoolRanking onGetSchoolRanking) {
         Log.d(TAG, "학교 랭킹 요청");
-        socket.emit(Global.GET_SCHOOL_RANKING, from);
+        socket.emit(Global.GET_SCHOOL_RANKING, "");
+        socket.once(Global.GET_SCHOOL_RANKING, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    JSONObject resObject = getJson(args);
+                    final int code = getCode(resObject);
+
+                    if (code == SocketException.SUCCESS) {
+                        // 성공
+                        JSONArray schoolArray = resObject.getJSONArray(Global.SCHOOL);
+                        final ArrayList<SchoolRanking> schoolRankingList = new ArrayList<>();
+                        for (int i = 0; i < schoolArray.length(); i++) {
+                            JSONObject schoolObject = schoolArray.getJSONObject(i);
+                            SchoolRanking schoolRanking = new SchoolRanking(schoolObject);
+                            schoolRankingList.add(schoolRanking);
+                        }
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onGetSchoolRanking.onSuccess(schoolRankingList);
+                            }
+                        });
+                    } else {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onGetSchoolRanking.onException();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     // TODO: 15. 11. 20. 제품검색
     public static void searchProduct(int schoolId, int sex, int category, int size, int position, final RequestManager.OnSearchProduct onSearchProduct) {
-        Log.d(TAG, "제품 검색");
+        Log.d(TAG, "제품 검색 ");
         try {
             JSONObject object = new JSONObject();
             object.put(Global.SCHOOL_ID, schoolId);
@@ -1152,13 +1107,15 @@ public class SocketIO {
                         if (code == SocketException.SUCCESS) {
                             final ArrayList<ProductCardDto> products = new ArrayList<>();
                             JSONArray array = reqObject.getJSONArray(Global.PRODUCT);
+                            Log.d(TAG, "제품 검색 array = " + array);
+                            Log.d(TAG, "제품 검색 arraySize = " + array.length());
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject productJson = array.getJSONObject(i);
                                 ProductCardDto dto = new ProductCardDto(productJson);
                                 if (i != 0) {
-                                    ProductCardDto curDto = products.get(products.size() - 1);
-                                    if (curDto.isSame(dto)) {
-                                        curDto.addFile(dto.fileEntities.get(0));
+                                    int size = products.size() - 1;
+                                    if (products.get(size).isSame(dto)) {
+                                        products.get(size).addFile(dto.fileEntities.get(0));
                                         continue;
                                     }
                                 }
@@ -1246,13 +1203,43 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 21. 유저 프로필 업데이트
-    public void updateUserProfile(UserEntity user) {
+    public static void updateUserProfile(UserEntity user, final RequestManager.OnUpdateUserProfile onUpdateUserProfile) {
         try {
             Gson gson = new Gson();
             String json = gson.toJson(user, UserEntity.class);
             JSONObject object = new JSONObject(json);
             Log.d(TAG, "updateUserProfile Object = " + object);
             socket.emit(Global.UPDATE_USER_PROFILE, object);
+            socket.once(Global.UPDATE_USER_PROFILE, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            JSONObject userObject = resObject.getJSONObject(Global.USER);
+                            final UserEntity user = new UserEntity(userObject);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onUpdateUserProfile.onSuccess(user);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onUpdateUserProfile.onException();
+                                }
+                            });
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1369,8 +1356,9 @@ public class SocketIO {
                                 timelineCardDto.setTimeline(timelineObject);
                                 timelineCardDto.setUser(timelineObject);
                                 timelineCardDto.setLike(timelineObject);
-                                if (i != 0 && timelineCardDto.isSame(timelineCardDtos.get(i - 1))) {
-                                    timelineCardDtos.get(i - 1).addFile(timelineObject);
+                                int size = timelineCardDtos.size() - 1;
+                                if (i != 0 && timelineCardDto.isSame(timelineCardDtos.get(size))) {
+                                    timelineCardDtos.get(size).addFile(timelineObject);
                                 } else {
                                     timelineCardDto.setFile(timelineObject);
                                     timelineCardDtos.add(timelineCardDto);
@@ -1615,9 +1603,9 @@ public class SocketIO {
                                 JSONObject productObject = array.getJSONObject(i);
                                 ProductCardDto dto = new ProductCardDto(productObject);
                                 if (i != 0) {
-                                    ProductCardDto curDto = productCardDtos.get(productCardDtos.size() - 1);
-                                    if (curDto.isSame(dto)) {
-                                        curDto.addFile(dto.fileEntities.get(0));
+                                    int size = productCardDtos.size() - 1;
+                                    if (productCardDtos.get(size).isSame(dto)) {
+                                        productCardDtos.get(size).addFile(dto.fileEntities.get(0));
                                         continue;
                                     }
                                 }

@@ -8,14 +8,13 @@ import com.ironfactory.donation.Global;
 import com.ironfactory.donation.controllers.fragments.SettingFragment;
 import com.ironfactory.donation.dtos.SchoolRanking;
 import com.ironfactory.donation.entities.UserEntity;
+import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.managers.SchoolManager;
-import com.ironfactory.donation.socketIo.SocketException;
-import com.ironfactory.donation.socketIo.SocketService;
 
 import java.util.ArrayList;
 
 public class SchoolRankingPushService extends IntentService {
-    private static final String TAG = "SchoolRankingPushService";
+    private static final String TAG = "RankingPushService";
     private SchoolRankingCheckThread schoolRankingCheckThread;
 
     public SchoolRankingPushService() {
@@ -43,10 +42,27 @@ public class SchoolRankingPushService extends IntentService {
 
     private void checkSchoolRankUpdated() {
         SchoolManager schoolManager = new SchoolManager(getApplicationContext());
-        Intent intent = new Intent(getApplicationContext(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.GET_SCHOOL_RANKING);
-        intent.putExtra(Global.FROM, 2);
-        startService(intent);
+        RequestManager.getSchoolRanking(new RequestManager.OnGetSchoolRanking() {
+            @Override
+            public void onSuccess(ArrayList<SchoolRanking> schoolRankings) {
+                int lastRank = SettingFragment.getLastSchoolRank();
+                int currentRank = getMyRank(schoolRankings);
+                if (lastRank == -1 || currentRank == -1) {
+                    SettingFragment.setLastSchoolRank(currentRank);
+                } else if (lastRank != currentRank) {
+//                PushManager.sendSchoolRankUpdatedPushToMe("학교 순위가 " + lastRank + "위에서 " + currentRank + "위로 변경되었습니다!");
+                    Log.d(TAG, "푸시 알림 구현해야함");
+                    SettingFragment.setLastSchoolRank(currentRank);
+                }
+                Log.d("USUM", "lastRank: " + lastRank);
+                Log.d("USUM", "currentRank: " + currentRank);
+            }
+
+            @Override
+            public void onException() {
+
+            }
+        });
 
 //        RequestManager.getSchoolRankingsInBackground(schoolManager,
 //                new BaasioQueryCallback() {
@@ -91,38 +107,5 @@ public class SchoolRankingPushService extends IntentService {
         }
 
         return myRanking;
-    }
-
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        String command = intent.getStringExtra(Global.COMMAND);
-        if (command != null) {
-            int code = intent.getIntExtra(Global.CODE, -1);
-            if (command.equals(Global.GET_SCHOOL_RANKING)) {
-                // 학교랭킹
-                processGetSchoolRanking(code, intent);
-            }
-        }
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-
-    private void processGetSchoolRanking(int code, Intent intent) {
-        if (code == SocketException.SUCCESS) {
-            ArrayList<SchoolRanking> schoolRankings = (ArrayList) intent.getSerializableExtra(Global.SCHOOL);
-
-            int lastRank = SettingFragment.getLastSchoolRank();
-            int currentRank = getMyRank(schoolRankings);
-            if (lastRank == -1 || currentRank == -1) {
-                SettingFragment.setLastSchoolRank(currentRank);
-            } else if (lastRank != currentRank) {
-//                PushManager.sendSchoolRankUpdatedPushToMe("학교 순위가 " + lastRank + "위에서 " + currentRank + "위로 변경되었습니다!");
-                Log.d(TAG, "푸시 알림 구현해야함");
-                SettingFragment.setLastSchoolRank(currentRank);
-            }
-            Log.d("USUM", "lastRank: " + lastRank);
-            Log.d("USUM", "currentRank: " + currentRank);
-        }
     }
 }

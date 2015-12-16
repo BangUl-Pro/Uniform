@@ -10,14 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.ironfactory.donation.Global;
 import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.views.ProductAddForm;
 import com.ironfactory.donation.controllers.views.ProductRecyclerView;
 import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.managers.RequestManager;
-import com.ironfactory.donation.socketIo.SocketException;
 
 import java.util.ArrayList;
 
@@ -43,6 +41,53 @@ public class AddProductsActivity extends BaseActivity {
     private static final int MAXIMUM_IMAGES = 5;
 
     private ArrayList<ProductCardDto> productCardDtos;
+
+
+    private final RequestManager.OnInsertProduct onInsertProduct = new RequestManager.OnInsertProduct() {
+        @Override
+        public void onSuccess(ProductCardDto productCardDto) {
+            TransactionEntity transactionEntity = new TransactionEntity();
+            transactionEntity.donator_id = productCardDto.productEntity.user_id;
+            transactionEntity.receiver_id = "";
+            transactionEntity.product_id = productCardDto.productEntity.id;
+            transactionEntity.product_name = productCardDto.productEntity.product_name;
+            RequestManager.insertTransaction(transactionEntity);
+
+            for (Uri uri : productCardDtos.get(0).uris) {
+                RequestManager.insertFile(productCardDto.productEntity.id, uri.toString(), new RequestManager.OnInsertFile() {
+                    @Override
+                    public void onSuccess() {
+                        if (productCardDtos.size() == 0) {
+                            hideLoadingView();
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onException(int code) {
+
+                    }
+                });
+            }
+            productCardDtos.remove(0);
+            if (productCardDtos.size() > 0) {
+                RequestManager.insertProduct(productCardDtos.get(0), onInsertProduct);
+            } else {
+                hideLoadingView();
+                finish();
+            }
+        }
+
+        @Override
+        public void onException() {
+            new MaterialDialog.Builder(BaseActivity.context)
+                    .title(R.string.app_name)
+                    .content("등록 도중 에러가 발생했습니다.")
+                    .show();
+            hideLoadingView();
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,42 +134,6 @@ public class AddProductsActivity extends BaseActivity {
         return true;
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        if (intent != null) {
-            String command = intent.getStringExtra(Global.COMMAND);
-            if (command != null) {
-                int code = intent.getIntExtra(Global.CODE, -1);
-                if (command.equals(Global.INSERT_PRODUCT)) {
-                    // 제품 입력
-                    processInsertProduct(code, intent);
-                }
-            }
-        }
-    }
-
-
-    // TODO: 15. 11. 25. 제품 입력
-    private void processInsertProduct(int code, Intent intent) {
-        if (code == SocketException.SUCCESS) {
-//            RequestManager.insertTransactionsInBackground(productEntities, new BaasioCallback<List<BaasioEntity>>() {
-//                @Override
-//                public void onResponse(List<BaasioEntity> baasioEntities) {
-//
-//                }
-//
-//                @Override
-//                public void onException(BaasioException e) {
-//
-//                }
-//            });
-
-
-            hideLoadingView();
-            finish();
-        }
-    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -143,41 +152,7 @@ public class AddProductsActivity extends BaseActivity {
 
                 showLoadingView();
 
-                for (int i = 0; i < productCardDtos.size(); i++) {
-                    final int I = i;
-                    RequestManager.insertProduct(productCardDtos.get(i), new RequestManager.OnInsertProduct() {
-                        @Override
-                        public void onSuccess(ProductCardDto productCardDto) {
-                            TransactionEntity transactionEntity = new TransactionEntity();
-                            transactionEntity.donator_id = productCardDto.productEntity.user_id;
-                            transactionEntity.receiver_id = "";
-                            transactionEntity.product_id = productCardDto.productEntity.id;
-                            transactionEntity.product_name = productCardDto.productEntity.product_name;
-                            RequestManager.insertTransaction(transactionEntity);
-
-
-                            for (Uri uri : productCardDtos.get(I).uris) {
-                                RequestManager.insertFile(productCardDto.productEntity.id, uri.toString(), new RequestManager.OnInsertFile() {
-                                    @Override
-                                    public void onSuccess() {
-                                        hideLoadingView();
-                                        finish();
-                                    }
-
-                                    @Override
-                                    public void onException(int code) {
-
-                                    }
-                                });
-                            }
-                        }
-
-                        @Override
-                        public void onException() {
-
-                        }
-                    });
-                }
+                RequestManager.insertProduct(productCardDtos.get(0), onInsertProduct);
 
 
 //                RequestManager.insertProductsInBackground(productCardDtos, new BaasioCallback<List<BaasioEntity>>() {

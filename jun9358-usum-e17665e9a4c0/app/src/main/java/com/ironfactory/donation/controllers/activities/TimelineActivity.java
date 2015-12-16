@@ -16,7 +16,6 @@ import com.ironfactory.donation.entities.SchoolEntity;
 import com.ironfactory.donation.entities.UserEntity;
 import com.ironfactory.donation.managers.AuthManager;
 import com.ironfactory.donation.managers.RequestManager;
-import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -76,9 +75,8 @@ public class TimelineActivity extends BaseActivity {
         }
 
         timelineCardDtos.clear();
-//        RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
-
         getTimeline();
+        Log.d(TAG, "1");
     }
 
 
@@ -204,17 +202,19 @@ public class TimelineActivity extends BaseActivity {
             public void onRefresh() {
                 timelineCardDtos.clear();
                 getTimeline();
+                Log.d(TAG, "2");
 //                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
             }
         });
 
-        viewHolder.timelines.setOnMoreListener(new OnMoreListener() {
-            @Override
-            public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
-                getTimeline();
-//                RequestManager.getNextTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
-            }
-        });
+//        viewHolder.timelines.setOnMoreListener(new OnMoreListener() {
+//            @Override
+//            public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
+//                getTimeline();
+//                Log.d(TAG, "3");
+////                RequestManager.getNextTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
+//            }
+//        });
     }
 
     @Override
@@ -251,6 +251,7 @@ public class TimelineActivity extends BaseActivity {
                     setQueryToAllTimelines();
                 }
                 getTimeline();
+                Log.d(TAG, "4");
 //                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
 
                 return true;
