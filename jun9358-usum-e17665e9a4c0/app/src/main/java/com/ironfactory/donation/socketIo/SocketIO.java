@@ -2063,4 +2063,19 @@ public class SocketIO {
             e.printStackTrace();
         }
     }
+
+
+    public static void transactionPush(ArrayList<String> userIds, String msg) {
+        try {
+            Gson gson = new Gson();
+            String userJson = gson.toJson(userIds);
+            JSONArray userArray = new JSONArray(userJson);
+            JSONObject object = new JSONObject();
+            object.put(Global.USER, userArray);
+            object.put(Global.MESSAGE, msg);
+            socket.emit(Global.TRANSACTION_PUSH, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

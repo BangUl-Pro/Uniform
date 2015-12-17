@@ -35,6 +35,7 @@ public class Global {
     public static final String INSERT_LIKE = "insertLike";
     public static final String INSERT_TRANSACTION = "insertTransaction";
     public static final String INSERT_TIMELINE_COMMENT = "insertTimelineComment";
+    public static final String TRANSACTION_PUSH = "transactionPush";
 
     public static final String ID = "id";
     public static final String USER = "user";
@@ -70,6 +71,7 @@ public class Global {
     public static final String TOKEN = "token";
     public static final String CREATED = "created";
     public static final String CONTENT = "content";
+    public static final String MESSAGE = "message";
 
     public static boolean isCreated = false;
 

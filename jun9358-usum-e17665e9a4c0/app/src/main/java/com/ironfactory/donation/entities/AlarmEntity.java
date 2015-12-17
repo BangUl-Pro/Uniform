@@ -4,6 +4,7 @@ package com.ironfactory.donation.entities;
 public class AlarmEntity {
     public String message;
     public Long timestamp;
+    public int type;
 
     public AlarmEntity() {
 
@@ -17,5 +18,10 @@ public class AlarmEntity {
     public AlarmEntity(String message) {
         this.message = message;
         this.timestamp = System.currentTimeMillis();
+    }
+
+    public AlarmEntity(String message, int type) {
+        this.message = message;
+        this.type = type;
     }
 }

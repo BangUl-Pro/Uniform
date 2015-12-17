@@ -18,6 +18,10 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.android.vending.BILLING" />
 
+    <!-- c. android:name="{package 이름}.permission.C2D_MESSAGE" 사용 -->
+    <uses-permission android:name="com.ironfactory.donation.permission.C2D_MESSAGE"/>
+
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -43,6 +47,33 @@
         <!--</receiver>-->
 <!---->
         <!--<service android:name=".gcm.GCMIntentService" />-->
+
+
+
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <!-- 구현해야 하는 class1 -->
+        <receiver
+            android:name=".gcm.GCMRedirectedBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <!-- d. android:name="{package 이름}" 사용 -->
+                <category android:name="com.kakao.sample.push" />
+            </intent-filter>
+        </receiver>
+        <!-- 구현해야 하는 class2 -->
+        <service android:name=".gcm.GCMIntentService"/>
+
+        <meta-data android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key"/>
+
+        <meta-data android:name="com.kakao.sdk.GcmProjectId"
+            android:value="@string/gcm_project_number"/>
+
+
+
 
         <receiver android:name="com.ironfactory.donation.reservation.ReservationPushBroadcastReceiver" >
             <intent-filter>

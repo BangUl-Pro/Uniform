@@ -185,6 +185,12 @@ public class RequestManager {
     }
 
 
+    public static void transactionPush(ArrayList<String> userIds, String msg) {
+//        AlarmEntity alarmEntity = new AlarmEntity(msg, AlarmEntity.PUSH_TYPE_TRANSACTION);
+        SocketIO.transactionPush(userIds, msg);
+    }
+
+
     public interface OnGetSchoolRanking {
         void onSuccess(ArrayList<SchoolRanking> schoolRankings);
         void onException();
