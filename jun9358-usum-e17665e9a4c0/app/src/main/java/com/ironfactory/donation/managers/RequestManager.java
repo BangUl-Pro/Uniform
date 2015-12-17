@@ -33,6 +33,7 @@ public class RequestManager {
     private static Handler handler = new Handler();
 
     public static void downloadImage(final String path, final File file, final OnDownloadImage onDownloadImage) {
+        Log.d(TAG, "이미지 다운로드 요청 ");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -84,78 +85,95 @@ public class RequestManager {
 
 
     public static void insertProduct(ProductCardDto productCardDto, OnInsertProduct onInsertProduct) {
+        Log.d(TAG, "제품 입력 요청");
         SocketIO.insertProduct(productCardDto, onInsertProduct);
     }
 
 
     public static void insertTransaction(final TransactionEntity transactionEntity) {
+        Log.d(TAG, "트랜잭션 입력 요청");
         SocketIO.insertTransaction(transactionEntity);
     }
 
 
     public static void getMyProduct(UserEntity userEntity, RequestManager.OnGetMyProduct onGetMyProduct) {
+        Log.d(TAG, "내 제품 리스트 요청");
         SocketIO.getMyProduct(userEntity.id, onGetMyProduct);
     }
 
 
     public static void searchProduct(int schoolId, int sex, int category, int position, int size, OnSearchProduct onSearchProduct) {
+        Log.d(TAG, "제품 검색 리스트 요청");
         SocketIO.searchProduct(schoolId, sex, category, size, position, onSearchProduct);
     }
 
 
     public static void deleteProduct(String productId, OnDeleteProduct onDeleteProduct) {
+        Log.d(TAG, "제품 삭제 요청");
         SocketIO.deleteProduct(productId, onDeleteProduct);
     }
 
     public static void updateProduct(ProductCardDto productCardDto, OnUpdateProduct onUpdateProduct) {
+        Log.d(TAG, "제품 업데이트 요청");
         SocketIO.updateProduct(productCardDto, onUpdateProduct);
     }
 
 
     public static void insertFile(String productId, String path, OnInsertFile onInsertFile) {
+        Log.d(TAG, "파일 입력 요청");
         SocketIO.insertFile(productId, path, onInsertFile);
     }
 
     public static void deleteFile(ArrayList<FileEntity> fileEntities, OnDeleteFile onDeleteFile) {
+        Log.d(TAG, "제품 삭제 요청");
         SocketIO.deleteFile(fileEntities, onDeleteFile);
     }
 
 
     public static void updateTimeline(TimelineCardDto timelineCardDto, OnInsertTimeline onInsertTimeline) {
+        Log.d(TAG, "타임라인 업데이트 요청");
         SocketIO.updateTimeline(timelineCardDto, onInsertTimeline);
     }
 
 
     public static void insertTimeline(int schoolId, ArrayList<Uri> uris, String content, String userId, OnInsertTimeline onInsertTimeline) {
+        Log.d(TAG, "타임라인 입력 요청");
         SocketIO.insertTimeline(schoolId, content, userId, uris, onInsertTimeline);
     }
 
     public static void insertLike(String timelineItemId, String userId, OnInsertLike onInsertLike) {
+        Log.d(TAG, "좋아요 입력 요청");
         SocketIO.insertLike(timelineItemId, userId, onInsertLike);
     }
 
 
     public static void getAllTimeline(String userId, int schoolId, OnGetAllTimeline onGetAllTimeline) {
+        Log.d(TAG, "모든 타임라인 리스트 요청");
         SocketIO.getAllTimeline(schoolId, userId, onGetAllTimeline);
     }
 
     public static void getMyTimeline(String userId, int schoolId, OnGetMyTimeline onGetMyTimeline) {
+        Log.d(TAG, "내 타임라인 리스트 요청");
         SocketIO.getMyTimeline(schoolId, userId, onGetMyTimeline);
     }
 
     public static void deleteComment(TimelineCommentCardDto timelineCommentCardDto, OnDeleteComment onDeleteComment) {
+        Log.d(TAG, "댓글 삭제 요청");
         SocketIO.deleteComment(timelineCommentCardDto, onDeleteComment);
     }
 
     public static void deleteLike(LikeEntity likeEntity, OnDeleteLike onDeleteLike) {
+        Log.d(TAG, "좋아요 삭제 요청");
         SocketIO.deleteLike(likeEntity, onDeleteLike);
     }
 
     public static void deleteTimeline(TimelineCardDto timelineCardDto, OnDeleteTimeline onDeleteTimeline) {
+        Log.d(TAG, "타임라인 삭제 요청");
         SocketIO.deleteTimeline(timelineCardDto, onDeleteTimeline);
     }
 
     public static void signInKakao(long id, OnSignInKakao onSignInKakao) {
+        Log.d(TAG, "카카오 로그인 요청");
         SocketIO.signInKakao(id, onSignInKakao);
     }
 

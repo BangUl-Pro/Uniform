@@ -20,6 +20,7 @@ import com.kakao.MeResponseCallback;
 import com.kakao.Session;
 import com.kakao.UserManagement;
 import com.kakao.UserProfile;
+import com.kakao.helper.SharedPreferencesCache;
 
 
 public class SignUpActivity extends BaseActivity {
@@ -148,7 +149,16 @@ public class SignUpActivity extends BaseActivity {
     // TODO RequestManager에 넣기
     private void requestCheckConfirmedUser() {
         setContentView(R.layout.activity_login);
-        String kakaoToken = Session.getCurrentSession().getAccessToken();
+        SharedPreferencesCache cache = Session.getAppCache();
+        String kakaoToken = cache.getString(Global.TOKEN);
+        Log.d(TAG, "kakaoToken = " + kakaoToken);
+
+        if (kakaoToken == null) {
+            kakaoToken = Session.getCurrentSession().getAccessToken();
+            Bundle bundle = new Bundle();
+            bundle.putString(Global.TOKEN, kakaoToken);
+            cache.save(bundle);
+        }
 
 //        Intent intent = new Intent(getApplicationContext(), SocketService.class);
 //        intent.putExtra(Global.COMMAND, Global.SIGN_IN_KAKAO);

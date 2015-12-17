@@ -16,23 +16,33 @@
 
 package com.ironfactory.donation.gcm;
 
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
-
-import com.google.android.gcm.GCMBroadcastReceiver;
 
 /**
  * @author trevorjohns@google.com (Trevor Johns)
  */
 public class GCMRedirectedBroadcastReceiver extends WakefulBroadcastReceiver {
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String packageName = context.getPackageName();
+        String calssName = GCMIntentService.class.getName();
+        ComponentName comp = new ComponentName(packageName, calssName);
+        startWakefulService(context, (intent.setComponent(comp)));
+        setResultCode(Activity.RESULT_OK);
+    }
+
     /**
      * Gets the class name of the intent service that will handle GCM messages.
      * Used to override class name, so that GCMIntentService can live in a
      * subpackage.
      */
-    @Override
-    protected String getGCMIntentServiceClassName(Context context) {
-        return com.songjin.usum.gcm.GCMIntentService.class.getCanonicalName();
-    }
+//    @Override
+//    protected String getGCMIntentServiceClassName(Context context) {
+//        return com.songjin.usum.gcm.GCMIntentService.class.getCanonicalName();
+//    }
 }

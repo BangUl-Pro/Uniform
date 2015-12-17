@@ -25,6 +25,7 @@ import com.ironfactory.donation.dtos.TimelineCardDto;
 import com.ironfactory.donation.dtos.TimelineCommentCardDto;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.entities.UserEntity;
+import com.ironfactory.donation.gcm.PushManager;
 import com.ironfactory.donation.managers.AuthManager;
 import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.socketIo.SocketException;
@@ -639,8 +640,7 @@ public class ProductDetailCardView extends CardView {
                 pushMessage = "구매자가 상품을 수취하였습니다.";
 
                 // activity가 닫혀서 dialog가 표시안되서 특별처리
-                Log.d(TAG, "푸시알림 구현해야함");
-//                PushManager.sendTransactionPush(targetUserUuids, pushMessage);
+                PushManager.sendTransactionPush(targetUserUuids, pushMessage);
 
                 // 예약알림에서 제거
                 SettingFragment.removeReservedCategory(
@@ -649,8 +649,7 @@ public class ProductDetailCardView extends CardView {
                 );
                 return;
         }
-//        PushManager.sendTransactionPush(targetUserUuids, pushMessage);
-        Log.d(TAG, "푸시알림 구현해야함");
+        PushManager.sendTransactionPush(targetUserUuids, pushMessage);
 
         new MaterialDialog.Builder(BaseActivity.context)
                 .title(R.string.app_name)

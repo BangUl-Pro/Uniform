@@ -16,25 +16,24 @@
 
 package com.ironfactory.donation.gcm;
 
-import android.app.IntentService;;
-
-
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.activities.MainActivity;
 import com.ironfactory.donation.controllers.fragments.SettingFragment;
 import com.ironfactory.donation.entities.AlarmEntity;
+
+;
 
 /**
  * {@link android.app.IntentService} responsible for handling GCM messages.
@@ -53,42 +52,50 @@ public class GCMIntentService extends IntentService {
         super(name);
     }
 
-    @Override
-    protected void onRegistered(Context context, String regId) {
-        Log.d(TAG, "Device registered: regId=" + regId);
-
+//    @Override
+//    protected void onRegistered(Context context, String regId) {
+//        Log.d(TAG, "Device registered: regId=" + regId);
+//
 //        try {
 //            BaasioPush.register(context, regId);
 //        } catch (BaasioException e) {
-//            // TODO Auto-generated catch block
+//             // TODO Auto-generated catch block
 //            e.printStackTrace();
 //        }
-    }
+//    }
 
-    @Override
-    protected void onUnregistered(Context context, String regId) {
-        Log.d(TAG, "Device unregistered");
-
+//    @Override
+//    protected void onUnregistered(Context context, String regId) {
+//        Log.d(TAG, "Device unregistered");
+//
 //        try {
 //            BaasioPush.unregister(context);
 //        } catch (BaasioException e) {
 //            // TODO Auto-generated catch block
 //            e.printStackTrace();
 //        }
-    }
+//    }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(TAG, "뭔가 옴 " + intent);
+        Bundle extras = intent.getExtras();
+        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+        String messageType = gcm.getMessageType(intent);
+        Log.d(TAG, "messageType = " + messageType);
+
+        if (!extras.isEmpty()) {
+            Log.d(TAG, "Received: " + extras.toString());
+        }
+        GCMRedirectedBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    @Override
-    protected void onMessage(Context context, Intent intent) {
-        String announcement = intent.getStringExtra("message");
-        if (announcement != null) {
-            filterNotification(context, announcement);
-        }
-    }
+//    @Override
+//    protected void onMessage(Context context, Intent intent) {
+//        String announcement = intent.getStringExtra("message");
+//        if (announcement != null) {
+//            filterNotification(context, announcement);
+//        }
+//    }
 
     private static void filterNotification(Context context, String message) {
 //        BaasioPayload msg = JsonUtils.parse(message, BaasioPayload.class);

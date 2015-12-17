@@ -55,8 +55,8 @@ public final class R {
 		public static final int cancel = 0x7f0c001b;
 		public static final int done = 0x7f0c0043;
 		public static final int gallery = 0x7f0c0044;
-		public static final int progress_title = 0x7f0c0202;
-		public static final int take_photo = 0x7f0c0205;
+		public static final int progress_title = 0x7f0c0203;
+		public static final int take_photo = 0x7f0c0206;
 	}
 	public static final class style {
 		public static final int AppBaseTheme = 0x7f0d0004;

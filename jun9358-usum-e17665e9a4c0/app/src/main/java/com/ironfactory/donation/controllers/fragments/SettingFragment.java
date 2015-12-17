@@ -17,11 +17,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ironfactory.donation.Global;
-import com.kakao.APIErrorResult;
-import com.kakao.LogoutResponseCallback;
-import com.kakao.UnlinkResponseCallback;
-import com.kakao.UserManagement;
-import com.securepreferences.SecurePreferences;
 import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.activities.BaseActivity;
 import com.ironfactory.donation.controllers.activities.LoginActivity;
@@ -30,6 +25,15 @@ import com.ironfactory.donation.entities.AlarmEntity;
 import com.ironfactory.donation.entities.ReservedCategoryEntity;
 import com.ironfactory.donation.managers.AuthManager;
 import com.ironfactory.donation.slidingtab.SlidingBaseFragment;
+import com.kakao.APIErrorResult;
+import com.kakao.LogoutResponseCallback;
+import com.kakao.PushDeregisterHttpResponseHandler;
+import com.kakao.PushService;
+import com.kakao.Session;
+import com.kakao.UnlinkResponseCallback;
+import com.kakao.UserManagement;
+import com.kakao.helper.SharedPreferencesCache;
+import com.securepreferences.SecurePreferences;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -151,6 +155,18 @@ public class SettingFragment extends SlidingBaseFragment {
                                         BaseActivity.hideLoadingView();
                                         BaseActivity.startActivityOnTopStack(LoginActivity.class);
                                         ((Activity)MainActivity.context).finish();
+
+                                        SharedPreferencesCache cache = Session.getAppCache();
+                                        String deviceId = cache.getString(Global.TOKEN);
+
+                                        PushService.deregisterPushToken(new PushDeregisterHttpResponseHandler() {
+                                            @Override
+                                            protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
+                                                Log.d(TAG, "토큰 제거 실패");
+                                            }
+                                        }, deviceId);
+
+                                        cache.clearAll();
                                     }
 
                                     @Override
@@ -219,6 +235,9 @@ public class SettingFragment extends SlidingBaseFragment {
                 BaseActivity.hideLoadingView();
                 BaseActivity.startActivityOnTopStack(LoginActivity.class);
                 ((Activity) MainActivity.context).finish();
+
+                SharedPreferencesCache cache = Session.getAppCache();
+                cache.clearAll();
             }
 
             @Override

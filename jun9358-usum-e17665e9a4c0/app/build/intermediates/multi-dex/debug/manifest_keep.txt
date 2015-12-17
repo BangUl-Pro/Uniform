@@ -2,6 +2,8 @@
     <init>();
     void attachBaseContext(android.content.Context);
 }
+-keep class com.ironfactory.donation.gcm.GCMRedirectedBroadcastReceiver { <init>(); }
+-keep class com.ironfactory.donation.gcm.GCMIntentService { <init>(); }
 -keep class com.ironfactory.donation.reservation.ReservationPushBroadcastReceiver { <init>(); }
 -keep class com.ironfactory.donation.reservation.ReservationPushService { <init>(); }
 -keep class com.ironfactory.donation.reservation.SchoolRankingPushBroadcastReceiver { <init>(); }

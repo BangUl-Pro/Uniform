@@ -309,31 +309,6 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    private void processGetSchool(int code, Intent intent) {
-        Log.d(TAG, "학교 정보 응답");
-        final ArrayList<SchoolEntity> schoolEntities = intent.getParcelableArrayListExtra(Global.SCHOOL);
-
-        if (code == SocketException.SUCCESS) {
-            // 성공
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    // DB에 저장한다.
-                    schoolManager.insertSchools(schoolEntities);
-                }
-            }).start();
-
-            onLoadingSchoolsCompleted();
-        } else {
-            new MaterialDialog.Builder(BaseActivity.context)
-                    .title(R.string.app_name)
-                    .content("학교정보를 가져오는데 실패하였습니다.")
-                    .show();
-        }
-        hideLoadingView();
-    }
-
-
     private class SessionStatusCallback implements SessionCallback {
         @Override
         public void onSessionOpened() {
