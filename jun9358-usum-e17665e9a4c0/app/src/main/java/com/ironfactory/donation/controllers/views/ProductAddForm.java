@@ -175,7 +175,7 @@ public class ProductAddForm extends CardView {
                 }
                 viewHolder.schoolName.setEnabled(false);
 
-                viewHolder.sex.setSelection(userEntity.sex);
+                viewHolder.sex.setSelection(userEntity.sex - 1);
                 break;
             case Global.PARENT:
                 break;

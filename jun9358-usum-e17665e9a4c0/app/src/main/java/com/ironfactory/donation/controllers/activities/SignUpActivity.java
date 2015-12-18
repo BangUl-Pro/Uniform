@@ -135,6 +135,7 @@ public class SignUpActivity extends BaseActivity {
             UserEntity user = intent.getParcelableExtra(Global.USER);
             Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
             intent1.putExtra(Global.USER, user);
+            Log.d(TAG, "1.userId = " + user.id);
             startActivity(intent1);
 //            BaseActivity.startActivityOnTopStack(MainActivity.class);
             finish();
@@ -197,6 +198,7 @@ public class SignUpActivity extends BaseActivity {
                         if (userEntity.hasExtraProfile) {
                             Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
                             intent1.putExtra(Global.USER, userEntity);
+                            Log.d(TAG, "2.userId = " + userEntity.id);
                             startActivity(intent1);
                             finish();
                         } else {
@@ -210,7 +212,15 @@ public class SignUpActivity extends BaseActivity {
                             RequestManager.signInKakao(id, new RequestManager.OnSignInKakao() {
                                 @Override
                                 public void onSuccess(UserEntity userEntity) {
-
+                                    if (userEntity.hasExtraProfile) {
+                                        Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                                        intent1.putExtra(Global.USER, userEntity);
+                                        Log.d(TAG, "2.userId = " + userEntity.id);
+                                        startActivity(intent1);
+                                        finish();
+                                    } else {
+                                        initViews(R.layout.activity_sign_up);
+                                    }
                                 }
 
                                 @Override

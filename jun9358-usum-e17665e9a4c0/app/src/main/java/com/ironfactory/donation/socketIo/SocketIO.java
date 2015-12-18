@@ -706,7 +706,7 @@ public class SocketIO {
             int userType = object.getInt(Global.USER_TYPE);
 
             Intent intent;
-            if (userType == 0) {
+            if (userType == 1) {
                 // 게스트모드
                 intent = new Intent(context, LoginActivity.class);
             } else {
@@ -717,6 +717,7 @@ public class SocketIO {
             if (code == SocketException.SUCCESS) {
                 // 성공
                 JSONObject userObject = object.getJSONObject(Global.USER);
+                Log.d(TAG, "userObject = " + userObject);
                 UserEntity user = new UserEntity(userObject);
                 intent.putExtra(Global.USER, user);
             }
@@ -850,43 +851,43 @@ public class SocketIO {
      * */
     public static void getSchool(final RequestManager.OnGetSchool onGetSchool) {
         Log.d(TAG, "학교 정보 요청");
-//        socket.emit(Global.GET_SCHOOL, "");
-//        socket.once(Global.GET_SCHOOL, new Emitter.Listener() {
-//            @Override
-//            public void call(Object... args) {
-//                try {
-//                    JSONObject resObject = getJson(args);
-//                    final int code = getCode(resObject);
-//                    Log.d(TAG, "학교 정보 응답 resObject = " + resObject);
-//
-//                    if (code == SocketException.SUCCESS) {
-//                        JSONArray array = resObject.getJSONArray(Global.SCHOOL);
-//                        final ArrayList<SchoolEntity> schoolEntities = new ArrayList<>();
-//
-//                        for (int i = 0; i < array.length(); i++) {
-//                            JSONObject schoolObject = array.getJSONObject(i);
-//                            schoolEntities.add(new SchoolEntity(schoolObject));
-//                        }
-//                        handler.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                onGetSchool.onSuccess(schoolEntities);
-//                            }
-//                        });
-//                    } else {
-//                        handler.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                onGetSchool.onException();
-//                            }
-//                        });
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-        insertSchool();
+        socket.emit(Global.GET_SCHOOL, "");
+        socket.once(Global.GET_SCHOOL, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    JSONObject resObject = getJson(args);
+                    final int code = getCode(resObject);
+                    Log.d(TAG, "학교 정보 응답 resObject = " + resObject);
+
+                    if (code == SocketException.SUCCESS) {
+                        JSONArray array = resObject.getJSONArray(Global.SCHOOL);
+                        final ArrayList<SchoolEntity> schoolEntities = new ArrayList<>();
+
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject schoolObject = array.getJSONObject(i);
+                            schoolEntities.add(new SchoolEntity(schoolObject));
+                        }
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onGetSchool.onSuccess(schoolEntities);
+                            }
+                        });
+                    } else {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onGetSchool.onException();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+//        insertSchool();
     }
 
 
@@ -898,7 +899,8 @@ public class SocketIO {
                 try {
 //                    String serviceKey = "AgIevc%2B9UJQ8VK0tGD%2FcO1BTMIPNnklsq7Vsa7LT%2Bu6aBTy5b42HH2r9Y4cI1mNdf%2Bp%2BZ%2B%2Bsg5Unml1IJcChuw%3D%3D";
 //                    serviceKey = URLEncoder.encode(serviceKey, "UTF-8");
-                    String urlStr = "http://api.data.go.kr/openapi/4e1a3cda-db21-40b3-b4f8-a1e7de2993bd?s_page=1&s_list=10000&type=xml&encoding=UTF-8&serviceKey=AgIevc%2B9UJQ8VK0tGD%2FcO1BTMIPNnklsq7Vsa7LT%2Bu6aBTy5b42HH2r9Y4cI1mNdf%2Bp%2BZ%2B%2Bsg5Unml1IJcChuw%3D%3D";
+                    String urlStr = "http://api.data.go.kr/openapi/4e1a3cda-db21-40b3-b4f8-a1e7de2993bd?s_page=1&s_list=10000&numOfRows=999&pageNo=1&type=xml&encoding=UTF-8&serviceKey=Lxbm1ybyU8N5PDZs85%2Fq7lPkVo9xuf2eienU0jAfV2YFMTZBElEvProHiKucWYZ5sS4R1fAA1nolBb2u7ttxcg%3D%3D";
+//                    String urlStr = "http://api.data.go.kr/openapi/4e1a3cda-db21-40b3-b4f8-a1e7de2993bd?s_page=1&s_list=10000&numOfRows=999&pageNo=1&type=xml&serviceKey=AgIevc%2B9UJQ8VK0tGD%2FcO1BTMIPNnklsq7Vsa7LT%2Bu6aBTy5b42HH2r9Y4cI1mNdf%2Bp%2BZ%2B%2Bsg5Unml1IJcChuw%3D%3D";
 //                    urlStr = URLEncoder.encode(urlStr, "UTF-8");
                     URL url = new URL(urlStr);
                     try {
@@ -1950,7 +1952,6 @@ public class SocketIO {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
                         Log.d(TAG, "좋아요 삭제 응답 resObject = " + resObject);
-
                         handler.post(new Runnable() {
                             @Override
                             public void run() {

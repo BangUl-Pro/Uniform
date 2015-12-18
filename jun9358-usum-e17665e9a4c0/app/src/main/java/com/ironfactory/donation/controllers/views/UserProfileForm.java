@@ -2,6 +2,7 @@ package com.ironfactory.donation.controllers.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -231,6 +232,8 @@ public class UserProfileForm extends ScrollView {
         }
         SchoolEntity schoolEntity = schoolManager.selectSchool(userEntity.schoolId);
         String schoolName = viewHolder.schoolNameAutoCompleteTextView.getText().toString();
+        Log.d(TAG, "schoolName = " + schoolName);
+        Log.d(TAG, "schoolEntity Name = " + schoolEntity.schoolname);
         if (!schoolName.equals(schoolEntity.schoolname)) {
             return "소속학교를 다시 선택해주세요.";
         }

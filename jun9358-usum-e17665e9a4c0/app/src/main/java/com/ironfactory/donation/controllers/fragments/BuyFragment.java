@@ -41,8 +41,6 @@ public class BuyFragment extends SlidingBaseFragment {
     private ViewHolder viewHolder;
 
     private ArrayList<ProductCardDto> productCardDtos;
-//    private BaasioQuery productCardDtoQuery;
-//    private RequestManager.TypedBaasioQueryCallback<ProductCardDto> productCardDtoQueryCallback;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,19 +51,6 @@ public class BuyFragment extends SlidingBaseFragment {
     }
 
     private void initCallback() {
-//        productCardDtoQueryCallback = new RequestManager.TypedBaasioQueryCallback<ProductCardDto>() {
-//            @Override
-//            public void onResponse(List<ProductCardDto> entities) {
-//                productCardDtos.addAll(entities);
-//                viewHolder.products.setProductCardDtos(productCardDtos);
-//                viewHolder.products.hideMoreProgress();
-//            }
-//
-//            @Override
-//            public void onException(BaasioException e) {
-//                viewHolder.products.hideMoreProgress();
-//            }
-//        };
     }
 
 

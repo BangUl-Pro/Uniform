@@ -2,6 +2,7 @@ package com.ironfactory.donation.controllers.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -179,7 +180,7 @@ public class ProductSearchForm extends LinearLayout {
                 viewHolder.schoolName.setEnabled(false);
                 viewHolder.schoolName.clearFocus();
 
-                viewHolder.sex.setSelection(userEntity.sex);
+                viewHolder.sex.setSelection(userEntity.sex - 1);
                 break;
             case Global.PARENT:
                 break;
@@ -212,6 +213,7 @@ public class ProductSearchForm extends LinearLayout {
 
     public int getSex() {
         int sexPosition = viewHolder.sex.getSelectedItemPosition();
+        Log.d(TAG, "sexPosition = " + sexPosition);
         HashBiMap<String, Integer> inverseSex = Sex.getHashBiMapExceptAll().inverse();
         int selectedSex = inverseSex.get(sexAdapter.getItem(sexPosition));
         return selectedSex;
@@ -220,6 +222,7 @@ public class ProductSearchForm extends LinearLayout {
 
     public int getCategory() {
         int categoryPosition = viewHolder.category.getSelectedItemPosition();
+        Log.d(TAG, "categoryPosition = " + categoryPosition);
         HashBiMap<String, Integer> inverseCategory = Category.getHashBiMap(getSex()).inverse();
         int selectedCategory = inverseCategory.get(categoryAdapter.getItem(categoryPosition));
         if (selectedCategory == 0)
@@ -230,6 +233,7 @@ public class ProductSearchForm extends LinearLayout {
 
     public int getSize() {
         int sizePosition = viewHolder.size.getSelectedItemPosition();
+        Log.d(TAG, "sizePosition = " + sizePosition);
         HashBiMap<String, Integer> inverseSize = Size.getHashBiMap(getCategory()).inverse();
         int selectedSize = inverseSize.get(sizeAdapter.getItem(sizePosition));
         if (selectedSize == 0)

@@ -199,6 +199,7 @@ public class LoginActivity extends BaseActivity {
 //        BaseActivity.startActivityOnTopStack(MainActivity.class);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra(Global.USER, guest);
+        Log.d(TAG, "3.userId = " + guest.id);
         startActivity(intent);
         finish();
 //        RequestManager.requestSignUp(guest, new BaasioSignInCallback() {

@@ -61,22 +61,19 @@ public class ProductCardView extends LinearLayout {
         writtenTime.setText(DateFormat.format("yyyy년 MM월 dd일 HH시 mm분에 작성", productCardDto.productEntity.created));
 
         photo.setImageResource(R.drawable.ic_launcher);
-        Log.d(TAG, "uris.size = " + productCardDto.uris.size());
-        Log.d(TAG, "files.size = " + productCardDto.fileEntities.size());
         if (0 < productCardDto.uris.size()) {
             photo.setImageURI(productCardDto.uris.get(0));
-            Log.d(TAG, "imageUri = " + productCardDto.uris.get(0));
         } else if (0 < productCardDto.fileEntities.size()) {
-//            String photoUrl = "https://portal-access-api.baas.io/usum/usum/files/" + productCardDto.fileEntities.get(0).id + "/data";
             String photoUrl = "http://uniform-test.herokuapp.com/imgs/" + productCardDto.fileEntities.get(0).id;
-            Log.d(TAG, "photoUrl = " + photoUrl);
             Ion.with(photo)
                     .placeholder(R.drawable.ic_launcher)
                     .error(R.drawable.ic_launcher)
                     .load(photoUrl);
         }
         schoolname.setText(schoolEntity.schoolname);
+        Log.d(TAG, "sex = " + productCardDto.productEntity.sex);
         sex.setText("[" + Sex.getHashBiMapExceptAll().get(productCardDto.productEntity.sex) + "]");
+        Log.d(TAG, "sex TEXT = " + sex.getText().toString());
         category.setText(Category.getHashBiMap(productCardDto.productEntity.sex).get(productCardDto.productEntity.category));
         size.setText(Size.getHashBiMap(productCardDto.productEntity.category).get(productCardDto.productEntity.size));
         condition.setText(Condition.getHashBiMapExceptAll().get(productCardDto.productEntity.condition));
