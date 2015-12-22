@@ -19,64 +19,60 @@ ADDED from AndroidManifest.xml:5:5
 		ADDED from AndroidManifest.xml:7:9
 	android:name
 		ADDED from AndroidManifest.xml:6:9
-uses-permission#com.songjin.usum.permission.C2D_MESSAGE
+uses-permission#com.google.android.c2dm.permission.RECEIVE
 ADDED from AndroidManifest.xml:9:5
 	android:name
 		ADDED from AndroidManifest.xml:9:22
-uses-permission#com.google.android.c2dm.permission.RECEIVE
+uses-permission#android.permission.GET_ACCOUNTS
 ADDED from AndroidManifest.xml:10:5
 	android:name
 		ADDED from AndroidManifest.xml:10:22
-uses-permission#android.permission.GET_ACCOUNTS
+uses-permission#android.permission.WAKE_LOCK
 ADDED from AndroidManifest.xml:11:5
 	android:name
 		ADDED from AndroidManifest.xml:11:22
-uses-permission#android.permission.WAKE_LOCK
+uses-permission#android.permission.USE_CREDENTIALS
 ADDED from AndroidManifest.xml:12:5
 	android:name
 		ADDED from AndroidManifest.xml:12:22
-uses-permission#android.permission.USE_CREDENTIALS
+uses-permission#android.permission.INTERNET
 ADDED from AndroidManifest.xml:13:5
 	android:name
 		ADDED from AndroidManifest.xml:13:22
-uses-permission#android.permission.INTERNET
+uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from AndroidManifest.xml:14:5
 	android:name
 		ADDED from AndroidManifest.xml:14:22
-uses-permission#android.permission.ACCESS_NETWORK_STATE
+uses-permission#android.permission.CAMERA
 ADDED from AndroidManifest.xml:15:5
 	android:name
 		ADDED from AndroidManifest.xml:15:22
-uses-permission#android.permission.CAMERA
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
 ADDED from AndroidManifest.xml:16:5
 	android:name
 		ADDED from AndroidManifest.xml:16:22
-uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
 ADDED from AndroidManifest.xml:17:5
 	android:name
 		ADDED from AndroidManifest.xml:17:22
-uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+uses-permission#com.android.vending.BILLING
 ADDED from AndroidManifest.xml:18:5
 	android:name
 		ADDED from AndroidManifest.xml:18:22
-uses-permission#com.android.vending.BILLING
-ADDED from AndroidManifest.xml:19:5
-	android:name
-		ADDED from AndroidManifest.xml:19:22
 uses-permission#com.ironfactory.donation.permission.C2D_MESSAGE
-ADDED from AndroidManifest.xml:22:5
+ADDED from AndroidManifest.xml:21:5
 	android:name
-		ADDED from AndroidManifest.xml:22:22
+		ADDED from AndroidManifest.xml:21:22
 uses-feature#android.hardware.camera
+ADDED from AndroidManifest.xml:24:5
+	android:name
+		ADDED from AndroidManifest.xml:24:19
+uses-feature#android.hardware.camera.autofocus
 ADDED from AndroidManifest.xml:25:5
 	android:name
 		ADDED from AndroidManifest.xml:25:19
-uses-feature#android.hardware.camera.autofocus
-ADDED from AndroidManifest.xml:26:5
-	android:name
-		ADDED from AndroidManifest.xml:26:19
 application
-ADDED from AndroidManifest.xml:28:5
+ADDED from AndroidManifest.xml:27:5
 MERGED from com.android.support:appcompat-v7:23.1.1:22:5
 MERGED from com.android.support:support-v4:23.1.1:22:5
 MERGED from com.android.support:cardview-v7:23.0.1:22:5
@@ -118,191 +114,191 @@ MERGED from com.kakao.sdk:push:1.0.46:7:5
 MERGED from com.kakao.sdk:login:1.0.46:7:5
 MERGED from com.kakao.sdk:util:1.0.46:7:5
 	android:label
-		ADDED from AndroidManifest.xml:32:9
-	android:allowBackup
-		ADDED from AndroidManifest.xml:30:9
-	android:icon
 		ADDED from AndroidManifest.xml:31:9
+	android:allowBackup
+		ADDED from AndroidManifest.xml:29:9
+	android:icon
+		ADDED from AndroidManifest.xml:30:9
 	android:hardwareAccelerated
 		ADDED from com.github.chrisbanes.photoview:library:1.2.3:4:45
 	android:theme
-		ADDED from AndroidManifest.xml:34:9
-	android:largeHeap
 		ADDED from AndroidManifest.xml:33:9
+	android:largeHeap
+		ADDED from AndroidManifest.xml:32:9
 	android:name
-		ADDED from AndroidManifest.xml:29:9
+		ADDED from AndroidManifest.xml:28:9
 meta-data#com.google.android.gms.version
-ADDED from AndroidManifest.xml:53:9
+ADDED from AndroidManifest.xml:52:9
 	android:name
-		ADDED from AndroidManifest.xml:53:20
+		ADDED from AndroidManifest.xml:52:20
 	android:value
-		ADDED from AndroidManifest.xml:54:13
+		ADDED from AndroidManifest.xml:53:13
 receiver#com.ironfactory.donation.gcm.GCMRedirectedBroadcastReceiver
-ADDED from AndroidManifest.xml:56:9
+ADDED from AndroidManifest.xml:55:9
 	android:permission
-		ADDED from AndroidManifest.xml:58:13
-	android:name
 		ADDED from AndroidManifest.xml:57:13
-intent-filter#com.google.android.c2dm.intent.RECEIVE+com.google.android.c2dm.intent.REGISTRATION+com.kakao.sample.push
-ADDED from AndroidManifest.xml:59:13
+	android:name
+		ADDED from AndroidManifest.xml:56:13
+intent-filter#com.google.android.c2dm.intent.RECEIVE+com.google.android.c2dm.intent.REGISTRATION+com.ironfactory.donation.push
+ADDED from AndroidManifest.xml:58:13
 action#com.google.android.c2dm.intent.RECEIVE
+ADDED from AndroidManifest.xml:59:17
+	android:name
+		ADDED from AndroidManifest.xml:59:25
+action#com.google.android.c2dm.intent.REGISTRATION
 ADDED from AndroidManifest.xml:60:17
 	android:name
 		ADDED from AndroidManifest.xml:60:25
-action#com.google.android.c2dm.intent.REGISTRATION
-ADDED from AndroidManifest.xml:61:17
+category#com.ironfactory.donation.push
+ADDED from AndroidManifest.xml:62:17
 	android:name
-		ADDED from AndroidManifest.xml:61:25
-category#com.kakao.sample.push
-ADDED from AndroidManifest.xml:63:17
-	android:name
-		ADDED from AndroidManifest.xml:63:27
+		ADDED from AndroidManifest.xml:62:27
 service#com.ironfactory.donation.gcm.GCMIntentService
-ADDED from AndroidManifest.xml:67:9
+ADDED from AndroidManifest.xml:66:9
 	android:name
-		ADDED from AndroidManifest.xml:67:18
+		ADDED from AndroidManifest.xml:66:18
 meta-data#com.kakao.sdk.AppKey
-ADDED from AndroidManifest.xml:69:9
+ADDED from AndroidManifest.xml:68:9
 	android:name
-		ADDED from AndroidManifest.xml:69:20
+		ADDED from AndroidManifest.xml:68:20
 	android:value
-		ADDED from AndroidManifest.xml:70:13
+		ADDED from AndroidManifest.xml:69:13
 meta-data#com.kakao.sdk.GcmProjectId
-ADDED from AndroidManifest.xml:72:9
+ADDED from AndroidManifest.xml:71:9
 	android:name
-		ADDED from AndroidManifest.xml:72:20
+		ADDED from AndroidManifest.xml:71:20
 	android:value
-		ADDED from AndroidManifest.xml:73:13
+		ADDED from AndroidManifest.xml:72:13
 receiver#com.ironfactory.donation.reservation.ReservationPushBroadcastReceiver
-ADDED from AndroidManifest.xml:78:9
+ADDED from AndroidManifest.xml:77:9
 	android:name
-		ADDED from AndroidManifest.xml:78:19
+		ADDED from AndroidManifest.xml:77:19
 intent-filter#android.intent.action.BOOT_COMPLETED
-ADDED from AndroidManifest.xml:79:13
+ADDED from AndroidManifest.xml:78:13
 action#android.intent.action.BOOT_COMPLETED
-ADDED from AndroidManifest.xml:80:17
+ADDED from AndroidManifest.xml:79:17
 	android:name
-		ADDED from AndroidManifest.xml:80:25
+		ADDED from AndroidManifest.xml:79:25
 service#com.ironfactory.donation.reservation.ReservationPushService
-ADDED from AndroidManifest.xml:84:9
+ADDED from AndroidManifest.xml:83:9
 	android:name
-		ADDED from AndroidManifest.xml:84:18
+		ADDED from AndroidManifest.xml:83:18
 receiver#com.ironfactory.donation.reservation.SchoolRankingPushBroadcastReceiver
-ADDED from AndroidManifest.xml:86:9
+ADDED from AndroidManifest.xml:85:9
 	android:name
-		ADDED from AndroidManifest.xml:86:19
+		ADDED from AndroidManifest.xml:85:19
 service#com.ironfactory.donation.reservation.SchoolRankingPushService
-ADDED from AndroidManifest.xml:92:9
+ADDED from AndroidManifest.xml:91:9
 	android:name
-		ADDED from AndroidManifest.xml:92:18
+		ADDED from AndroidManifest.xml:91:18
 activity#com.kakao.LoginActivity
-ADDED from AndroidManifest.xml:95:9
+ADDED from AndroidManifest.xml:94:9
 	android:configChanges
-		ADDED from AndroidManifest.xml:97:13
-	android:name
 		ADDED from AndroidManifest.xml:96:13
+	android:name
+		ADDED from AndroidManifest.xml:95:13
 activity#com.ironfactory.donation.controllers.activities.LoginActivity
-ADDED from AndroidManifest.xml:104:9
+ADDED from AndroidManifest.xml:103:9
 	android:label
-		ADDED from AndroidManifest.xml:106:13
-	android:name
 		ADDED from AndroidManifest.xml:105:13
+	android:name
+		ADDED from AndroidManifest.xml:104:13
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:107:13
+ADDED from AndroidManifest.xml:106:13
 action#android.intent.action.MAIN
-ADDED from AndroidManifest.xml:108:17
+ADDED from AndroidManifest.xml:107:17
 	android:name
-		ADDED from AndroidManifest.xml:108:25
+		ADDED from AndroidManifest.xml:107:25
 category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:110:17
+ADDED from AndroidManifest.xml:109:17
 	android:name
-		ADDED from AndroidManifest.xml:110:27
+		ADDED from AndroidManifest.xml:109:27
 activity#com.ironfactory.donation.controllers.activities.SignUpActivity
-ADDED from AndroidManifest.xml:113:9
+ADDED from AndroidManifest.xml:112:9
 	android:theme
-		ADDED from AndroidManifest.xml:115:13
-	android:name
 		ADDED from AndroidManifest.xml:114:13
+	android:name
+		ADDED from AndroidManifest.xml:113:13
 activity#com.ironfactory.donation.controllers.activities.MainActivity
+ADDED from AndroidManifest.xml:115:9
+	android:name
+		ADDED from AndroidManifest.xml:115:19
+activity#com.ironfactory.donation.controllers.activities.TimelineDetailActivity
 ADDED from AndroidManifest.xml:116:9
 	android:name
 		ADDED from AndroidManifest.xml:116:19
-activity#com.ironfactory.donation.controllers.activities.TimelineDetailActivity
+activity#com.ironfactory.donation.controllers.activities.TimelineWriteActivity
 ADDED from AndroidManifest.xml:117:9
 	android:name
 		ADDED from AndroidManifest.xml:117:19
-activity#com.ironfactory.donation.controllers.activities.TimelineWriteActivity
-ADDED from AndroidManifest.xml:118:9
-	android:name
-		ADDED from AndroidManifest.xml:118:19
 activity#nl.changer.polypicker.ImagePickerActivity
-ADDED from AndroidManifest.xml:119:9
+ADDED from AndroidManifest.xml:118:9
 	android:theme
-		ADDED from AndroidManifest.xml:121:13
-	android:name
 		ADDED from AndroidManifest.xml:120:13
+	android:name
+		ADDED from AndroidManifest.xml:119:13
 activity#com.ironfactory.donation.controllers.activities.TimelineActivity
-ADDED from AndroidManifest.xml:122:9
+ADDED from AndroidManifest.xml:121:9
 	android:name
-		ADDED from AndroidManifest.xml:122:19
+		ADDED from AndroidManifest.xml:121:19
 activity#com.ironfactory.donation.controllers.activities.AddProductsActivity
-ADDED from AndroidManifest.xml:123:9
+ADDED from AndroidManifest.xml:122:9
 	android:label
-		ADDED from AndroidManifest.xml:125:13
-	android:name
 		ADDED from AndroidManifest.xml:124:13
+	android:name
+		ADDED from AndroidManifest.xml:123:13
 activity#com.ironfactory.donation.controllers.activities.ProductDetailActivity
-ADDED from AndroidManifest.xml:126:9
+ADDED from AndroidManifest.xml:125:9
 	android:label
-		ADDED from AndroidManifest.xml:128:13
-	android:name
 		ADDED from AndroidManifest.xml:127:13
+	android:name
+		ADDED from AndroidManifest.xml:126:13
 activity#com.ironfactory.donation.controllers.activities.EditProfileActivity
-ADDED from AndroidManifest.xml:129:9
+ADDED from AndroidManifest.xml:128:9
 	android:label
-		ADDED from AndroidManifest.xml:131:13
-	android:name
 		ADDED from AndroidManifest.xml:130:13
+	android:name
+		ADDED from AndroidManifest.xml:129:13
 activity#com.ironfactory.donation.controllers.activities.PhotoViewActivity
-ADDED from AndroidManifest.xml:132:9
+ADDED from AndroidManifest.xml:131:9
 	android:label
-		ADDED from AndroidManifest.xml:134:13
-	android:theme
-		ADDED from AndroidManifest.xml:135:13
-	android:name
 		ADDED from AndroidManifest.xml:133:13
+	android:theme
+		ADDED from AndroidManifest.xml:134:13
+	android:name
+		ADDED from AndroidManifest.xml:132:13
 activity#com.ironfactory.donation.controllers.activities.SupportActivity
-ADDED from AndroidManifest.xml:136:9
+ADDED from AndroidManifest.xml:135:9
 	android:label
-		ADDED from AndroidManifest.xml:138:13
-	android:name
 		ADDED from AndroidManifest.xml:137:13
+	android:name
+		ADDED from AndroidManifest.xml:136:13
 activity#com.ironfactory.donation.controllers.activities.FaqActivity
-ADDED from AndroidManifest.xml:140:9
+ADDED from AndroidManifest.xml:139:9
 	android:label
-		ADDED from AndroidManifest.xml:142:13
-	android:name
 		ADDED from AndroidManifest.xml:141:13
+	android:name
+		ADDED from AndroidManifest.xml:140:13
 activity#com.ironfactory.donation.controllers.activities.SupportCompletedActivity
-ADDED from AndroidManifest.xml:144:9
+ADDED from AndroidManifest.xml:143:9
 	android:label
-		ADDED from AndroidManifest.xml:146:13
-	android:name
 		ADDED from AndroidManifest.xml:145:13
+	android:name
+		ADDED from AndroidManifest.xml:144:13
 activity#com.ironfactory.donation.controllers.activities.AlarmActivity
-ADDED from AndroidManifest.xml:148:9
+ADDED from AndroidManifest.xml:147:9
 	android:label
-		ADDED from AndroidManifest.xml:150:13
-	android:name
 		ADDED from AndroidManifest.xml:149:13
-service#com.ironfactory.donation.socketIo.SocketService
-ADDED from AndroidManifest.xml:153:9
-	android:exported
-		ADDED from AndroidManifest.xml:156:13
-	android:enabled
-		ADDED from AndroidManifest.xml:155:13
 	android:name
+		ADDED from AndroidManifest.xml:148:13
+service#com.ironfactory.donation.socketIo.SocketService
+ADDED from AndroidManifest.xml:152:9
+	android:exported
+		ADDED from AndroidManifest.xml:155:13
+	android:enabled
 		ADDED from AndroidManifest.xml:154:13
+	android:name
+		ADDED from AndroidManifest.xml:153:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:multidex:1.0.0:18:5

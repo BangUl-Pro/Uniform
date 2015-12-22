@@ -32,6 +32,8 @@ import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.activities.MainActivity;
 import com.ironfactory.donation.controllers.fragments.SettingFragment;
 import com.ironfactory.donation.entities.AlarmEntity;
+import com.kakao.Session;
+import com.kakao.helper.SharedPreferencesCache;
 
 ;
 
@@ -47,34 +49,14 @@ public class GCMIntentService extends IntentService {
     public static final int PUSH_TYPE_RESERVATION = 3;
     public static final int PUSH_TYPE_SCHOOL_RANK_UPDATED = 4;
 
-
     public GCMIntentService(String name) {
         super(name);
     }
 
-//    @Override
-//    protected void onRegistered(Context context, String regId) {
-//        Log.d(TAG, "Device registered: regId=" + regId);
-//
-//        try {
-//            BaasioPush.register(context, regId);
-//        } catch (BaasioException e) {
-//             // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//    }
+    public GCMIntentService() {
+        super("615711835088");
+    }
 
-//    @Override
-//    protected void onUnregistered(Context context, String regId) {
-//        Log.d(TAG, "Device unregistered");
-//
-//        try {
-//            BaasioPush.unregister(context);
-//        } catch (BaasioException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//    }
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -84,7 +66,17 @@ public class GCMIntentService extends IntentService {
         Log.d(TAG, "messageType = " + messageType);
 
         if (!extras.isEmpty()) {
-            Log.d(TAG, "Received: " + extras.toString());
+
+            if (messageType != null) {
+                if (messageType.equals("gcm")) {
+                    String msg = extras.getString("msg");
+                    Log.d(TAG, "GCM Message = " + msg);
+                    filterNotification(getApplicationContext(), msg);
+                }
+            }  else {
+                Log.d(TAG, "Received: " + extras.toString());
+                SharedPreferencesCache cache = Session.getAppCache();
+            }
         }
         GCMRedirectedBroadcastReceiver.completeWakefulIntent(intent);
     }
@@ -98,7 +90,6 @@ public class GCMIntentService extends IntentService {
 //    }
 
     private static void filterNotification(Context context, String message) {
-//        BaasioPayload msg = JsonUtils.parse(message, BaasioPayload.class);
         if (TextUtils.isEmpty(message)) {
             return;
         }
@@ -150,16 +141,4 @@ public class GCMIntentService extends IntentService {
         msg.timestamp = System.currentTimeMillis();
         SettingFragment.addReceivedPushMessage(msg);
     }
-
-//    @Override
-//    public void onError(Context context, String errorId) {
-//        Log.e(TAG, "Received error: " + errorId);
-//    }
-
-//    @Override
-//    protected boolean onRecoverableError(Context context, String errorId) {
-//        // log message
-//        Log.w(TAG, "Received recoverable error: " + errorId);
-//        return super.onRecoverableError(context, errorId);
-//    }
 }

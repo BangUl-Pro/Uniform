@@ -15,7 +15,7 @@ public class ProductSearchSlidingLayer extends LinearLayout {
         public SlidingLayer slidingLayer;
         public LinearLayout slidingContainer;
         public LinearLayout slidingHandle;
-        public ImageView slidngArrow;
+        public ImageView slidingArrow;
 
         public ProductSearchForm productSearchForm;
 
@@ -23,7 +23,7 @@ public class ProductSearchSlidingLayer extends LinearLayout {
             slidingLayer = (SlidingLayer) view.findViewById(R.id.sliding_layer);
             slidingContainer = (LinearLayout) view.findViewById(R.id.sliding_container);
             slidingHandle = (LinearLayout) view.findViewById(R.id.sliding_handle);
-            slidngArrow = (ImageView) view.findViewById(R.id.sliding_arrow);
+            slidingArrow = (ImageView) view.findViewById(R.id.sliding_arrow);
 
             productSearchForm = (ProductSearchForm) view.findViewById(R.id.product_search_form);
         }
@@ -78,12 +78,12 @@ public class ProductSearchSlidingLayer extends LinearLayout {
         viewHolder.slidingLayer.setOnInteractListener(new SlidingLayer.OnInteractListener() {
             @Override
             public void onOpen() {
-                viewHolder.slidngArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_up));
+                viewHolder.slidingArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_up));
             }
 
             @Override
             public void onClose() {
-                viewHolder.slidngArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_down));
+                viewHolder.slidingArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_down));
             }
 
             @Override

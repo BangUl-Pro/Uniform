@@ -16,6 +16,7 @@ import com.ironfactory.donation.entities.LikeEntity;
 import com.ironfactory.donation.entities.SchoolEntity;
 import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.entities.UserEntity;
+import com.ironfactory.donation.gcm.PushManager;
 import com.ironfactory.donation.socketIo.SocketIO;
 
 import java.io.File;
@@ -172,33 +173,38 @@ public class RequestManager {
         SocketIO.deleteTimeline(timelineCardDto, onDeleteTimeline);
     }
 
-    public static void signInKakao(long id, OnSignInKakao onSignInKakao) {
+    public static void signInKakao(long id, String nickName, String profileImage, String thumbnailImage, OnSignInKakao onSignInKakao) {
         Log.d(TAG, "카카오 로그인 요청");
-        SocketIO.signInKakao(id, onSignInKakao);
+        SocketIO.signInKakao(id, nickName, profileImage, thumbnailImage, onSignInKakao);
     }
 
 
     public static void getSchool(OnGetSchool onGetSchool) {
+        Log.d(TAG, "학교 정보 요청");
         SocketIO.getSchool(onGetSchool);
     }
 
 
     public static void insertTimelineComment(String timelineId, String comment, String userId, OnInsertTimelineComment onInsertTimelineComment) {
+        Log.d(TAG, "타임라인 댓글 입력 요청");
         SocketIO.insertTimelineComment(timelineId, comment, userId, onInsertTimelineComment);
     }
 
 
     public static void getTimelineComment(String timelineId, OnGetTimelineComment onGetTimelineComment) {
+        Log.d(TAG, "타임라인 댓글 리스트 요청");
         SocketIO.getTimelineComment(timelineId, onGetTimelineComment);
     }
 
 
     public static void updateUserProfile(UserEntity userEntity, OnUpdateUserProfile onUpdateUserProfile) {
+        Log.d(TAG, "유저 프로필 변경 요청");
         SocketIO.updateUserProfile(userEntity, onUpdateUserProfile);
     }
 
 
     public static void getSchoolRanking(OnGetSchoolRanking onGetSchoolRanking) {
+        Log.d(TAG, "학교 랭킹 요청");
         SocketIO.getSchoolRanking(onGetSchoolRanking);
     }
 
@@ -208,6 +214,19 @@ public class RequestManager {
         SocketIO.transactionPush(userIds, msg);
     }
 
+
+    public static void updateTransactionStatus(TransactionEntity transactionEntity, int status, OnUpdateTransactionStatus onUpdateTransactionStatus) {
+        Log.d(TAG, "트랜잭션 업데이트 요청");
+        SocketIO.updateTransactionStatus(status, transactionEntity, onUpdateTransactionStatus);
+    }
+
+
+
+
+    public interface OnUpdateTransactionStatus {
+        void onSuccess(TransactionEntity transactionEntity);
+        void onException();
+    }
 
     public interface OnGetSchoolRanking {
         void onSuccess(ArrayList<SchoolRanking> schoolRankings);

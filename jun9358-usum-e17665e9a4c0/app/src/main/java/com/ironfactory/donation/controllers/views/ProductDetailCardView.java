@@ -29,7 +29,6 @@ import com.ironfactory.donation.gcm.PushManager;
 import com.ironfactory.donation.managers.AuthManager;
 import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.socketIo.SocketException;
-import com.ironfactory.donation.socketIo.SocketService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +37,7 @@ import nl.changer.polypicker.ImagePickerActivity;
 
 public class ProductDetailCardView extends CardView {
     private static final String TAG = "ProductDetailCardView";
+    private static final long ONE_WEEK = 1000 * 60 * 60 * 24 * 7;
     private class ViewHolder {
         public ProductCardView productCardView;
         public ProductAddForm productAddForm;
@@ -89,157 +89,155 @@ public class ProductDetailCardView extends CardView {
         View view = inflate(getContext(), R.layout.view_product_detail_card, this);
 
         viewHolder = new ViewHolder(view);
-//        final BaasioCallback<BaasioEntity> callback = new BaasioCallback<BaasioEntity>() {
-//            @Override
-//            public void onResponse(BaasioEntity baasioEntity) {
-//                productCardDto.transactionEntity = new TransactionEntity(baasioEntity);
-//                notifyTransactionStatusChanged();
-//
-//                ArrayList<String> targetUserUuids = new ArrayList<>();
-//                String pushMessage = "";
-//                String signedUserUuid = Baas.io().getSignedInUser().getUuid().toString();
-//                switch (productCardDto.transactionEntity.status) {
-//                    case REGISTERED:
-//                        writeCommentToShareMyProfile();
-//
-//                        if (productCardDto.transactionEntity.donator_uuid.equals(signedUserUuid)) {
-//                            targetUserUuids.add(productCardDto.transactionEntity.receiver_uuid);
-//                        } else if (productCardDto.transactionEntity.receiver_uuid.equals(signedUserUuid)) {
-//                            targetUserUuids.add(productCardDto.transactionEntity.donator_uuid);
-//                        }
-//                        pushMessage = "진행중이던 거래가 취소되었습니다.";
-//                        break;
-//                    case REQUESTED:
-//                        writeCommentToShareMyProfile();
-//
-//                        targetUserUuids.add(productCardDto.transactionEntity.donator_uuid);
-//                        pushMessage = "기부요청이 들어왔습니다.";
-//                        break;
-//                    case SENDED:
-//                        targetUserUuids.add(productCardDto.transactionEntity.receiver_uuid);
-//                        pushMessage = "기부자가 상품을 발송하였습니다.";
-//                        break;
-//                    case RECEIVED:
-//                        if (productCardDto.transactionEntity.donator_uuid.equals(signedUserUuid)) {
-//                            new MaterialDialog.Builder(BaseActivity.context)
-//                                    .title(R.string.app_name)
-//                                    .content("정상적으로 처리되었습니다.")
-//                                    .positiveText("확인")
-//                                    .cancelable(false)
-//                                    .callback(new MaterialDialog.ButtonCallback() {
-//                                        @Override
-//                                        public void onPositive(MaterialDialog dialog) {
-//                                            super.onPositive(dialog);
-//
-//                                            ((Activity) getContext()).finish();
-//                                        }
-//                                    })
-//                                    .show();
-//                            return;
-//                        }
-//
-//                        new MaterialDialog.Builder(BaseActivity.context)
-//                                .title(R.string.app_name)
-//                                .content("교복이 마음에 드시나요?" + "\n" +
-//                                        "이 앱을 위해 후원해주세요!")
-//                                .positiveText("후원 바로가기")
-//                                .negativeText("취소")
-//                                .callback(new MaterialDialog.ButtonCallback() {
-//                                    @Override
-//                                    public void onPositive(MaterialDialog dialog) {
-//                                        SupportFragment.initBillingProcessor(new SupportFragment.BillingProcessorInitCallback() {
-//                                            public void onBillingInitialized() {
-//                                                new MaterialDialog.Builder(BaseActivity.context)
-//                                                        .title(R.string.app_name)
-//                                                        .items(R.array.supprotItems)
-//                                                        .itemsCallback(new MaterialDialog.ListCallback() {
-//                                                            @Override
-//                                                            public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-//                                                                ArrayList<String> supportSkus = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.supportSkus)));
-//                                                                SupportFragment.billingProcessor.purchase((Activity) MainActivity.context, supportSkus.get(i));
-//                                                            }
-//                                                        })
-//                                                        .show();
-//                                            }
-//                                        });
-//                                        super.onPositive(dialog);
-//                                    }
-//
-//                                    @Override
-//                                    public void onNegative(MaterialDialog dialog) {
-//                                        ((Activity) getContext()).finish();
-//                                    }
-//                                })
-//                                .show();
-//                        writeTimelineThatTransactionCompleted();
-//
-//                        targetUserUuids.add(productCardDto.transactionEntity.donator_uuid);
-//                        pushMessage = "구매자가 상품을 수취하였습니다.";
-//
-//                        // activity가 닫혀서 dialog가 표시안되서 특별처리
-//                        PushManager.sendTransactionPush(targetUserUuids, pushMessage);
-//
-//                        // 예약알림에서 제거
-//                        SettingFragment.removeReservedCategory(
-//                                productCardDto.productEntity.school_id,
-//                                productCardDto.productEntity.category
-//                        );
-//                        return;
-//                }
-//                PushManager.sendTransactionPush(targetUserUuids, pushMessage);
-//
-//                new MaterialDialog.Builder(BaseActivity.context)
-//                        .title(R.string.app_name)
-//                        .content("정상적으로 처리되었습니다.")
-//                        .positiveText("확인")
-//                        .cancelable(false)
-//                        .callback(new MaterialDialog.ButtonCallback() {
-//                            @Override
-//                            public void onPositive(MaterialDialog dialog) {
-//                                super.onPositive(dialog);
-//
-//                                ((Activity) getContext()).finish();
-//                            }
-//                        })
-//                        .show();
-//            }
-//
-//            @Override
-//            public void onException(BaasioException e) {
-//
-//            }
-//        };
-        viewHolder.donateButton.setOnClickListener(new OnClickListener() {
+
+        final RequestManager.OnUpdateTransactionStatus onUpdateTransactionStatus = new RequestManager.OnUpdateTransactionStatus() {
             @Override
-            public void onClick(View v) {
-                if (1000 * 60 * 60 * 24 * 7 < System.currentTimeMillis() - productCardDto.transactionEntity.modified) {
-                    Intent intent = new Intent(getContext(), SocketService.class);
-                    intent.putExtra(Global.COMMAND, Global.UPDATE_TRANSACTION_STATUS);
-                    intent.putExtra(Global.TRANSACTION, productCardDto.transactionEntity);
-                    intent.putExtra(Global.STATUS, Global.RECEIVED);
-                    getContext().startService(intent);
+            public void onSuccess(TransactionEntity transactionEntity) {
+                productCardDto.transactionEntity = transactionEntity;
+                notifyTransactionStatusChanged();
 
-//                    RequestManager.updateTransactionStatus(productCardDto.transactionEntity, TransactionEntity.STATUS_TYPE.RECEIVED, callback);
-                    return;
-                }
+                ArrayList<String> targetUserUuids = new ArrayList<>();
+                String pushMessage = "";
+                String signedUserUuid = Global.userEntity.getId();
 
-                Intent intent = new Intent(getContext(), SocketService.class);
-                intent.putExtra(Global.COMMAND, Global.UPDATE_TRANSACTION_STATUS);
-                intent.putExtra(Global.TRANSACTION, productCardDto.transactionEntity);
-                getContext().startService(intent);
+                Log.d(TAG, "제품 상태 = " + productCardDto.transactionEntity.status);
 
                 switch (productCardDto.transactionEntity.status) {
                     case Global.REGISTERED:
-                        intent.putExtra(Global.STATUS, Global.REQUESTED);
-//                        RequestManager.updateTransactionStatus(productCardDto.transactionEntity, TransactionEntity.STATUS_TYPE.REQUESTED, callback);
+                        writeCommentToShareMyProfile();
+
+                        if (productCardDto.transactionEntity.donator_id.equals(signedUserUuid)) {
+                            Log.d(TAG, "기부자와 내가 일치함 ");
+                            targetUserUuids.add(productCardDto.transactionEntity.receiver_id);
+                        } else if (productCardDto.transactionEntity.receiver_id.equals(signedUserUuid)) {
+                            Log.d(TAG, "기부 요청자와 내가 일치함 ");
+                            targetUserUuids.add(productCardDto.transactionEntity.donator_id);
+                        }
+                        pushMessage = "진행중이던 거래가 취소되었습니다.";
                         break;
                     case Global.REQUESTED:
-                        intent.putExtra(Global.STATUS, Global.SENDED);
-//                        RequestManager.updateTransactionStatus(productCardDto.transactionEntity, TransactionEntity.STATUS_TYPE.SENDED, callback);
+                        writeCommentToShareMyProfile();
+
+                        targetUserUuids.add(productCardDto.transactionEntity.donator_id);
+                        pushMessage = "기부요청이 들어왔습니다.";
                         break;
                     case Global.SENDED:
-                        intent.putExtra(Global.STATUS, Global.RECEIVED);
-//                        RequestManager.updateTransactionStatus(productCardDto.transactionEntity, TransactionEntity.STATUS_TYPE.RECEIVED, callback);
+                        targetUserUuids.add(productCardDto.transactionEntity.receiver_id);
+                        pushMessage = "기부자가 상품을 발송하였습니다.";
+                        break;
+                    case Global.RECEIVED:
+                        if (productCardDto.transactionEntity.donator_id.equals(signedUserUuid)) {
+                            Log.d(TAG, "기부자와 내가 일치함");
+                            new MaterialDialog.Builder(BaseActivity.context)
+                                    .title(R.string.app_name)
+                                    .content("정상적으로 처리되었습니다.")
+                                    .positiveText("확인")
+                                    .cancelable(false)
+                                    .callback(new MaterialDialog.ButtonCallback() {
+                                        @Override
+                                        public void onPositive(MaterialDialog dialog) {
+                                            super.onPositive(dialog);
+
+                                            ((Activity) getContext()).finish();
+                                        }
+                                    })
+                                    .show();
+                            return;
+                        }
+
+                        Log.d(TAG, "기부자와 내가 일치하지 않음");
+                        new MaterialDialog.Builder(BaseActivity.context)
+                                .title(R.string.app_name)
+                                .content("교복이 마음에 드시나요?" + "\n" +
+                                        "이 앱을 위해 후원해주세요!")
+                                .positiveText("후원 바로가기")
+                                .negativeText("취소")
+                                .callback(new MaterialDialog.ButtonCallback() {
+                                    @Override
+                                    public void onPositive(MaterialDialog dialog) {
+                                        SupportFragment.initBillingProcessor(new SupportFragment.BillingProcessorInitCallback() {
+                                            public void onBillingInitialized() {
+                                                new MaterialDialog.Builder(BaseActivity.context)
+                                                        .title(R.string.app_name)
+                                                        .items(R.array.supprotItems)
+                                                        .itemsCallback(new MaterialDialog.ListCallback() {
+                                                            @Override
+                                                            public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+                                                                ArrayList<String> supportSkus = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.supportSkus)));
+                                                                SupportFragment.billingProcessor.purchase((Activity) MainActivity.context, supportSkus.get(i));
+                                                            }
+                                                        })
+                                                        .show();
+                                            }
+                                        });
+                                        super.onPositive(dialog);
+                                    }
+
+                                    @Override
+                                    public void onNegative(MaterialDialog dialog) {
+                                        ((Activity) getContext()).finish();
+                                    }
+                                })
+                                .show();
+                        writeTimelineThatTransactionCompleted();
+
+                        targetUserUuids.add(productCardDto.transactionEntity.donator_id);
+                        pushMessage = "구매자가 상품을 수취하였습니다.";
+
+                        // activity가 닫혀서 dialog가 표시안되서 특별처리
+                        PushManager.sendTransactionPush(targetUserUuids, pushMessage);
+
+                        // 예약알림에서 제거
+                        SettingFragment.removeReservedCategory(
+                                productCardDto.productEntity.school_id,
+                                productCardDto.productEntity.category
+                        );
+                        return;
+                }
+                PushManager.sendTransactionPush(targetUserUuids, pushMessage);
+
+                new MaterialDialog.Builder(BaseActivity.context)
+                        .title(R.string.app_name)
+                        .content("정상적으로 처리되었습니다.")
+                        .positiveText("확인")
+                        .cancelable(false)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                super.onPositive(dialog);
+
+                                ((Activity) getContext()).finish();
+                            }
+                        })
+                        .show();
+            }
+
+            @Override
+            public void onException() {
+
+            }
+        };
+
+        viewHolder.donateButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ONE_WEEK < System.currentTimeMillis() - productCardDto.transactionEntity.modified) {
+                    productCardDto.transactionEntity.receiver_id = Global.userEntity.id;
+                    RequestManager.updateTransactionStatus(productCardDto.transactionEntity, Global.RECEIVED, onUpdateTransactionStatus);
+                    return;
+                }
+
+                switch (productCardDto.transactionEntity.status) {
+                    case Global.REGISTERED:
+                        productCardDto.transactionEntity.receiver_id = Global.userEntity.id;
+                        RequestManager.updateTransactionStatus(productCardDto.transactionEntity, Global.REQUESTED, onUpdateTransactionStatus);
+                        break;
+                    case Global.REQUESTED:
+                        RequestManager.updateTransactionStatus(productCardDto.transactionEntity, Global.SENDED, onUpdateTransactionStatus);
+                        break;
+                    case Global.SENDED:
+                        productCardDto.transactionEntity.receiver_id = Global.userEntity.id;
+                        RequestManager.updateTransactionStatus(productCardDto.transactionEntity, Global.RECEIVED, onUpdateTransactionStatus);
                         break;
                     case Global.RECEIVED:
                         break;
@@ -249,24 +247,7 @@ public class ProductDetailCardView extends CardView {
         viewHolder.cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SocketService.class);
-                intent.putExtra(Global.COMMAND, Global.UPDATE_TRANSACTION_STATUS);
-                intent.putExtra(Global.TRANSACTION, productCardDto.transactionEntity);
-                intent.putExtra(Global.STATUS, 10);
-                getContext().startService(intent);
-
-//                RequestManager.updateTransactionStatus(productCardDto.transactionEntity, TransactionEntity.STATUS_TYPE.REGISTERED, new BaasioCallback<BaasioEntity>() {
-//                    @Override
-//                    public void onResponse(BaasioEntity baasioEntity) {
-//                        productCardDto.transactionEntity = new TransactionEntity(baasioEntity);
-//                        notifyTransactionStatusChanged();
-//                    }
-//
-//                    @Override
-//                    public void onException(BaasioException e) {
-//
-//                    }
-//                });
+                RequestManager.updateTransactionStatus(productCardDto.transactionEntity, Global.REGISTERED, onUpdateTransactionStatus);
 
                 RequestManager.getTimelineComment(productCardDto.productEntity.id, new RequestManager.OnGetTimelineComment() {
                     @Override
@@ -275,7 +256,6 @@ public class ProductDetailCardView extends CardView {
                             RequestManager.deleteComment(timelineCommentCardDto, new RequestManager.OnDeleteComment() {
                                 @Override
                                 public void onSuccess() {
-
                                 }
 
                                 @Override
@@ -291,35 +271,6 @@ public class ProductDetailCardView extends CardView {
 
                     }
                 });
-
-//                intent = new Intent(getContext(), SocketService.class);
-//                intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
-//                intent.putExtra(Global.ID, productCardDto.productEntity.user_id);
-//                intent.putExtra(Global.FROM, 3);
-//                getContext().startService(intent);
-
-//                RequestManager.getTimelineComments(productCardDto.productEntity.user_id, new RequestManager.TypedBaasioQueryCallback<TimelineCommentCardDto>() {
-//                    @Override
-//                    public void onResponse(List<TimelineCommentCardDto> entities) {
-//                        ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
-//                        timelineCommentCardDtos.addAll(entities);
-//                        for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
-//                            RequestManager.deleteComment(timelineCommentCardDto, new BaasioCallback<BaasioEntity>() {
-//                                @Override
-//                                public void onResponse(BaasioEntity baasioEntity) {
-//                                }
-//
-//                                @Override
-//                                public void onException(BaasioException e) {
-//                                }
-//                            });
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onException(BaasioException e) {
-//                    }
-//                });
             }
         });
         viewHolder.updateButton.setOnClickListener(new OnClickListener() {
@@ -350,24 +301,6 @@ public class ProductDetailCardView extends CardView {
                                 .show();
                     }
                 });
-
-//                RequestManager.deleteProduct(productCardDto, new BaasioCallback<BaasioEntity>() {
-//                    @Override
-//                    public void onResponse(BaasioEntity baasioEntity) {
-//                        BaseActivity.hideLoadingView();
-//                        ((Activity) BaseActivity.context).finish();
-//                    }
-//
-//                    @Override
-//                    public void onException(BaasioException e) {
-//                        BaseActivity.hideLoadingView();
-//
-//                        new MaterialDialog.Builder(BaseActivity.context)
-//                                .title(R.string.app_name)
-//                                .content("상품을 삭제하는 중에 문제가 발생하였습니다.")
-//                                .show();
-//                    }
-//                });
             }
         });
         viewHolder.productAddForm.setAttachImageButtonOnClickListener(new OnClickListener() {
@@ -418,7 +351,6 @@ public class ProductDetailCardView extends CardView {
                                     new RequestManager.OnInsertFile() {
                                         @Override
                                         public void onSuccess() {
-
                                         }
 
                                         @Override
@@ -439,45 +371,6 @@ public class ProductDetailCardView extends CardView {
 
                     }
                 });
-
-//                RequestManager.deleteFileEntities(productCardDto.fileEntities);
-//                RequestManager.updateProduct(productCardDtoForUpdate, new BaasioCallback<BaasioEntity>() {
-//                    @Override
-//                    public void onResponse(BaasioEntity baasioEntity) {
-//                        for (Uri uri : productCardDtoForUpdate.uris) {
-//                            RequestManager.insertFile(
-//                                    productCardDtoForUpdate.productEntity.uuid,
-//                                    uri,
-//                                    new BaasioUploadCallback() {
-//                                        @Override
-//                                        public void onResponse(BaasioFile baasioFile) {
-//
-//                                        }
-//
-//                                        @Override
-//                                        public void onException(BaasioException e) {
-//
-//                                        }
-//
-//                                        @Override
-//                                        public void onProgress(long l, long l2) {
-//
-//                                        }
-//                                    }
-//                            );
-//                        }
-//
-//                        BaseActivity.hideLoadingView();
-//                        viewHolder.productUpdateDialog.hide();
-//                        ((Activity) BaseActivity.context).finish();
-//                    }
-//
-//                    @Override
-//                    public void onException(BaasioException e) {
-//                        BaseActivity.hideLoadingView();
-//                        viewHolder.productUpdateDialog.hide();
-//                    }
-//                });
             }
         });
 
@@ -494,51 +387,6 @@ public class ProductDetailCardView extends CardView {
     }
 
 
-    public void processUpdateProduct(int code) {
-        if (code == SocketException.SUCCESS) {
-            for (Uri uri : productCardDtoForUpdate.uris) {
-                String path = uri.getEncodedPath();
-                String fileName = path.substring(path.lastIndexOf('/') + 1);
-
-                Intent intent = new Intent(getContext(), SocketService.class);
-                intent.putExtra(Global.COMMAND, Global.INSERT_FILE);
-                intent.putExtra(Global.PRODUCT_ID, productCardDtoForUpdate.productEntity.id);
-                intent.putExtra(Global.PATH, path);
-                intent.putExtra(Global.FILE, fileName);
-                getContext().startService(intent);
-
-//                RequestManager.insertFile(
-//                        productCardDtoForUpdate.productEntity.uuid,
-//                        uri,
-//                        new BaasioUploadCallback() {
-//                            @Override
-//                            public void onResponse(BaasioFile baasioFile) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onException(BaasioException e) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onProgress(long l, long l2) {
-//
-//                            }
-//                        }
-//                );
-            }
-
-            BaseActivity.hideLoadingView();
-            viewHolder.productUpdateDialog.hide();
-            ((Activity) BaseActivity.context).finish();
-        } else {
-            BaseActivity.hideLoadingView();
-            viewHolder.productUpdateDialog.hide();
-        }
-    }
-
-
     public void processDeleteProduct(int code) {
         if (code == SocketException.SUCCESS) {
             BaseActivity.hideLoadingView();
@@ -550,144 +398,6 @@ public class ProductDetailCardView extends CardView {
                     .title(R.string.app_name)
                     .content("상품을 삭제하는 중에 문제가 발생하였습니다.")
                     .show();
-        }
-    }
-
-
-    public void processUpdateTransactionStatus(TransactionEntity transactionEntity) {
-        productCardDto.transactionEntity = transactionEntity;
-        notifyTransactionStatusChanged();
-
-        ArrayList<String> targetUserUuids = new ArrayList<>();
-        String pushMessage = "";
-        String signedUserUuid = Global.userEntity.id;
-        switch (productCardDto.transactionEntity.status) {
-            case Global.REGISTERED:
-                writeCommentToShareMyProfile();
-
-                if (productCardDto.transactionEntity.donator_id.equals(signedUserUuid)) {
-                    targetUserUuids.add(productCardDto.transactionEntity.receiver_id);
-                } else if (productCardDto.transactionEntity.receiver_id.equals(signedUserUuid)) {
-                    targetUserUuids.add(productCardDto.transactionEntity.donator_id);
-                }
-                pushMessage = "진행중이던 거래가 취소되었습니다.";
-                break;
-            case Global.REQUESTED:
-                writeCommentToShareMyProfile();
-
-                targetUserUuids.add(productCardDto.transactionEntity.donator_id);
-                pushMessage = "기부요청이 들어왔습니다.";
-                break;
-            case Global.SENDED:
-                targetUserUuids.add(productCardDto.transactionEntity.receiver_id);
-                pushMessage = "기부자가 상품을 발송하였습니다.";
-                break;
-            case Global.RECEIVED:
-                if (productCardDto.transactionEntity.donator_id.equals(signedUserUuid)) {
-                    new MaterialDialog.Builder(BaseActivity.context)
-                            .title(R.string.app_name)
-                            .content("정상적으로 처리되었습니다.")
-                            .positiveText("확인")
-                            .cancelable(false)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog dialog) {
-                                    super.onPositive(dialog);
-
-                                    ((Activity) getContext()).finish();
-                                }
-                            })
-                            .show();
-                    return;
-                }
-
-                new MaterialDialog.Builder(BaseActivity.context)
-                        .title(R.string.app_name)
-                        .content("교복이 마음에 드시나요?" + "\n" +
-                                "이 앱을 위해 후원해주세요!")
-                        .positiveText("후원 바로가기")
-                        .negativeText("취소")
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                SupportFragment.initBillingProcessor(new SupportFragment.BillingProcessorInitCallback() {
-                                    public void onBillingInitialized() {
-                                        new MaterialDialog.Builder(BaseActivity.context)
-                                                .title(R.string.app_name)
-                                                .items(R.array.supprotItems)
-                                                .itemsCallback(new MaterialDialog.ListCallback() {
-                                                    @Override
-                                                    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-                                                        ArrayList<String> supportSkus = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.supportSkus)));
-                                                        SupportFragment.billingProcessor.purchase((Activity) MainActivity.context, supportSkus.get(i));
-                                                    }
-                                                })
-                                                .show();
-                                    }
-                                });
-                                super.onPositive(dialog);
-                            }
-
-                            @Override
-                            public void onNegative(MaterialDialog dialog) {
-                                ((Activity) getContext()).finish();
-                            }
-                        })
-                        .show();
-                writeTimelineThatTransactionCompleted();
-
-                targetUserUuids.add(productCardDto.transactionEntity.donator_id);
-                pushMessage = "구매자가 상품을 수취하였습니다.";
-
-                // activity가 닫혀서 dialog가 표시안되서 특별처리
-                PushManager.sendTransactionPush(targetUserUuids, pushMessage);
-
-                // 예약알림에서 제거
-                SettingFragment.removeReservedCategory(
-                        productCardDto.productEntity.school_id,
-                        productCardDto.productEntity.category
-                );
-                return;
-        }
-        PushManager.sendTransactionPush(targetUserUuids, pushMessage);
-
-        new MaterialDialog.Builder(BaseActivity.context)
-                .title(R.string.app_name)
-                .content("정상적으로 처리되었습니다.")
-                .positiveText("확인")
-                .cancelable(false)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-
-                        ((Activity) getContext()).finish();
-                    }
-                })
-                .show();
-    }
-
-
-    public void processCancelUpdateTransactionStatus(TransactionEntity transactionEntity) {
-        productCardDto.transactionEntity = transactionEntity;
-        notifyTransactionStatusChanged();
-    }
-
-
-    public void processGetTimelineComment(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
-        for (TimelineCommentCardDto timelineComment :
-                timelineCommentCardDtos) {
-            RequestManager.deleteComment(timelineComment, new RequestManager.OnDeleteComment() {
-                @Override
-                public void onSuccess() {
-
-                }
-
-                @Override
-                public void onException() {
-
-                }
-            });
         }
     }
 
@@ -781,14 +491,17 @@ public class ProductDetailCardView extends CardView {
         String receiverUuid = productCardDto.transactionEntity.receiver_id;
 //        String signedUserUuid = Baas.io().getSignedInUser().getUuid().toString();
         String signedUserUuid = Global.userEntity.id;
+        Log.d(TAG, "상태 = " +  productCardDto.transactionEntity.status);
         switch (productCardDto.transactionEntity.status) {
             case Global.REGISTERED:
                 if (donatorUuid.equals(signedUserUuid)) {
+                    Log.d(TAG, "기부자와 내가 일치");
                     viewHolder.donateButton.setVisibility(View.GONE);
                     viewHolder.cancelButton.setVisibility(View.GONE);
                     viewHolder.updateButton.setVisibility(View.VISIBLE);
                     viewHolder.deleteButton.setVisibility(View.VISIBLE);
                 } else {
+                    Log.d(TAG, "기부자와 내가 일치하지 않음");
                     viewHolder.donateButton.setVisibility(View.VISIBLE);
                     viewHolder.cancelButton.setVisibility(View.GONE);
                     viewHolder.updateButton.setVisibility(View.GONE);
@@ -799,6 +512,7 @@ public class ProductDetailCardView extends CardView {
                 break;
             case Global.REQUESTED:
                 if (donatorUuid.equals(signedUserUuid)) {
+                    Log.d(TAG, "기부자와 내가 일치");
                     viewHolder.donateButton.setVisibility(View.VISIBLE);
                     viewHolder.cancelButton.setVisibility(View.VISIBLE);
                     viewHolder.updateButton.setVisibility(View.GONE);
@@ -806,6 +520,7 @@ public class ProductDetailCardView extends CardView {
 
                     viewHolder.donateButton.setText("발송완료");
                 } else if (receiverUuid.equals(signedUserUuid)) {
+                    Log.d(TAG, "구매자와 내가 일치");
                     viewHolder.donateButton.setVisibility(View.GONE);
                     viewHolder.cancelButton.setVisibility(View.VISIBLE);
                     viewHolder.updateButton.setVisibility(View.GONE);
@@ -813,6 +528,7 @@ public class ProductDetailCardView extends CardView {
 
                     viewHolder.donateButton.setText("발송대기중");
                 } else {
+                    Log.d(TAG, "그 누구와도 일치하지 않음");
                     viewHolder.donateButton.setVisibility(View.GONE);
                     viewHolder.cancelButton.setVisibility(View.GONE);
                     viewHolder.updateButton.setVisibility(View.GONE);
@@ -821,6 +537,7 @@ public class ProductDetailCardView extends CardView {
                 break;
             case Global.SENDED:
                 if (donatorUuid.equals(signedUserUuid)) {
+                    Log.d(TAG, "기부자와 내가 일치");
                     viewHolder.donateButton.setVisibility(View.GONE);
                     viewHolder.cancelButton.setVisibility(View.GONE);
                     viewHolder.updateButton.setVisibility(View.GONE);
@@ -828,7 +545,7 @@ public class ProductDetailCardView extends CardView {
 
                     viewHolder.donateButton.setText("수취대기중");
 
-                    if (1000 * 60 * 60 * 24 * 7 < System.currentTimeMillis() - productCardDto.transactionEntity.modified) {
+                    if (ONE_WEEK < System.currentTimeMillis() - productCardDto.transactionEntity.modified) {
                         viewHolder.donateButton.setVisibility(View.VISIBLE);
                         viewHolder.donateButton.setText("거래완료처리");
                     }

@@ -8,6 +8,7 @@ import com.ironfactory.donation.Global;
 import com.ironfactory.donation.controllers.fragments.SettingFragment;
 import com.ironfactory.donation.dtos.SchoolRanking;
 import com.ironfactory.donation.entities.UserEntity;
+import com.ironfactory.donation.gcm.PushManager;
 import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.managers.SchoolManager;
 
@@ -50,8 +51,7 @@ public class SchoolRankingPushService extends IntentService {
                 if (lastRank == -1 || currentRank == -1) {
                     SettingFragment.setLastSchoolRank(currentRank);
                 } else if (lastRank != currentRank) {
-//                PushManager.sendSchoolRankUpdatedPushToMe("학교 순위가 " + lastRank + "위에서 " + currentRank + "위로 변경되었습니다!");
-                    Log.d(TAG, "푸시 알림 구현해야함");
+                    PushManager.sendSchoolRankUpdatedPushToMe("학교 순위가 " + lastRank + "위에서 " + currentRank + "위로 변경되었습니다!");
                     SettingFragment.setLastSchoolRank(currentRank);
                 }
                 Log.d("USUM", "lastRank: " + lastRank);

@@ -72,6 +72,9 @@ public class Global {
     public static final String CREATED = "created";
     public static final String CONTENT = "content";
     public static final String MESSAGE = "message";
+    public static final String NICK_NAME = "nickName";
+    public static final String PROFILE_IMAGE = "profileImage";
+    public static final String THUMBNAIL_IMAGE = "thumbnailImage";
 
     public static boolean isCreated = false;
 

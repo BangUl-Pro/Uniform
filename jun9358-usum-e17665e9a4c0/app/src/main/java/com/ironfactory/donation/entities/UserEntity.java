@@ -152,45 +152,48 @@ public class UserEntity implements Parcelable {
         this.userType = bundle.getInt(PROPERTY_USER_TYPE);
     }
 
-    public void set(JSONObject entity) {
+    public void set(JSONObject object) {
         try {
-            if (entity == null) {
+            if (object == null) {
                 return;
             }
 //        if (entity.getUuid() != null) {
 //            this.uuid = entity.getUuid().toString();
 //        }
-            if (entity.getString(PROPERTY_ID) != null) {
-                this.id = entity.getString(PROPERTY_ID);
+            if (object.getString(PROPERTY_ID) != null) {
+                this.id = object.getString(PROPERTY_ID);
             }
-            if (entity.getString(PROPERTY_NAME) != null) {
-                this.name = entity.getString(PROPERTY_NAME);
+            if (object.getString(PROPERTY_NAME) != null) {
+                this.name = object.getString(PROPERTY_NAME);
             }
-            if (entity.getString(PROPERTY_HAS_EXTRA_PROFILE) != null) {
-                String hasProfile = entity.getString(PROPERTY_HAS_EXTRA_PROFILE);
+            if (object.getString(PROPERTY_HAS_EXTRA_PROFILE) != null) {
+                String hasProfile = object.getString(PROPERTY_HAS_EXTRA_PROFILE);
                 if (hasProfile.equals("1")) {
                     hasExtraProfile = true;
                 } else {
                     hasExtraProfile = false;
                 }
             }
-            if (entity.getString(PROPERTY_PHONE) != null) {
-                this.phone = entity.getString(PROPERTY_PHONE);
+            if (object.getString(PROPERTY_PHONE) != null) {
+                this.phone = object.getString(PROPERTY_PHONE);
             }
-            if (entity.getString(PROPERTY_PICTURE) != null) {
-                this.picture = entity.getString(PROPERTY_PICTURE);
+            if (object.getString(PROPERTY_PICTURE) != null) {
+                this.picture = object.getString(PROPERTY_PICTURE);
             }
-            if (entity.getString(PROPERTY_REAL_NAME) != null) {
-                this.realName = entity.getString(PROPERTY_REAL_NAME);
+            if (object.getString(PROPERTY_REAL_NAME) != null) {
+                this.realName = object.getString(PROPERTY_REAL_NAME);
             }
-            if (!entity.get(PROPERTY_SCHOOL_ID).equals(null)) {
-                this.schoolId = entity.getInt(PROPERTY_SCHOOL_ID);
+            if (!object.get(PROPERTY_SCHOOL_ID).equals(null)) {
+                this.schoolId = object.getInt(PROPERTY_SCHOOL_ID);
             }
-            if (!entity.get(PROPERTY_SEX).equals(null)) {
-                this.sex = entity.getInt(PROPERTY_SEX);
+            if (!object.get(PROPERTY_SEX).equals(null)) {
+                this.sex = object.getInt(PROPERTY_SEX);
             }
-            if (!entity.get(PROPERTY_USER_TYPE).equals(null)) {
-                this.userType = entity.getInt(PROPERTY_USER_TYPE);
+            if (!object.get(PROPERTY_USER_TYPE).equals(null)) {
+                this.userType = object.getInt(PROPERTY_USER_TYPE);
+            }
+            if (!object.get(KakaoProfile.PROPERTY_ID).equals(null)) {
+                this.kakaotalk = new KakaoProfile(object);
             }
 //            if (entity.get(PROPERTY_KAKAOTALK).equals(null)) {
 //                this.kakaotalk = new KakaoProfile(entity.getJSONObject(PROPERTY_KAKAOTALK));

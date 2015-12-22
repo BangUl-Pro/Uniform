@@ -95,6 +95,7 @@ public class SettingFragment extends SlidingBaseFragment {
             public void onClick(View v) {
                 requestUnlink();
                 clearAllSharedPreferences();
+                Log.d(TAG, "회원 탈퇴 ");
             }
         });
         viewHolder.logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -157,7 +158,7 @@ public class SettingFragment extends SlidingBaseFragment {
                                         ((Activity)MainActivity.context).finish();
 
                                         SharedPreferencesCache cache = Session.getAppCache();
-                                        String deviceId = cache.getString(Global.TOKEN);
+                                        String deviceId = cache.getString(Global.ID);
 
                                         PushService.deregisterPushToken(new PushDeregisterHttpResponseHandler() {
                                             @Override
@@ -229,6 +230,14 @@ public class SettingFragment extends SlidingBaseFragment {
 
     private void requestLogout() {
         BaseActivity.showLoadingView();
+        PushService.deregisterPushToken(new PushDeregisterHttpResponseHandler() {
+            @Override
+            protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
+                Log.d(TAG, "토큰 삭제 에러 = " + errorResult.getErrorCodeInt());
+                Log.d(TAG, "토큰 삭제 에러 = " + errorResult.getErrorMessage());
+
+            }
+        }, Global.userEntity.id);
         UserManagement.requestLogout(new LogoutResponseCallback() {
             @Override
             protected void onSuccess(final long userId) {
@@ -364,8 +373,7 @@ public class SettingFragment extends SlidingBaseFragment {
 
         ArrayList<AlarmEntity> receivedPushMessages = new ArrayList<>();
         for (String jsonString : pushMessageJsonStrings) {
-            Log.d(TAG, "jsonString = " + jsonString);
-            receivedPushMessages.add(new AlarmEntity(jsonString));
+            receivedPushMessages.add(gson.fromJson(jsonString, AlarmEntity.class));
         }
 
         return receivedPushMessages;
@@ -400,15 +408,16 @@ public class SettingFragment extends SlidingBaseFragment {
         ArrayList<AlarmEntity> pushMessages = getReceivedPushMessages();
         pushMessages.add(alarmEntity);
 
+        Gson gson = new Gson();
         ArrayList<String> pushMessageJsonStrings = new ArrayList<>();
         for (AlarmEntity pushMessage : pushMessages) {
-            pushMessageJsonStrings.add(0, pushMessage.toString());
-            Log.d(TAG, "pushMessage = " + pushMessage.toString());
+
+            pushMessageJsonStrings.add(0, gson.toJson(pushMessage));
+            Log.d(TAG, "pushMessage = " + gson.toJson(pushMessage));
         }
 
         SecurePreferences securePreferences = new SecurePreferences(context);
         SecurePreferences.Editor editor = securePreferences.edit();
-        Gson gson = new Gson();
         editor.putString(PREFERENCE_RECEIVED_PUSH_MESSAGES, gson.toJson(pushMessageJsonStrings));
         editor.commit();
     }

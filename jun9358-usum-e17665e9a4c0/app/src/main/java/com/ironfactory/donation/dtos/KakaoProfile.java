@@ -8,11 +8,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class KakaoProfile implements Parcelable {
-    public static final String PROPERTY_ID = "id";
-    public static final String PROPERTY_NICKNAME = "nickname";
-    public static final String PROPERTY_PROFILEIMAGE = "profileImage";
-    public static final String PROPERTY_PROPERTIES = "properties";
-    public static final String PROPERTY_THUMBNAIL_IMAGE = "thumbnail_image";
+    public static final String PROPERTY_ID = "kakao_id";
+    public static final String PROPERTY_NICKNAME = "kakao_nickname";
+    public static final String PROPERTY_PROFILEIMAGE = "kakao_profile_image";
+    public static final String PROPERTY_PROPERTIES = "kakao_properties";
+    public static final String PROPERTY_THUMBNAIL_IMAGE = "kakao_thumbnail_image";
 
     public int id;
     public String nickname;
@@ -37,6 +37,13 @@ public class KakaoProfile implements Parcelable {
         set(jsonObject);
     }
 
+    public KakaoProfile() {
+        id = 0;
+        nickname = null;
+        profileImage = null;
+        thumbnailImage = null;
+    }
+
     public void set(Bundle bundle) {
         this.id = bundle.getInt(PROPERTY_ID);
         this.nickname = bundle.getString(PROPERTY_NICKNAME);
@@ -49,7 +56,6 @@ public class KakaoProfile implements Parcelable {
             this.id = jsonObject.getInt(PROPERTY_ID);
             this.nickname = jsonObject.getString(PROPERTY_NICKNAME);
             this.profileImage = jsonObject.getString(PROPERTY_PROFILEIMAGE);
-//        this.thumbnailImage = jsonObject.get(PROPERTY_PROPERTIES).get(PROPERTY_THUMBNAIL_IMAGE).asText();
             this.thumbnailImage = jsonObject.getString(PROPERTY_THUMBNAIL_IMAGE);
         } catch (JSONException e) {
             e.printStackTrace();

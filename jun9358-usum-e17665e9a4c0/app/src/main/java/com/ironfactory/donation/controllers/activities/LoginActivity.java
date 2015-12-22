@@ -199,7 +199,6 @@ public class LoginActivity extends BaseActivity {
 //        BaseActivity.startActivityOnTopStack(MainActivity.class);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra(Global.USER, guest);
-        Log.d(TAG, "3.userId = " + guest.id);
         startActivity(intent);
         finish();
 //        RequestManager.requestSignUp(guest, new BaasioSignInCallback() {
@@ -234,10 +233,13 @@ public class LoginActivity extends BaseActivity {
     private void checkSession() {
         Session.initializeSession(this, mySessionCallback);
 
+        Log.d(TAG, "checkSession");
         if (Session.getCurrentSession().isOpened()) {
+            Log.d(TAG, "열려 있음 ");
             startActivityUsingStack(SignUpActivity.class);
             finish();
         } else if (Session.getCurrentSession().isClosed()) {
+            Log.d(TAG, "닫혀 있음");
             showLoginButtons();
         } else {
             new MaterialDialog.Builder(BaseActivity.context)

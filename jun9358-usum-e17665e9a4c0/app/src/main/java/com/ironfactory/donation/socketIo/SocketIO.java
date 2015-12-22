@@ -12,7 +12,6 @@ import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 import com.ironfactory.donation.Global;
 import com.ironfactory.donation.controllers.activities.LoginActivity;
-import com.ironfactory.donation.controllers.activities.ProductDetailActivity;
 import com.ironfactory.donation.controllers.activities.SignUpActivity;
 import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.dtos.SchoolRanking;
@@ -114,18 +113,6 @@ public class SocketIO {
             public void call(Object... args) {
                 JSONObject object = (JSONObject) args[0];
                 processSignIn(object);
-            }
-        }).on(Global.UPDATE_TRANSACTION_STATUS, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processUpdateTransactionStatus(object);
-            }
-        }).on(Global.UPDATE_PRODUCT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processUpdateProduct(object);
             }
         }).on(Global.GET_PRODUCT, new Emitter.Listener() {
             @Override
@@ -329,24 +316,6 @@ public class SocketIO {
 //    }
 
 
-    // TODO: 15. 11. 25. 제품 업데이트
-    private void processUpdateProduct(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            Log.d(TAG, "제품 업데이트 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent = new Intent(context, ProductDetailActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.UPDATE_PRODUCT);
-            intent.putExtra(Global.CODE, code);
-            context.startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 //    // TODO: 15. 11. 25. 파일 삭제
 //    private void processDeleteFile(JSONObject object) {
 //        try {
@@ -385,32 +354,6 @@ public class SocketIO {
 //            e.printStackTrace();
 //        }
 //    }
-
-
-    private void processUpdateTransactionStatus(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            int status = object.getInt(Global.STATUS);
-            Log.d(TAG, "updateTransactionStatus 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent = new Intent(context, ProductDetailActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.CODE, code);
-            intent.putExtra(Global.STATUS, status);
-
-            if (code == SocketException.SUCCESS) {
-                // 성공
-                JSONObject transactionJson = object.getJSONObject(Global.TRANSACTION);
-                TransactionEntity transactionEntity = new TransactionEntity(transactionJson);
-                intent.putExtra(Global.TRANSACTION, transactionEntity);
-            }
-            context.startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
 
 
     // TODO: 15. 11. 24. 댓글 삭제
@@ -1687,7 +1630,7 @@ public class SocketIO {
     }
 
 
-    public  void updateTransactionStatus(int status, TransactionEntity transactionEntity) {
+    public static void updateTransactionStatus(int status, TransactionEntity transactionEntity, final RequestManager.OnUpdateTransactionStatus onUpdateTransactionStatus) {
         try {
             Gson gson = new Gson();
             String json = gson.toJson(transactionEntity, TransactionEntity.class);
@@ -1698,6 +1641,37 @@ public class SocketIO {
             object.put(Global.TRANSACTION, transJson);
             Log.d(TAG, "updateTransactionStatus Object = " + object);
             socket.emit(Global.UPDATE_TRANSACTION_STATUS, object);
+            socket.once(Global.UPDATE_TRANSACTION_STATUS, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        Log.d(TAG, "트랜잭션 업데이트 응답 = " + resObject);
+
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            JSONObject transactionJson = resObject.getJSONObject(Global.TRANSACTION);
+                            final TransactionEntity transactionEntity = new TransactionEntity(transactionJson);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onUpdateTransactionStatus.onSuccess(transactionEntity);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onUpdateTransactionStatus.onException();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -2043,10 +2017,13 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 28. 카카오 로그인
-    public static void signInKakao(long id, final RequestManager.OnSignInKakao onSignInKakao) {
+    public static void signInKakao(long id, String nickName, String profileImage, String thumbnailImage, final RequestManager.OnSignInKakao onSignInKakao) {
         try {
             JSONObject object = new JSONObject();
             object.put(Global.ID, String.valueOf(id));
+            object.put(Global.NICK_NAME, nickName);
+            object.put(Global.PROFILE_IMAGE, profileImage);
+            object.put(Global.THUMBNAIL_IMAGE, thumbnailImage);
             Log.d(TAG, "signInKakao Object = " + object);
             socket.emit(Global.SIGN_IN_KAKAO, object);
             socket.once(Global.SIGN_IN_KAKAO, new Emitter.Listener() {

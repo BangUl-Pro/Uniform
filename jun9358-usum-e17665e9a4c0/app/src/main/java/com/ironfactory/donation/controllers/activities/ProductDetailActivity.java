@@ -16,7 +16,6 @@ import com.ironfactory.donation.controllers.views.ProductDetailCardView;
 import com.ironfactory.donation.controllers.views.TimelineCommentRecyclerView;
 import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.dtos.TimelineCommentCardDto;
-import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.managers.AuthManager;
 import com.ironfactory.donation.managers.RequestManager;
 import com.ironfactory.donation.socketIo.SocketException;
@@ -150,15 +149,9 @@ public class ProductDetailActivity extends BaseActivity {
                     if (command.equals(Global.DELETE_COMMENT)) {
                         // 댓글 삭제
 //                        processDeleteComment(code);
-                    } else if (command.equals(Global.UPDATE_TRANSACTION_STATUS)) {
-                        //
-                        processUpdateTransactionUpdate(code, intent);
                     } else if (command.equals(Global.DELETE_PRODUCT)) {
                         // 제품 삭제
                         processDeleteProduct(code);
-                    } else if (command.equals(Global.UPDATE_PRODUCT)) {
-                        // 제품 수정
-                        processUpdateProduct(code);
                     }
                 }
             }
@@ -166,31 +159,10 @@ public class ProductDetailActivity extends BaseActivity {
     }
 
 
-    // TODO: 15. 11. 25. 제품 등록
-    private void processUpdateProduct(int code) {
-        viewHolder.productDetailCardView.processUpdateProduct(code);
-    }
-
-
     // TODO: 15. 11. 25. 제품 삭제
     private void processDeleteProduct(int code) {
         viewHolder.productDetailCardView.processDeleteProduct(code);
     }
-
-
-    private void processUpdateTransactionUpdate(int code, Intent intent) {
-        if (code == SocketException.SUCCESS) {
-            // 성공
-            int status = intent.getIntExtra(Global.STATUS, -1);
-            TransactionEntity transactionEntity = intent.getParcelableExtra(Global.TRANSACTION);
-            if (status == 10) {
-                viewHolder.productDetailCardView.processCancelUpdateTransactionStatus(transactionEntity);
-            } else {
-                viewHolder.productDetailCardView.processUpdateTransactionStatus(transactionEntity);
-            }
-        }
-    }
-
 
 
     @Override

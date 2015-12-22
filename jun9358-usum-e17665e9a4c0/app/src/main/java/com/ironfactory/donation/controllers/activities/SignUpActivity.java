@@ -2,6 +2,8 @@ package com.ironfactory.donation.controllers.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -17,22 +19,29 @@ import com.ironfactory.donation.socketIo.SocketIO;
 import com.ironfactory.donation.socketIo.SocketService;
 import com.kakao.APIErrorResult;
 import com.kakao.MeResponseCallback;
+import com.kakao.PushRegisterHttpResponseHandler;
+import com.kakao.PushService;
+import com.kakao.PushTokenInfo;
+import com.kakao.PushTokensHttpResponseHandler;
 import com.kakao.Session;
 import com.kakao.UserManagement;
 import com.kakao.UserProfile;
 import com.kakao.helper.SharedPreferencesCache;
+import com.kakao.widget.PushActivity;
+
+import java.util.Arrays;
 
 
-public class SignUpActivity extends BaseActivity {
+public class SignUpActivity extends PushActivity {
     private static final String TAG = "SignUpActivity";
     private long id;
 
     private class ViewHolder {
-        public CheckBox termsAggreementCheckBox;
+        public CheckBox termsAgreementCheckBox;
         public UserProfileForm userProfileForm;
 
         public ViewHolder(View view) {
-            termsAggreementCheckBox = (CheckBox) view.findViewById(R.id.terms_agreement);
+            termsAgreementCheckBox = (CheckBox) view.findViewById(R.id.terms_agreement);
             userProfileForm = (UserProfileForm) view.findViewById(R.id.user_profile_form);
         }
     }
@@ -40,15 +49,87 @@ public class SignUpActivity extends BaseActivity {
     private ViewHolder viewHolder;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestCheckConfirmedUser();
+    protected void redirectLoginActivity() {
+        Log.d(TAG, "redirect");
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
-    protected void initViews(int layoutResID) {
-        setContentView(layoutResID);
+    protected String getDeviceUUID() {
+        SharedPreferencesCache cache = Session.getAppCache();
+        String curId = cache.getString(Global.ID);
+        if (curId == null) {
+            Bundle bundle = new Bundle();
+            curId = getUniqueId();
+            bundle.putString(Global.ID, curId);
+            cache.save(bundle);
+            getPushToken();
+        }
+        Log.d(TAG, "getDeviceUUID = " + curId);
+        return curId;
+    }
+
+    private String getUniqueId() {
+        return Settings.Secure.getString(
+                getContentResolver(),
+                Settings.Secure.ANDROID_ID
+        ) + System.currentTimeMillis();
+    }
+
+
+    private void getPushToken() {
+        PushService.getPushTokens(new PushTokensHttpResponseHandler<PushTokenInfo[]>() {
+            @Override
+            protected void onHttpSuccess(PushTokenInfo[] resultObj) {
+                String message = "succeeded to get push tokens."
+                        + "\ncount="
+                        + resultObj.length
+                        + "\nstories="
+                        + Arrays.toString(resultObj);
+                Log.d(TAG, "푸시알림 토큰 = " + message);
+                for (PushTokenInfo pushTokenInfo :
+                        resultObj) {
+                    String pushToken = pushTokenInfo.getPushToken();
+                    String deviceId = pushTokenInfo.getDeviceId();
+
+                    if (!TextUtils.isEmpty(pushToken) && !TextUtils.isEmpty(deviceId) && deviceId.length() > 10) {
+                        Log.d(TAG, "푸시토큰 = " + pushToken);
+                        Log.d(TAG, "디바이스 아이디 = " + deviceId);
+                        Log.d(TAG, "토큰 등록");
+                        PushService.registerPushToken(new PushRegisterHttpResponseHandler() {
+                            @Override
+                            protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
+                                Log.d(TAG, "GCM PUSH 등록 에러 메세지 = " + errorResult.getErrorMessage());
+                                Log.d(TAG, "GCM PUSH 등록 에러 URL = " + errorResult.getRequestURL());
+                                Log.d(TAG, "GCM PUSH 등록 에러 코드 = " + errorResult.getErrorCodeInt());
+                            }
+                        }, pushToken, deviceId);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
+                Log.d(TAG, "GCM PUSH 연결 에러 메세지 = " + errorResult.getErrorMessage());
+                Log.d(TAG, "GCM PUSH 연결 에러 URL = " + errorResult.getRequestURL());
+                Log.d(TAG, "GCM PUSH 연결 에러 코드 = " + errorResult.getErrorCodeInt());
+            }
+        });
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         Log.d(TAG, "액티비티 시작");
+        requestCheckConfirmedUser();
+    }
+
+
+    private void initViews(int layoutResID) {
+        setContentView(layoutResID);
 
         // 컨트롤변수 초기화
         viewHolder = new ViewHolder(getWindow().getDecorView());
@@ -59,7 +140,7 @@ public class SignUpActivity extends BaseActivity {
                 UserEntity userEntity = viewHolder.userProfileForm.getUserEntity();
 
                 // 약관에 동의 했는지 체크하기
-                if (!viewHolder.termsAggreementCheckBox.isChecked()) {
+                if (!viewHolder.termsAgreementCheckBox.isChecked()) {
                     new MaterialDialog.Builder(BaseActivity.context)
                             .title(R.string.app_name)
                             .content("약관에 동의해주세요.")
@@ -76,7 +157,7 @@ public class SignUpActivity extends BaseActivity {
                 }
 
                 // 회원가입 요청
-                BaseActivity.showLoadingView();
+                showProgress();
 
                 Intent intent = new Intent(getApplicationContext(), SocketService.class);
                 intent.putExtra(Global.COMMAND, Global.SIGN_UP);
@@ -129,7 +210,7 @@ public class SignUpActivity extends BaseActivity {
 
     // TODO 회원가입 응답
     private void processSignUp(int code, Intent intent) {
-        BaseActivity.hideLoadingView();
+        hideLoadingView();
 
         if (code == SocketException.SUCCESS) {
             UserEntity user = intent.getParcelableExtra(Global.USER);
@@ -159,6 +240,15 @@ public class SignUpActivity extends BaseActivity {
             Bundle bundle = new Bundle();
             bundle.putString(Global.TOKEN, kakaoToken);
             cache.save(bundle);
+
+            PushService.registerPushToken(new PushRegisterHttpResponseHandler() {
+                @Override
+                protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
+                    Log.d(TAG, "GCM PUSH 등록 에러 메세지 = " + errorResult.getErrorMessage());
+                    Log.d(TAG, "GCM PUSH 등록 에러 URL = " + errorResult.getRequestURL());
+                    Log.d(TAG, "GCM PUSH 등록 에러 코드 = " + errorResult.getErrorCodeInt());
+                }
+            }, kakaoToken, getDeviceUUID());
         }
 
 //        Intent intent = new Intent(getApplicationContext(), SocketService.class);
@@ -190,15 +280,18 @@ public class SignUpActivity extends BaseActivity {
         UserManagement.requestMe(new MeResponseCallback() {
             @Override
             protected void onSuccess(UserProfile userProfile) {
+                final String nickName = userProfile.getNickname();
+                final String profileImage = userProfile.getProfileImagePath();
+                final String thumbnailImage = userProfile.getThumbnailImagePath();
+
                 id = userProfile.getId();
                 new SocketIO(getApplicationContext());
-                RequestManager.signInKakao(id, new RequestManager.OnSignInKakao() {
+                RequestManager.signInKakao(id, nickName, profileImage, thumbnailImage, new RequestManager.OnSignInKakao() {
                     @Override
                     public void onSuccess(UserEntity userEntity) {
                         if (userEntity.hasExtraProfile) {
                             Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
                             intent1.putExtra(Global.USER, userEntity);
-                            Log.d(TAG, "2.userId = " + userEntity.id);
                             startActivity(intent1);
                             finish();
                         } else {
@@ -209,13 +302,12 @@ public class SignUpActivity extends BaseActivity {
                     @Override
                     public void onException(int code) {
                         if (code == 482) {
-                            RequestManager.signInKakao(id, new RequestManager.OnSignInKakao() {
+                            RequestManager.signInKakao(id, nickName, profileImage, thumbnailImage, new RequestManager.OnSignInKakao() {
                                 @Override
                                 public void onSuccess(UserEntity userEntity) {
                                     if (userEntity.hasExtraProfile) {
                                         Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
                                         intent1.putExtra(Global.USER, userEntity);
-                                        Log.d(TAG, "2.userId = " + userEntity.id);
                                         startActivity(intent1);
                                         finish();
                                     } else {
@@ -277,5 +369,25 @@ public class SignUpActivity extends BaseActivity {
 //                                .show();
 //                    }
 //                });
+    }
+    
+    MaterialDialog materialDialog;
+    
+    private void showProgress() {
+        materialDialog = new MaterialDialog.Builder(this)
+                .title(R.string.app_name)
+                .content("Waiting...")
+                .progress(true, 0)
+                .cancelable(false)
+                .show();
+    }
+
+
+    public void hideLoadingView() {
+        if (materialDialog == null) {
+            return;
+        }
+
+        materialDialog.hide();
     }
 }

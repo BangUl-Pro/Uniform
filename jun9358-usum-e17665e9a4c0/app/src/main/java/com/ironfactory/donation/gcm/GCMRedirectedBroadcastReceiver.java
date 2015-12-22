@@ -21,17 +21,21 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Log;
 
 /**
  * @author trevorjohns@google.com (Trevor Johns)
  */
 public class GCMRedirectedBroadcastReceiver extends WakefulBroadcastReceiver {
 
+    private static final String TAG = "GCMRedirectBro";
+
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d(TAG, "onReceive");
         String packageName = context.getPackageName();
-        String calssName = GCMIntentService.class.getName();
-        ComponentName comp = new ComponentName(packageName, calssName);
+        String className = GCMIntentService.class.getName();
+        ComponentName comp = new ComponentName(packageName, className);
         startWakefulService(context, (intent.setComponent(comp)));
         setResultCode(Activity.RESULT_OK);
     }

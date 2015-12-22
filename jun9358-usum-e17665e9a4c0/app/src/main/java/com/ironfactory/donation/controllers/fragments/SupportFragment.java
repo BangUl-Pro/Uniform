@@ -94,7 +94,8 @@ public class SupportFragment extends SlidingBaseFragment {
                         Log.d("USUM", productId);
                         Log.d("USUM", transactionDetails.toString());
 
-                        billingProcessor.consumePurchase(BaseActivity.context.getResources().getString(R.string.sku_id));
+//                        billingProcessor.consumePurchase(BaseActivity.context.getResources().getString(R.string.sku_id));
+                        billingProcessor.consumePurchase("bill5000");
                         BaseActivity.startActivityUsingStack(SupportCompletedActivity.class);
                     }
 
@@ -129,7 +130,8 @@ public class SupportFragment extends SlidingBaseFragment {
                     public void onBillingInitialized() {
                         Log.d("USUM", "[onBillingInitialized]");
 
-                        billingProcessor.consumePurchase(BaseActivity.context.getResources().getString(R.string.sku_id));
+//                        billingProcessor.consumePurchase(BaseActivity.context.getResources().getString(R.string.sku_id));
+                        billingProcessor.consumePurchase("bill5000");
                         if (callback != null) {
                             callback.onBillingInitialized();
                         }

@@ -6,7 +6,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.ironfactory.donation.Global;
-import com.ironfactory.donation.entities.TransactionEntity;
 import com.ironfactory.donation.entities.UserEntity;
 
 public class SocketService extends Service {
@@ -32,9 +31,6 @@ public class SocketService extends Service {
                 } else if (command.equals(Global.SIGN_IN)) {
                     // 로그인
                     processSignIn(intent);
-                } else if (command.equals(Global.UPDATE_TRANSACTION_STATUS)) {
-                    //
-                    processUpdateTransactionStatus(intent);
                 } else if (command.equals(Global.GET_PRODUCT)) {
                     // 제품 요청
                     processGetProduct(intent);
@@ -71,14 +67,6 @@ public class SocketService extends Service {
     private void processGetProduct(Intent intent) {
         String productJson = intent.getStringExtra(Global.PRODUCT);
         socketIO.getProduct(productJson);
-    }
-
-
-    // TODO: 15. 11. 24.
-    private void processUpdateTransactionStatus(Intent intent) {
-        int status = intent.getIntExtra(Global.STATUS, -1);
-        TransactionEntity transactionEntity = intent.getParcelableExtra(Global.TRANSACTION);
-        socketIO.updateTransactionStatus(status, transactionEntity);
     }
 
 

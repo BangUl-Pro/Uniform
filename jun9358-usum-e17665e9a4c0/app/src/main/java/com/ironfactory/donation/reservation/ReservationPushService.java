@@ -2,7 +2,6 @@ package com.ironfactory.donation.reservation;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.util.Log;
 
 import com.ironfactory.donation.Global;
 import com.ironfactory.donation.HashBiMap;
@@ -13,6 +12,7 @@ import com.ironfactory.donation.dtos.ProductCardDto;
 import com.ironfactory.donation.entities.ProductEntity;
 import com.ironfactory.donation.entities.ReservedCategoryEntity;
 import com.ironfactory.donation.entities.UserEntity;
+import com.ironfactory.donation.gcm.PushManager;
 import com.ironfactory.donation.socketIo.SocketException;
 import com.ironfactory.donation.socketIo.SocketService;
 
@@ -148,8 +148,7 @@ public class ReservationPushService extends IntentService {
                 String msg = "";
                 msg += categories.get(productCardDto.productEntity.category);
                 msg += "에 해당하는 상품이 등록되었습니다.";
-//                PushManager.sendReservationPushToMe(msg);
-                Log.d(TAG, "푸시알림 구현해야함");
+                PushManager.sendReservationPushToMe(msg);
 
                 SettingFragment.updateReservedCategoryTimestamp(
                         productCardDto.productEntity.school_id,

@@ -7,6 +7,7 @@ import android.view.View;
 import com.ironfactory.donation.R;
 import com.ironfactory.donation.controllers.fragments.SettingFragment;
 import com.ironfactory.donation.controllers.views.AlarmRecyclerView;
+import com.ironfactory.donation.entities.AlarmEntity;
 
 public class AlarmActivity extends BaseActivity {
 
@@ -40,6 +41,12 @@ public class AlarmActivity extends BaseActivity {
         setContentView(layoutResID);
         Log.d(TAG, "액티비티 시작");
         viewHolder = new ViewHolder(getWindow().getDecorView());
+        for (AlarmEntity alarm :
+                SettingFragment.getReceivedPushMessages()) {
+            Log.d(TAG, "msg = " + alarm.message);
+            Log.d(TAG, "timestamp = " + alarm.timestamp);
+            Log.d(TAG, "type = " + alarm.type);
+        }
         viewHolder.alarms.setAlarmEntities(
 //                convertBaasioPayloadsToAlarmEntities(SettingFragment.getReceivedPushMessages())
                 SettingFragment.getReceivedPushMessages()
