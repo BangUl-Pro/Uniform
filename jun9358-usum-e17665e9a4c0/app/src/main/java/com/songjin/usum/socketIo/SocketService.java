@@ -6,7 +6,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.songjin.usum.Global;
-import com.songjin.usum.entities.UserEntity;
 
 public class SocketService extends Service {
     private static final String TAG = "SocketService";
@@ -25,13 +24,7 @@ public class SocketService extends Service {
             String command = intent.getStringExtra(Global.COMMAND);
             if (command != null) {
                 Log.d(TAG, "command = " + command);
-                if (command.equals(Global.SIGN_UP)) {
-                    // 회원 가입
-                    processSignUp(intent);
-                } else if (command.equals(Global.SIGN_IN)) {
-                    // 로그인
-                    processSignIn(intent);
-                } else if (command.equals(Global.GET_PRODUCT)) {
+                if (command.equals(Global.GET_PRODUCT)) {
                     // 제품 요청
                     processGetProduct(intent);
                 }
@@ -68,21 +61,6 @@ public class SocketService extends Service {
         String productJson = intent.getStringExtra(Global.PRODUCT);
         socketIO.getProduct(productJson);
     }
-
-
-    private void processSignIn(Intent intent) {
-        // 로그인
-        String userId = intent.getStringExtra(Global.USER_ID);
-        socketIO.signIn(userId);
-    }
-
-
-    private void processSignUp(Intent intent) {
-        // 회원가입
-        UserEntity userEntity = intent.getParcelableExtra(Global.USER);
-        socketIO.signUp(userEntity);
-    }
-
 
 
     @Override

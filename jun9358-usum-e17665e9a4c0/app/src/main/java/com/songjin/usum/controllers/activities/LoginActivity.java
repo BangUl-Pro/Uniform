@@ -8,19 +8,18 @@ import android.view.View;
 import android.widget.Button;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.songjin.usum.controllers.fragments.SettingFragment;
-import com.songjin.usum.managers.RequestManager;
-import com.songjin.usum.socketIo.SocketIO;
 import com.kakao.Session;
 import com.kakao.SessionCallback;
 import com.kakao.exception.KakaoException;
 import com.kakao.widget.LoginButton;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
+import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.UserEntity;
+import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.managers.SchoolManager;
-import com.songjin.usum.socketIo.SocketException;
+import com.songjin.usum.socketIo.SocketIO;
 import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
@@ -116,13 +115,28 @@ public class LoginActivity extends BaseActivity {
         showLoadingView();
         final String androidId = getUniqueGuestId();
         final String userId = "guest" + androidId;
-
-        Intent intent = new Intent(getApplicationContext(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.SIGN_UP);
         UserEntity userEntity = new UserEntity();
         userEntity.id = userId;
-        intent.putExtra(Global.USER, userEntity);
-        startService(intent);
+        RequestManager.signUp(userEntity, new RequestManager.OnSignUp() {
+            @Override
+            public void onSuccess(UserEntity userEntity) {
+                hideLoadingView();
+                signInViaGuest();
+            }
+
+            @Override
+            public void onException(int code) {
+                hideLoadingView();
+                if (code == 412 || code == 413) { // 이미 가입된 사용자
+                    signInViaGuest();
+                } else {
+                    new MaterialDialog.Builder(context)
+                            .title(R.string.app_name)
+                            .content("비회원 로그인중에 문제가 발생하였습니다.\n나중에 다시 시도해주세요.")
+                            .show();
+                }
+            }
+        });
 
 
 //        BaasioUser.signUpInBackground(
@@ -157,11 +171,22 @@ public class LoginActivity extends BaseActivity {
 
     private void signInViaGuest() {
         showLoadingView();
-        Intent intent = new Intent(getApplicationContext(), SocketService.class);
-        intent.putExtra(Global.COMMAND, Global.SIGN_IN);
-        intent.putExtra(Global.USER_ID, "guest" + getUniqueGuestId());
-        startService(intent);
+        RequestManager.signIn("guest" + getUniqueGuestId(), new RequestManager.OnSignIn() {
+            @Override
+            public void onSuccess(UserEntity userEntity) {
+                hideLoadingView();
+                updateGuestExtraProfile(userEntity);
+            }
 
+            @Override
+            public void onException() {
+                hideLoadingView();
+                new MaterialDialog.Builder(context)
+                        .title(R.string.app_name)
+                        .content("비회원 로그인중에 문제가 발생하였습니다.\n나중에 다시 시도해주세요.")
+                        .show();
+            }
+        });
 //        BaasioUser.signInInBackground(
 //                BaseActivity.context,
 //                "guest" + getUniqueGuestId(),
@@ -256,58 +281,6 @@ public class LoginActivity extends BaseActivity {
         public ViewHolder(View view) {
             kakaoLoginButton = (LoginButton) view.findViewById(R.id.login_with_kakao);
             guestLoginButton = (Button) view.findViewById(R.id.login_with_guest);
-        }
-    }
-
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        if (intent != null) {
-            String command = intent.getStringExtra(Global.COMMAND);
-            if (command != null) {
-                int code = intent.getIntExtra(Global.CODE, -1);
-                SocketException.printErrMsg(code);
-                SocketException.toastErrMsg(code);
-                if (code != -1) {
-                    if (command.equals(Global.SIGN_UP)) {
-                        processSignUp(code);
-                    } else if (command.equals(Global.SIGN_IN)) {
-                        processSignIn(code, intent);
-                    }
-                }
-            }
-        }
-        super.onNewIntent(intent);
-    }
-
-
-    private void processSignIn(int code, Intent intent) {
-        hideLoadingView();
-        if (code == SocketException.SUCCESS) {
-            // 성공
-            UserEntity user = intent.getParcelableExtra(Global.USER);
-            updateGuestExtraProfile(user);
-        } else if (code == 421 || code == 420) {
-            new MaterialDialog.Builder(context)
-                    .title(R.string.app_name)
-                    .content("비회원 로그인중에 문제가 발생하였습니다.\n나중에 다시 시도해주세요.")
-                    .show();
-        }
-    }
-
-
-    private void processSignUp(int code) {
-        hideLoadingView();
-        if (code == SocketException.SUCCESS) {
-            // 성공
-            signInViaGuest();
-        } else if (code == 412 || code == 413) { // 이미 가입된 사용자
-            signInViaGuest();
-        } else {
-            new MaterialDialog.Builder(context)
-                    .title(R.string.app_name)
-                    .content("비회원 로그인중에 문제가 발생하였습니다.\n나중에 다시 시도해주세요.")
-                    .show();
         }
     }
 

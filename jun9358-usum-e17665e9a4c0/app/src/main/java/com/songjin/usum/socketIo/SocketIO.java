@@ -12,7 +12,6 @@ import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 import com.songjin.usum.Global;
 import com.songjin.usum.controllers.activities.LoginActivity;
-import com.songjin.usum.controllers.activities.SignUpActivity;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.dtos.TimelineCardDto;
@@ -24,7 +23,6 @@ import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.RequestManager;
-import com.songjin.usum.reservation.ReservationPushService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,110 +100,9 @@ public class SocketIO {
                 Log.d(TAG, "소켓 연결 끊김");
                 socketConnect();
             }
-        }).on(Global.SIGN_UP, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processSingUp(object);
-            }
-        }).on(Global.SIGN_IN, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processSignIn(object);
-            }
-        }).on(Global.GET_PRODUCT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                processGetProduct(object);
-            }
         });
     }
 
-
-    // TODO: 15. 11. 25. 제품 요청 응답
-    private void processGetProduct(JSONObject object) {
-        try {
-            int code = object.getInt(Global.CODE);
-            Log.d(TAG, "제품 요청 응답");
-            Log.d(TAG, "object = " + object);
-
-            Intent intent = new Intent(context, ReservationPushService.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Global.COMMAND, Global.GET_PRODUCT);
-            intent.putExtra(Global.CODE, code);
-
-            if (code == SocketException.SUCCESS) {
-                JSONArray productArray = object.getJSONArray(Global.PRODUCT);
-                Gson gson = new Gson();
-                ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
-
-                for (int i = 0; i < productArray.length(); i++) {
-                    JSONObject productObject = productArray.getJSONObject(i);
-                    ProductCardDto dto = gson.fromJson(productObject.toString(), ProductCardDto.class);
-                    productCardDtos.add(dto);
-                }
-                intent.putExtra(Global.PRODUCT, productCardDtos);
-            }
-            context.startService(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // TODO: 15. 11. 20. 로그인 응답
-    private void processSignIn(JSONObject object) {
-        Log.d(TAG, "로그인 응답");
-        try {
-            int code = object.getInt(Global.CODE);
-
-            Intent intent = new Intent(context, LoginActivity.class);
-            if (code == SocketException.SUCCESS) {
-                // 성공
-                JSONObject userObject = object.getJSONObject(Global.USER);
-                UserEntity guest = new UserEntity(userObject);
-                intent.putExtra(Global.USER, guest);
-            }
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void processSingUp(JSONObject object) {
-        // 회원가입 응답
-        Log.d(TAG, "회원가입 응답");
-        try {
-            int code = object.getInt(Global.CODE);
-            int userType = object.getInt(Global.USER_TYPE);
-
-            Intent intent;
-            if (userType == 1) {
-                // 게스트모드
-                intent = new Intent(context, LoginActivity.class);
-            } else {
-                // 정식모드
-                intent = new Intent(context, SignUpActivity.class);
-            }
-
-            if (code == SocketException.SUCCESS) {
-                // 성공
-                JSONObject userObject = object.getJSONObject(Global.USER);
-                Log.d(TAG, "userObject = " + userObject);
-                UserEntity user = new UserEntity(userObject);
-                intent.putExtra(Global.USER, user);
-            }
-            intent.putExtra(Global.COMMAND, Global.SIGN_UP);
-            intent.putExtra(Global.CODE, code);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     /**
@@ -245,7 +142,7 @@ public class SocketIO {
     }
 
 
-    public void signUp(UserEntity userEntity) {
+    public static void signUp(UserEntity userEntity, final RequestManager.OnSignUp onSignUp) {
         // 회원가입
         Log.d(TAG, "회원가입");
 
@@ -270,13 +167,32 @@ public class SocketIO {
             object.put(Global.SCHOOL_ID, schoolId);
 
             socket.emit(Global.SIGN_UP, object);
+            socket.once(Global.SIGN_UP, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        if (code == SocketException.SUCCESS) {
+                            JSONObject userObject = resObject.getJSONObject(Global.USER);
+                            Log.d(TAG, "userObject = " + userObject);
+                            UserEntity user = new UserEntity(userObject);
+                            onSignUp.onSuccess(user);
+                        } else {
+                            onSignUp.onException(code);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
 
-    public void signIn(String userId) {
+    public static void signIn(String userId, final RequestManager.OnSignIn onSignIn) {
         // 로그인
         Log.d(TAG, "로그인");
         Log.i(TAG, "userId = " + userId);
@@ -288,6 +204,26 @@ public class SocketIO {
             object.put(Global.USER_ID, userId);
 
             socket.emit(Global.SIGN_IN, object);
+            socket.once(Global.SIGN_IN, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+
+                        if (code == SocketException.SUCCESS) {
+                            JSONObject userObject = resObject.getJSONObject(Global.USER);
+                            UserEntity guest = new UserEntity(userObject);
+                            onSignIn.onSuccess(guest);
+                        } else {
+                            onSignIn.onException();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1544,13 +1480,38 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 제품 요청
-    public void getProduct(String productJson) {
+    public static void getProduct(String productJson, final RequestManager.OnGetProduct onGetProduct) {
         try {
             if (!checkSocket())
                 return;
             JSONArray array = new JSONArray(productJson);
             Log.d(TAG, "getProduct Array = " + array.toString());
             socket.emit(Global.GET_PRODUCT, array);
+            socket.once(Global.GET_PRODUCT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        if (code == SocketException.SUCCESS) {
+                            JSONArray productArray = resObject.getJSONArray(Global.PRODUCT);
+                            Gson gson = new Gson();
+                            ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
+
+                            for (int i = 0; i < productArray.length(); i++) {
+                                JSONObject productObject = productArray.getJSONObject(i);
+                                ProductCardDto dto = gson.fromJson(productObject.toString(), ProductCardDto.class);
+                                productCardDtos.add(dto);
+                            }
+                            onGetProduct.onSuccess(productCardDtos);
+                        } else {
+                            onGetProduct.onException();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -9,14 +9,6 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.songjin.usum.Global;
-import com.songjin.usum.R;
-import com.songjin.usum.controllers.views.UserProfileForm;
-import com.songjin.usum.entities.UserEntity;
-import com.songjin.usum.managers.RequestManager;
-import com.songjin.usum.socketIo.SocketException;
-import com.songjin.usum.socketIo.SocketIO;
-import com.songjin.usum.socketIo.SocketService;
 import com.kakao.APIErrorResult;
 import com.kakao.MeResponseCallback;
 import com.kakao.PushRegisterHttpResponseHandler;
@@ -28,6 +20,12 @@ import com.kakao.UserManagement;
 import com.kakao.UserProfile;
 import com.kakao.helper.SharedPreferencesCache;
 import com.kakao.widget.PushActivity;
+import com.songjin.usum.Global;
+import com.songjin.usum.R;
+import com.songjin.usum.controllers.views.UserProfileForm;
+import com.songjin.usum.entities.UserEntity;
+import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketIO;
 
 import java.util.Arrays;
 
@@ -159,10 +157,24 @@ public class SignUpActivity extends PushActivity {
                 // 회원가입 요청
                 showProgress();
 
-                Intent intent = new Intent(getApplicationContext(), SocketService.class);
-                intent.putExtra(Global.COMMAND, Global.SIGN_UP);
-                intent.putExtra(Global.USER, userEntity);
-                startService(intent);
+                RequestManager.signUp(userEntity, new RequestManager.OnSignUp() {
+                    @Override
+                    public void onSuccess(UserEntity userEntity) {
+                        hideLoadingView();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra(Global.USER, userEntity);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onException(int code) {
+                        new MaterialDialog.Builder(BaseActivity.context)
+                                .title(R.string.app_name)
+                                .content("회원가입하는데 문제가 발생하였습니다.")
+                                .show();
+                    }
+                });
 
 //                RequestManager.requestSignUp(userEntity, new BaasioSignInCallback() {
 //                    @Override
@@ -188,45 +200,6 @@ public class SignUpActivity extends PushActivity {
     }
 
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        if (intent != null) {
-            String command = intent.getStringExtra(Global.COMMAND);
-            if (command != null) {
-                int code = intent.getIntExtra(Global.CODE, -1);
-                if (code != -1) {
-                    SocketException.printErrMsg(code);
-                    SocketException.toastErrMsg(code);
-
-                    if (command.equals(Global.SIGN_UP)) {
-                        // 회원가입 응답
-                        processSignUp(code, intent);
-                    }
-                }
-            }
-        }
-    }
-
-
-    // TODO 회원가입 응답
-    private void processSignUp(int code, Intent intent) {
-        hideLoadingView();
-
-        if (code == SocketException.SUCCESS) {
-            UserEntity user = intent.getParcelableExtra(Global.USER);
-            Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-            intent1.putExtra(Global.USER, user);
-            Log.d(TAG, "1.userId = " + user.id);
-            startActivity(intent1);
-//            BaseActivity.startActivityOnTopStack(MainActivity.class);
-            finish();
-        } else {
-            new MaterialDialog.Builder(BaseActivity.context)
-                    .title(R.string.app_name)
-                    .content("회원가입하는데 문제가 발생하였습니다.")
-                    .show();
-        }
-    }
 
     // TODO RequestManager에 넣기
     private void requestCheckConfirmedUser() {

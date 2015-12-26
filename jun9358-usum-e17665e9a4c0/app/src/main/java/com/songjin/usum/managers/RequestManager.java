@@ -209,12 +209,6 @@ public class RequestManager {
     }
 
 
-    public static void transactionPush(ArrayList<String> userIds, String msg) {
-//        AlarmEntity alarmEntity = new AlarmEntity(msg, AlarmEntity.PUSH_TYPE_TRANSACTION);
-        SocketIO.transactionPush(userIds, msg);
-    }
-
-
     public static void updateTransactionStatus(TransactionEntity transactionEntity, int status, OnUpdateTransactionStatus onUpdateTransactionStatus) {
         Log.d(TAG, "트랜잭션 업데이트 요청");
         SocketIO.updateTransactionStatus(status, transactionEntity, onUpdateTransactionStatus);
@@ -225,6 +219,35 @@ public class RequestManager {
     }
 
 
+    public static void signUp(UserEntity userEntity, OnSignUp onSignUp) {
+        SocketIO.signUp(userEntity, onSignUp);
+    }
+
+    public static void signIn(String userId, OnSignIn onSignIn) {
+        SocketIO.signIn(userId, onSignIn);
+    }
+
+
+    public static void getProduct(String productJson, OnGetProduct onGetProduct) {
+        SocketIO.getProduct(productJson, onGetProduct);
+    }
+
+
+    public interface OnGetProduct {
+        void onSuccess(ArrayList<ProductCardDto> productCardDtos);
+        void onException();
+    }
+
+
+    public interface OnSignIn {
+        void onSuccess(UserEntity userEntity);
+        void onException();
+    }
+
+    public interface OnSignUp {
+        void onSuccess(UserEntity userEntity);
+        void onException(int code);
+    }
 
 
     public interface OnUpdateTransactionStatus {
