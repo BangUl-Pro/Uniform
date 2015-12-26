@@ -1,7 +1,6 @@
 package com.songjin.usum.socketIo;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
@@ -11,7 +10,6 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 import com.songjin.usum.Global;
-import com.songjin.usum.controllers.activities.LoginActivity;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.dtos.TimelineCardDto;
@@ -86,13 +84,6 @@ public class SocketIO {
                 // 연결
                 Log.d(TAG, "소켓 연결");
             }
-        }).on(Global.LOGIN, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                // 로그인
-                JSONObject object = (JSONObject) args[0];
-                processLogin(object);
-            }
         }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -101,33 +92,6 @@ public class SocketIO {
                 socketConnect();
             }
         });
-    }
-
-
-
-    /**
-     * TODO : 로그인 응답
-     * */
-    private void processLogin(JSONObject object) {
-        Log.d(TAG, "로그인 응답");
-        try {
-            int code = object.getInt(Global.CODE);
-            SocketException.printErrMsg(code);
-
-            String id = null;
-            if (code == SocketException.SUCCESS)
-                id = object.getString(Global.ID);
-
-            Intent intent = new Intent(context, LoginActivity.class);
-            intent.putExtra(Global.COMMAND, Global.LOGIN);
-            intent.putExtra(Global.ID, id);
-            intent.putExtra(Global.CODE, code);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            context.startActivity(intent);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -176,10 +140,20 @@ public class SocketIO {
                         if (code == SocketException.SUCCESS) {
                             JSONObject userObject = resObject.getJSONObject(Global.USER);
                             Log.d(TAG, "userObject = " + userObject);
-                            UserEntity user = new UserEntity(userObject);
-                            onSignUp.onSuccess(user);
+                            final UserEntity user = new UserEntity(userObject);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSignUp.onSuccess(user);
+                                }
+                            });
                         } else {
-                            onSignUp.onException(code);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSignUp.onException(code);
+                                }
+                            });
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -213,10 +187,20 @@ public class SocketIO {
 
                         if (code == SocketException.SUCCESS) {
                             JSONObject userObject = resObject.getJSONObject(Global.USER);
-                            UserEntity guest = new UserEntity(userObject);
-                            onSignIn.onSuccess(guest);
+                            final UserEntity guest = new UserEntity(userObject);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSignIn.onSuccess(guest);
+                                }
+                            });
                         } else {
-                            onSignIn.onException();
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSignIn.onException();
+                                }
+                            });
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1194,27 +1178,34 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 제품 수정
-    public static void updateProduct(ProductCardDto productCardDto, final RequestManager.OnUpdateProduct onUpdateProduct) {
+    public static void updateProduct(ProductCardDto productCardDto, boolean isDeleteFile, final RequestManager.OnUpdateProduct onUpdateProduct) {
         try {
             if (!checkSocket())
                 return;
             Gson gson = new Gson();
             String json = gson.toJson(productCardDto);
             JSONObject object = new JSONObject(json);
+            object.put("isDeleteFile", isDeleteFile);
             Log.d(TAG, "updateProduct Object = " + object);
             socket.emit(Global.UPDATE_PRODUCT, object);
             socket.once(Global.UPDATE_PRODUCT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
                     try {
-                        JSONObject resObject = getJson(args);
+                        final JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
                         Log.d(TAG, "제품 수정 응답 resObject = " + resObject);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 if (code == SocketException.SUCCESS) {
-                                    onUpdateProduct.onSuccess();
+                                    try {
+                                        JSONObject productJson = resObject.getJSONObject(Global.PRODUCT);
+                                        ProductEntity productEntity = new ProductEntity(productJson);
+                                        onUpdateProduct.onSuccess(productEntity);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 } else {
                                     onUpdateProduct.onException();
                                 }
@@ -1232,14 +1223,14 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 파일 입력
-    public static void insertFile(String id, String path, RequestManager.OnInsertFile onInsertFile) {
+    public static void insertFile(String id, String path, int position, RequestManager.OnInsertFile onInsertFile) {
 //        try {
             String serverUrl = SERVER_URL + "/api/photo";
 
             Log.d(TAG, "productId = " + id);
             Log.d(TAG, "path = " + path);
 
-            upload(serverUrl, path, id, onInsertFile);
+            upload(serverUrl, path, id, position, onInsertFile);
 
 //            object.put(Global.PRODUCT_ID, id);
 //            object.put(Global.PATH, path);
@@ -1252,7 +1243,7 @@ public class SocketIO {
     }
 
 
-    private static void upload(final String serverUrl, final String fileUrl, final String id, final RequestManager.OnInsertFile onInsertFile) {
+    private static void upload(final String serverUrl, final String fileUrl, final String id, final int position, final RequestManager.OnInsertFile onInsertFile) {
         Log.d(TAG, "fileUrl = " + fileUrl);
         new Thread(new Runnable() {
             @Override
@@ -1270,6 +1261,7 @@ public class SocketIO {
 
                 if (!file.isFile()) {
                     Log.e(TAG, "파일아님 = " + fileUrl);
+                    onInsertFile.onException(1000);
                     return;
                 }
 
@@ -1330,7 +1322,7 @@ public class SocketIO {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                onInsertFile.onSuccess();
+                                onInsertFile.onSuccess(position);
                             }
                         });
                     } else {
@@ -1496,16 +1488,26 @@ public class SocketIO {
                         if (code == SocketException.SUCCESS) {
                             JSONArray productArray = resObject.getJSONArray(Global.PRODUCT);
                             Gson gson = new Gson();
-                            ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
+                            final ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
 
                             for (int i = 0; i < productArray.length(); i++) {
                                 JSONObject productObject = productArray.getJSONObject(i);
                                 ProductCardDto dto = gson.fromJson(productObject.toString(), ProductCardDto.class);
                                 productCardDtos.add(dto);
                             }
-                            onGetProduct.onSuccess(productCardDtos);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetProduct.onSuccess(productCardDtos);
+                                }
+                            });
                         } else {
-                            onGetProduct.onException();
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetProduct.onException();
+                                }
+                            });
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

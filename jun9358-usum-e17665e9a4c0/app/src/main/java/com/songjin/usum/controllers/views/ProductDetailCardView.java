@@ -23,6 +23,7 @@ import com.songjin.usum.controllers.fragments.SupportFragment;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.ProductEntity;
 import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.gcm.PushManager;
@@ -340,17 +341,26 @@ public class ProductDetailCardView extends CardView {
                     });
                 }
 
-                RequestManager.updateProduct(productCardDtoForUpdate, new RequestManager.OnUpdateProduct() {
+                final boolean isDeleteFile = productCardDtoForUpdate.uris.get(0).toString().contains("com.jerryjang.donation/cache") ? false : true;
+
+                RequestManager.updateProduct(productCardDtoForUpdate, isDeleteFile, new RequestManager.OnUpdateProduct() {
                     @Override
-                    public void onSuccess() {
+                    public void onSuccess(ProductEntity productEntity) {
                         Log.d(TAG, "업데이트 성공");
-                        for (Uri uri : productCardDtoForUpdate.uris) {
+                        for (int i = 0; i < productCardDtoForUpdate.uris.size(); i++) {
+                            Uri uri = productCardDtoForUpdate.uris.get(i);
                             RequestManager.insertFile(
-                                    productCardDtoForUpdate.productEntity.id,
+                                    productEntity.id,
                                     uri.toString(),
+                                    i,
                                     new RequestManager.OnInsertFile() {
                                         @Override
-                                        public void onSuccess() {
+                                        public void onSuccess(int position) {
+                                            if (position == productCardDtoForUpdate.uris.size() - 1) {
+                                                BaseActivity.hideLoadingView();
+                                                viewHolder.productUpdateDialog.hide();
+                                                ((Activity) BaseActivity.context).finish();
+                                            }
                                         }
 
                                         @Override
@@ -361,9 +371,11 @@ public class ProductDetailCardView extends CardView {
                             );
                         }
 
-                        BaseActivity.hideLoadingView();
-                        viewHolder.productUpdateDialog.hide();
-                        ((Activity) BaseActivity.context).finish();
+                        if (productCardDtoForUpdate.uris.size() == 0 || !isDeleteFile) {
+                            BaseActivity.hideLoadingView();
+                            viewHolder.productUpdateDialog.hide();
+                            ((Activity) BaseActivity.context).finish();
+                        }
                     }
 
                     @Override

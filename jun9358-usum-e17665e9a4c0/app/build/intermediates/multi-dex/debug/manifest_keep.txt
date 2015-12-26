@@ -24,7 +24,6 @@
 -keep class com.songjin.usum.controllers.activities.FaqActivity { <init>(); }
 -keep class com.songjin.usum.controllers.activities.SupportCompletedActivity { <init>(); }
 -keep class com.songjin.usum.controllers.activities.AlarmActivity { <init>(); }
--keep class com.songjin.usum.socketIo.SocketService { <init>(); }
 -keep public class * extends android.app.backup.BackupAgent {
     <init>();
 }

@@ -1,5 +1,6 @@
 package com.songjin.usum.controllers.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -33,6 +34,7 @@ import java.util.Arrays;
 public class SignUpActivity extends PushActivity {
     private static final String TAG = "SignUpActivity";
     private long id;
+    private Activity activity = this;
 
     private class ViewHolder {
         public CheckBox termsAgreementCheckBox;
@@ -139,7 +141,7 @@ public class SignUpActivity extends PushActivity {
 
                 // 약관에 동의 했는지 체크하기
                 if (!viewHolder.termsAgreementCheckBox.isChecked()) {
-                    new MaterialDialog.Builder(BaseActivity.context)
+                    new MaterialDialog.Builder(activity)
                             .title(R.string.app_name)
                             .content("약관에 동의해주세요.")
                             .show();
@@ -147,7 +149,7 @@ public class SignUpActivity extends PushActivity {
                 }
                 String validateMsg = viewHolder.userProfileForm.validateForm();
                 if (!validateMsg.isEmpty()) {
-                    new MaterialDialog.Builder(BaseActivity.context)
+                    new MaterialDialog.Builder(activity)
                             .title(R.string.app_name)
                             .content(validateMsg)
                             .show();
@@ -169,7 +171,7 @@ public class SignUpActivity extends PushActivity {
 
                     @Override
                     public void onException(int code) {
-                        new MaterialDialog.Builder(BaseActivity.context)
+                        new MaterialDialog.Builder(activity)
                                 .title(R.string.app_name)
                                 .content("회원가입하는데 문제가 발생하였습니다.")
                                 .show();
@@ -269,7 +271,7 @@ public class SignUpActivity extends PushActivity {
                                 }
                             });
                         } else {
-                            new MaterialDialog.Builder(BaseActivity.context)
+                            new MaterialDialog.Builder(activity)
                                     .title(R.string.app_name)
                                     .content("로그인하는데 문제가 발생하였습니다.")
                                     .show();

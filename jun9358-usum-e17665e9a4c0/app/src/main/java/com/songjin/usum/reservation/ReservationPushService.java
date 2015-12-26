@@ -2,6 +2,7 @@ package com.songjin.usum.reservation;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 import com.songjin.usum.Global;
 import com.songjin.usum.HashBiMap;
@@ -83,6 +84,7 @@ public class ReservationPushService extends IntentService {
             RequestManager.getProduct(array.toString(), new RequestManager.OnGetProduct() {
                 @Override
                 public void onSuccess(ArrayList<ProductCardDto> productCardDtos) {
+                    Log.d(TAG, "getProduct");
                     HashBiMap<Integer, String> categories = Category.getHashBiMap(Sex.ALL);
                     for (ProductCardDto productCardDto : productCardDtos) {
                         if (productCardDto.productEntity.user_id.equals(Global.userEntity.id)) {

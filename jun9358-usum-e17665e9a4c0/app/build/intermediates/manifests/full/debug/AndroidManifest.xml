@@ -154,12 +154,6 @@
             android:name="com.songjin.usum.controllers.activities.AlarmActivity"
             android:label="@string/title_activity_alarm" >
         </activity>
-
-        <service
-            android:name="com.songjin.usum.socketIo.SocketService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
     </application>
 
 </manifest>

@@ -14,6 +14,7 @@ import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.LikeEntity;
+import com.songjin.usum.entities.ProductEntity;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
@@ -114,15 +115,15 @@ public class RequestManager {
         SocketIO.deleteProduct(productId, onDeleteProduct);
     }
 
-    public static void updateProduct(ProductCardDto productCardDto, OnUpdateProduct onUpdateProduct) {
+    public static void updateProduct(ProductCardDto productCardDto, boolean isDeleteFile, OnUpdateProduct onUpdateProduct) {
         Log.d(TAG, "제품 업데이트 요청");
-        SocketIO.updateProduct(productCardDto, onUpdateProduct);
+        SocketIO.updateProduct(productCardDto, isDeleteFile, onUpdateProduct);
     }
 
 
-    public static void insertFile(String productId, String path, OnInsertFile onInsertFile) {
+    public static void insertFile(String productId, String path, int position, OnInsertFile onInsertFile) {
         Log.d(TAG, "파일 입력 요청");
-        SocketIO.insertFile(productId, path, onInsertFile);
+        SocketIO.insertFile(productId, path, position, onInsertFile);
     }
 
     public static void deleteFile(ArrayList<FileEntity> fileEntities, OnDeleteFile onDeleteFile) {
@@ -290,7 +291,7 @@ public class RequestManager {
     }
 
     public interface OnUpdateProduct {
-        void onSuccess();
+        void onSuccess(ProductEntity productEntity);
         void onException();
     }
 
@@ -355,7 +356,7 @@ public class RequestManager {
     }
 
     public interface OnInsertFile {
-        void onSuccess();
+        void onSuccess(int position);
         void onException(int code);
     }
 

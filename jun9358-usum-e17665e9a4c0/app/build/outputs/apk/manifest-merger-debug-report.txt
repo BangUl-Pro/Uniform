@@ -291,14 +291,6 @@ ADDED from AndroidManifest.xml:147:9
 		ADDED from AndroidManifest.xml:149:13
 	android:name
 		ADDED from AndroidManifest.xml:148:13
-service#com.songjin.usum.socketIo.SocketService
-ADDED from AndroidManifest.xml:152:9
-	android:exported
-		ADDED from AndroidManifest.xml:155:13
-	android:enabled
-		ADDED from AndroidManifest.xml:154:13
-	android:name
-		ADDED from AndroidManifest.xml:153:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:multidex:1.0.0:18:5

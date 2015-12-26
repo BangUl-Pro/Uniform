@@ -108,72 +108,74 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/socketIo/SocketIO.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="94" column="13" selection-start-line="94" selection-start-column="13" selection-end-line="94" selection-end-column="13" />
+              <caret line="1180" column="26" selection-start-line="1180" selection-start-column="26" selection-end-line="1180" selection-end-column="26" />
               <folding>
-                <element signature="e#2417#2593#0" expanded="true" />
-                <element signature="e#2592#2593#0" expanded="true" />
-                <element signature="e#2612#2848#0" expanded="true" />
-                <element signature="e#2878#3093#0" expanded="true" />
-                <element signature="e#3092#3093#0" expanded="true" />
-                <element signature="e#3951#3952#0" expanded="true" />
-                <element signature="e#3980#3981#0" expanded="true" />
-                <element signature="e#5009#5872#0" expanded="true" />
-                <element signature="e#5871#5872#0" expanded="true" />
-                <element signature="e#6392#7184#0" expanded="true" />
-                <element signature="e#7183#7184#0" expanded="true" />
-                <element signature="e#25934#26181#0" expanded="true" />
-                <element signature="e#26180#26181#0" expanded="true" />
-                <element signature="e#26258#26503#0" expanded="true" />
-                <element signature="e#26502#26503#0" expanded="true" />
-                <element signature="e#33215#33471#0" expanded="true" />
-                <element signature="e#33470#33471#0" expanded="true" />
-                <element signature="e#33548#33794#0" expanded="true" />
-                <element signature="e#33793#33794#0" expanded="true" />
-                <element signature="e#35924#36179#0" expanded="true" />
-                <element signature="e#36178#36179#0" expanded="true" />
-                <element signature="e#36256#36501#0" expanded="true" />
-                <element signature="e#36500#36501#0" expanded="true" />
-                <element signature="e#38209#38545#0" expanded="true" />
-                <element signature="e#38544#38545#0" expanded="true" />
-                <element signature="e#38622#38864#0" expanded="true" />
-                <element signature="e#38863#38864#0" expanded="true" />
-                <element signature="e#45177#45430#0" expanded="true" />
-                <element signature="e#45429#45430#0" expanded="true" />
-                <element signature="e#45507#45751#0" expanded="true" />
-                <element signature="e#45750#45751#0" expanded="true" />
-                <element signature="e#48501#49941#0" expanded="true" />
-                <element signature="e#49940#49941#0" expanded="true" />
-                <element signature="e#50510#51456#0" expanded="true" />
-                <element signature="e#51455#51456#0" expanded="true" />
-                <element signature="e#52079#53025#0" expanded="true" />
-                <element signature="e#52440#52876#0" expanded="true" />
-                <element signature="e#52875#52876#0" expanded="true" />
-                <element signature="e#53024#53025#0" expanded="true" />
-                <element signature="e#58975#59890#0" expanded="true" />
-                <element signature="e#59889#59890#0" expanded="true" />
-                <element signature="e#60485#61390#0" expanded="true" />
-                <element signature="e#60847#61241#0" expanded="true" />
-                <element signature="e#61240#61241#0" expanded="true" />
-                <element signature="e#61389#61390#0" expanded="true" />
-                <element signature="e#62018#63365#0" expanded="true" />
-                <element signature="e#63364#63365#0" expanded="true" />
-                <element signature="e#63880#65133#0" expanded="true" />
-                <element signature="e#65132#65133#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoginActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/LoginActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="297" column="5" selection-start-line="297" selection-start-column="5" selection-end-line="297" selection-end-column="5" />
-              <folding>
-                <element signature="e#2342#2359#0" expanded="true" />
-                <element signature="e#4606#4623#0" expanded="true" />
-                <element signature="e#6403#6420#0" expanded="true" />
-                <element signature="e#9605#9622#0" expanded="true" />
+                <element signature="e#2324#2500#0" expanded="true" />
+                <element signature="e#2499#2500#0" expanded="true" />
+                <element signature="e#2530#2745#0" expanded="true" />
+                <element signature="e#2744#2745#0" expanded="true" />
+                <element signature="e#2793#2794#0" expanded="true" />
+                <element signature="e#2822#2823#0" expanded="true" />
+                <element signature="e#3851#5172#0" expanded="true" />
+                <element signature="e#4446#4682#0" expanded="true" />
+                <element signature="e#4681#4682#0" expanded="true" />
+                <element signature="e#4759#4997#0" expanded="true" />
+                <element signature="e#4996#4997#0" expanded="true" />
+                <element signature="e#5171#5172#0" expanded="true" />
+                <element signature="e#5692#6942#0" expanded="true" />
+                <element signature="e#6219#6456#0" expanded="true" />
+                <element signature="e#6455#6456#0" expanded="true" />
+                <element signature="e#6533#6767#0" expanded="true" />
+                <element signature="e#6766#6767#0" expanded="true" />
+                <element signature="e#6941#6942#0" expanded="true" />
+                <element signature="e#17498#19128#0" expanded="true" />
+                <element signature="e#19127#19128#0" expanded="true" />
+                <element signature="e#25692#25939#0" expanded="true" />
+                <element signature="e#25938#25939#0" expanded="true" />
+                <element signature="e#26016#26261#0" expanded="true" />
+                <element signature="e#26260#26261#0" expanded="true" />
+                <element signature="e#29901#30168#0" expanded="true" />
+                <element signature="e#30167#30168#0" expanded="true" />
+                <element signature="e#30245#30491#0" expanded="true" />
+                <element signature="e#30490#30491#0" expanded="true" />
+                <element signature="e#32973#33229#0" expanded="true" />
+                <element signature="e#33228#33229#0" expanded="true" />
+                <element signature="e#33306#33552#0" expanded="true" />
+                <element signature="e#33551#33552#0" expanded="true" />
+                <element signature="e#37967#38303#0" expanded="true" />
+                <element signature="e#38302#38303#0" expanded="true" />
+                <element signature="e#38380#38622#0" expanded="true" />
+                <element signature="e#38621#38622#0" expanded="true" />
+                <element signature="e#43548#45684#0" expanded="true" />
+                <element signature="e#44935#45188#0" expanded="true" />
+                <element signature="e#45187#45188#0" expanded="true" />
+                <element signature="e#45265#45509#0" expanded="true" />
+                <element signature="e#45508#45509#0" expanded="true" />
+                <element signature="e#45683#45684#0" expanded="true" />
+                <element signature="e#46497#47403#0" expanded="true" />
+                <element signature="e#47402#47403#0" expanded="true" />
+                <element signature="e#48259#49699#0" expanded="true" />
+                <element signature="e#49698#49699#0" expanded="true" />
+                <element signature="e#50268#51214#0" expanded="true" />
+                <element signature="e#51213#51214#0" expanded="true" />
+                <element signature="e#51913#53295#0" expanded="true" />
+                <element signature="e#52280#53146#0" expanded="true" />
+                <element signature="e#53145#53146#0" expanded="true" />
+                <element signature="e#53294#53295#0" expanded="true" />
+                <element signature="e#59349#60264#0" expanded="true" />
+                <element signature="e#60263#60264#0" expanded="true" />
+                <element signature="e#60859#61764#0" expanded="true" />
+                <element signature="e#61221#61615#0" expanded="true" />
+                <element signature="e#61614#61615#0" expanded="true" />
+                <element signature="e#61763#61764#0" expanded="true" />
+                <element signature="e#62392#63739#0" expanded="true" />
+                <element signature="e#63738#63739#0" expanded="true" />
+                <element signature="e#64254#65965#0" expanded="true" />
+                <element signature="e#65224#65475#0" expanded="true" />
+                <element signature="e#65474#65475#0" expanded="true" />
+                <element signature="e#65552#65790#0" expanded="true" />
+                <element signature="e#65789#65790#0" expanded="true" />
+                <element signature="e#65964#65965#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -183,54 +185,67 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/managers/RequestManager.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="230" column="29" selection-start-line="230" selection-start-column="29" selection-end-line="230" selection-end-column="29" />
+              <caret line="117" column="30" selection-start-line="117" selection-start-column="30" selection-end-line="117" selection-end-column="30" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Global.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/Global.java">
+      <file leaf-file-name="AddProductsActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/AddProductsActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="12" column="34" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
+              <caret line="82" column="13" selection-start-line="82" selection-start-column="13" selection-end-line="82" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BaseActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/BaseActivity.java">
+      <file leaf-file-name="ProductDetailCardView.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/views/ProductDetailCardView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="89" column="5" selection-start-line="89" selection-start-column="5" selection-end-line="89" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.12979351">
+              <caret line="343" column="22" selection-start-line="343" selection-start-column="22" selection-end-line="343" selection-end-column="22" />
               <folding>
-                <element signature="e#1002#1003#0" expanded="true" />
-                <element signature="e#1047#1048#0" expanded="true" />
+                <element signature="e#2292#2309#0" expanded="true" />
+                <element signature="e#5837#5854#0" expanded="true" />
+                <element signature="e#6759#6776#0" expanded="true" />
+                <element signature="e#7593#7610#0" expanded="true" />
+                <element signature="e#9937#9954#0" expanded="true" />
+                <element signature="e#14465#14482#0" expanded="true" />
+                <element signature="e#16409#16426#0" expanded="true" />
+                <element signature="e#19516#19533#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProductDetailActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/ProductDetailActivity.java">
+      <file leaf-file-name="TimelineWriteActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/TimelineWriteActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="230" column="11" selection-start-line="230" selection-start-column="11" selection-end-line="230" selection-end-column="11" />
+              <caret line="200" column="95" selection-start-line="200" selection-start-column="95" selection-end-line="200" selection-end-column="95" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SignUpActivity.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/SignUpActivity.java">
+      <file leaf-file-name="TimelineCardDto.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/dtos/TimelineCardDto.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.29175946">
-              <caret line="225" column="0" selection-start-line="225" selection-start-column="0" selection-end-line="225" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#onException#0;class#10207:11112" expanded="false" />
-              </folding>
+            <state vertical-scroll-proportion="0.0">
+              <caret line="103" column="39" selection-start-line="103" selection-start-column="39" selection-end-line="103" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReservationPushService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/reservation/ReservationPushService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="98" column="65" selection-start-line="98" selection-start-column="65" selection-end-line="98" selection-end-column="65" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -241,6 +256,30 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Global.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/Global.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="24" column="41" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SignUpActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/SignUpActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="273" column="63" selection-start-line="273" selection-start-column="63" selection-end-line="273" selection-end-column="63" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#5425#5442#0" expanded="true" />
+                <element signature="method#onException#0;class#10238:11143" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1690,10 +1729,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ironfactory/donation/controllers/activities/TimelineDetailActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ironfactory/donation/controllers/activities/TimelineWriteActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ironfactory/donation/controllers/fragments/BuyFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ironfactory/donation/controllers/fragments/CommunityFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ironfactory/donation/controllers/fragments/MyPageFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ironfactory/donation/controllers/fragments/SettingFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ironfactory/donation/controllers/fragments/SupportFragment.java" />
@@ -1724,7 +1759,6 @@
         <option value="$PROJECT_DIR$/app/build/generated/source/buildConfig/test/debug/com/songjin/donation/test/BuildConfig.java" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/gcm/GCMIntentService.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/Global.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/views/ImageCardView.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/views/ProductCardView.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/entities/UserEntity.java" />
@@ -1732,15 +1766,20 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/gcm/PushManager.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/fragments/SettingFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/managers/RequestManager.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/reservation/ReservationPushService.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/socketIo/SocketIO.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/socketIo/SocketService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/ProductDetailActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/SignUpActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/fragments/MyPageFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/BaseActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/LoginActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/Global.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/reservation/ReservationPushService.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/SignUpActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/dtos/TimelineCardDto.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/TimelineWriteActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/AddProductsActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/socketIo/SocketIO.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/managers/RequestManager.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/views/ProductDetailCardView.java" />
       </list>
     </option>
   </component>
@@ -1996,6 +2035,28 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="reservation" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jun9358-usum-e17665e9a4c0" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="usum" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="managers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -2079,7 +2140,7 @@
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
     <property name="FullScreen" value="true" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="016f4717de56b094 192.168.56.101:5555" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="016f4717de56b094" />
     <property name="android.project.structure.last.selected" value="app" />
     <property name="android.project.structure.proportion" value="0.15" />
     <property name="OverrideImplement.combined" value="true" />
@@ -2280,7 +2341,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32956383" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3243626" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3243626" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3371105" sideWeight="0.49542335" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39943343" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -2354,41 +2415,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/views/ProductDetailCardView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.642858">
-          <caret line="30" column="47" selection-start-line="30" selection-start-column="47" selection-end-line="30" selection-end-column="47" />
-          <folding>
-            <element signature="e#7251#8601#0" expanded="true" />
-            <element signature="e#8600#8601#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/views/ProductSearchForm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.321428">
-          <caret line="29" column="39" selection-start-line="29" selection-start-column="39" selection-end-line="29" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/views/ProductRecyclerView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.821429">
-          <caret line="15" column="31" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/views/ProductSearchSlidingLayer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.2857143">
-          <caret line="12" column="3" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/views/ProfileView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.142857">
@@ -2703,161 +2729,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/fragments/SettingFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6181818">
-          <caret line="263" column="16" selection-start-line="263" selection-start-column="16" selection-end-line="263" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3987#4136#0" expanded="true" />
-            <element signature="e#4135#4136#0" expanded="true" />
-            <element signature="e#6084#6128#0" expanded="true" />
-            <element signature="e#6280#6319#0" expanded="true" />
-            <element signature="e#6345#11579#0" expanded="true" />
-            <element signature="e#6724#7090#0" expanded="true" />
-            <element signature="e#7089#7090#0" expanded="true" />
-            <element signature="e#7476#8546#0" expanded="true" />
-            <element signature="e#7702#8456#0" expanded="true" />
-            <element signature="e#8455#8456#0" expanded="true" />
-            <element signature="e#8545#8546#0" expanded="true" />
-            <element signature="e#8960#8977#0" expanded="true" />
-            <element signature="e#9519#9536#0" expanded="true" />
-            <element signature="e#11578#11579#0" expanded="true" />
-            <element signature="e#11641#11684#0" expanded="true" />
-            <element signature="e#12127#12449#0" expanded="true" />
-            <element signature="e#12448#12449#0" expanded="true" />
-            <element signature="e#13167#13184#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/reservation/ReservationPushService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30454546">
-          <caret line="86" column="61" selection-start-line="86" selection-start-column="61" selection-end-line="86" selection-end-column="61" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/HashBiMap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.16363636">
           <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/managers/RequestManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="230" column="29" selection-start-line="230" selection-start-column="29" selection-end-line="230" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/Global.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="34" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/socketIo/SocketIO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="94" column="13" selection-start-line="94" selection-start-column="13" selection-end-line="94" selection-end-column="13" />
-          <folding>
-            <element signature="e#2417#2593#0" expanded="true" />
-            <element signature="e#2592#2593#0" expanded="true" />
-            <element signature="e#2612#2848#0" expanded="true" />
-            <element signature="e#2878#3093#0" expanded="true" />
-            <element signature="e#3092#3093#0" expanded="true" />
-            <element signature="e#3951#3952#0" expanded="true" />
-            <element signature="e#3980#3981#0" expanded="true" />
-            <element signature="e#5009#5872#0" expanded="true" />
-            <element signature="e#5871#5872#0" expanded="true" />
-            <element signature="e#6392#7184#0" expanded="true" />
-            <element signature="e#7183#7184#0" expanded="true" />
-            <element signature="e#25934#26181#0" expanded="true" />
-            <element signature="e#26180#26181#0" expanded="true" />
-            <element signature="e#26258#26503#0" expanded="true" />
-            <element signature="e#26502#26503#0" expanded="true" />
-            <element signature="e#33215#33471#0" expanded="true" />
-            <element signature="e#33470#33471#0" expanded="true" />
-            <element signature="e#33548#33794#0" expanded="true" />
-            <element signature="e#33793#33794#0" expanded="true" />
-            <element signature="e#35924#36179#0" expanded="true" />
-            <element signature="e#36178#36179#0" expanded="true" />
-            <element signature="e#36256#36501#0" expanded="true" />
-            <element signature="e#36500#36501#0" expanded="true" />
-            <element signature="e#38209#38545#0" expanded="true" />
-            <element signature="e#38544#38545#0" expanded="true" />
-            <element signature="e#38622#38864#0" expanded="true" />
-            <element signature="e#38863#38864#0" expanded="true" />
-            <element signature="e#45177#45430#0" expanded="true" />
-            <element signature="e#45429#45430#0" expanded="true" />
-            <element signature="e#45507#45751#0" expanded="true" />
-            <element signature="e#45750#45751#0" expanded="true" />
-            <element signature="e#48501#49941#0" expanded="true" />
-            <element signature="e#49940#49941#0" expanded="true" />
-            <element signature="e#50510#51456#0" expanded="true" />
-            <element signature="e#51455#51456#0" expanded="true" />
-            <element signature="e#52079#53025#0" expanded="true" />
-            <element signature="e#52440#52876#0" expanded="true" />
-            <element signature="e#52875#52876#0" expanded="true" />
-            <element signature="e#53024#53025#0" expanded="true" />
-            <element signature="e#58975#59890#0" expanded="true" />
-            <element signature="e#59889#59890#0" expanded="true" />
-            <element signature="e#60485#61390#0" expanded="true" />
-            <element signature="e#60847#61241#0" expanded="true" />
-            <element signature="e#61240#61241#0" expanded="true" />
-            <element signature="e#61389#61390#0" expanded="true" />
-            <element signature="e#62018#63365#0" expanded="true" />
-            <element signature="e#63364#63365#0" expanded="true" />
-            <element signature="e#63880#65133#0" expanded="true" />
-            <element signature="e#65132#65133#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/ProductDetailActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="230" column="11" selection-start-line="230" selection-start-column="11" selection-end-line="230" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/fragments/MyPageFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/BaseActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="89" column="5" selection-start-line="89" selection-start-column="5" selection-end-line="89" selection-end-column="5" />
-          <folding>
-            <element signature="e#1002#1003#0" expanded="true" />
-            <element signature="e#1047#1048#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/LoginActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="297" column="5" selection-start-line="297" selection-start-column="5" selection-end-line="297" selection-end-column="5" />
-          <folding>
-            <element signature="e#2342#2359#0" expanded="true" />
-            <element signature="e#4606#4623#0" expanded="true" />
-            <element signature="e#6403#6420#0" expanded="true" />
-            <element signature="e#9605#9622#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2872,13 +2748,212 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/SignUpActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/ProductDetailActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29175946">
-          <caret line="225" column="0" selection-start-line="225" selection-start-column="0" selection-end-line="225" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.63919824">
+          <caret line="230" column="11" selection-start-line="230" selection-start-column="11" selection-end-line="230" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/BaseActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6792873">
+          <caret line="89" column="5" selection-start-line="89" selection-start-column="5" selection-end-line="89" selection-end-column="5" />
+          <folding>
+            <element signature="e#1002#1003#0" expanded="true" />
+            <element signature="e#1047#1048#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/LoginActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6792873">
+          <caret line="297" column="5" selection-start-line="297" selection-start-column="5" selection-end-line="297" selection-end-column="5" />
+          <folding>
+            <element signature="e#2342#2359#0" expanded="true" />
+            <element signature="e#4606#4623#0" expanded="true" />
+            <element signature="e#6403#6420#0" expanded="true" />
+            <element signature="e#9605#9622#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/fragments/MyPageFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/fragments/SettingFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.49545455">
+          <caret line="346" column="23" selection-start-line="346" selection-start-column="23" selection-end-line="346" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#onException#0;class#10207:11112" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/SignUpActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="273" column="63" selection-start-line="273" selection-start-column="63" selection-end-line="273" selection-end-column="63" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#5425#5442#0" expanded="true" />
+            <element signature="method#onException#0;class#10238:11143" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/dtos/TimelineCardDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="103" column="39" selection-start-line="103" selection-start-column="39" selection-end-line="103" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/reservation/ReservationPushService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="98" column="65" selection-start-line="98" selection-start-column="65" selection-end-line="98" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/TimelineWriteActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="200" column="95" selection-start-line="200" selection-start-column="95" selection-end-line="200" selection-end-column="95" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/Global.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="41" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/java/lang/Override.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6136364">
+          <caret line="32" column="18" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/activities/AddProductsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="82" column="13" selection-start-line="82" selection-start-column="13" selection-end-line="82" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/socketIo/SocketIO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1180" column="26" selection-start-line="1180" selection-start-column="26" selection-end-line="1180" selection-end-column="26" />
+          <folding>
+            <element signature="e#2324#2500#0" expanded="true" />
+            <element signature="e#2499#2500#0" expanded="true" />
+            <element signature="e#2530#2745#0" expanded="true" />
+            <element signature="e#2744#2745#0" expanded="true" />
+            <element signature="e#2793#2794#0" expanded="true" />
+            <element signature="e#2822#2823#0" expanded="true" />
+            <element signature="e#3851#5172#0" expanded="true" />
+            <element signature="e#4446#4682#0" expanded="true" />
+            <element signature="e#4681#4682#0" expanded="true" />
+            <element signature="e#4759#4997#0" expanded="true" />
+            <element signature="e#4996#4997#0" expanded="true" />
+            <element signature="e#5171#5172#0" expanded="true" />
+            <element signature="e#5692#6942#0" expanded="true" />
+            <element signature="e#6219#6456#0" expanded="true" />
+            <element signature="e#6455#6456#0" expanded="true" />
+            <element signature="e#6533#6767#0" expanded="true" />
+            <element signature="e#6766#6767#0" expanded="true" />
+            <element signature="e#6941#6942#0" expanded="true" />
+            <element signature="e#17498#19128#0" expanded="true" />
+            <element signature="e#19127#19128#0" expanded="true" />
+            <element signature="e#25692#25939#0" expanded="true" />
+            <element signature="e#25938#25939#0" expanded="true" />
+            <element signature="e#26016#26261#0" expanded="true" />
+            <element signature="e#26260#26261#0" expanded="true" />
+            <element signature="e#29901#30168#0" expanded="true" />
+            <element signature="e#30167#30168#0" expanded="true" />
+            <element signature="e#30245#30491#0" expanded="true" />
+            <element signature="e#30490#30491#0" expanded="true" />
+            <element signature="e#32973#33229#0" expanded="true" />
+            <element signature="e#33228#33229#0" expanded="true" />
+            <element signature="e#33306#33552#0" expanded="true" />
+            <element signature="e#33551#33552#0" expanded="true" />
+            <element signature="e#37967#38303#0" expanded="true" />
+            <element signature="e#38302#38303#0" expanded="true" />
+            <element signature="e#38380#38622#0" expanded="true" />
+            <element signature="e#38621#38622#0" expanded="true" />
+            <element signature="e#43548#45684#0" expanded="true" />
+            <element signature="e#44935#45188#0" expanded="true" />
+            <element signature="e#45187#45188#0" expanded="true" />
+            <element signature="e#45265#45509#0" expanded="true" />
+            <element signature="e#45508#45509#0" expanded="true" />
+            <element signature="e#45683#45684#0" expanded="true" />
+            <element signature="e#46497#47403#0" expanded="true" />
+            <element signature="e#47402#47403#0" expanded="true" />
+            <element signature="e#48259#49699#0" expanded="true" />
+            <element signature="e#49698#49699#0" expanded="true" />
+            <element signature="e#50268#51214#0" expanded="true" />
+            <element signature="e#51213#51214#0" expanded="true" />
+            <element signature="e#51913#53295#0" expanded="true" />
+            <element signature="e#52280#53146#0" expanded="true" />
+            <element signature="e#53145#53146#0" expanded="true" />
+            <element signature="e#53294#53295#0" expanded="true" />
+            <element signature="e#59349#60264#0" expanded="true" />
+            <element signature="e#60263#60264#0" expanded="true" />
+            <element signature="e#60859#61764#0" expanded="true" />
+            <element signature="e#61221#61615#0" expanded="true" />
+            <element signature="e#61614#61615#0" expanded="true" />
+            <element signature="e#61763#61764#0" expanded="true" />
+            <element signature="e#62392#63739#0" expanded="true" />
+            <element signature="e#63738#63739#0" expanded="true" />
+            <element signature="e#64254#65965#0" expanded="true" />
+            <element signature="e#65224#65475#0" expanded="true" />
+            <element signature="e#65474#65475#0" expanded="true" />
+            <element signature="e#65552#65790#0" expanded="true" />
+            <element signature="e#65789#65790#0" expanded="true" />
+            <element signature="e#65964#65965#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/managers/RequestManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="117" column="30" selection-start-line="117" selection-start-column="30" selection-end-line="117" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/songjin/usum/controllers/views/ProductDetailCardView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.12979351">
+          <caret line="343" column="22" selection-start-line="343" selection-start-column="22" selection-end-line="343" selection-end-column="22" />
+          <folding>
+            <element signature="e#2292#2309#0" expanded="true" />
+            <element signature="e#5837#5854#0" expanded="true" />
+            <element signature="e#6759#6776#0" expanded="true" />
+            <element signature="e#7593#7610#0" expanded="true" />
+            <element signature="e#9937#9954#0" expanded="true" />
+            <element signature="e#14465#14482#0" expanded="true" />
+            <element signature="e#16409#16426#0" expanded="true" />
+            <element signature="e#19516#19533#0" expanded="true" />
           </folding>
         </state>
       </provider>
