@@ -229,35 +229,5 @@ public class ProductDetailActivity extends BaseActivity {
 
             }
         });
-
-//        Intent intent = new Intent(getApplicationContext(), SocketService.class);
-//        intent.putExtra(Global.COMMAND, Global.GET_TIMELINE_COMMENT);
-//        intent.putExtra(Global.FROM, 1);
-//        intent.putExtra(Global.ID, productCardDto.productEntity.user_id);
-//        startService(intent);
-
-//        RequestManager.getTimelineComments(productCardDto.productEntity.user_id, new RequestManager.TypedBaasioQueryCallback<TimelineCommentCardDto>() {
-//            @Override
-//            public void onResponse(List<TimelineCommentCardDto> entities) {
-//                ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
-//                timelineCommentCardDtos.addAll(entities);
-//                for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
-//                    timelineCommentCardDto.userEntity.picture = "";
-//                    if (timelineCommentCardDto.userEntity.id.equals(productCardDto.productEntity.user_id    )) {
-//                        timelineCommentCardDto.userEntity.realName = "기부자";
-//                    } else if (timelineCommentCardDto.userEntity.id.equals(productCardDto.transactionEntity.receiver_uuid)) {
-//                        timelineCommentCardDto.userEntity.realName = "구매자";
-//                    } else {
-//                        timelineCommentCardDto.userEntity.realName = "이방인";
-//                    }
-//                }
-//
-//                viewHolder.comments.setTimelineCommentCardDtos(timelineCommentCardDtos);
-//            }
-//
-//            @Override
-//            public void onException(BaasioException e) {
-//            }
-//        });
     }
 }

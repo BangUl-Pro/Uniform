@@ -224,32 +224,6 @@ public class SignUpActivity extends PushActivity {
             }, kakaoToken, getDeviceUUID());
         }
 
-//        Intent intent = new Intent(getApplicationContext(), SocketService.class);
-//        intent.putExtra(Global.COMMAND, Global.SIGN_IN_KAKAO);
-//        intent.putExtra(Global.TOKEN, kakaoToken);
-//        startService(intent);
-
-//        KakaoTalkService.requestProfile(new KakaoTalkHttpResponseHandler<KakaoTalkProfile>() {
-//            @Override
-//            protected void onNotKakaoTalkUser() {
-//
-//            }
-//
-//            @Override
-//            protected void onFailure(APIErrorResult errorResult) {
-//
-//            }
-//
-//            @Override
-//            protected void onHttpSuccess(KakaoTalkProfile resultObj) {
-//            }
-//
-//            @Override
-//            protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
-//
-//            }
-//        });
-
         UserManagement.requestMe(new MeResponseCallback() {
             @Override
             protected void onSuccess(UserProfile userProfile) {

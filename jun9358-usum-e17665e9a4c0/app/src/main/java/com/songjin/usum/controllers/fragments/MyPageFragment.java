@@ -81,34 +81,6 @@ public class MyPageFragment extends SlidingBaseFragment {
             }
         });
 
-//        Intent intent = new Intent(getActivity(), SocketService.class);
-//        intent.putExtra(Global.COMMAND, Global.GET_MY_PRODUCT);
-//        intent.putExtra(TransactionEntity.PROPERTY_DONATOR_UUID, Global.userEntity.id);
-//        intent.putExtra(TransactionEntity.PROPERTY_RECEIVER_UUID, Global.userEntity.id);
-//        getActivity().startService(intent);
-
-//        RequestManager.onGetMyProduct = new RequestManager.OnGetMyProduct() {
-//            @Override
-//            public void onSuccess(ArrayList<ProductCardDto> productCardDtos) {
-//            }
-//
-//            @Override
-//            public void onException(int code) {
-//
-//            }
-//        };
-
-//        RequestManager.getMyProductsInBackground(new RequestManager.TypedBaasioQueryCallback<ProductCardDto>() {
-//            @Override
-//            public void onResponse(List<ProductCardDto> entities) {
-//                viewHolder.dealingProducts.setProductCardDtos(new ArrayList<>(entities));
-//            }
-//
-//            @Override
-//            public void onException(BaasioException e) {
-//
-//            }
-//        });
     }
 
 

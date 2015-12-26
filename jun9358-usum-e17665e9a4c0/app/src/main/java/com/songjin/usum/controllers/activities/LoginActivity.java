@@ -20,7 +20,6 @@ import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.managers.SchoolManager;
 import com.songjin.usum.socketIo.SocketIO;
-import com.songjin.usum.socketIo.SocketService;
 
 import java.util.ArrayList;
 
@@ -297,57 +296,4 @@ public class LoginActivity extends BaseActivity {
             viewHolder.kakaoLoginButton.setVisibility(View.VISIBLE);
         }
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Intent intent = new Intent(getApplicationContext(), SocketService.class);
-        stopService(intent);
-    }
-
-    //    private class SchoolsQueryCallback implements BaasioQueryCallback {
-//        @Override
-//        public void onResponse(List<BaasioBaseEntity> baasioBaseEntities, List<Object> objects, BaasioQuery baasioQuery, long l) {
-//            // 가져온 데이터를 변환하여 리스트로 만든다.
-//            ArrayList<SchoolEntity> schoolEntities = new ArrayList<>();
-//            for (BaasioBaseEntity entity : baasioBaseEntities) {
-//                schoolEntities.add(new SchoolEntity(entity));
-//            }
-//
-//            // DB에 저장한다.
-//            schoolManager.insertSchools(schoolEntities);
-//
-//            // 다음 로딩
-//            schoolsQuery = baasioQuery;
-//            RequestManager.getNextSchoolsInBackground(schoolsQuery, this);
-//        }
-//
-//        @Override
-//        public void onException(BaasioException e) {
-//            hideLoadingView();
-//
-//            if (e.getErrorCode() == 212) {
-//                if (e.getStatusCode().compareTo("406") == 0) {
-//                    new MaterialDialog.Builder(BaseActivity.context)
-//                            .title(R.string.app_name)
-//                            .content("서버 작업중입니다.")
-//                            .show();
-//                    return;
-//                }
-//            }
-//
-//            if (e.getErrorCode() == 0) {
-//                // 더 이상 데이터가 없을 경우(로딩 완료)
-//                if (e.getStatusCode() == null) {
-//                    onLoadingSchoolsCompleted();
-//                    return;
-//                }
-//            }
-//
-//            new MaterialDialog.Builder(BaseActivity.context)
-//                    .title(R.string.app_name)
-//                    .content("학교정보를 가져오는데 실패하였습니다.")
-//                    .show();
-//        }
-//    }
 }
