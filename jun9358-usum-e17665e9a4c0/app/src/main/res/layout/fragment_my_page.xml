@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ironfactory.donation.controllers.fragments.MyPageFragment">
+    tools:context="com.songjin.usum.controllers.fragments.MyPageFragment">
 
-    <com.ironfactory.donation.controllers.views.ProfileView
+    <com.songjin.usum.controllers.views.ProfileView
         android:id="@+id/profile_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:text="진행중인 거래"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <com.ironfactory.donation.controllers.views.ProductRecyclerView
+        <com.songjin.usum.controllers.views.ProductRecyclerView
             android:id="@+id/dealing_products"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

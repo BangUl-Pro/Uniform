@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.ironfactory.donation.controllers.activities.AddProductsActivity">
+    tools:context="com.songjin.usum.controllers.activities.AddProductsActivity">
     <item
         android:id="@+id/action_alram"
         android:orderInCategory="100"

@@ -7,7 +7,7 @@
         <item>30,000원</item>
     </string-array>
     <string-array name="supportSkus">
-        <item>bill5000</item>
+        <item>support_5</item>
         <item>support_10</item>
         <item>support_20</item>
         <item>support_30</item>

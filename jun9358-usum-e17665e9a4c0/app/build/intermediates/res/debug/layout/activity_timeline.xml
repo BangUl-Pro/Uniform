@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.ironfactory.donation.controllers.views.TimelineRecyclerView
+    <com.songjin.usum.controllers.views.TimelineRecyclerView
         android:id="@+id/timelines"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

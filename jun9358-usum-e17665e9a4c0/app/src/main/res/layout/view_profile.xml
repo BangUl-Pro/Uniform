@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <com.ironfactory.donation.controllers.views.SquareImageView
+    <com.songjin.usum.controllers.views.SquareImageView
         android:id="@+id/profile_picture"
         android:layout_width="50dp"
         android:layout_height="50dp"

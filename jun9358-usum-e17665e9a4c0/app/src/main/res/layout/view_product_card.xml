@@ -12,7 +12,7 @@
         android:layout_margin="8dp"
         android:orientation="horizontal">
 
-        <com.ironfactory.donation.controllers.views.SquareImageView
+        <com.songjin.usum.controllers.views.SquareImageView
             android:id="@+id/photo"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

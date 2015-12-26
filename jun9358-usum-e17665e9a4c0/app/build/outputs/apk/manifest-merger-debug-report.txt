@@ -13,7 +13,7 @@ ADDED from AndroidManifest.xml:2:1
 	android:versionCode
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
-permission#com.ironfactory.donation.permission.C2D_MESSAGE
+permission#com.songjin.usum.permission.C2D_MESSAGE
 ADDED from AndroidManifest.xml:5:5
 	android:protectionLevel
 		ADDED from AndroidManifest.xml:7:9
@@ -59,7 +59,7 @@ uses-permission#com.android.vending.BILLING
 ADDED from AndroidManifest.xml:18:5
 	android:name
 		ADDED from AndroidManifest.xml:18:22
-uses-permission#com.ironfactory.donation.permission.C2D_MESSAGE
+uses-permission#com.songjin.usum.permission.C2D_MESSAGE
 ADDED from AndroidManifest.xml:21:5
 	android:name
 		ADDED from AndroidManifest.xml:21:22
@@ -133,13 +133,13 @@ ADDED from AndroidManifest.xml:52:9
 		ADDED from AndroidManifest.xml:52:20
 	android:value
 		ADDED from AndroidManifest.xml:53:13
-receiver#com.ironfactory.donation.gcm.GCMRedirectedBroadcastReceiver
+receiver#com.songjin.usum.gcm.GCMRedirectedBroadcastReceiver
 ADDED from AndroidManifest.xml:55:9
 	android:permission
 		ADDED from AndroidManifest.xml:57:13
 	android:name
 		ADDED from AndroidManifest.xml:56:13
-intent-filter#com.google.android.c2dm.intent.RECEIVE+com.google.android.c2dm.intent.REGISTRATION+com.ironfactory.donation.push
+intent-filter#com.google.android.c2dm.intent.RECEIVE+com.google.android.c2dm.intent.REGISTRATION+com.songjin.usum.push
 ADDED from AndroidManifest.xml:58:13
 action#com.google.android.c2dm.intent.RECEIVE
 ADDED from AndroidManifest.xml:59:17
@@ -149,11 +149,11 @@ action#com.google.android.c2dm.intent.REGISTRATION
 ADDED from AndroidManifest.xml:60:17
 	android:name
 		ADDED from AndroidManifest.xml:60:25
-category#com.ironfactory.donation.push
+category#com.songjin.usum.push
 ADDED from AndroidManifest.xml:62:17
 	android:name
 		ADDED from AndroidManifest.xml:62:27
-service#com.ironfactory.donation.gcm.GCMIntentService
+service#com.songjin.usum.gcm.GCMIntentService
 ADDED from AndroidManifest.xml:66:9
 	android:name
 		ADDED from AndroidManifest.xml:66:18
@@ -169,7 +169,7 @@ ADDED from AndroidManifest.xml:71:9
 		ADDED from AndroidManifest.xml:71:20
 	android:value
 		ADDED from AndroidManifest.xml:72:13
-receiver#com.ironfactory.donation.reservation.ReservationPushBroadcastReceiver
+receiver#com.songjin.usum.reservation.ReservationPushBroadcastReceiver
 ADDED from AndroidManifest.xml:77:9
 	android:name
 		ADDED from AndroidManifest.xml:77:19
@@ -179,15 +179,15 @@ action#android.intent.action.BOOT_COMPLETED
 ADDED from AndroidManifest.xml:79:17
 	android:name
 		ADDED from AndroidManifest.xml:79:25
-service#com.ironfactory.donation.reservation.ReservationPushService
+service#com.songjin.usum.reservation.ReservationPushService
 ADDED from AndroidManifest.xml:83:9
 	android:name
 		ADDED from AndroidManifest.xml:83:18
-receiver#com.ironfactory.donation.reservation.SchoolRankingPushBroadcastReceiver
+receiver#com.songjin.usum.reservation.SchoolRankingPushBroadcastReceiver
 ADDED from AndroidManifest.xml:85:9
 	android:name
 		ADDED from AndroidManifest.xml:85:19
-service#com.ironfactory.donation.reservation.SchoolRankingPushService
+service#com.songjin.usum.reservation.SchoolRankingPushService
 ADDED from AndroidManifest.xml:91:9
 	android:name
 		ADDED from AndroidManifest.xml:91:18
@@ -197,7 +197,7 @@ ADDED from AndroidManifest.xml:94:9
 		ADDED from AndroidManifest.xml:96:13
 	android:name
 		ADDED from AndroidManifest.xml:95:13
-activity#com.ironfactory.donation.controllers.activities.LoginActivity
+activity#com.songjin.usum.controllers.activities.LoginActivity
 ADDED from AndroidManifest.xml:103:9
 	android:label
 		ADDED from AndroidManifest.xml:105:13
@@ -213,21 +213,21 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:109:17
 	android:name
 		ADDED from AndroidManifest.xml:109:27
-activity#com.ironfactory.donation.controllers.activities.SignUpActivity
+activity#com.songjin.usum.controllers.activities.SignUpActivity
 ADDED from AndroidManifest.xml:112:9
 	android:theme
 		ADDED from AndroidManifest.xml:114:13
 	android:name
 		ADDED from AndroidManifest.xml:113:13
-activity#com.ironfactory.donation.controllers.activities.MainActivity
+activity#com.songjin.usum.controllers.activities.MainActivity
 ADDED from AndroidManifest.xml:115:9
 	android:name
 		ADDED from AndroidManifest.xml:115:19
-activity#com.ironfactory.donation.controllers.activities.TimelineDetailActivity
+activity#com.songjin.usum.controllers.activities.TimelineDetailActivity
 ADDED from AndroidManifest.xml:116:9
 	android:name
 		ADDED from AndroidManifest.xml:116:19
-activity#com.ironfactory.donation.controllers.activities.TimelineWriteActivity
+activity#com.songjin.usum.controllers.activities.TimelineWriteActivity
 ADDED from AndroidManifest.xml:117:9
 	android:name
 		ADDED from AndroidManifest.xml:117:19
@@ -237,29 +237,29 @@ ADDED from AndroidManifest.xml:118:9
 		ADDED from AndroidManifest.xml:120:13
 	android:name
 		ADDED from AndroidManifest.xml:119:13
-activity#com.ironfactory.donation.controllers.activities.TimelineActivity
+activity#com.songjin.usum.controllers.activities.TimelineActivity
 ADDED from AndroidManifest.xml:121:9
 	android:name
 		ADDED from AndroidManifest.xml:121:19
-activity#com.ironfactory.donation.controllers.activities.AddProductsActivity
+activity#com.songjin.usum.controllers.activities.AddProductsActivity
 ADDED from AndroidManifest.xml:122:9
 	android:label
 		ADDED from AndroidManifest.xml:124:13
 	android:name
 		ADDED from AndroidManifest.xml:123:13
-activity#com.ironfactory.donation.controllers.activities.ProductDetailActivity
+activity#com.songjin.usum.controllers.activities.ProductDetailActivity
 ADDED from AndroidManifest.xml:125:9
 	android:label
 		ADDED from AndroidManifest.xml:127:13
 	android:name
 		ADDED from AndroidManifest.xml:126:13
-activity#com.ironfactory.donation.controllers.activities.EditProfileActivity
+activity#com.songjin.usum.controllers.activities.EditProfileActivity
 ADDED from AndroidManifest.xml:128:9
 	android:label
 		ADDED from AndroidManifest.xml:130:13
 	android:name
 		ADDED from AndroidManifest.xml:129:13
-activity#com.ironfactory.donation.controllers.activities.PhotoViewActivity
+activity#com.songjin.usum.controllers.activities.PhotoViewActivity
 ADDED from AndroidManifest.xml:131:9
 	android:label
 		ADDED from AndroidManifest.xml:133:13
@@ -267,31 +267,31 @@ ADDED from AndroidManifest.xml:131:9
 		ADDED from AndroidManifest.xml:134:13
 	android:name
 		ADDED from AndroidManifest.xml:132:13
-activity#com.ironfactory.donation.controllers.activities.SupportActivity
+activity#com.songjin.usum.controllers.activities.SupportActivity
 ADDED from AndroidManifest.xml:135:9
 	android:label
 		ADDED from AndroidManifest.xml:137:13
 	android:name
 		ADDED from AndroidManifest.xml:136:13
-activity#com.ironfactory.donation.controllers.activities.FaqActivity
+activity#com.songjin.usum.controllers.activities.FaqActivity
 ADDED from AndroidManifest.xml:139:9
 	android:label
 		ADDED from AndroidManifest.xml:141:13
 	android:name
 		ADDED from AndroidManifest.xml:140:13
-activity#com.ironfactory.donation.controllers.activities.SupportCompletedActivity
+activity#com.songjin.usum.controllers.activities.SupportCompletedActivity
 ADDED from AndroidManifest.xml:143:9
 	android:label
 		ADDED from AndroidManifest.xml:145:13
 	android:name
 		ADDED from AndroidManifest.xml:144:13
-activity#com.ironfactory.donation.controllers.activities.AlarmActivity
+activity#com.songjin.usum.controllers.activities.AlarmActivity
 ADDED from AndroidManifest.xml:147:9
 	android:label
 		ADDED from AndroidManifest.xml:149:13
 	android:name
 		ADDED from AndroidManifest.xml:148:13
-service#com.ironfactory.donation.socketIo.SocketService
+service#com.songjin.usum.socketIo.SocketService
 ADDED from AndroidManifest.xml:152:9
 	android:exported
 		ADDED from AndroidManifest.xml:155:13

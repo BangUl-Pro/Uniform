@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#D7EDE9"
-    tools:context="com.ironfactory.donation.controllers.fragments.CommunityFragment">
+    tools:context="com.songjin.usum.controllers.fragments.CommunityFragment">
 
-    <com.ironfactory.donation.controllers.views.SchoolRankingRecyclerView
+    <com.songjin.usum.controllers.views.SchoolRankingRecyclerView
         android:id="@+id/school_rankings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +19,7 @@
         android:background="#ACD0C9"
         android:padding="4dp">
 
-        <com.ironfactory.donation.controllers.views.SchoolRankingCardView
+        <com.songjin.usum.controllers.views.SchoolRankingCardView
             android:id="@+id/my_school_ranking_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

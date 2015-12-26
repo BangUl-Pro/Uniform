@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ironfactory.donation"
-    android:versionCode="6"
-    android:versionName="1.2" >
+    package="com.jerryjang.donation"
+    android:versionCode="8"
+    android:versionName="1.3.1" >
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="23" />
 
     <permission
-        android:name="com.ironfactory.donation.permission.C2D_MESSAGE"
+        android:name="com.songjin.usum.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -24,7 +24,7 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <!-- c. android:name="{package 이름}.permission.C2D_MESSAGE" 사용 -->
-    <uses-permission android:name="com.ironfactory.donation.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.songjin.usum.permission.C2D_MESSAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -61,17 +61,17 @@
             android:value="@integer/google_play_services_version" />
         <!-- 구현해야 하는 class1 -->
         <receiver
-            android:name="com.ironfactory.donation.gcm.GCMRedirectedBroadcastReceiver"
+            android:name="com.songjin.usum.gcm.GCMRedirectedBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
                 <!-- d. android:name="{package 이름}" 사용 -->
-                <category android:name="com.ironfactory.donation.push" />
+                <category android:name="com.songjin.usum.push" />
             </intent-filter>
         </receiver>
         <!-- 구현해야 하는 class2 -->
-        <service android:name="com.ironfactory.donation.gcm.GCMIntentService" />
+        <service android:name="com.songjin.usum.gcm.GCMIntentService" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -80,21 +80,21 @@
             android:name="com.kakao.sdk.GcmProjectId"
             android:value="@string/gcm_project_number" />
 
-        <receiver android:name="com.ironfactory.donation.reservation.ReservationPushBroadcastReceiver" >
+        <receiver android:name="com.songjin.usum.reservation.ReservationPushBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service android:name="com.ironfactory.donation.reservation.ReservationPushService" />
+        <service android:name="com.songjin.usum.reservation.ReservationPushService" />
 
-        <receiver android:name="com.ironfactory.donation.reservation.SchoolRankingPushBroadcastReceiver" >
+        <receiver android:name="com.songjin.usum.reservation.SchoolRankingPushBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service android:name="com.ironfactory.donation.reservation.SchoolRankingPushService" />
+        <service android:name="com.songjin.usum.reservation.SchoolRankingPushService" />
 
         <!-- kakao -->
         <activity
@@ -107,7 +107,7 @@
 
         <!-- App -->
         <activity
-            android:name="com.ironfactory.donation.controllers.activities.LoginActivity"
+            android:name="com.songjin.usum.controllers.activities.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -116,47 +116,47 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ironfactory.donation.controllers.activities.SignUpActivity"
+            android:name="com.songjin.usum.controllers.activities.SignUpActivity"
             android:theme="@style/AppThemeNoTitleBarFullscreen" />
-        <activity android:name="com.ironfactory.donation.controllers.activities.MainActivity" />
-        <activity android:name="com.ironfactory.donation.controllers.activities.TimelineDetailActivity" />
-        <activity android:name="com.ironfactory.donation.controllers.activities.TimelineWriteActivity" />
+        <activity android:name="com.songjin.usum.controllers.activities.MainActivity" />
+        <activity android:name="com.songjin.usum.controllers.activities.TimelineDetailActivity" />
+        <activity android:name="com.songjin.usum.controllers.activities.TimelineWriteActivity" />
         <activity
             android:name="nl.changer.polypicker.ImagePickerActivity"
             android:theme="@android:style/Theme.Holo" />
-        <activity android:name="com.ironfactory.donation.controllers.activities.TimelineActivity" />
+        <activity android:name="com.songjin.usum.controllers.activities.TimelineActivity" />
         <activity
-            android:name="com.ironfactory.donation.controllers.activities.AddProductsActivity"
+            android:name="com.songjin.usum.controllers.activities.AddProductsActivity"
             android:label="@string/title_activity_add_products" />
         <activity
-            android:name="com.ironfactory.donation.controllers.activities.ProductDetailActivity"
+            android:name="com.songjin.usum.controllers.activities.ProductDetailActivity"
             android:label="@string/title_activity_product_detail" />
         <activity
-            android:name="com.ironfactory.donation.controllers.activities.EditProfileActivity"
+            android:name="com.songjin.usum.controllers.activities.EditProfileActivity"
             android:label="@string/title_activity_edit_profile" />
         <activity
-            android:name="com.ironfactory.donation.controllers.activities.PhotoViewActivity"
+            android:name="com.songjin.usum.controllers.activities.PhotoViewActivity"
             android:label="@string/title_activity_photo_view"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
-            android:name="com.ironfactory.donation.controllers.activities.SupportActivity"
+            android:name="com.songjin.usum.controllers.activities.SupportActivity"
             android:label="@string/title_activity_support" >
         </activity>
         <activity
-            android:name="com.ironfactory.donation.controllers.activities.FaqActivity"
+            android:name="com.songjin.usum.controllers.activities.FaqActivity"
             android:label="@string/title_activity_faq" >
         </activity>
         <activity
-            android:name="com.ironfactory.donation.controllers.activities.SupportCompletedActivity"
+            android:name="com.songjin.usum.controllers.activities.SupportCompletedActivity"
             android:label="@string/title_activity_support_completed" >
         </activity>
         <activity
-            android:name="com.ironfactory.donation.controllers.activities.AlarmActivity"
+            android:name="com.songjin.usum.controllers.activities.AlarmActivity"
             android:label="@string/title_activity_alarm" >
         </activity>
 
         <service
-            android:name="com.ironfactory.donation.socketIo.SocketService"
+            android:name="com.songjin.usum.socketIo.SocketService"
             android:enabled="true"
             android:exported="true" >
         </service>

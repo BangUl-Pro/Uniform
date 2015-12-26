@@ -10,7 +10,7 @@
     <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/arrays.xml -->
     <eat-comment/>
     <string-array name="supportSkus">
-        <item>bill5000</item>
+        <item>support_5</item>
         <item>support_10</item>
         <item>support_20</item>
         <item>support_30</item>
@@ -565,8 +565,8 @@
     <string name="gallery">"Gallery"</string>
     <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="gcm_project_number">615711835088</string>
-    <string name="google_public_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwatE0SvGn1r76rQW38IX1kHIZRMmQS57UAH9OlzdtEqXdxmDbcQxhPcS+TDl0kp0sT5eDi4f0XxUBV5mrgU0DFLI7GwoHHxGs3x8nNI72UJLJoRHi3bAoI1A1jvb0imjNIY+1niP0OczHfPmKLDs83ARBHGMOaX1ZhqTp1vrBwe2P6AmVIf71mgQzO+s5hzgRSmbV1UeQoKzrPZYUPNojanAVWZsbgnpdh8h2yytjRr2q3/tJeri+NB99XRtU+iqKnKZj46NlBc7c9a+qv43vjXeAjy4orzFRZWyNR2OeyCrodPMA8vLBk8vY/L6ky/aXF6FznpptVj+H8ZR1qSZ4QIDAQAB</string>
+    <string name="gcm_project_number">889078369340</string>
+    <string name="google_public_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnipME1vd7B6KAWqh+O8nWG7f9S3W0SM6WwmjRKU7lfIkyoCdlIKImP9sxaQtVAVRGBXM4kpwsPmxtJmnuv0dvL2OGtM2JSmW/Xc0GepGyIArLlmmzLlIo8DA8PnLYhrXIKHgoBAxwYhbxdjDllq67SN7TBT51vRz5xfxo9fqOI173AS+lQZ1IK9Y9qQ5Hwc3Umv8UiCl0aMPpZuPF75UtRjYDdNhb8XpBsWngYpI67PRv/FifKrDObWQR5GrXO+pNFxqv9hOUyC/bVZbWG3BfxspqXvKxMN1gHiyroGuI9W15uo7R1F0oGhgXsBtBEPjBl72KTqh0RtgU7Mee21cKQIDAQAB</string>
     <string name="ic_access_alarms"></string>
     <string name="ic_access_time"></string>
     <string name="ic_accessibility"></string>
@@ -1000,8 +1000,8 @@
     <string name="ic_whatshot"></string>
     <string name="ic_wifi_tethering"></string>
     <string name="ic_work"></string>
-    <string name="kakao_admin_key">cfa39b812b10bafebb44ffc2898a0169</string>
-    <string name="kakao_app_key">a30e5f575adfa98350fbd87b82ca36a8</string>
+    <string name="kakao_admin_key">a6a1e884f2ecbbb1dcf154a7e49e40f0</string>
+    <string name="kakao_app_key">22fbd331c55f511daea37b74d120f256</string>
     <!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.1.0/res/values/values.xml -->
     <eat-comment/>
     <string name="library_FloatingActionButton_author">Oleksandr Melnykov</string>
