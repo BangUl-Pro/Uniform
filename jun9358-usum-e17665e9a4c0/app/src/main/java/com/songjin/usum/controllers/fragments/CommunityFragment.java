@@ -100,7 +100,9 @@ public class CommunityFragment extends SlidingBaseFragment {
 
     public void setSchoolRankings(ArrayList<SchoolRanking> schoolRankings) {
         viewHolder.schoolRankings.setSchoolRankings(schoolRankings);
-        initMySchoolRankingCard(schoolRankings);
+        if (Global.userEntity.userType == Global.STUDENT) {
+            initMySchoolRankingCard(schoolRankings);
+        }
     }
 
 

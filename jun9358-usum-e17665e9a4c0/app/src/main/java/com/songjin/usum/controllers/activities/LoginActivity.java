@@ -2,7 +2,6 @@ package com.songjin.usum.controllers.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +21,7 @@ import com.songjin.usum.managers.SchoolManager;
 import com.songjin.usum.socketIo.SocketIO;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class LoginActivity extends BaseActivity {
     private final SessionCallback mySessionCallback = new SessionStatusCallback();
@@ -38,21 +38,15 @@ public class LoginActivity extends BaseActivity {
         Log.d(TAG, "액티비티 시작");
 
         schoolManager = new SchoolManager(this);
+        new SocketIO(getApplicationContext());
         if (schoolManager.isEmptyTable()) {
             showLoadingView();
-            new SocketIO(getApplicationContext());
 
             // 학교 정보 로딩 요청
             RequestManager.getSchool(new RequestManager.OnGetSchool() {
                 @Override
                 public void onSuccess(final ArrayList<SchoolEntity> schoolEntities) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // DB에 저장한다.
-                            schoolManager.insertSchools(schoolEntities);
-                        }
-                    }).start();
+                    schoolManager.insertSchools(schoolEntities);
 
                     onLoadingSchoolsCompleted();
                     hideLoadingView();
@@ -103,31 +97,22 @@ public class LoginActivity extends BaseActivity {
         hideLoginButtons();
     }
 
-    private String getUniqueGuestId() {
-        return Settings.Secure.getString(
-                getContentResolver(),
-                Settings.Secure.ANDROID_ID
-        );
-    }
-
     private void signUpViaGuest() {
         showLoadingView();
-        final String androidId = getUniqueGuestId();
-        final String userId = "guest" + androidId;
         UserEntity userEntity = new UserEntity();
-        userEntity.id = userId;
+        userEntity.id = getRandomName();
         RequestManager.signUp(userEntity, new RequestManager.OnSignUp() {
             @Override
             public void onSuccess(UserEntity userEntity) {
                 hideLoadingView();
-                signInViaGuest();
+                signInViaGuest(userEntity.id);
             }
 
             @Override
             public void onException(int code) {
                 hideLoadingView();
                 if (code == 412 || code == 413) { // 이미 가입된 사용자
-                    signInViaGuest();
+//                    signInViaGuest();
                 } else {
                     new MaterialDialog.Builder(context)
                             .title(R.string.app_name)
@@ -168,9 +153,20 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    private void signInViaGuest() {
+    private String getRandomName() {
+        String character = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            sb.append(character.charAt(random.nextInt(character.length())));
+        }
+        return sb.toString();
+    }
+
+
+    private void signInViaGuest(String id) {
         showLoadingView();
-        RequestManager.signIn("guest" + getUniqueGuestId(), new RequestManager.OnSignIn() {
+        RequestManager.signIn(id, new RequestManager.OnSignIn() {
             @Override
             public void onSuccess(UserEntity userEntity) {
                 hideLoadingView();
