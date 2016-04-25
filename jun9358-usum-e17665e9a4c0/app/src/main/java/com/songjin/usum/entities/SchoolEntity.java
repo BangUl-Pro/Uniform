@@ -123,13 +123,17 @@ public class SchoolEntity implements Parcelable {
     }
 
     public void set(Cursor cursor) {
-        this.id = cursor.getInt(cursor.getColumnIndex(PROPERTY_ID));
+        try {
+            this.id = cursor.getInt(cursor.getColumnIndex(PROPERTY_ID));
 //        this.uuid = cursor.getString(cursor.getColumnIndex(PROPERTY_UUID));
-        this.schoolname = cursor.getString(cursor.getColumnIndex(PROPERTY_SCHOOLNAME));
-        this.address = cursor.getString(cursor.getColumnIndex(PROPERTY_ADDRESS));
-        this.city = cursor.getString(cursor.getColumnIndex(PROPERTY_CITY));
-        this.category = cursor.getString(cursor.getColumnIndex(PROPERTY_CATEGORY));
-        this.gu = cursor.getString(cursor.getColumnIndex(PROPERTY_GU));
+            this.schoolname = cursor.getString(cursor.getColumnIndex(PROPERTY_SCHOOLNAME));
+            this.address = cursor.getString(cursor.getColumnIndex(PROPERTY_ADDRESS));
+            this.city = cursor.getString(cursor.getColumnIndex(PROPERTY_CITY));
+            this.category = cursor.getString(cursor.getColumnIndex(PROPERTY_CATEGORY));
+            this.gu = cursor.getString(cursor.getColumnIndex(PROPERTY_GU));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void set(Bundle bundle) {
