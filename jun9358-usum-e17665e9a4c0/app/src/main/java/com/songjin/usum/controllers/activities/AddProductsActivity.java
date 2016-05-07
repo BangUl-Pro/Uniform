@@ -41,9 +41,8 @@ public class AddProductsActivity extends BaseActivity {
     private static final int MAXIMUM_IMAGES = 5;
 
     private ArrayList<ProductCardDto> productCardDtos;
-    private static int position = 0;
-    private static int size = 0;
-
+    private int positions = 0;
+    private int size = 0;
 
 
     private final RequestManager.OnInsertProduct onInsertProduct = new RequestManager.OnInsertProduct() {
@@ -56,11 +55,11 @@ public class AddProductsActivity extends BaseActivity {
             transactionEntity.product_name = productCardDto.productEntity.product_name;
             RequestManager.insertTransaction(transactionEntity);
 
-            for (Uri uri : productCardDtos.get(position).uris) {
-                RequestManager.insertFile(productCardDto.productEntity.id, uri.toString(), position, new RequestManager.OnInsertFile() {
+            for (Uri uri : productCardDtos.get(positions).uris) {
+                RequestManager.insertFile(productCardDto.productEntity.id, uri.toString(), positions, new RequestManager.OnInsertFile() {
                     @Override
                     public void onSuccess(int position) {
-                        if (position == AddProductsActivity.position - 1) {
+                        if (position == positions - 1) {
                             size++;
                             if (productCardDtos.get(position).uris.size() == size) {
                                 hideLoadingView();
@@ -74,10 +73,10 @@ public class AddProductsActivity extends BaseActivity {
                     }
                 });
             }
-            position++;
-            if (productCardDtos.size() > position) {
-                RequestManager.insertProduct(productCardDtos.get(position), onInsertProduct);
-            } else if (productCardDtos.get(position - 1).uris.size() == 0) {
+            positions++;
+            if (productCardDtos.size() > positions) {
+                RequestManager.insertProduct(productCardDtos.get(positions), onInsertProduct);
+            } else if (productCardDtos.get(positions - 1).uris.size() == 0) {
                 hideLoadingView();
                 finish();
             }

@@ -54,8 +54,8 @@ public class TimelineCardDto implements Parcelable {
             timelineEntity = new TimelineEntity(object);
             userEntity = new UserEntity(object);
             fileEntities = new ArrayList<>();
-            likeEntity = new LikeEntity(object);
             fileEntities.add(new FileEntity(object));
+            likeEntity = new LikeEntity(object);
 //            if (!object.get(Global.TIMELINE).equals(null)) {
 //                JSONObject timelineObject = object.getJSONObject(Global.TIMELINE);
 //                timelineEntity = new TimelineEntity(timelineObject);

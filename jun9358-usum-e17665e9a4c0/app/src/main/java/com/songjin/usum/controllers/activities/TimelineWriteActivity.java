@@ -29,7 +29,28 @@ import nl.changer.polypicker.ImagePickerActivity;
 
 public class TimelineWriteActivity extends BaseActivity {
     private static final String TAG = "TimelineWriteActivity";
-    private RequestManager.OnInsertFile onInsertFile;
+    private TimelineCardDto timelineCardDto;
+    private RequestManager.OnInsertFile onInsertFile = new RequestManager.OnInsertFile() {
+        @Override
+        public void onSuccess(int position) {
+            Log.d(TAG, "타임라인 파일 입력 성공");
+            if (0 < selectedImageUris.size()) {
+                Uri selectedUri = selectedImageUris.get(0);
+                selectedImageUris.remove(0);
+
+                String parentUuid = timelineCardDto.timelineEntity.id;
+                Log.e(TAG, "position = " + position);
+                RequestManager.insertFile(parentUuid, selectedUri.toString(), position, onInsertFile);
+            } else {
+                onWriteAfter(true);
+            }
+        }
+
+        @Override
+        public void onException(int code) {
+            onWriteAfter(false);
+        }
+    };;
 
     private class ViewHolder {
         public WriterView writerView;
@@ -53,9 +74,9 @@ public class TimelineWriteActivity extends BaseActivity {
     private static final int MAXIMUM_IMAGES = 10;
     private Menu menu;
     private ArrayList<Uri> selectedImageUris;
-//    private TimelineInsertCallback timelineInsertCallback = new TimelineInsertCallback();
-//    private FileUploadCallback fileUploadCallback = new FileUploadCallback();
     private Context context;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,35 +144,11 @@ public class TimelineWriteActivity extends BaseActivity {
                         public void onSuccess(final TimelineCardDto timelineCardDto) {
                             // 성공
                             Log.d(TAG, "타임라인 수정 성공");
+                            TimelineWriteActivity.this.timelineCardDto = timelineCardDto;
                             if (0 < selectedImageUris.size()) {
                                 Uri selectedUri = selectedImageUris.get(0);
                                 selectedImageUris.remove(0);
                                 final String parentUuid = timelineCardDto.timelineEntity.id;
-
-                                onInsertFile = new RequestManager.OnInsertFile() {
-                                    @Override
-                                    public void onSuccess(int position) {
-                                        Log.d(TAG, "타임라인 파일 입력 성공");
-                                        if (0 < selectedImageUris.size()) {
-                                            Uri selectedUri = selectedImageUris.get(0);
-                                            selectedImageUris.remove(0);
-
-                                            String parentUuid = timelineCardDto.timelineEntity.id;
-                                            Log.d(TAG, "uri = " + selectedUri);
-
-                                            RequestManager.insertFile(parentUuid, selectedUri.toString(), 0, onInsertFile);
-                                        } else {
-                                            onWriteAfter(true);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onException(int code) {
-                                        onWriteAfter(false);
-                                    }
-                                };
-
-
                                 RequestManager.insertFile(parentUuid, selectedUri.toString(), 0, onInsertFile);
                             } else {
                                 onWriteAfter(true);
@@ -170,34 +167,13 @@ public class TimelineWriteActivity extends BaseActivity {
                         public void onSuccess(final TimelineCardDto timelineCardDto) {
                             // 성공
                             Log.d(TAG, "타임라인 입력 성공");
+                            TimelineWriteActivity.this.timelineCardDto = timelineCardDto;
+                            Log.e(TAG, "이미지 수 = " + selectedImageUris.size());
                             if (0 < selectedImageUris.size()) {
                                 Uri selectedUri = selectedImageUris.get(0);
                                 selectedImageUris.remove(0);
+                                Log.e(TAG, "이미지 수 = " + selectedImageUris.size());
                                 final String parentUuid = timelineCardDto.timelineEntity.id;
-
-                                onInsertFile = new RequestManager.OnInsertFile() {
-                                    @Override
-                                    public void onSuccess(int position) {
-                                        Log.d(TAG, "타임라인 파일 입력 성공");
-                                        if (0 < selectedImageUris.size()) {
-                                            Uri selectedUri = selectedImageUris.get(0);
-                                            selectedImageUris.remove(0);
-
-                                            String parentUuid = timelineCardDto.timelineEntity.id;
-                                            Log.d(TAG, "uri = " + selectedUri);
-
-                                            RequestManager.insertFile(parentUuid, selectedUri.toString(), 0, onInsertFile);
-                                        } else {
-                                            onWriteAfter(true);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onException(int code) {
-                                        onWriteAfter(false);
-                                    }
-                                };
-
                                 RequestManager.insertFile(parentUuid, selectedUri.toString(), 0, onInsertFile);
                             } else {
                                 onWriteAfter(true);
@@ -302,62 +278,4 @@ public class TimelineWriteActivity extends BaseActivity {
                 break;
         }
     }
-
-
-//    // TODO: 15. 11. 28. 타임라인 삽입 응답
-//    private void processInsertTimeline(int code, Intent intent) {
-//        Log.d(TAG, "타임라인 삽입 응답");
-//        if (code == SocketException.SUCCESS) {
-//
-//        } else {
-//            // 실패
-//
-//        }
-//    }
-
-
-//    private class TimelineInsertCallback implements BaasioCallback<BaasioEntity> {
-//        @Override
-//        public void onResponse(BaasioEntity baasioEntity) {
-//            if (0 < selectedImageUris.size()) {
-//                Uri selectedUri = selectedImageUris.get(0);
-//                selectedImageUris.remove(0);
-//
-//                String parentUuid = baasioEntity.getUuid().toString();
-//                RequestManager.insertFile(parentUuid, selectedUri, fileUploadCallback);
-//            } else {
-//                onWriteAfter(true);
-//            }
-//        }
-//
-//        @Override
-//        public void onException(BaasioException e) {
-//            onWriteAfter(false);
-//        }
-//    }
-
-//    private class FileUploadCallback implements BaasioUploadCallback {
-//        @Override
-//        public void onResponse(BaasioFile baasioFile) {
-//            if (0 < selectedImageUris.size()) {
-//                Uri selectedUri = selectedImageUris.get(0);
-//                selectedImageUris.remove(0);
-//
-//                String parentUuid = baasioFile.getProperty("parent_uuid").asText();
-//                RequestManager.insertFile(parentUuid, selectedUri, fileUploadCallback);
-//            } else {
-//                onWriteAfter(true);
-//            }
-//        }
-//
-//        @Override
-//        public void onException(BaasioException e) {
-//            onWriteAfter(false);
-//        }
-//
-//        @Override
-//        public void onProgress(long l, long l2) {
-//             TODO 진행상황 표시
-//        }
-//    }
 }

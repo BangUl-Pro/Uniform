@@ -30,11 +30,9 @@ import java.util.Random;
 
 public class LoginActivity extends BaseActivity {
     private final ISessionCallback mySessionCallback = new SessionStatusCallback();
-//    private final BaasioQueryCallback schoolsQueryCallback = new SchoolsQueryCallback();
     private ViewHolder viewHolder;
     private SchoolManager schoolManager;
     private static final String TAG = "LoginActivity";
-//    private BaasioQuery schoolsQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +64,6 @@ public class LoginActivity extends BaseActivity {
                     hideLoadingView();
                 }
             });
-
-
-//            schoolsQuery = new BaasioQuery();
-//            schoolsQuery.setType(SchoolEntity.COLLECTION_NAME);
-//            schoolsQuery.setOrderBy(SchoolEntity.PROPERTY_ID, BaasioQuery.ORDER_BY.ASCENDING);
-//            schoolsQuery.setLimit(500);
-//            RequestManager.getSchoolsInBackground(schoolsQuery, schoolsQueryCallback);
         } else {
             onLoadingSchoolsCompleted();
         }
@@ -126,35 +117,6 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
-
-
-//        BaasioUser.signUpInBackground(
-//                "guest" + androidId,
-//                "guest" + androidId,
-//                null,
-//                androidId,
-//                new BaasioSignUpCallback() {
-//                    @Override
-//                    public void onResponse(BaasioUser baasioUser) {
-//                        hideLoadingView();
-//                        signInViaGuest();
-//                    }
-//
-//                    @Override
-//                    public void onException(BaasioException e) {
-//                        hideLoadingView();
-//                        if (e.getErrorCode() == 913) { // 이미 가입된 사용자
-//                            signInViaGuest();
-//                            return;
-//                        }
-//
-//                        new MaterialDialog.Builder(BaseActivity.context)
-//                                .title(R.string.app_name)
-//                                .content("비회원 로그인중에 문제가 발생하였습니다.\n나중에 다시 시도해주세요.")
-//                                .show();
-//                    }
-//                }
-//        );
     }
 
 
@@ -187,62 +149,23 @@ public class LoginActivity extends BaseActivity {
                         .show();
             }
         });
-//        BaasioUser.signInInBackground(
-//                BaseActivity.context,
-//                "guest" + getUniqueGuestId(),
-//                getUniqueGuestId(),
-//                new BaasioSignInCallback() {
-//                    @Override
-//                    public void onResponse(BaasioUser baasioUser) {
-//                        hideLoadingView();
-//                        updateGuestExtraProfile();
-//                    }
-//
-//                    @Override
-//                    public void onException(BaasioException e) {
-//                        hideLoadingView();
-//                        new MaterialDialog.Builder(BaseActivity.context)
-//                                .title(R.string.app_name)
-//                                .content("비회원 로그인중에 문제가 발생하였습니다.\n나중에 다시 시도해주세요.")
-//                                .show();
-//                    }
-//                }
-//        );
     }
 
 
     private void updateGuestExtraProfile(UserEntity guest) {
         showLoadingView();
 
-//        UserEntity guest = new UserEntity(Baas.io().getSignedInUser());
         guest.realName = "방문자";
         guest.sex = Global.MAN;
         guest.userType = Global.GUEST;
         guest.phone = "0";
         guest.schoolId = 0;
 
-//        BaseActivity.startActivityOnTopStack(MainActivity.class);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Log.e(TAG, "1");
         intent.putExtra(Global.USER, guest);
         startActivity(intent);
         finish();
-//        RequestManager.requestSignUp(guest, new BaasioSignInCallback() {
-//            @Override
-//            public void onResponse(BaasioUser baasioUser) {
-//                hideLoadingView();
-//                BaseActivity.startActivityOnTopStack(MainActivity.class);
-//                finish();
-//            }
-//
-//            @Override
-//            public void onException(BaasioException e) {
-//                hideLoadingView();
-//                new MaterialDialog.Builder(BaseActivity.context)
-//                        .title(R.string.app_name)
-//                        .content("비회원 로그인중에 문제가 발생하였습니다.\n나중에 다시 시도해주세요.")
-//                        .show();
-//            }
-//        });
     }
 
     private void hideLoginButtons() {
@@ -277,13 +200,13 @@ public class LoginActivity extends BaseActivity {
             KakaoSDK.init(new KakaoSDKAdapter());
         Session.getCurrentSession().addCallback(mySessionCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
-//        Session.getCurrentSession()
-//        Session.initializeSession(this, mySessionCallback);
         Log.d(TAG, "checkSession");
         if (Session.getCurrentSession().isOpened()) {
             Log.d(TAG, "열려 있음 ");
-            startActivityUsingStack(SignUpActivity.class);
-            finish();
+//            Intent intent = new Intent(this, SignUpActivity.class);
+//            startActivity(intent);
+//            Log.e(TAG, "sign 2");
+//            finish();
         } else if (Session.getCurrentSession().isClosed()) {
             Log.d(TAG, "닫혀 있음");
             showLoginButtons();
@@ -301,7 +224,7 @@ public class LoginActivity extends BaseActivity {
             return;
         }
 
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -324,7 +247,8 @@ public class LoginActivity extends BaseActivity {
     private class SessionStatusCallback implements ISessionCallback {
         @Override
         public void onSessionOpened() {
-            startActivityUsingStack(SignUpActivity.class);
+            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+            startActivity(intent);
             finish();
         }
 

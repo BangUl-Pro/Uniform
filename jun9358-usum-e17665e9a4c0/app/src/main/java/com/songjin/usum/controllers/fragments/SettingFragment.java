@@ -37,6 +37,7 @@ import com.songjin.usum.entities.ReservedCategoryEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
+import com.songjin.usum.socketIo.SocketIO;
 
 import org.json.JSONObject;
 
@@ -164,6 +165,7 @@ public class SettingFragment extends SlidingBaseFragment {
                                     @Override
                                     public void onSessionClosed(ErrorResult errorResult) {
                                         Log.d(TAG, "토큰 제거 실패 = " + errorResult.getErrorMessage());
+                                        Log.d(TAG, "코드 = " + errorResult.getErrorCode());
                                     }
 
                                     @Override
@@ -187,11 +189,12 @@ public class SettingFragment extends SlidingBaseFragment {
                                                 .title(R.string.app_name)
                                                 .content("연결해제에 실패하였습니다.")
                                                 .show();
+                                        Log.d(TAG, "연결해제 실패");
                                     }
 
                                     @Override
                                     public void onNotSignedUp() {
-
+                                        Log.d(TAG, "Not Signed Up");
                                     }
 
                                     @Override
@@ -262,6 +265,7 @@ public class SettingFragment extends SlidingBaseFragment {
             @Override
             public void onSessionClosed(ErrorResult errorResult) {
                 Log.d(TAG, "토큰 제거 실패 = " + errorResult.getErrorMessage());
+                Log.d(TAG, "코드 = " + errorResult.getErrorCode());
             }
 
             @Override
@@ -274,50 +278,35 @@ public class SettingFragment extends SlidingBaseFragment {
                 Log.d(TAG, "푸시토큰 제거 세션 = " + result);
             }
         }, Global.userEntity.id);
+
         UserManagement.requestLogout(new LogoutResponseCallback() {
             @Override
             public void onCompleteLogout() {
-                BaseActivity.hideLoadingView();
-                BaseActivity.startActivityOnTopStack(LoginActivity.class);
-                ((Activity) MainActivity.context).finish();
-
-                SharedPreferencesCache cache = Session.getAppCache();
-                cache.clearAll();
-            }
-        });
-
-//        UserManagement.requestLogout(new LogoutResponseCallback() {
-//            @Override
-//            protected void onSuccess(final long userId) {
-//
-//            }
-//
-//            @Override
-//            protected void onFailure(final APIErrorResult apiErrorResult) {
-//                BaseActivity.hideLoadingView();
-//                new MaterialDialog.Builder(BaseActivity.context)
-//                        .title(R.string.app_name)
-//                        .content("로그아웃에 실패하였습니다.")
-//                        .show();
-//            }
-//        });
-//        RequestManager.logoutAppInBackground(new LogoutResponseCallback() {
-//            @Override
-//            protected void onSuccess(final long userId) {
 //                BaseActivity.hideLoadingView();
 //                BaseActivity.startActivityOnTopStack(LoginActivity.class);
 //                ((Activity) MainActivity.context).finish();
-//            }
 //
-//            @Override
-//            protected void onFailure(final APIErrorResult apiErrorResult) {
-//                BaseActivity.hideLoadingView();
-//                new MaterialDialog.Builder(BaseActivity.context)
-//                        .title(R.string.app_name)
-//                        .content("로그아웃에 실패하였습니다.")
-//                        .show();
-//            }
-//        });
+//                SharedPreferencesCache cache = Session.getAppCache();
+//                cache.clearAll();
+            }
+        });
+
+        SocketIO.setDeviceId(Global.userEntity.id, null, new RequestManager.OnSetDeviceId() {
+            @Override
+            public void onSuccess() {
+                SharedPreferencesCache cache = Session.getAppCache();
+                cache.clearAll();
+
+                //        BaseActivity.hideLoadingView();
+//        BaseActivity.startActivityOnTopStack(LoginActivity.class);
+                ((Activity) MainActivity.context).finish();
+            }
+
+            @Override
+            public void onException() {
+
+            }
+        });
     }
 
     public static ArrayList<ReservedCategoryEntity> getReservedCategories() {
@@ -421,31 +410,6 @@ public class SettingFragment extends SlidingBaseFragment {
 
         return receivedPushMessages;
     }
-//    public static ArrayList<BaasioPayload> getReceivedPushMessages() {
-//        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
-//        String pushMessageJsonString = securePreferences.getString(PREFERENCE_RECEIVED_PUSH_MESSAGES, "");
-//
-//        Gson gson = new Gson();
-//        ArrayList<String> pushMessageJsonStrings;
-//        try {
-//            pushMessageJsonStrings = gson.fromJson(
-//                    pushMessageJsonString,
-//                    new TypeToken<ArrayList<String>>() {
-//                    }.getType());
-//        } catch (Exception e) {
-//            pushMessageJsonStrings = new ArrayList<>();
-//        }
-//        if (pushMessageJsonStrings == null) {
-//            return new ArrayList<>();
-//        }
-//
-//        ArrayList<BaasioPayload> receivedPushMessages = new ArrayList<>();
-//        for (String jsonString : pushMessageJsonStrings) {
-//            receivedPushMessages.add(BaasioPayload.createObject(jsonString));
-//        }
-//
-//        return receivedPushMessages;
-//    }
 
     public static void addReceivedPushMessage(AlarmEntity alarmEntity) {
         ArrayList<AlarmEntity> pushMessages = getReceivedPushMessages();
@@ -464,21 +428,6 @@ public class SettingFragment extends SlidingBaseFragment {
         editor.putString(PREFERENCE_RECEIVED_PUSH_MESSAGES, gson.toJson(pushMessageJsonStrings));
         editor.commit();
     }
-//    public static void addReceivedPushMessage(BaasioPayload baasioPayload) {
-//        ArrayList<BaasioPayload> pushMessages = getReceivedPushMessages();
-//        pushMessages.add(baasioPayload);
-//
-//        ArrayList<String> pushMessageJsonStrings = new ArrayList<>();
-//        for (BaasioPayload pushMessage : pushMessages) {
-//            pushMessageJsonStrings.add(0, pushMessage.toString());
-//        }
-//
-//        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
-//        SecurePreferences.Editor editor = securePreferences.edit();
-//        Gson gson = new Gson();
-//        editor.putString(PREFERENCE_RECEIVED_PUSH_MESSAGES, gson.toJson(pushMessageJsonStrings));
-//        editor.commit();
-//    }
 
     public static long getLastAlarmSyncedTimestamp() {
         SecurePreferences securePreferences = new SecurePreferences(context);

@@ -46,6 +46,8 @@ public class SchoolManager {
     }
 
     public SchoolEntity selectSchool(int schoolId) {
+        if (adapter == null)
+            return null;
         SQLiteDatabase db = adapter.getReadableDatabase();
 
         Cursor cursor = db.query(

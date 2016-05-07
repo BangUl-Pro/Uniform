@@ -22,6 +22,9 @@ import java.util.ArrayList;
 
 public class TimelineActivity extends BaseActivity {
     private static final String TAG = "TimelineActivity";
+    private static final int ALL = 0;
+    private static final int MINE = 1;
+
     private int timelineStatus = 0;
 
     private class ViewHolder {
@@ -81,7 +84,7 @@ public class TimelineActivity extends BaseActivity {
 
 
     private void getTimeline() {
-        if (timelineStatus == 0) {
+        if (timelineStatus == ALL) {
             RequestManager.getAllTimeline(Global.userEntity.id, schoolEntity.id, new RequestManager.OnGetAllTimeline() {
                 @Override
                 public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
@@ -94,7 +97,7 @@ public class TimelineActivity extends BaseActivity {
                     viewHolder.timelines.hideMoreProgress();
                 }
             });
-        } else if (timelineStatus == 1) {
+        } else if (timelineStatus == MINE) {
             RequestManager.getMyTimeline(Global.userEntity.id, schoolEntity.id, new RequestManager.OnGetMyTimeline() {
                 @Override
                 public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
@@ -112,30 +115,12 @@ public class TimelineActivity extends BaseActivity {
 
     private void setQueryToAllTimelines() {
         if (schoolEntity != null) {
-            timelineStatus = 0;
+            timelineStatus = ALL;
         }
-
-//        timelineCardDtoQuery = new BaasioQuery();
-//        timelineCardDtoQuery.setType(TimelineEntity.COLLECTION_NAME);
-//        timelineCardDtoQuery.setWheres(TimelineEntity.PROPERTY_SCHOOL_ID + "=" + String.valueOf(schoolEntity.id));
-//        timelineCardDtoQuery.setOrderBy(
-//                BaasioEntity.PROPERTY_CREATED,
-//                BaasioQuery.ORDER_BY.DESCENDING
-//        );
     }
 
     private void setQueryToMyTimelines() {
-        timelineStatus = 1;
-//        timelineCardDtoQuery = new BaasioQuery();
-//        timelineCardDtoQuery.setType(TimelineEntity.COLLECTION_NAME);
-//        timelineCardDtoQuery.setWheres(
-//                TimelineEntity.PROPERTY_SCHOOL_ID + "=" + String.valueOf(schoolEntity.id) + " AND " +
-//                        TimelineEntity.PROPERTY_USER_UUID + "=" + Baas.io().getSignedInUser().getUuid().toString()
-//        );
-//        timelineCardDtoQuery.setOrderBy(
-//                BaasioEntity.PROPERTY_CREATED,
-//                BaasioQuery.ORDER_BY.DESCENDING
-//        );
+        timelineStatus = MINE;
     }
 
 //    private void initCallback() {

@@ -185,7 +185,10 @@ public class UserProfileForm extends ScrollView {
         userEntity.phone = viewHolder.phoneEditText.getText().toString();
         userEntity.schoolId = selectedSchoolId;
         //
-        userEntity.id = Global.userEntity.id;
+        if (Global.userEntity == null)
+            userEntity.id = String.valueOf(id);
+        else
+            userEntity.id = Global.userEntity.id;
 
         return userEntity;
     }

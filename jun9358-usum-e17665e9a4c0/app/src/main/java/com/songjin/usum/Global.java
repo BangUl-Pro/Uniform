@@ -38,8 +38,10 @@ public class Global {
     public static final String INSERT_TIMELINE_COMMENT = "insertTimelineComment";
     public static final String TRANSACTION_PUSH = "transactionPush";
     public static final String DELETE_USER = "deleteUser";
+    public static final String SET_DEVICE_ID = "setDeviceId";
 
     public static final String ID = "id";
+    public static final String DEVICE_ID = "deviceId";
     public static final String USER = "user";
     public static final String SCHOOL = "school";
     public static final String USER_ID = "user_id";
@@ -96,7 +98,6 @@ public class Global {
     public static final int REQUESTED = 2;
     public static final int SENDED = 3;
     public static final int RECEIVED = 4;
-
 
     public static UserEntity userEntity;
 }

@@ -23,9 +23,11 @@ public class UserEntity implements Parcelable {
     public static final String PROPERTY_SCHOOL_ID = "user_school_id";
     public static final String PROPERTY_SEX = "user_sex";
     public static final String PROPERTY_USER_TYPE = "user_user_type";
+    public static final String PROPERTY_DEVICE_ID = "user_device_id";
 
 //    public String uuid;
     public String id;
+    public String deviceId = null;
     public String name;
     public boolean hasExtraProfile;
     public KakaoProfile kakaotalk;
@@ -56,6 +58,14 @@ public class UserEntity implements Parcelable {
 
     public UserEntity(JSONObject entity) {
         set(entity);
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     public String getId() {
@@ -150,6 +160,7 @@ public class UserEntity implements Parcelable {
         this.schoolId = bundle.getInt(PROPERTY_SCHOOL_ID);
         this.sex = bundle.getInt(PROPERTY_SEX);
         this.userType = bundle.getInt(PROPERTY_USER_TYPE);
+        this.deviceId = bundle.getString(PROPERTY_DEVICE_ID);
     }
 
     public void set(JSONObject object) {
@@ -157,16 +168,19 @@ public class UserEntity implements Parcelable {
             if (object == null) {
                 return;
             }
-//        if (entity.getUuid() != null) {
+//        if (entity.getUuid().equals(null)) {
 //            this.uuid = entity.getUuid().toString();
 //        }
-            if (object.getString(PROPERTY_ID) != null) {
+            if (!object.get(PROPERTY_ID).equals(null)) {
                 this.id = object.getString(PROPERTY_ID);
             }
-            if (object.getString(PROPERTY_NAME) != null) {
+            if (!object.get(PROPERTY_DEVICE_ID).equals(null)) {
+                this.deviceId = object.getString(PROPERTY_DEVICE_ID);
+            }
+            if (!object.get(PROPERTY_NAME).equals(null)) {
                 this.name = object.getString(PROPERTY_NAME);
             }
-            if (object.getString(PROPERTY_HAS_EXTRA_PROFILE) != null) {
+            if (!object.get(PROPERTY_HAS_EXTRA_PROFILE).equals(null)) {
                 String hasProfile = object.getString(PROPERTY_HAS_EXTRA_PROFILE);
                 if (hasProfile.equals("1")) {
                     hasExtraProfile = true;
@@ -174,13 +188,13 @@ public class UserEntity implements Parcelable {
                     hasExtraProfile = false;
                 }
             }
-            if (object.getString(PROPERTY_PHONE) != null) {
+            if (!object.get(PROPERTY_PHONE).equals(null)) {
                 this.phone = object.getString(PROPERTY_PHONE);
             }
-            if (object.getString(PROPERTY_PICTURE) != null) {
+            if (!object.get(PROPERTY_PICTURE).equals(null)) {
                 this.picture = object.getString(PROPERTY_PICTURE);
             }
-            if (object.getString(PROPERTY_REAL_NAME) != null) {
+            if (!object.get(PROPERTY_REAL_NAME).equals(null)) {
                 this.realName = object.getString(PROPERTY_REAL_NAME);
             }
             if (!object.get(PROPERTY_SCHOOL_ID).equals(null)) {

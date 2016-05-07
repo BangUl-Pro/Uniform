@@ -57,8 +57,7 @@ public class TimelineRecyclerView extends SuperRecyclerView {
     public void setTimelineCardDtos(ArrayList<TimelineCardDto> timelineCardDtos) {
         setEmptyView(R.layout.view_empty);
 
-        this.timelineCardDtos.clear();
-        this.timelineCardDtos.addAll(timelineCardDtos);
+        this.timelineCardDtos = timelineCardDtos;
         getAdapter().notifyDataSetChanged();
     }
 

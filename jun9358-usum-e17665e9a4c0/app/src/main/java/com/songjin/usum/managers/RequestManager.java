@@ -122,7 +122,7 @@ public class RequestManager {
 
 
     public static void insertFile(String productId, String path, int position, OnInsertFile onInsertFile) {
-        Log.d(TAG, "파일 입력 요청");
+        Log.e(TAG, "파일 입력 요청");
         SocketIO.insertFile(productId, path, position, onInsertFile);
     }
 
@@ -258,6 +258,11 @@ public class RequestManager {
 
     public interface OnGetSchoolRanking {
         void onSuccess(ArrayList<SchoolRanking> schoolRankings);
+        void onException();
+    }
+
+    public interface OnSetDeviceId {
+        void onSuccess();
         void onException();
     }
 

@@ -425,6 +425,49 @@ public class SocketIO {
         return true;
     }
 
+    public static void setDeviceId(String id, String deviceId, final RequestManager.OnSetDeviceId onSetDeviceId) {
+        Log.d(TAG, "디바이스 아이디 설정");
+        if (!checkSocket())
+            return;
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.ID, id);
+            object.put(Global.DEVICE_ID, deviceId);
+            socket.emit(Global.SET_DEVICE_ID, object);
+            socket.once(Global.SET_DEVICE_ID, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        Log.d(TAG, "디바이스 아이디 설정 응답 resObject = " + resObject);
+
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSetDeviceId.onSuccess();
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSetDeviceId.onException();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // TODO: 15. 11. 20. 학교 랭킹 요청
     public static void getSchoolRanking(final RequestManager.OnGetSchoolRanking onGetSchoolRanking) {
@@ -1546,6 +1589,7 @@ public class SocketIO {
             object.put(Global.PROFILE_IMAGE, profileImage);
             object.put(Global.THUMBNAIL_IMAGE, thumbnailImage);
             Log.d(TAG, "signInKakao Object = " + object);
+//            socket.emit("addDeviceId", "");
             socket.emit(Global.SIGN_IN_KAKAO, object);
             socket.once(Global.SIGN_IN_KAKAO, new Emitter.Listener() {
                 @Override
@@ -1562,8 +1606,7 @@ public class SocketIO {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.d(TAG, "myId = " + user.getId());
-                                    Log.d(TAG, "myKakaoId = " + user.getKakaotalk().id);
+                                    Log.d(TAG, "device Id = " + user.deviceId);
                                     onSignInKakao.onSuccess(user);
                                 }
                             });
