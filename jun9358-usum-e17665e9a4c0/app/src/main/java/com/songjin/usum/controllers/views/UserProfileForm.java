@@ -185,7 +185,7 @@ public class UserProfileForm extends ScrollView {
         userEntity.phone = viewHolder.phoneEditText.getText().toString();
         userEntity.schoolId = selectedSchoolId;
         //
-        userEntity.id = String.valueOf(id);
+        userEntity.id = Global.userEntity.id;
 
         return userEntity;
     }
@@ -245,5 +245,17 @@ public class UserProfileForm extends ScrollView {
     }
 
     public interface OnSubmitListener extends OnClickListener {
+    }
+
+    public void setRealName(String name) {
+        viewHolder.realNameEditText.setText(name);
+    }
+
+    public void setSex(int sex) {
+        viewHolder.sexRadioGroup.check(getSexResId(sex));
+    }
+
+    public void setType(int type) {
+        viewHolder.userTypeRadioGroup.check(getUserTypeResId(type));
     }
 }

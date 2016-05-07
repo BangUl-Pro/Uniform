@@ -127,7 +127,6 @@ public class CommunityFragment extends SlidingBaseFragment {
 
 //        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
         SchoolEntity mySchoolEntity = schoolManager.selectSchool(Global.userEntity.schoolId);
-        Log.d(TAG, "userId = " + Global.userEntity.id);
         Log.d(TAG, "schoolId = " + Global.userEntity.schoolId);
         Log.d(TAG, "schoolName = " + mySchoolEntity.schoolname);
         Log.d(TAG, "mySchoolEntity = " + mySchoolEntity);

@@ -36,6 +36,9 @@ public class EditProfileActivity extends BaseActivity {
         Log.d(TAG, "액티비티 시작");
 
         viewHolder = new ViewHolder(getWindow().getDecorView());
+        viewHolder.userProfileForm.setRealName(Global.userEntity.realName);
+        viewHolder.userProfileForm.setSex(Global.userEntity.sex);
+        viewHolder.userProfileForm.setType(Global.userEntity.userType);
         viewHolder.userProfileForm.setMode(UserProfileForm.Mode.EDIT);
         viewHolder.userProfileForm.setOnSubmitListener(new UserProfileForm.OnSubmitListener() {
             @Override
@@ -46,6 +49,7 @@ public class EditProfileActivity extends BaseActivity {
                     @Override
                     public void onSuccess(UserEntity userEntity) {
                         Global.userEntity = userEntity;
+                        Log.d(TAG, "id = " + userEntity.id);
                         hideLoadingView();
                         finish();
                     }

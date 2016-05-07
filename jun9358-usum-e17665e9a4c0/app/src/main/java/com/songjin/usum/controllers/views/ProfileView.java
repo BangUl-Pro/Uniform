@@ -87,8 +87,6 @@ public class ProfileView extends LinearLayout {
         }
         viewHolder.phone.setText(userEntity.phone);
 
-//        BaasioUser baasioUser = Baas.io().getSignedInUser();
-//        if (userEntity.uuid.equals(baasioUser.getUuid().toString())) {
         if (userEntity.id.equals(Global.userEntity.id)) {
             viewHolder.editProfileButton.setVisibility(View.VISIBLE);
         } else {

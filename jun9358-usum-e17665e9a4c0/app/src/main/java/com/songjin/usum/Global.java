@@ -1,5 +1,7 @@
 package com.songjin.usum;
 
+import com.songjin.usum.entities.UserEntity;
+
 /**
  * Created by IronFactory on 15. 10. 26..
  */
@@ -96,5 +98,5 @@ public class Global {
     public static final int RECEIVED = 4;
 
 
-//    public static UserEntity userEntity;
+    public static UserEntity userEntity;
 }
