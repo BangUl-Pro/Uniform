@@ -1562,6 +1562,8 @@ public class SocketIO {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    Log.d(TAG, "myId = " + user.getId());
+                                    Log.d(TAG, "myKakaoId = " + user.getKakaotalk().id);
                                     onSignInKakao.onSuccess(user);
                                 }
                             });

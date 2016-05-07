@@ -1,7 +1,5 @@
 package com.songjin.usum.dtos;
 
-import android.util.Log;
-
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.SchoolPointEntity;
 
@@ -46,10 +44,8 @@ public class SchoolRanking implements Serializable {
             } else {
                 this.point = object.getLong(SchoolPointEntity.PROPERTY_POINT);
             }
-            Log.d(TAG, "point = " + point);
             this.school_id = object.getInt(SchoolEntity.PROPERTY_ID);
             this.schoolname = object.getString(SchoolEntity.PROPERTY_SCHOOLNAME);
-            Log.d(TAG, "schoolName = " + schoolname);
             this.address = object.getString(SchoolEntity.PROPERTY_ADDRESS);
             this.city = object.getString(SchoolEntity.PROPERTY_CITY);
             this.category = object.getString(SchoolEntity.PROPERTY_CATEGORY);

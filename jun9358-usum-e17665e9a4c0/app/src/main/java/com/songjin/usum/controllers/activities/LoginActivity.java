@@ -1,5 +1,7 @@
 package com.songjin.usum.controllers.activities;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,10 +9,13 @@ import android.view.View;
 import android.widget.Button;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.kakao.Session;
-import com.kakao.SessionCallback;
-import com.kakao.exception.KakaoException;
-import com.kakao.widget.LoginButton;
+import com.kakao.auth.IApplicationConfig;
+import com.kakao.auth.ISessionCallback;
+import com.kakao.auth.KakaoAdapter;
+import com.kakao.auth.KakaoSDK;
+import com.kakao.auth.Session;
+import com.kakao.usermgmt.LoginButton;
+import com.kakao.util.exception.KakaoException;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.fragments.SettingFragment;
@@ -24,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class LoginActivity extends BaseActivity {
-    private final SessionCallback mySessionCallback = new SessionStatusCallback();
+    private final ISessionCallback mySessionCallback = new SessionStatusCallback();
 //    private final BaasioQueryCallback schoolsQueryCallback = new SchoolsQueryCallback();
     private ViewHolder viewHolder;
     private SchoolManager schoolManager;
@@ -40,7 +45,7 @@ public class LoginActivity extends BaseActivity {
         schoolManager = new SchoolManager(this);
         new SocketIO(getApplicationContext());
         if (schoolManager.isEmptyTable()) {
-            showLoadingView();
+            showLoadingView("학교 DB 다운로드 중 입니다.");
 
             // 학교 정보 로딩 요청
             RequestManager.getSchool(new RequestManager.OnGetSchool() {
@@ -250,9 +255,30 @@ public class LoginActivity extends BaseActivity {
         viewHolder.guestLoginButton.setVisibility(View.VISIBLE);
     }
 
-    private void checkSession() {
-        Session.initializeSession(this, mySessionCallback);
+    private class KakaoSDKAdapter extends KakaoAdapter {
+        @Override
+        public IApplicationConfig getApplicationConfig() {
+            return new IApplicationConfig() {
+                @Override
+                public Activity getTopActivity() {
+                    return LoginActivity.this;
+                }
 
+                @Override
+                public Context getApplicationContext() {
+                    return LoginActivity.this;
+                }
+            };
+        }
+    }
+
+    private void checkSession() {
+        if (KakaoSDK.getAdapter() == null)
+            KakaoSDK.init(new KakaoSDKAdapter());
+        Session.getCurrentSession().addCallback(mySessionCallback);
+        Session.getCurrentSession().checkAndImplicitOpen();
+//        Session.getCurrentSession()
+//        Session.initializeSession(this, mySessionCallback);
         Log.d(TAG, "checkSession");
         if (Session.getCurrentSession().isOpened()) {
             Log.d(TAG, "열려 있음 ");
@@ -269,6 +295,21 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Session.getCurrentSession().removeCallback(mySessionCallback);
+    }
+
     private class ViewHolder {
         public LoginButton kakaoLoginButton;
         public Button guestLoginButton;
@@ -280,7 +321,7 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    private class SessionStatusCallback implements SessionCallback {
+    private class SessionStatusCallback implements ISessionCallback {
         @Override
         public void onSessionOpened() {
             startActivityUsingStack(SignUpActivity.class);
@@ -288,7 +329,7 @@ public class LoginActivity extends BaseActivity {
         }
 
         @Override
-        public void onSessionClosed(final KakaoException exception) {
+        public void onSessionOpenFailed(KakaoException exception) {
             viewHolder.kakaoLoginButton.setVisibility(View.VISIBLE);
         }
     }

@@ -18,14 +18,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.nkzawa.emitter.Emitter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.kakao.APIErrorResult;
-import com.kakao.LogoutResponseCallback;
-import com.kakao.PushDeregisterHttpResponseHandler;
-import com.kakao.PushService;
-import com.kakao.Session;
-import com.kakao.UnlinkResponseCallback;
-import com.kakao.UserManagement;
-import com.kakao.helper.SharedPreferencesCache;
+import com.kakao.auth.ApiResponseCallback;
+import com.kakao.auth.Session;
+import com.kakao.network.ErrorResult;
+import com.kakao.push.PushService;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
+import com.kakao.usermgmt.callback.UnLinkResponseCallback;
+import com.kakao.util.helper.SharedPreferencesCache;
 import com.securepreferences.SecurePreferences;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
@@ -160,19 +160,42 @@ public class SettingFragment extends SlidingBaseFragment {
 
                                 SharedPreferencesCache cache = Session.getAppCache();
 
-                                PushService.deregisterPushToken(new PushDeregisterHttpResponseHandler() {
+                                PushService.deregisterPushToken(new ApiResponseCallback<Boolean>() {
                                     @Override
-                                    protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
+                                    public void onSessionClosed(ErrorResult errorResult) {
                                         Log.d(TAG, "토큰 제거 실패 = " + errorResult.getErrorMessage());
+                                    }
+
+                                    @Override
+                                    public void onNotSignedUp() {
+                                        Log.d(TAG, "푸시토큰 제거 not signedUp");
+                                    }
+
+                                    @Override
+                                    public void onSuccess(Boolean result) {
+                                        Log.d(TAG, "푸시토큰 제거 세션 = " + result);
                                     }
                                 }, Global.userEntity.id);
 
-
                                 cache.clearAll();
 
-                                UserManagement.requestUnlink(new UnlinkResponseCallback() {
+                                UserManagement.requestUnlink(new UnLinkResponseCallback() {
                                     @Override
-                                    protected void onSuccess(final long userId) {
+                                    public void onSessionClosed(ErrorResult errorResult) {
+                                        BaseActivity.hideLoadingView();
+                                        new MaterialDialog.Builder(BaseActivity.context)
+                                                .title(R.string.app_name)
+                                                .content("연결해제에 실패하였습니다.")
+                                                .show();
+                                    }
+
+                                    @Override
+                                    public void onNotSignedUp() {
+
+                                    }
+
+                                    @Override
+                                    public void onSuccess(Long result) {
                                         RequestManager.deleteUser(Global.userEntity.id, new Emitter.Listener() {
                                             @Override
                                             public void call(final Object... args) {
@@ -191,25 +214,8 @@ public class SettingFragment extends SlidingBaseFragment {
                                             }
                                         });
                                     }
-
-                                    @Override
-                                    protected void onSessionClosedFailure(final APIErrorResult errorResult) {
-                                        BaseActivity.hideLoadingView();
-                                        new MaterialDialog.Builder(BaseActivity.context)
-                                                .title(R.string.app_name)
-                                                .content("연결해제하는 중에 세션에 문제가 생겼습니다.")
-                                                .show();
-                                    }
-
-                                    @Override
-                                    protected void onFailure(final APIErrorResult errorResult) {
-                                        BaseActivity.hideLoadingView();
-                                        new MaterialDialog.Builder(BaseActivity.context)
-                                                .title(R.string.app_name)
-                                                .content("연결해제에 실패하였습니다.")
-                                                .show();
-                                    }
                                 });
+
 //                                RequestManager.unlinkAppInBackground(new UnlinkResponseCallback() {
 //                                    @Override
 //                                    protected void onSuccess(final long userId) {
@@ -252,17 +258,25 @@ public class SettingFragment extends SlidingBaseFragment {
 
     private void requestLogout() {
         BaseActivity.showLoadingView();
-        PushService.deregisterPushToken(new PushDeregisterHttpResponseHandler() {
+        PushService.deregisterPushToken(new ApiResponseCallback<Boolean>() {
             @Override
-            protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
-                Log.d(TAG, "토큰 삭제 에러 = " + errorResult.getErrorCodeInt());
-                Log.d(TAG, "토큰 삭제 에러 = " + errorResult.getErrorMessage());
+            public void onSessionClosed(ErrorResult errorResult) {
+                Log.d(TAG, "토큰 제거 실패 = " + errorResult.getErrorMessage());
+            }
 
+            @Override
+            public void onNotSignedUp() {
+                Log.d(TAG, "푸시토큰 제거 not signedUp");
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                Log.d(TAG, "푸시토큰 제거 세션 = " + result);
             }
         }, Global.userEntity.id);
         UserManagement.requestLogout(new LogoutResponseCallback() {
             @Override
-            protected void onSuccess(final long userId) {
+            public void onCompleteLogout() {
                 BaseActivity.hideLoadingView();
                 BaseActivity.startActivityOnTopStack(LoginActivity.class);
                 ((Activity) MainActivity.context).finish();
@@ -270,16 +284,23 @@ public class SettingFragment extends SlidingBaseFragment {
                 SharedPreferencesCache cache = Session.getAppCache();
                 cache.clearAll();
             }
-
-            @Override
-            protected void onFailure(final APIErrorResult apiErrorResult) {
-                BaseActivity.hideLoadingView();
-                new MaterialDialog.Builder(BaseActivity.context)
-                        .title(R.string.app_name)
-                        .content("로그아웃에 실패하였습니다.")
-                        .show();
-            }
         });
+
+//        UserManagement.requestLogout(new LogoutResponseCallback() {
+//            @Override
+//            protected void onSuccess(final long userId) {
+//
+//            }
+//
+//            @Override
+//            protected void onFailure(final APIErrorResult apiErrorResult) {
+//                BaseActivity.hideLoadingView();
+//                new MaterialDialog.Builder(BaseActivity.context)
+//                        .title(R.string.app_name)
+//                        .content("로그아웃에 실패하였습니다.")
+//                        .show();
+//            }
+//        });
 //        RequestManager.logoutAppInBackground(new LogoutResponseCallback() {
 //            @Override
 //            protected void onSuccess(final long userId) {

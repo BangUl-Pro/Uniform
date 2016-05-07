@@ -10,24 +10,23 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.kakao.APIErrorResult;
-import com.kakao.MeResponseCallback;
-import com.kakao.PushRegisterHttpResponseHandler;
-import com.kakao.PushService;
-import com.kakao.PushTokenInfo;
-import com.kakao.PushTokensHttpResponseHandler;
-import com.kakao.Session;
-import com.kakao.UserManagement;
-import com.kakao.UserProfile;
-import com.kakao.helper.SharedPreferencesCache;
-import com.kakao.widget.PushActivity;
+import com.kakao.auth.ApiResponseCallback;
+import com.kakao.auth.Session;
+import com.kakao.network.ErrorResult;
+import com.kakao.push.PushActivity;
+import com.kakao.push.PushService;
+import com.kakao.push.response.model.PushTokenInfo;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.response.model.UserProfile;
+import com.kakao.util.helper.SharedPreferencesCache;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.UserProfileForm;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.RequestManager;
 
-import java.util.Arrays;
+import java.util.List;
 
 
 public class SignUpActivity extends PushActivity {
@@ -58,11 +57,11 @@ public class SignUpActivity extends PushActivity {
     @Override
     protected String getDeviceUUID() {
         SharedPreferencesCache cache = Session.getAppCache();
-        String curId = cache.getString(Global.ID);
+        String curId = cache.getString("device_id");
         if (curId == null) {
             Bundle bundle = new Bundle();
             curId = getUniqueId();
-            bundle.putString(Global.ID, curId);
+            bundle.putString("device_id", curId);
             cache.save(bundle);
             getPushToken();
         }
@@ -79,17 +78,27 @@ public class SignUpActivity extends PushActivity {
 
 
     private void getPushToken() {
-        PushService.getPushTokens(new PushTokensHttpResponseHandler<PushTokenInfo[]>() {
+        PushService.getPushTokens(new ApiResponseCallback<List<PushTokenInfo>>() {
             @Override
-            protected void onHttpSuccess(PushTokenInfo[] resultObj) {
+            public void onSessionClosed(ErrorResult errorResult) {
+
+            }
+
+            @Override
+            public void onNotSignedUp() {
+
+            }
+
+            @Override
+            public void onSuccess(List<PushTokenInfo> result) {
                 String message = "succeeded to get push tokens."
                         + "\ncount="
-                        + resultObj.length
+                        + result.size()
                         + "\nstories="
-                        + Arrays.toString(resultObj);
+                        + result;
                 Log.d(TAG, "푸시알림 토큰 = " + message);
                 for (PushTokenInfo pushTokenInfo :
-                        resultObj) {
+                        result) {
                     String pushToken = pushTokenInfo.getPushToken();
                     String deviceId = pushTokenInfo.getDeviceId();
 
@@ -97,24 +106,27 @@ public class SignUpActivity extends PushActivity {
                         Log.d(TAG, "푸시토큰 = " + pushToken);
                         Log.d(TAG, "디바이스 아이디 = " + deviceId);
                         Log.d(TAG, "토큰 등록");
-                        PushService.registerPushToken(new PushRegisterHttpResponseHandler() {
+                        PushService.registerPushToken(new ApiResponseCallback<Integer>() {
                             @Override
-                            protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
+                            public void onSessionClosed(ErrorResult errorResult) {
                                 Log.d(TAG, "GCM PUSH 등록 에러 메세지 = " + errorResult.getErrorMessage());
-                                Log.d(TAG, "GCM PUSH 등록 에러 URL = " + errorResult.getRequestURL());
-                                Log.d(TAG, "GCM PUSH 등록 에러 코드 = " + errorResult.getErrorCodeInt());
+                                Log.d(TAG, "GCM PUSH 등록 에러 URL = " + errorResult.getHttpStatus());
+                                Log.d(TAG, "GCM PUSH 등록 에러 코드 = " + errorResult.getErrorCode());
                             }
-                        }, pushToken, deviceId);
+
+                            @Override
+                            public void onNotSignedUp() {
+
+                            }
+
+                            @Override
+                            public void onSuccess(Integer result) {
+
+                            }
+                        }, pushToken, deviceId, Global.APP_VER);
                         break;
                     }
                 }
-            }
-
-            @Override
-            protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
-                Log.d(TAG, "GCM PUSH 연결 에러 메세지 = " + errorResult.getErrorMessage());
-                Log.d(TAG, "GCM PUSH 연결 에러 URL = " + errorResult.getRequestURL());
-                Log.d(TAG, "GCM PUSH 연결 에러 코드 = " + errorResult.getErrorCodeInt());
             }
         });
     }
@@ -205,34 +217,55 @@ public class SignUpActivity extends PushActivity {
     // TODO RequestManager에 넣기
     private void requestCheckConfirmedUser() {
         setContentView(R.layout.activity_login);
-        SharedPreferencesCache cache = Session.getAppCache();
-        String kakaoToken = cache.getString(Global.TOKEN);
+        final SharedPreferencesCache cache = Session.getAppCache();
+        final String kakaoToken = cache.getString(Global.TOKEN);
         Log.d(TAG, "kakaoToken = " + kakaoToken);
-
-        if (kakaoToken == null) {
-            kakaoToken = Session.getCurrentSession().getAccessToken();
-            Bundle bundle = new Bundle();
-            bundle.putString(Global.TOKEN, kakaoToken);
-            cache.save(bundle);
-
-            PushService.registerPushToken(new PushRegisterHttpResponseHandler() {
-                @Override
-                protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
-                    Log.d(TAG, "GCM PUSH 등록 에러 메세지 = " + errorResult.getErrorMessage());
-                    Log.d(TAG, "GCM PUSH 등록 에러 URL = " + errorResult.getRequestURL());
-                    Log.d(TAG, "GCM PUSH 등록 에러 코드 = " + errorResult.getErrorCodeInt());
-                }
-            }, kakaoToken, getDeviceUUID());
-        }
 
         UserManagement.requestMe(new MeResponseCallback() {
             @Override
-            protected void onSuccess(UserProfile userProfile) {
+            public void onSessionClosed(ErrorResult errorResult) {
+
+            }
+
+            @Override
+            public void onNotSignedUp() {
+
+            }
+
+            @Override
+            public void onSuccess(UserProfile userProfile) {
                 final String nickName = userProfile.getNickname();
                 final String profileImage = userProfile.getProfileImagePath();
                 final String thumbnailImage = userProfile.getThumbnailImagePath();
 
                 id = userProfile.getId();
+
+                String token = kakaoToken;
+                if (token == null) {
+                    token = Session.getCurrentSession().getAccessToken();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Global.TOKEN, token);
+                    cache.save(bundle);
+
+                    PushService.registerPushToken(new ApiResponseCallback<Integer>() {
+                        @Override
+                        public void onSessionClosed(ErrorResult errorResult) {
+                            Log.d(TAG, "GCM PUSH 등록 에러 메세지 = " + errorResult.getErrorMessage());
+                            Log.d(TAG, "GCM PUSH 등록 에러 URL = " + errorResult.getHttpStatus());
+                            Log.d(TAG, "GCM PUSH 등록 에러 코드 = " + errorResult.getErrorCode());
+                        }
+
+                        @Override
+                        public void onNotSignedUp() {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Integer result) {
+
+                        }
+                    }, kakaoToken, getDeviceUUID(), Global.APP_VER);
+                }
 //                new SocketIO(getApplicationContext());
 //                Log.d(TAG, "11111");
                 RequestManager.signInKakao(id, nickName, profileImage, thumbnailImage, new RequestManager.OnSignInKakao() {
@@ -269,6 +302,8 @@ public class SignUpActivity extends PushActivity {
 
                                 }
                             });
+                        } else if (code == 483) {
+                            initViews(R.layout.activity_sign_up);
                         } else {
                             new MaterialDialog.Builder(activity)
                                     .title(R.string.app_name)
@@ -278,46 +313,7 @@ public class SignUpActivity extends PushActivity {
                     }
                 });
             }
-
-            @Override
-            protected void onNotSignedUp() {
-
-            }
-
-            @Override
-            protected void onSessionClosedFailure(APIErrorResult errorResult) {
-
-            }
-
-            @Override
-            protected void onFailure(APIErrorResult errorResult) {
-
-            }
         });
-
-//        BaasioUser.signInViaKakaotalkInBackground(
-//                this,
-//                Session.getCurrentSession().getAccessToken(),
-//                new BaasioSignInCallback() {
-//                    @Override
-//                    public void onResponse(BaasioUser baasioUser) {
-//                        UserEntity userEntity = new UserEntity(baasioUser);
-//                        if (userEntity.hasExtraProfile) {
-//                            BaseActivity.startActivityOnTopStack(MainActivity.class);
-//                            finish();
-//                        } else {
-//                            initViews(R.layout.activity_sign_up);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onException(BaasioException e) {
-//                        new MaterialDialog.Builder(BaseActivity.context)
-//                                .title(R.string.app_name)
-//                                .content("로그인하는데 문제가 발생하였습니다.")
-//                                .show();
-//                    }
-//                });
     }
     
     MaterialDialog materialDialog;

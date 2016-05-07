@@ -51,6 +51,7 @@ public class MainActivity extends BaseActivity {
 
             Global.userEntity = getIntent().getParcelableExtra(Global.USER);
             Log.d(TAG, "id = " + Global.userEntity.id);
+            Log.d(TAG, "schoolId = " + Global.userEntity.schoolId);
             ArrayList<SlidingBaseFragment> tabFragments = new ArrayList<>();
 
             communityFragment = new CommunityFragment();

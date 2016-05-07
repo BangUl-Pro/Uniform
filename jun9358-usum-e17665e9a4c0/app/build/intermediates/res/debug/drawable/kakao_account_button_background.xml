@@ -4,4 +4,4 @@
     <item android:drawable="@color/com_kakao_button_background_press" android:state_pressed="true"/>
     <item android:drawable="@color/com_kakao_account_button_background"/>
 
-</selector><!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.0.46/res/drawable/kakao_account_button_background.xml -->
+</selector><!-- From: file:/Users/IronFactory/AndroidStudioProjects/Uniform/jun9358-usum-e17665e9a4c0/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.1.15/res/drawable/kakao_account_button_background.xml -->

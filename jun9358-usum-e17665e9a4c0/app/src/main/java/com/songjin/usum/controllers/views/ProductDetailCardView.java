@@ -102,16 +102,17 @@ public class ProductDetailCardView extends CardView {
                 String signedUserUuid = Global.userEntity.getId();
 
                 Log.d(TAG, "제품 상태 = " + productCardDto.transactionEntity.status);
+                Log.d(TAG, "내 아이디 = " + signedUserUuid);
 
                 switch (productCardDto.transactionEntity.status) {
                     case Global.REGISTERED:
                         writeCommentToShareMyProfile();
 
                         if (productCardDto.transactionEntity.donator_id.equals(signedUserUuid)) {
-                            Log.d(TAG, "기부자와 내가 일치함 ");
+                            Log.d(TAG, "내가 기부자임 ");
                             targetUserUuids.add(productCardDto.transactionEntity.receiver_id);
                         } else if (productCardDto.transactionEntity.receiver_id.equals(signedUserUuid)) {
-                            Log.d(TAG, "기부 요청자와 내가 일치함 ");
+                            Log.d(TAG, "내가 기부 요청자임 ");
                             targetUserUuids.add(productCardDto.transactionEntity.donator_id);
                         }
                         pushMessage = "진행중이던 거래가 취소되었습니다.";

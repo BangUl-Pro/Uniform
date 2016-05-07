@@ -68,6 +68,7 @@ public class MyPageFragment extends SlidingBaseFragment {
 
     private void initProfileView() {
         viewHolder.profileView.setUserEntity(Global.userEntity);
+        Log.d(TAG ,"schoolId = " + Global.userEntity.getSchoolId());
 
         RequestManager.getMyProduct(Global.userEntity, new RequestManager.OnGetMyProduct() {
             @Override

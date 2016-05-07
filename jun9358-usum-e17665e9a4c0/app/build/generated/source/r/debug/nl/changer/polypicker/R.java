@@ -8,8 +8,8 @@ package nl.changer.polypicker;
 
 public final class R {
 	public static final class attr {
-		public static final int matchHeightToWidth = 0x7f01005a;
-		public static final int matchWidthToHeight = 0x7f01005b;
+		public static final int matchHeightToWidth = 0x7f010057;
+		public static final int matchWidthToHeight = 0x7f010058;
 	}
 	public static final class dimen {
 		public static final int activity_horizontal_margin = 0x7f090043;
@@ -17,30 +17,30 @@ public final class R {
 	}
 	public static final class drawable {
 		public static final int btn_bg = 0x7f02004d;
-		public static final int gallery_photo_selected = 0x7f02006b;
-		public static final int ic_action_accept = 0x7f02006c;
-		public static final int ic_action_cancel = 0x7f02006d;
-		public static final int ic_action_overflow = 0x7f02006e;
-		public static final int ic_launcher = 0x7f020076;
-		public static final int state_disabled = 0x7f02009e;
-		public static final int state_highlight = 0x7f02009f;
-		public static final int state_normal = 0x7f0200a0;
+		public static final int gallery_photo_selected = 0x7f02006d;
+		public static final int ic_action_accept = 0x7f02006e;
+		public static final int ic_action_cancel = 0x7f02006f;
+		public static final int ic_action_overflow = 0x7f020070;
+		public static final int ic_launcher = 0x7f020078;
+		public static final int state_disabled = 0x7f02009c;
+		public static final int state_highlight = 0x7f02009d;
+		public static final int state_normal = 0x7f02009e;
 	}
 	public static final class id {
-		public static final int action_btn_cancel = 0x7f0a007c;
-		public static final int action_btn_contianer = 0x7f0a0077;
-		public static final int action_btn_done = 0x7f0a007d;
-		public static final int button_bar = 0x7f0a007b;
-		public static final int camera = 0x7f0a00a3;
-		public static final int gallery_grid = 0x7f0a00a7;
-		public static final int pager = 0x7f0a0076;
-		public static final int preview_holder = 0x7f0a00a1;
-		public static final int selected_photo = 0x7f0a00bd;
-		public static final int selected_photos_container = 0x7f0a0079;
-		public static final int selected_photos_container_frame = 0x7f0a0078;
-		public static final int selected_photos_empty = 0x7f0a007a;
-		public static final int take_picture = 0x7f0a00a2;
-		public static final int thumbnail_image = 0x7f0a00b3;
+		public static final int action_btn_cancel = 0x7f0a007b;
+		public static final int action_btn_contianer = 0x7f0a0076;
+		public static final int action_btn_done = 0x7f0a007c;
+		public static final int button_bar = 0x7f0a007a;
+		public static final int camera = 0x7f0a00a2;
+		public static final int gallery_grid = 0x7f0a00a6;
+		public static final int pager = 0x7f0a0075;
+		public static final int preview_holder = 0x7f0a00a0;
+		public static final int selected_photo = 0x7f0a00bc;
+		public static final int selected_photos_container = 0x7f0a0078;
+		public static final int selected_photos_container_frame = 0x7f0a0077;
+		public static final int selected_photos_empty = 0x7f0a0079;
+		public static final int take_picture = 0x7f0a00a1;
+		public static final int thumbnail_image = 0x7f0a00b2;
 	}
 	public static final class layout {
 		public static final int activity_main_pp = 0x7f03001f;
@@ -52,18 +52,18 @@ public final class R {
 	}
 	public static final class string {
 		public static final int app_name = 0x7f0c0014;
-		public static final int cancel = 0x7f0c001b;
-		public static final int done = 0x7f0c0043;
-		public static final int gallery = 0x7f0c0044;
-		public static final int progress_title = 0x7f0c0204;
-		public static final int take_photo = 0x7f0c0207;
+		public static final int cancel = 0x7f0c0017;
+		public static final int done = 0x7f0c0049;
+		public static final int gallery = 0x7f0c004a;
+		public static final int progress_title = 0x7f0c020a;
+		public static final int take_photo = 0x7f0c020d;
 	}
 	public static final class style {
 		public static final int AppBaseTheme = 0x7f0d0004;
 		public static final int AppTheme = 0x7f0d0005;
 	}
 	public static final class styleable {
-		public static final int[] CustomView = { 0x7f01005a, 0x7f01005b };
+		public static final int[] CustomView = { 0x7f010057, 0x7f010058 };
 		public static final int CustomView_matchHeightToWidth = 0;
 		public static final int CustomView_matchWidthToHeight = 1;
 	}

@@ -93,7 +93,7 @@
         <!-- kakao -->
         <activity
             android:name="com.kakao.LoginActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"/>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"

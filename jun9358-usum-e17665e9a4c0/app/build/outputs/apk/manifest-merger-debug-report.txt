@@ -21,6 +21,7 @@ ADDED from AndroidManifest.xml:5:5
 		ADDED from AndroidManifest.xml:6:9
 uses-permission#com.google.android.c2dm.permission.RECEIVE
 ADDED from AndroidManifest.xml:9:5
+MERGED from com.google.android.gms:play-services-gcm:7.8.0:21:5
 	android:name
 		ADDED from AndroidManifest.xml:9:22
 uses-permission#android.permission.GET_ACCOUNTS
@@ -37,6 +38,7 @@ ADDED from AndroidManifest.xml:12:5
 		ADDED from AndroidManifest.xml:12:22
 uses-permission#android.permission.INTERNET
 ADDED from AndroidManifest.xml:13:5
+MERGED from com.google.android.gms:play-services-gcm:7.8.0:22:5
 	android:name
 		ADDED from AndroidManifest.xml:13:22
 uses-permission#android.permission.ACCESS_NETWORK_STATE
@@ -104,15 +106,9 @@ MERGED from com.android.support:support-v4:23.1.1:22:5
 MERGED from com.android.support:appcompat-v7:23.1.1:22:5
 MERGED from com.android.support:support-v4:23.1.1:22:5
 MERGED from com.android.support:support-v4:23.1.1:22:5
-MERGED from com.kakao.sdk:usermgmt:1.0.46:7:5
-MERGED from com.kakao.sdk:login:1.0.46:7:5
-MERGED from com.kakao.sdk:util:1.0.46:7:5
-MERGED from com.kakao.sdk:kakaotalk:1.0.46:7:5
-MERGED from com.kakao.sdk:login:1.0.46:7:5
-MERGED from com.kakao.sdk:util:1.0.46:7:5
-MERGED from com.kakao.sdk:push:1.0.46:7:5
-MERGED from com.kakao.sdk:login:1.0.46:7:5
-MERGED from com.kakao.sdk:util:1.0.46:7:5
+MERGED from com.google.android.gms:play-services-gcm:7.8.0:24:5
+MERGED from com.google.android.gms:play-services-base:7.8.0:20:5
+MERGED from com.android.support:support-v4:23.1.1:22:5
 	android:label
 		ADDED from AndroidManifest.xml:31:9
 	android:allowBackup
@@ -129,6 +125,7 @@ MERGED from com.kakao.sdk:util:1.0.46:7:5
 		ADDED from AndroidManifest.xml:28:9
 meta-data#com.google.android.gms.version
 ADDED from AndroidManifest.xml:52:9
+MERGED from com.google.android.gms:play-services-base:7.8.0:21:9
 	android:name
 		ADDED from AndroidManifest.xml:52:20
 	android:value
@@ -331,16 +328,24 @@ MERGED from com.android.support:support-v4:23.1.1:20:5
 MERGED from com.android.support:appcompat-v7:23.1.1:20:5
 MERGED from com.android.support:support-v4:23.1.1:20:5
 MERGED from com.android.support:support-v4:23.1.1:20:5
-MERGED from com.kakao.sdk:usermgmt:1.0.46:5:5
-MERGED from com.kakao.sdk:login:1.0.46:5:5
-MERGED from com.kakao.sdk:util:1.0.46:5:5
-MERGED from com.kakao.sdk:kakaotalk:1.0.46:5:5
-MERGED from com.kakao.sdk:login:1.0.46:5:5
-MERGED from com.kakao.sdk:util:1.0.46:5:5
-MERGED from com.kakao.sdk:push:1.0.46:5:5
-MERGED from com.kakao.sdk:login:1.0.46:5:5
-MERGED from com.kakao.sdk:util:1.0.46:5:5
-MERGED from com.google.android.gms:play-services:4.2.42:7:5
+MERGED from com.kakao.sdk:usermgmt:1.1.15:11:5
+MERGED from com.kakao.sdk:auth:1.1.15:11:5
+MERGED from com.kakao.sdk:network:1.1.15:8:5
+MERGED from com.kakao.sdk:util:1.1.15:11:5
+MERGED from com.kakao.sdk:kakaotalk:1.1.15:11:5
+MERGED from com.kakao.sdk:friends:1.1.15:8:5
+MERGED from com.kakao.sdk:usermgmt:1.1.15:11:5
+MERGED from com.kakao.sdk:auth:1.1.15:11:5
+MERGED from com.kakao.sdk:network:1.1.15:8:5
+MERGED from com.kakao.sdk:util:1.1.15:11:5
+MERGED from com.kakao.sdk:push:1.1.15:11:5
+MERGED from com.google.android.gms:play-services-gcm:7.8.0:18:5
+MERGED from com.google.android.gms:play-services-base:7.8.0:18:5
+MERGED from com.android.support:support-v4:23.1.1:20:5
+MERGED from com.kakao.sdk:usermgmt:1.1.15:11:5
+MERGED from com.kakao.sdk:auth:1.1.15:11:5
+MERGED from com.kakao.sdk:network:1.1.15:8:5
+MERGED from com.kakao.sdk:util:1.1.15:11:5
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0

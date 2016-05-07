@@ -53,9 +53,14 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.0.1'
 
     // About kakao
-    provided group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
-    provided group: project.KAKAO_SDK_GROUP, name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
-    provided group: project.KAKAO_SDK_GROUP, name: 'push', version: project.KAKAO_SDK_VERSION
+//    provided group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+//    provided group: project.KAKAO_SDK_GROUP, name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
+//    provided group: project.KAKAO_SDK_GROUP, name: 'push', version: project.KAKAO_SDK_VERSION
+
+    compile group: 'com.kakao.sdk', name: 'push', version: project.KAKAO_SDK_VERSION
+    compile group: 'com.kakao.sdk', name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
+    compile group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.1'
     compile 'com.ning:async-http-client:1.8.3'
 

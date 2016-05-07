@@ -81,6 +81,20 @@ public abstract class BaseActivity extends ActionBarActivity {
                 .show();
     }
 
+    public static void showLoadingView(String msg) {
+        if (materialDialog != null) {
+            materialDialog.hide();
+        }
+
+        Log.d("USUM", "BaseActivity.context: " + context);
+        materialDialog = new MaterialDialog.Builder(context)
+                .title(R.string.app_name)
+                .content(msg)
+                .progress(true, 0)
+                .cancelable(false)
+                .show();
+    }
+
     public static void hideLoadingView() {
         if (materialDialog == null) {
             return;

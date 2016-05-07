@@ -48,7 +48,6 @@ public class SchoolManager {
 
     public SchoolEntity selectSchool(int schoolId) {
         SQLiteDatabase db = adapter.getReadableDatabase();
-        Log.d(TAG, "schoolId = " + schoolId);
 
         Cursor cursor = db.query(
                 SchoolEntity.COLLECTION_NAME,

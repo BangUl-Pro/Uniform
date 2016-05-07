@@ -12,11 +12,8 @@
         <option name="SELECTED_TEST_ARTIFACT" value="_android_test_" />
         <option name="ASSEMBLE_TASK_NAME" value="assembleDebug" />
         <option name="COMPILE_JAVA_TASK_NAME" value="compileDebugSources" />
-        <option name="ASSEMBLE_TEST_TASK_NAME" value="assembleDebugTest" />
-        <option name="COMPILE_JAVA_TEST_TASK_NAME" value="compileDebugTestSources" />
         <afterSyncTasks>
           <task>generateDebugSources</task>
-          <task>generateDebugTestSources</task>
         </afterSyncTasks>
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
@@ -64,8 +61,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
-      <excludeFolder url="file://$MODULE_DIR$/build/.DS_Store" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/.DS_Store" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dependency-cache" />
@@ -83,7 +78,9 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="util-1.1.15" level="project" />
     <orderEntry type="library" exported="" name="atv-1.2.4" level="project" />
+    <orderEntry type="library" exported="" name="network-1.1.15" level="project" />
     <orderEntry type="library" exported="" name="jackson-databind-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="android-sliding-layer-lib-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="Parse-1.9.1" level="project" />
@@ -91,12 +88,10 @@
     <orderEntry type="library" exported="" name="jackson-core-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="camera-0.6.10" level="project" />
     <orderEntry type="library" exported="" name="library-1.0.31" level="project" />
-    <orderEntry type="library" exported="" name="kakaotalk-1.0.46" level="project" />
     <orderEntry type="library" exported="" name="superrecyclerview-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="library-1.2" level="project" />
-    <orderEntry type="library" exported="" name="push-1.0.46" level="project" />
+    <orderEntry type="library" exported="" name="auth-1.1.15" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.1.1" level="project" />
-    <orderEntry type="library" exported="" name="login-1.0.46" level="project" />
     <orderEntry type="library" exported="" name="socket.io-client-0.3.0" level="project" />
     <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="engine.io-client-0.3.1" level="project" />
@@ -107,14 +102,16 @@
     <orderEntry type="library" exported="" name="Java-WebSocket-1.3.0" level="project" />
     <orderEntry type="library" exported="" name="mail" level="project" />
     <orderEntry type="library" exported="" name="library-1.2.3" level="project" />
+    <orderEntry type="library" exported="" name="kakaotalk-1.1.15" level="project" />
     <orderEntry type="library" exported="" name="jackson-annotations-2.3.0" level="project" />
     <orderEntry type="library" exported="" name="print-1.2.2" level="project" />
     <orderEntry type="library" exported="" name="core-0.8.5.2" level="project" />
     <orderEntry type="library" exported="" name="library-circular-1.0.2" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.2.0" level="project" />
     <orderEntry type="library" exported="" name="additionnal" level="project" />
+    <orderEntry type="library" exported="" name="usermgmt-1.1.15" level="project" />
+    <orderEntry type="library" exported="" name="play-services-base-7.8.0" level="project" />
     <orderEntry type="library" exported="" name="ion-2.0.5" level="project" />
-    <orderEntry type="library" exported="" name="util-1.0.46" level="project" />
     <orderEntry type="library" exported="" name="poly-picker-1.0.11" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.1.1" level="project" />
@@ -122,11 +119,12 @@
     <orderEntry type="library" exported="" name="floatingactionbutton-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="slf4j-api-1.7.5" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.1.1" level="project" />
-    <orderEntry type="library" exported="" name="play-services-4.2.42" level="project" />
     <orderEntry type="library" exported="" name="async-http-client-1.8.3" level="project" />
+    <orderEntry type="library" exported="" name="play-services-gcm-7.8.0" level="project" />
+    <orderEntry type="library" exported="" name="push-1.1.15" level="project" />
     <orderEntry type="library" exported="" name="library-1.1.4" level="project" />
     <orderEntry type="library" exported="" name="netty-3.9.0.Final" level="project" />
-    <orderEntry type="library" exported="" name="usermgmt-1.0.46" level="project" />
+    <orderEntry type="library" exported="" name="friends-1.1.15" level="project" />
     <orderEntry type="library" exported="" name="support-v13-21.0.0" level="project" />
   </component>
 </module>

@@ -2,16 +2,14 @@ package com.songjin.usum.gcm;
 
 import android.util.Log;
 
-import com.kakao.APIErrorResult;
-import com.kakao.PushSendHttpResponseHandler;
-import com.kakao.PushService;
+import com.kakao.auth.ApiResponseCallback;
+import com.kakao.network.ErrorResult;
+import com.kakao.push.PushService;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.entities.AlarmEntity;
 
 import org.json.JSONArray;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -23,10 +21,10 @@ public class PushManager {
     public static void sendTransactionPush(ArrayList<String> userIds, String msg) {
         Log.d(TAG, "msg = " + msg);
 
-        final JSONArray array = new JSONArray();
-        for (String id: userIds) {
-            array.put(Integer.parseInt(id));
-        }
+//        final JSONArray array = new JSONArray();
+//        for (String id: userIds) {
+//            array.put(id);
+//        }
 
         final String json = "{" +
                 "\"for_apns\":{" +
@@ -48,55 +46,30 @@ public class PushManager {
                 "}" +
                 "}";
 
-
-
-        Log.d(TAG, "userList = " + array.toString());
-
 //        sendByHttp(userIds, msg);
 
-        PushService.sendPushMessage(new PushSendHttpResponseHandler() {
-            @Override
-            protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
-                Log.d(TAG, "GCM PUSH 에러 메세지 = " + errorResult.getErrorMessage());
-                Log.d(TAG, "GCM PUSH 에러 URL = " + errorResult.getRequestURL());
-                Log.d(TAG, "GCM PUSH 에러 코드 = " + errorResult.getErrorCodeInt());
-            }
-        }, json, array.toString());
+        for (int i = 0; i < userIds.size(); i++) {
+            Log.d(TAG, "GCM Device Id = " + userIds.get(i));
+            PushService.sendPushMessage(new ApiResponseCallback<Boolean>() {
+                @Override
+                public void onSessionClosed(ErrorResult errorResult) {
+                    Log.d(TAG, "GCM PUSH 에러 메세지 = " + errorResult.getErrorMessage());
+                    Log.d(TAG, "GCM PUSH 에러 URL = " + errorResult.getHttpStatus());
+                    Log.d(TAG, "GCM PUSH 에러 코드 = " + errorResult.getErrorCode());
+                }
 
-//        for (final String userId : userIds) {
-//            String json = "{" +
-//                    "\"for_apns\":{" +
-//                    "\"badge\": 3," +
-//                    "\"sound\": \"sound_file\"," +
-//                    "\"push_alert\": true," +
-//                    "\"message\": \"홍길동님 외 2명이 댓글을 달았습니다.\"," +
-//                    "\"custom_field\": {" +
-//                    "\"article_id\": \"111\"," +
-//                    "\"comment_id\": \"222\"" +
-//                    "}" +
-//                    "}," +
-//                    "\"for_gcm\":{" +
-//                    "\"collapse\": \"articleId123\"," +
-//                    "\"delay_while_idle\":false," +
-//                    "\"custom_field\": {" +
-//                    "\"msg\": \"" + msg + "\"" +
-//                    "}" +
-//                    "}" +
-//                    "}";
-//            Log.d(TAG, "json = " + json);
-//            JSONArray array = new JSONArray();
-//
-//            Log.d(TAG, "userId = " + userId);
-//            PushService.sendPushMessage(new PushSendHttpResponseHandler() {
-//                @Override
-//                protected void onHttpSessionClosedFailure(APIErrorResult errorResult) {
-//                    Log.d(TAG, "GCM PUSH 에러 메세지 = " + errorResult.getErrorMessage());
-//                    Log.d(TAG, "GCM PUSH 에러 URL = " + errorResult.getRequestURL());
-//                    Log.d(TAG, "GCM PUSH 에러 코드 = " + errorResult.getErrorCodeInt());
-//                }
-//            }, json, userId);
-//        }
+                @Override
+                public void onNotSignedUp() {
+                    Log.d(TAG, "GCM PUSH Not SignedUp");
+                }
+
+                @Override
+                public void onSuccess(Boolean result) {
+                    Log.d(TAG, "GCM PUSH 성공");
+                }
+            }, json, userIds.get(i));
         }
+    }
 
 
     public static void sendByHttp(final ArrayList<String> userIds, final String msg) {
@@ -136,14 +109,17 @@ public class PushManager {
                     conn.setDoInput(true);
                     conn.setDoOutput(true);
 
-                    StringBuilder builder = new StringBuilder();
-                    builder.append("uuids").append("=").append(array.toString()).append("&");
-                    builder.append("push_message").append("=").append(json);
+                    conn.setRequestProperty("uuids", array.toString());
+                    conn.setRequestProperty("push_message", json);
 
-                    PrintWriter pw = new PrintWriter(new OutputStreamWriter(conn.getOutputStream(), "utf-8"));
-                    pw.write(builder.toString());
-                    pw.flush();
-                    pw.close();
+//                    StringBuilder builder = new StringBuilder();
+//                    builder.append("uuids").append("=").append(array.toString()).append("&");
+//                    builder.append("push_message").append("=").append(json);
+//
+//                    PrintWriter pw = new PrintWriter(new OutputStreamWriter(conn.getOutputStream(), "utf-8"));
+//                    pw.write(builder.toString());
+//                    pw.flush();
+//                    pw.close();
 
                     int code = conn.getResponseCode();
                     String message = conn.getResponseMessage();
