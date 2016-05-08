@@ -266,6 +266,11 @@ public class RequestManager {
         void onException();
     }
 
+    public interface OnSetToken {
+        void onSuccess();
+        void onException();
+    }
+
 
     public interface OnUpdateUserProfile {
         void onSuccess(UserEntity userEntity);

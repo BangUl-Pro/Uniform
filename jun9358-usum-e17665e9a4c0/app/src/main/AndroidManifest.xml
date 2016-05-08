@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.songjin.usum" >
+    package="com.songjin.usum">
 
     <permission
         android:name="com.songjin.usum.permission.C2D_MESSAGE"
@@ -18,8 +18,7 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <!-- c. android:name="{package 이름}.permission.C2D_MESSAGE" 사용 -->
-    <uses-permission android:name="com.songjin.usum.permission.C2D_MESSAGE"/>
-
+    <uses-permission android:name="com.songjin.usum.permission.C2D_MESSAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -30,70 +29,70 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/AppTheme" >
-        <!--<receiver-->
-            <!--android:name=".gcm.GCMRedirectedBroadcastReceiver"-->
-            <!--android:permission="com.google.android.c2dm.permission.SEND" >-->
-            <!--<intent-filter>-->
+        android:theme="@style/AppTheme">
 
-                <!-- Receives the actual messages. -->
-                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
-                <!-- Receives the registration id. -->
-                <!--<action android:name="com.google.android.c2dm.intent.REGISTRATION" />-->
-
-                <!--<category android:name="com.songjin.usum" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
-<!---->
-        <!--<service android:name=".gcm.GCMIntentService" />-->
+        <!-- <receiver -->
+        <!-- android:name=".gcm.GCMRedirectedBroadcastReceiver" -->
+        <!-- android:permission="com.google.android.c2dm.permission.SEND" > -->
+        <!-- <intent-filter> -->
 
 
+        <!-- Receives the actual messages. -->
+        <!-- <action android:name="com.google.android.c2dm.intent.RECEIVE" /> -->
+        <!-- Receives the registration id. -->
+        <!-- <action android:name="com.google.android.c2dm.intent.REGISTRATION" /> -->
 
-        <meta-data android:name="com.google.android.gms.version"
+
+        <!-- <category android:name="com.songjin.usum" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
+        <!--  -->
+        <!-- <service android:name=".gcm.GCMIntentService" /> -->
+
+        <meta-data
+            android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <!-- 구현해야 하는 class1 -->
-        <!--<receiver-->
-            <!--android:name=".gcm.GCMRedirectedBroadcastReceiver"-->
-            <!--android:permission="com.google.android.c2dm.permission.SEND" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
-                <!--<action android:name="com.google.android.c2dm.intent.REGISTRATION" />-->
-                <!--&lt;!&ndash; d. android:name="{package 이름}" 사용 &ndash;&gt;-->
-                <!--<category android:name="com.songjin.usum.push" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
-        <!--&lt;!&ndash; 구현해야 하는 class2 &ndash;&gt;-->
-        <!--<service android:name=".gcm.GCMIntentService"/>-->
+        <!-- <receiver -->
+        <!-- android:name=".gcm.GCMRedirectedBroadcastReceiver" -->
+        <!-- android:permission="com.google.android.c2dm.permission.SEND" > -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.android.c2dm.intent.RECEIVE" /> -->
+        <!-- <action android:name="com.google.android.c2dm.intent.REGISTRATION" /> -->
+        <!-- &lt;!&ndash; d. android:name="{package 이름}" 사용 &ndash;&gt; -->
+        <!-- <category android:name="com.songjin.usum.push" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
+        <!-- &lt;!&ndash; 구현해야 하는 class2 &ndash;&gt; -->
+        <!-- <service android:name=".gcm.GCMIntentService"/> -->
 
-        <meta-data android:name="com.kakao.sdk.AppKey"
-            android:value="@string/kakao_app_key"/>
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+        <meta-data
+            android:name="com.kakao.sdk.GcmProjectId"
+            android:value="@string/gcm_project_number" />
 
-        <meta-data android:name="com.kakao.sdk.GcmProjectId"
-            android:value="@string/gcm_project_number"/>
-
-
-
-
-        <receiver android:name="com.songjin.usum.reservation.ReservationPushBroadcastReceiver" >
+        <receiver android:name=".reservation.ReservationPushBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service android:name="com.songjin.usum.reservation.ReservationPushService" />
+        <service android:name=".reservation.ReservationPushService" />
 
-        <receiver android:name="com.songjin.usum.reservation.SchoolRankingPushBroadcastReceiver" >
+        <receiver android:name=".reservation.SchoolRankingPushBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service android:name="com.songjin.usum.reservation.SchoolRankingPushService" />
+        <service android:name=".reservation.SchoolRankingPushService" />
 
         <!-- kakao -->
         <activity
             android:name="com.kakao.LoginActivity"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -102,7 +101,7 @@
         <!-- App -->
         <activity
             android:name=".controllers.activities.LoginActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -134,23 +133,20 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".controllers.activities.SupportActivity"
-            android:label="@string/title_activity_support" >
-        </activity>
+            android:label="@string/title_activity_support"></activity>
         <activity
             android:name=".controllers.activities.FaqActivity"
-            android:label="@string/title_activity_faq" >
-        </activity>
+            android:label="@string/title_activity_faq"></activity>
         <activity
             android:name=".controllers.activities.SupportCompletedActivity"
-            android:label="@string/title_activity_support_completed" >
-        </activity>
+            android:label="@string/title_activity_support_completed"></activity>
         <activity
             android:name=".controllers.activities.AlarmActivity"
-            android:label="@string/title_activity_alarm" >
-        </activity>
+            android:label="@string/title_activity_alarm"></activity>
 
-        <service android:name=".gcm.gcm.RegistrationIntentService"
-            android:exported="false"/>
+        <service
+            android:name=".gcm.gcm.RegistrationIntentService"
+            android:exported="false" />
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -158,24 +154,25 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.songjin.usum" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".gcm.gcm.MyGcmListenerService"
+        <service
+            android:name=".gcm.gcm.MyGcmListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-
-        <service android:name=".gcm.gcm.MyInstanceIDListenerService"
+        <service
+            android:name=".gcm.gcm.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
-
 
     </application>
 

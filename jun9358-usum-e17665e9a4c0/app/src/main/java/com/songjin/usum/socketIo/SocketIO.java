@@ -468,6 +468,92 @@ public class SocketIO {
         }
     }
 
+    public static void setToken(String id, String token, final RequestManager.OnSetToken onSetToken) {
+        Log.d(TAG, "토큰 설정");
+        if (!checkSocket())
+            return;
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.ID, id);
+            object.put(Global.TOKEN, token);
+            socket.emit(Global.SET_TOKEN, object);
+            socket.once(Global.SET_TOKEN, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        Log.d(TAG, "토큰 설정 응답 resObject = " + resObject);
+
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSetToken.onSuccess();
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSetToken.onException();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendGcm(String id, String msg, final RequestManager.OnSetToken onSetToken) {
+        Log.d(TAG, "GCM 보내기");
+        if (!checkSocket())
+            return;
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.ID, id);
+            object.put(Global.MSG, msg);
+            socket.emit(Global.SEND_GCM, object);
+            socket.once(Global.SEND_GCM, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        Log.d(TAG, "GCM 보내기 응답 resObject = " + resObject);
+
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSetToken.onSuccess();
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onSetToken.onException();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // TODO: 15. 11. 20. 학교 랭킹 요청
     public static void getSchoolRanking(final RequestManager.OnGetSchoolRanking onGetSchoolRanking) {

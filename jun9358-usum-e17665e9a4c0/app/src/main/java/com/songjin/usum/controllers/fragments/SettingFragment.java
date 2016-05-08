@@ -18,10 +18,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.nkzawa.emitter.Emitter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.kakao.auth.ApiResponseCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
-import com.kakao.push.PushService;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.UnLinkResponseCallback;
@@ -159,27 +157,19 @@ public class SettingFragment extends SlidingBaseFragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 BaseActivity.showLoadingView();
 
-                                SharedPreferencesCache cache = Session.getAppCache();
+                                final SharedPreferencesCache cache = Session.getAppCache();
 
-                                PushService.deregisterPushToken(new ApiResponseCallback<Boolean>() {
+                                SocketIO.setToken(Global.userEntity.id, null, new RequestManager.OnSetToken() {
                                     @Override
-                                    public void onSessionClosed(ErrorResult errorResult) {
-                                        Log.d(TAG, "토큰 제거 실패 = " + errorResult.getErrorMessage());
-                                        Log.d(TAG, "코드 = " + errorResult.getErrorCode());
+                                    public void onSuccess() {
+
                                     }
 
                                     @Override
-                                    public void onNotSignedUp() {
-                                        Log.d(TAG, "푸시토큰 제거 not signedUp");
-                                    }
+                                    public void onException() {
 
-                                    @Override
-                                    public void onSuccess(Boolean result) {
-                                        Log.d(TAG, "푸시토큰 제거 세션 = " + result);
                                     }
-                                }, Global.userEntity.id);
-
-                                cache.clearAll();
+                                });
 
                                 UserManagement.requestUnlink(new UnLinkResponseCallback() {
                                     @Override
@@ -206,6 +196,8 @@ public class SettingFragment extends SlidingBaseFragment {
                                                 handler.post(new Runnable() {
                                                     @Override
                                                     public void run() {
+                                                        cache.clearAll();
+
                                                         JSONObject object = (JSONObject) args[0];
                                                         Log.d(TAG, "회원탈퇴 응답 Object = " + object);
 
@@ -261,23 +253,17 @@ public class SettingFragment extends SlidingBaseFragment {
 
     private void requestLogout() {
         BaseActivity.showLoadingView();
-        PushService.deregisterPushToken(new ApiResponseCallback<Boolean>() {
+        SocketIO.setToken(Global.userEntity.id, null, new RequestManager.OnSetToken() {
             @Override
-            public void onSessionClosed(ErrorResult errorResult) {
-                Log.d(TAG, "토큰 제거 실패 = " + errorResult.getErrorMessage());
-                Log.d(TAG, "코드 = " + errorResult.getErrorCode());
+            public void onSuccess() {
+
             }
 
             @Override
-            public void onNotSignedUp() {
-                Log.d(TAG, "푸시토큰 제거 not signedUp");
-            }
+            public void onException() {
 
-            @Override
-            public void onSuccess(Boolean result) {
-                Log.d(TAG, "푸시토큰 제거 세션 = " + result);
             }
-        }, Global.userEntity.id);
+        });
 
         UserManagement.requestLogout(new LogoutResponseCallback() {
             @Override

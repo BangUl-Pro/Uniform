@@ -24,10 +24,12 @@ public class UserEntity implements Parcelable {
     public static final String PROPERTY_SEX = "user_sex";
     public static final String PROPERTY_USER_TYPE = "user_user_type";
     public static final String PROPERTY_DEVICE_ID = "user_device_id";
+    public static final String PROPERTY_TOKEN = "user_token";
 
 //    public String uuid;
     public String id;
     public String deviceId = null;
+    public String token = null;
     public String name;
     public boolean hasExtraProfile;
     public KakaoProfile kakaotalk;
@@ -66,6 +68,14 @@ public class UserEntity implements Parcelable {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getId() {
@@ -161,6 +171,7 @@ public class UserEntity implements Parcelable {
         this.sex = bundle.getInt(PROPERTY_SEX);
         this.userType = bundle.getInt(PROPERTY_USER_TYPE);
         this.deviceId = bundle.getString(PROPERTY_DEVICE_ID);
+        this.token = bundle.getString(PROPERTY_TOKEN);
     }
 
     public void set(JSONObject object) {
@@ -176,6 +187,9 @@ public class UserEntity implements Parcelable {
             }
             if (!object.get(PROPERTY_DEVICE_ID).equals(null)) {
                 this.deviceId = object.getString(PROPERTY_DEVICE_ID);
+            }
+            if (!object.get(PROPERTY_TOKEN).equals(null)) {
+                this.token = object.getString(PROPERTY_TOKEN);
             }
             if (!object.get(PROPERTY_NAME).equals(null)) {
                 this.name = object.getString(PROPERTY_NAME);
@@ -222,6 +236,8 @@ public class UserEntity implements Parcelable {
         Bundle bundle = new Bundle();
 //        bundle.putString(PROPERTY_UUID, this.uuid);
         bundle.putString(PROPERTY_ID, this.id);
+        bundle.putString(PROPERTY_TOKEN, this.token);
+        bundle.putString(PROPERTY_DEVICE_ID, this.deviceId);
         bundle.putString(PROPERTY_NAME, this.name);
         bundle.putBoolean(PROPERTY_HAS_EXTRA_PROFILE, this.hasExtraProfile);
         bundle.putParcelable(PROPERTY_KAKAOTALK, this.kakaotalk);
@@ -255,6 +271,10 @@ public class UserEntity implements Parcelable {
 
     public boolean isSame(UserEntity userEntity) {
         if (!id.equals(userEntity.id))
+            return false;
+        if (!deviceId.equals(userEntity.deviceId))
+            return false;
+        if (!token.equals(userEntity.token))
             return false;
         if (!name.equals(userEntity.name))
             return false;

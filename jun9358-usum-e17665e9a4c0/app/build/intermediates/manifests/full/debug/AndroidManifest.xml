@@ -143,20 +143,16 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name="com.songjin.usum.controllers.activities.SupportActivity"
-            android:label="@string/title_activity_support" >
-        </activity>
+            android:label="@string/title_activity_support" />
         <activity
             android:name="com.songjin.usum.controllers.activities.FaqActivity"
-            android:label="@string/title_activity_faq" >
-        </activity>
+            android:label="@string/title_activity_faq" />
         <activity
             android:name="com.songjin.usum.controllers.activities.SupportCompletedActivity"
-            android:label="@string/title_activity_support_completed" >
-        </activity>
+            android:label="@string/title_activity_support_completed" />
         <activity
             android:name="com.songjin.usum.controllers.activities.AlarmActivity"
-            android:label="@string/title_activity_alarm" >
-        </activity>
+            android:label="@string/title_activity_alarm" />
 
         <service
             android:name="com.songjin.usum.gcm.gcm.RegistrationIntentService"
@@ -169,7 +165,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
-                <category android:name="com.songjin.usum.gcm" />
+                <category android:name="com.songjin.usum" />
             </intent-filter>
         </receiver>
 
@@ -188,6 +184,10 @@
             </intent-filter>
         </service>
 
+        <receiver
+            android:name="com.songjin.usum.PackageReceiver"
+            android:enabled="true"
+            android:exported="true" />
         <!-- Include the AdActivity and InAppPurchaseActivity configChanges and themes. -->
         <activity
             android:name="com.google.android.gms.ads.AdActivity"

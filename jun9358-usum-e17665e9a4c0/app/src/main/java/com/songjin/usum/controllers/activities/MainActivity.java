@@ -10,7 +10,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -24,8 +23,10 @@ import com.songjin.usum.controllers.fragments.SupportFragment;
 import com.songjin.usum.entities.AlarmEntity;
 import com.songjin.usum.gcm.gcm.GCMManager;
 import com.songjin.usum.gcm.gcm.RegistrationIntentService;
+import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 import com.songjin.usum.slidingtab.SlidingTabsBasicFragment;
+import com.songjin.usum.socketIo.SocketIO;
 
 import java.util.ArrayList;
 
@@ -44,7 +45,6 @@ public class MainActivity extends BaseActivity {
     private SettingFragment settingFragment;
 
 
-    private Button mRegistrationButton;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     public void getInstanceIdToken() {
@@ -61,11 +61,21 @@ public class MainActivity extends BaseActivity {
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
 
-
                 if(action.equals(GCMManager.REGISTRATION_COMPLETE)){
                     // 액션이 COMPLETE일 경우
-                    String token = intent.getStringExtra("token");
-                    Log.d(TAG, "token = " + token);
+                    final String token = intent.getStringExtra("token");
+
+                    SocketIO.setToken(Global.userEntity.id, token, new RequestManager.OnSetToken() {
+                        @Override
+                        public void onSuccess() {
+                            Global.userEntity.token = token;
+                        }
+
+                        @Override
+                        public void onException() {
+                            Log.d(TAG, "token 설정 실패");
+                        }
+                    });
                 }
             }
         };

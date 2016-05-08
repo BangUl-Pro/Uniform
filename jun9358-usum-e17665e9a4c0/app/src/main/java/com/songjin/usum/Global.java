@@ -39,8 +39,11 @@ public class Global {
     public static final String TRANSACTION_PUSH = "transactionPush";
     public static final String DELETE_USER = "deleteUser";
     public static final String SET_DEVICE_ID = "setDeviceId";
+    public static final String SET_TOKEN = "setToken";
+    public static final String SEND_GCM = "sendGcm";
 
     public static final String ID = "id";
+    public static final String MSG = "msg";
     public static final String DEVICE_ID = "deviceId";
     public static final String USER = "user";
     public static final String SCHOOL = "school";

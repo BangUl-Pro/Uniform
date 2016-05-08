@@ -14,6 +14,8 @@ import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.activities.MainActivity;
 import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.entities.AlarmEntity;
+import com.songjin.usum.managers.RequestManager;
+import com.songjin.usum.socketIo.SocketIO;
 
 import org.json.JSONArray;
 
@@ -36,54 +38,20 @@ public class PushManager {
     public static void sendTransactionPush(ArrayList<String> userIds, String msg) {
         Log.d(TAG, "msg = " + msg);
 
-//        final JSONArray array = new JSONArray();
-//        for (String id: userIds) {
-//            array.put(id);
-//        }
+        for (String id :
+                userIds) {
+            SocketIO.sendGcm(id, msg, new RequestManager.OnSetToken() {
+                @Override
+                public void onSuccess() {
+                    Log.d(TAG, "성공");
+                }
 
-        final String json = "{" +
-                "\"for_apns\":{" +
-                "\"badge\": 3," +
-                "\"sound\": \"sound_file\"," +
-                "\"push_alert\": true," +
-                "\"message\": \"홍길동님 외 2명이 댓글을 달았습니다.\"," +
-                "\"custom_field\": {" +
-                "\"article_id\": \"111\"," +
-                "\"comment_id\": \"222\"" +
-                "}" +
-                "}," +
-                "\"for_gcm\":{" +
-                "\"collapse\": \"articleId123\"," +
-                "\"delay_while_idle\":false," +
-                "\"custom_field\": {" +
-                "\"msg\": \"" + msg + "\"" +
-                "}" +
-                "}" +
-                "}";
-
-        sendByHttp(userIds, msg);
-
-//        for (int i = 0; i < userIds.size(); i++) {
-//            Log.d(TAG, "GCM Device Id = " + userIds.get(i));
-//            PushService.sendPushMessage(new ApiResponseCallback<Boolean>() {
-//                @Override
-//                public void onSessionClosed(ErrorResult errorResult) {
-//                    Log.d(TAG, "GCM PUSH 에러 메세지 = " + errorResult.getErrorMessage());
-//                    Log.d(TAG, "GCM PUSH 에러 URL = " + errorResult.getHttpStatus());
-//                    Log.d(TAG, "GCM PUSH 에러 코드 = " + errorResult.getErrorCode());
-//                }
-//
-//                @Override
-//                public void onNotSignedUp() {
-//                    Log.d(TAG, "GCM PUSH Not SignedUp");
-//                }
-//
-//                @Override
-//                public void onSuccess(Boolean result) {
-//                    Log.d(TAG, "GCM PUSH 성공");
-//                }
-//            }, json, userIds.get(i));
-//        }
+                @Override
+                public void onException() {
+                    Log.d(TAG, "실패");
+                }
+            });
+        }
     }
 
 

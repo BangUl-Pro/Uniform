@@ -33,7 +33,7 @@ public class RegistrationIntentService extends IntentService {
 
         // GCM Instance ID의 토큰을 가져오는 작업이 시작되면 LocalBoardcast로 GENERATING 액션을 알려 ProgressBar가 동작하도록 한다.
         LocalBroadcastManager.getInstance(this)
-                .sendBroadcast(new Intent("registrationGenerating"));
+                .sendBroadcast(new Intent(GCMManager.REGISTRATION_GENERATION));
 
         // GCM을 위한 Instance ID를 가져온다.
         InstanceID instanceID = InstanceID.getInstance(this);
@@ -55,7 +55,7 @@ public class RegistrationIntentService extends IntentService {
 
         // GCM Instance ID에 해당하는 토큰을 획득하면 LocalBoardcast에 COMPLETE 액션을 알린다.
         // 이때 토큰을 함께 넘겨주어서 UI에 토큰 정보를 활용할 수 있도록 했다.
-        Intent registrationComplete = new Intent("registrationComplete");
+        Intent registrationComplete = new Intent(GCMManager.REGISTRATION_COMPLETE);
         registrationComplete.putExtra("token", token);
         LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
     }
