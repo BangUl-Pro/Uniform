@@ -1,8 +1,18 @@
 package com.songjin.usum.gcm;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
+import com.songjin.usum.controllers.activities.MainActivity;
+import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.entities.AlarmEntity;
 
 import org.json.JSONArray;
@@ -16,6 +26,11 @@ import java.util.ArrayList;
 import javax.net.ssl.HttpsURLConnection;
 
 public class PushManager {
+    public static final int PUSH_TYPE_TRANSACTION = 1;
+    public static final int PUSH_TYPE_TIMELINE = 2;
+    public static final int PUSH_TYPE_RESERVATION = 3;
+    public static final int PUSH_TYPE_SCHOOL_RANK_UPDATED = 4;
+
     private static final String TAG = "PushManager";
 
     public static void sendTransactionPush(ArrayList<String> userIds, String msg) {
@@ -167,8 +182,8 @@ public class PushManager {
                     HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                     conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                     conn.setRequestProperty("charset", "utf-8");
-                    conn.setRequestProperty("Authorization", "KakaoAK cfa39b812b10bafebb44ffc2898a0169");
-//                    conn.setRequestProperty("Authorization", "KakaoAK a6a1e884f2ecbbb1dcf154a7e49e40f0");
+//                    conn.setRequestProperty("Authorization", "KakaoAK cfa39b812b10bafebb44ffc2898a0169");
+                    conn.setRequestProperty("Authorization", "KakaoAK a6a1e884f2ecbbb1dcf154a7e49e40f0");
                     conn.setDoInput(true);
                     conn.setDoOutput(true);
 
@@ -344,10 +359,39 @@ public class PushManager {
     }
 
     public static void sendReservationPushToMe(String msg) {
-        GCMIntentService.generateNotification(BaseActivity.context, new AlarmEntity(msg, GCMIntentService.PUSH_TYPE_RESERVATION));
+        generateNotification(BaseActivity.context, new AlarmEntity(msg, PUSH_TYPE_RESERVATION));
     }
 
     public static void sendSchoolRankUpdatedPushToMe(String msg) {
-        GCMIntentService.generateNotification(BaseActivity.context, new AlarmEntity(msg, GCMIntentService.PUSH_TYPE_SCHOOL_RANK_UPDATED));
+        generateNotification(BaseActivity.context, new AlarmEntity(msg, PUSH_TYPE_SCHOOL_RANK_UPDATED));
+    }
+
+    public static void generateNotification(Context context, AlarmEntity msg) {
+        String alert = "";
+        if (!TextUtils.isEmpty(msg.message)) {
+            alert = msg.message.replace("\\r\\n", "\n");
+        }
+
+        int icon = R.drawable.ic_launcher;
+        long when = System.currentTimeMillis();
+        NotificationManager notificationManager = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent notificationIntent = new Intent(context, MainActivity.class);
+        // set intent so it does not start a new activity
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+
+        Log.e(TAG, "5");
+        Notification notification = new NotificationCompat.Builder(context).setWhen(when)
+                .setSmallIcon(icon).setContentTitle(context.getString(R.string.app_name))
+                .setContentText(alert).setContentIntent(intent).setTicker(alert)
+                .setAutoCancel(true).getNotification();
+
+        notificationManager.notify(0, notification);
+
+        msg.timestamp = System.currentTimeMillis();
+        SettingFragment.addReceivedPushMessage(msg);
     }
 }

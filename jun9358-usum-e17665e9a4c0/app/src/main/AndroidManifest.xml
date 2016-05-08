@@ -52,18 +52,18 @@
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <!-- 구현해야 하는 class1 -->
-        <receiver
-            android:name=".gcm.GCMRedirectedBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <!-- d. android:name="{package 이름}" 사용 -->
-                <category android:name="com.songjin.usum.push" />
-            </intent-filter>
-        </receiver>
-        <!-- 구현해야 하는 class2 -->
-        <service android:name=".gcm.GCMIntentService"/>
+        <!--<receiver-->
+            <!--android:name=".gcm.GCMRedirectedBroadcastReceiver"-->
+            <!--android:permission="com.google.android.c2dm.permission.SEND" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+                <!--<action android:name="com.google.android.c2dm.intent.REGISTRATION" />-->
+                <!--&lt;!&ndash; d. android:name="{package 이름}" 사용 &ndash;&gt;-->
+                <!--<category android:name="com.songjin.usum.push" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--&lt;!&ndash; 구현해야 하는 class2 &ndash;&gt;-->
+        <!--<service android:name=".gcm.GCMIntentService"/>-->
 
         <meta-data android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key"/>
@@ -148,6 +148,34 @@
             android:name=".controllers.activities.AlarmActivity"
             android:label="@string/title_activity_alarm" >
         </activity>
+
+        <service android:name=".gcm.gcm.RegistrationIntentService"
+            android:exported="false"/>
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.songjin.usum" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".gcm.gcm.MyGcmListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".gcm.gcm.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+
 
     </application>
 

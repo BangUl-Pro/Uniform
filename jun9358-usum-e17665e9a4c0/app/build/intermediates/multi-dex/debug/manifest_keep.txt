@@ -2,8 +2,6 @@
     <init>();
     void attachBaseContext(android.content.Context);
 }
--keep class com.songjin.usum.gcm.GCMRedirectedBroadcastReceiver { <init>(); }
--keep class com.songjin.usum.gcm.GCMIntentService { <init>(); }
 -keep class com.songjin.usum.reservation.ReservationPushBroadcastReceiver { <init>(); }
 -keep class com.songjin.usum.reservation.ReservationPushService { <init>(); }
 -keep class com.songjin.usum.reservation.SchoolRankingPushBroadcastReceiver { <init>(); }
@@ -24,9 +22,25 @@
 -keep class com.songjin.usum.controllers.activities.FaqActivity { <init>(); }
 -keep class com.songjin.usum.controllers.activities.SupportCompletedActivity { <init>(); }
 -keep class com.songjin.usum.controllers.activities.AlarmActivity { <init>(); }
+-keep class com.songjin.usum.gcm.gcm.RegistrationIntentService { <init>(); }
+-keep class com.google.android.gms.gcm.GcmReceiver { <init>(); }
+-keep class com.songjin.usum.gcm.gcm.MyGcmListenerService { <init>(); }
+-keep class com.songjin.usum.gcm.gcm.MyInstanceIDListenerService { <init>(); }
+-keep class com.google.android.gms.ads.AdActivity { <init>(); }
+-keep class com.google.android.gms.ads.purchase.InAppPurchaseActivity { <init>(); }
+-keep class com.google.android.gms.appinvite.PreviewActivity { <init>(); }
+-keep class com.google.android.gms.auth.api.signin.internal.SignInHubActivity { <init>(); }
+-keep class com.google.android.gms.auth.api.signin.RevocationBoundService { <init>(); }
+-keep class com.google.android.gms.measurement.AppMeasurementContentProvider { <init>(); }
+-keep class com.google.android.gms.measurement.AppMeasurementReceiver { <init>(); }
+-keep class com.google.android.gms.measurement.AppMeasurementService { <init>(); }
 -keep public class * extends android.app.backup.BackupAgent {
     <init>();
 }
 -keep public class * extends java.lang.annotation.Annotation {
     *;
 }
+-keep class com.android.tools.fd.** {
+    *;
+}
+-dontnote com.android.tools.fd.**,android.support.multidex.MultiDexExtractor

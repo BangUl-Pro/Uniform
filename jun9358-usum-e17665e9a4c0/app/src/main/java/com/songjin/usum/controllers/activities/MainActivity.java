@@ -1,23 +1,29 @@
 package com.songjin.usum.controllers.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
+import com.songjin.usum.Global;
+import com.songjin.usum.R;
 import com.songjin.usum.controllers.fragments.BuyFragment;
 import com.songjin.usum.controllers.fragments.CommunityFragment;
 import com.songjin.usum.controllers.fragments.MyPageFragment;
 import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.controllers.fragments.SupportFragment;
-import com.songjin.usum.Global;
-import com.songjin.usum.R;
 import com.songjin.usum.entities.AlarmEntity;
+import com.songjin.usum.gcm.gcm.GCMManager;
+import com.songjin.usum.gcm.gcm.RegistrationIntentService;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 import com.songjin.usum.slidingtab.SlidingTabsBasicFragment;
 
@@ -37,11 +43,42 @@ public class MainActivity extends BaseActivity {
     private SupportFragment supportFragment;
     private SettingFragment settingFragment;
 
+
+    private Button mRegistrationButton;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+
+    public void getInstanceIdToken() {
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
+    }
+
+    /**
+     * LocalBroadcast 리시버를 정의한다. 토큰을 획득하기 위한 READY, GENERATING, COMPLETE 액션에 따라 UI에 변화를 준다.
+     */
+    public void registBroadcastReceiver(){
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+
+
+                if(action.equals(GCMManager.REGISTRATION_COMPLETE)){
+                    // 액션이 COMPLETE일 경우
+                    String token = intent.getStringExtra("token");
+                    Log.d(TAG, "token = " + token);
+                }
+            }
+        };
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews(R.layout.activity_main);
         Log.d(TAG, "액티비티 시작");
+        registBroadcastReceiver();
+        getInstanceIdToken();
+
         context = this;
         if (savedInstanceState == null) {
             if (getIntent().getParcelableExtra(Global.USER) == null) {
@@ -125,6 +162,23 @@ public class MainActivity extends BaseActivity {
         super.onResume();
 
         updateAlarmStatus();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(GCMManager.REGISTRATION_REDAY));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(GCMManager.REGISTRATION_GENERATION));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(GCMManager.REGISTRATION_COMPLETE));
+
+    }
+
+    /**
+     * 앱이 화면에서 사라지면 등록된 LocalBoardcast를 모두 삭제한다.
+     */
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
     }
 
 
