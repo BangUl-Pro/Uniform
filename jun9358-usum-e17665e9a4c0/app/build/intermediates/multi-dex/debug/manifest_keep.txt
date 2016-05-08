@@ -26,7 +26,6 @@
 -keep class com.google.android.gms.gcm.GcmReceiver { <init>(); }
 -keep class com.songjin.usum.gcm.gcm.MyGcmListenerService { <init>(); }
 -keep class com.songjin.usum.gcm.gcm.MyInstanceIDListenerService { <init>(); }
--keep class com.songjin.usum.PackageReceiver { <init>(); }
 -keep class com.google.android.gms.ads.AdActivity { <init>(); }
 -keep class com.google.android.gms.ads.purchase.InAppPurchaseActivity { <init>(); }
 -keep class com.google.android.gms.appinvite.PreviewActivity { <init>(); }

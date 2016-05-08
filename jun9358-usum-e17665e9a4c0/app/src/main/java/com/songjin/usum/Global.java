@@ -83,6 +83,8 @@ public class Global {
     public static final String PROFILE_IMAGE = "profileImage";
     public static final String THUMBNAIL_IMAGE = "thumbnailImage";
 
+    public static final String ANOTHER_DEVICE = "다른 기기에서 접속했습니다.";
+
     public static boolean isCreated = false;
 
     // sex

@@ -184,10 +184,6 @@
             </intent-filter>
         </service>
 
-        <receiver
-            android:name="com.songjin.usum.PackageReceiver"
-            android:enabled="true"
-            android:exported="true" />
         <!-- Include the AdActivity and InAppPurchaseActivity configChanges and themes. -->
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
