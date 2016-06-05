@@ -47,13 +47,6 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:multidex:1.0.0'
-
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:cardview-v7:23.0.1'
-    compile 'com.android.support:recyclerview-v7:23.0.1'
-
-    compile "com.google.android.gms:play-services:8.4.0"
 
     // About kakao
 //    provided group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
@@ -64,10 +57,29 @@ dependencies {
     compile group: 'com.kakao.sdk', name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
     compile group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
 
+    // About design
+
+
+    // Parse
+    compile fileTree(dir: 'libs', include: 'Parse-1.9.1.jar')
+
+    // Picture pickerd
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.2@aar') {
+        transitive = true
+    }
+
+    // Mail
+    compile fileTree(dir: 'libs/mail', include: '*.jar')
+
+    // socket.io
+
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:cardview-v7:23.0.1'
+    compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.1'
     compile 'com.ning:async-http-client:1.8.3'
-
-    // About design
     compile 'com.koushikdutta.ion:ion:2.0.5'
     compile 'com.melnykov:floatingactionbutton:1.1.0'
     compile 'com.github.castorflex.smoothprogressbar:library-circular:1.0.2'
@@ -75,32 +87,15 @@ dependencies {
     compile 'com.github.itsmechlark:android-sliding-layer-lib:1.0.1'
     compile 'com.github.bmelnychuk:atv:1.2.4'
     compile 'com.github.johnkil.print:print:1.2.2'
-
-    // Parse
     compile 'com.parse.bolts:bolts-android:1.2.0'
-    compile fileTree(dir: 'libs', include: 'Parse-1.9.1.jar')
-
-    // Picture picker
     compile 'net.the4thdimension:poly-picker:1.0.11'
-
     compile 'com.scottyab:secure-preferences-lib:0.0.4'
-
     compile 'com.malinskiy:superrecyclerview:1.1.0'
-
     compile 'com.github.chrisbanes.photoview:library:1.2.3'
-
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.2@aar') {
-        transitive = true
-    }
-
     compile 'com.google.code.gson:gson:2.3.1'
-
-    // Mail
-    compile fileTree(dir: 'libs/mail', include: '*.jar')
-
     compile 'com.anjlab.android.iab.v3:library:1.0.+'
-
-    // socket.io
     compile 'com.github.nkzawa:socket.io-client:0.3.0'
-
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.google.android.gms:play-services-auth:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
 }

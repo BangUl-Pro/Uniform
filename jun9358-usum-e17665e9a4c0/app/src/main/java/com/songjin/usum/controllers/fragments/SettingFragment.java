@@ -296,6 +296,7 @@ public class SettingFragment extends SlidingBaseFragment {
     }
 
     public static ArrayList<ReservedCategoryEntity> getReservedCategories() {
+        Log.d(TAG, "getReservedCategories");
         ArrayList<String> reservedCategoryJsonStrings;
 //        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
         SecurePreferences securePreferences = new SecurePreferences(context);
@@ -372,6 +373,7 @@ public class SettingFragment extends SlidingBaseFragment {
     }
 
     public static ArrayList<AlarmEntity> getReceivedPushMessages() {
+        Log.d(TAG, "getReceivedPushMessages");
         SecurePreferences securePreferences = new SecurePreferences(context);
         String pushMessageJsonString = securePreferences.getString(PREFERENCE_RECEIVED_PUSH_MESSAGES, "");
 
@@ -398,6 +400,7 @@ public class SettingFragment extends SlidingBaseFragment {
     }
 
     public static void addReceivedPushMessage(AlarmEntity alarmEntity) {
+        Log.d(TAG, "addReceivedPushMessage");
         ArrayList<AlarmEntity> pushMessages = getReceivedPushMessages();
         pushMessages.add(alarmEntity);
 

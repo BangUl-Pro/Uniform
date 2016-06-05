@@ -40,6 +40,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by ironFactory on 2015-08-03.
@@ -621,21 +624,34 @@ public class SocketIO {
                         int code = getCode(reqObject);
                         if (code == SocketException.SUCCESS) {
                             final ArrayList<ProductCardDto> products = new ArrayList<>();
+                            final Map<String, ProductCardDto> productMap = new HashMap<String, ProductCardDto>();
+
+
                             JSONArray array = reqObject.getJSONArray(Global.PRODUCT);
                             Log.d(TAG, "제품 검색 array = " + array);
                             Log.d(TAG, "제품 검색 arraySize = " + array.length());
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject productJson = array.getJSONObject(i);
                                 ProductCardDto dto = new ProductCardDto(productJson);
-                                if (i != 0) {
-                                    int size = products.size() - 1;
-                                    if (products.get(size).isSame(dto)) {
-                                        products.get(size).addFile(dto.fileEntities.get(0));
-                                        continue;
-                                    }
+
+                                if (productMap.get(dto.productEntity.id) == null) {
+                                    productMap.put(dto.productEntity.id, dto);
+                                } else {
+                                    productMap.put(dto.productEntity.id, productMap.get(dto.productEntity.id).addFile(dto.fileEntities.get(0)));
                                 }
-                                products.add(dto);
+
+//                                if (i != 0) {
+//                                    int size = products.size() - 1;
+//                                    if (products.get(size).isSame(dto)) {
+//                                        products.get(size).addFile(dto.fileEntities.get(0));
+//                                        continue;
+//                                    }
+//                                }
+//                                products.add(dto);
                             }
+                            Iterator<String> iterator = productMap.keySet().iterator();
+                            while (iterator.hasNext())
+                                products.add(productMap.get(iterator.next()));
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1143,18 +1159,23 @@ public class SocketIO {
                         if (code == SocketException.SUCCESS) {
                             final ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
                             JSONArray array = resObject.getJSONArray(Global.PRODUCT);
+
+                            final ArrayList<ProductCardDto> products = new ArrayList<>();
+                            final Map<String, ProductCardDto> productMap = new HashMap<String, ProductCardDto>();
+
+
                             for (int i = 0; i < array.length(); i++) {
-                                JSONObject productObject = array.getJSONObject(i);
-                                ProductCardDto dto = new ProductCardDto(productObject);
-                                if (i != 0) {
-                                    int size = productCardDtos.size() - 1;
-                                    if (productCardDtos.get(size).isSame(dto)) {
-                                        productCardDtos.get(size).addFile(dto.fileEntities.get(0));
-                                        continue;
-                                    }
-                                }
-                                productCardDtos.add(dto);
+                                JSONObject productJson = array.getJSONObject(i);
+                                ProductCardDto dto = new ProductCardDto(productJson);
+
+                                if (productMap.get(dto.productEntity.id) == null)
+                                    productMap.put(dto.productEntity.id, dto);
+                                else
+                                    productMap.put(dto.productEntity.id, productMap.get(dto.productEntity.id).addFile(dto.fileEntities.get(0)));
                             }
+                            Iterator<String> iterator = productMap.keySet().iterator();
+                            while (iterator.hasNext())
+                                products.add(productMap.get(iterator.next()));
 
                             handler.post(new Runnable() {
                                 @Override

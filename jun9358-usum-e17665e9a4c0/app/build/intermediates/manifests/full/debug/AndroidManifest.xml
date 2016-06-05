@@ -100,9 +100,9 @@
         <service android:name="com.songjin.usum.reservation.SchoolRankingPushService" />
 
         <!-- kakao -->
-        <activity
-            android:name="com.kakao.LoginActivity"
-            android:configChanges="orientation|screenSize" />
+        <!-- <activity -->
+        <!-- android:name="com.kakao.LoginActivity" -->
+        <!-- android:configChanges="orientation|screenSize" /> -->
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"

@@ -144,24 +144,23 @@ public class ProductSearchForm extends LinearLayout {
                 String categoryName = Category.getHashBiMap(selectedSex).get(selectedCategory);
                 ArrayList<ReservedCategoryEntity> reservedCategories = SettingFragment.getReservedCategories();
                 Boolean hasAlready = SettingFragment.findIndexOfReservedCategories(reservedCategories, selectedSchoolId, selectedCategory) != -1;
+                Log.d(TAG, "hasAlready = " + hasAlready);
                 if (isChecked) {
-                    if (hasAlready) {
+                    if (hasAlready)
                         return;
-                    }
 
                     SettingFragment.addReservedCategory(selectedSchoolId, selectedCategory);
                     SchoolEntity schoolEntity = schoolManager.selectSchool(selectedSchoolId);
                     String msg = schoolEntity.schoolname + "의 " + categoryName + " 카테고리에 새로운 교복이 올라오면 알림이 가도록 예약되었습니다.";
-                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
                 } else {
-                    if (!hasAlready) {
+                    if (!hasAlready)
                         return;
-                    }
 
                     SettingFragment.removeReservedCategory(selectedSchoolId, selectedCategory);
                     SchoolEntity schoolEntity = schoolManager.selectSchool(selectedSchoolId);
                     String msg = schoolEntity.schoolname + "의 " + categoryName + " 카테고리의 알림 예약이 취소되었습니다.";
-                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
                 }
             }
         });

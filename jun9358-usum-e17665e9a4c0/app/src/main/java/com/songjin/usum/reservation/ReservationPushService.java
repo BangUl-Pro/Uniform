@@ -51,6 +51,7 @@ public class ReservationPushService extends IntentService {
 
     private void checkRegisteredNewProduct() {
         try {
+            Log.d(TAG, "checkRegisteredNewProduct");
             ArrayList<ReservedCategoryEntity> reservedCategories = SettingFragment.getReservedCategories();
             if (reservedCategories.size() == 0) {
                 return;
@@ -60,6 +61,7 @@ public class ReservationPushService extends IntentService {
 //        query.setType(ProductEntity.COLLECTION_NAME);
 //        String where = "";
             UserEntity userEntity = Global.userEntity;
+            Log.d(TAG, "checkId");
             if (userEntity.id == null) {
                 return;
             }

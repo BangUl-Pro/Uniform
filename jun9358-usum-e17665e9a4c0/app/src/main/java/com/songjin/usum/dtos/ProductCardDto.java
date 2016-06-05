@@ -60,14 +60,17 @@ public class ProductCardDto implements Parcelable {
     }
 
     public boolean isSame(ProductCardDto productCardDto) {
-        if (productEntity.isSame(productCardDto.productEntity) && transactionEntity.isSame(productCardDto.transactionEntity))
+//        if (productEntity.isSame(productCardDto.productEntity) && transactionEntity.isSame(productCardDto.transactionEntity))
+//            return true;
+        if (productEntity.id.equals(productCardDto.productEntity.id))
             return true;
         return false;
     }
 
 
-    public void addFile(FileEntity fileEntity) {
+    public ProductCardDto addFile(FileEntity fileEntity) {
         fileEntities.add(fileEntity);
+        return this;
     }
 
 

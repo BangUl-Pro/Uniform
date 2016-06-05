@@ -6,7 +6,6 @@
 -keep class com.songjin.usum.reservation.ReservationPushService { <init>(); }
 -keep class com.songjin.usum.reservation.SchoolRankingPushBroadcastReceiver { <init>(); }
 -keep class com.songjin.usum.reservation.SchoolRankingPushService { <init>(); }
--keep class com.kakao.LoginActivity { <init>(); }
 -keep class com.songjin.usum.controllers.activities.LoginActivity { <init>(); }
 -keep class com.songjin.usum.controllers.activities.SignUpActivity { <init>(); }
 -keep class com.songjin.usum.controllers.activities.MainActivity { <init>(); }
