@@ -897,6 +897,7 @@ public class SocketIO {
                                 timelineCardDto.setFile(timelineObject);
 
 
+                                Log.d(TAG, "timelineID = " + timelineCardDto.timelineEntity.id);
                                 if (timelineMap.get(timelineCardDto.timelineEntity.id) == null)
                                     timelineMap.put(timelineCardDto.timelineEntity.id, timelineCardDto);
                                 else
