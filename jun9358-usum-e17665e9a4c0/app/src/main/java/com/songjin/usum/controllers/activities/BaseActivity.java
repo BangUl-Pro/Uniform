@@ -68,17 +68,20 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     public static void showLoadingView() {
-        if (materialDialog != null) {
-            materialDialog.hide();
-        }
+        try {
+            if (materialDialog != null) {
+                materialDialog.hide();
+            }
 
-        Log.d("USUM", "BaseActivity.context: " + context);
-        materialDialog = new MaterialDialog.Builder(context)
-                .title(R.string.app_name)
-                .content("Waiting...")
-                .progress(true, 0)
-                .cancelable(false)
-                .show();
+            materialDialog = new MaterialDialog.Builder(context)
+                    .title(R.string.app_name)
+                    .content("Waiting...")
+                    .progress(true, 0)
+                    .cancelable(false)
+                    .show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void showLoadingView(String msg) {

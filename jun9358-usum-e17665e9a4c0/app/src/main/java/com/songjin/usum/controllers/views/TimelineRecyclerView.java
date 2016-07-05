@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 public class TimelineRecyclerView extends SuperRecyclerView {
     private ArrayList<TimelineCardDto> timelineCardDtos;
+    TimelineAdapter adapter;
 
     public TimelineRecyclerView(Context context) {
         this(context, null);
@@ -36,7 +37,8 @@ public class TimelineRecyclerView extends SuperRecyclerView {
     private void initView() {
         timelineCardDtos = new ArrayList<>();
         setLayoutManager(new LinearLayoutManager(getContext()));
-        setAdapter(new TimelineAdapter(timelineCardDtos));
+        adapter = new TimelineAdapter(timelineCardDtos);
+        setAdapter(adapter);
     }
 
     public void setEmptyView(int resId) {
@@ -58,12 +60,13 @@ public class TimelineRecyclerView extends SuperRecyclerView {
         setEmptyView(R.layout.view_empty);
 
         this.timelineCardDtos = timelineCardDtos;
+        adapter.setTimelineCardDtos(timelineCardDtos);
         getAdapter().notifyDataSetChanged();
     }
 
     public void addTimelineCardDtos(ArrayList<TimelineCardDto> timelineCardDtos) {
         this.timelineCardDtos.addAll(timelineCardDtos);
-        getAdapter().notifyDataSetChanged();
+        adapter.addTimelineCardDtos(timelineCardDtos);
     }
 
     private class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder> {
@@ -115,6 +118,18 @@ public class TimelineRecyclerView extends SuperRecyclerView {
 
                 timelineCard = (TimelineCardView) view.findViewWithTag("TimelineCardView");
             }
+        }
+
+        public ArrayList<TimelineCardDto> getTimelineCardDtos() {
+            return timelineCardDtos;
+        }
+
+        public void setTimelineCardDtos(ArrayList<TimelineCardDto> timelineCardDtos) {
+            this.timelineCardDtos = timelineCardDtos;
+        }
+
+        public void addTimelineCardDtos(ArrayList<TimelineCardDto> timelineCardDtos) {
+            this.timelineCardDtos.addAll(timelineCardDtos);
         }
     }
 }

@@ -100,7 +100,9 @@ public class TimelineCardDto implements Parcelable {
     public void setFile(JSONObject object) {
         fileEntities = new ArrayList<>();
         FileEntity fileEntity = new FileEntity(object);
-        if (!fileEntity.id.equals("null") && !fileEntity.parent_uuid.equals("null"))
+        if (fileEntity.id != null && fileEntity.parent_uuid != null
+                && !fileEntity.id.equals(null) && !fileEntity.parent_uuid.equals(null)
+                && !fileEntity.id.equals("null") && !fileEntity.parent_uuid.equals("null"))
             fileEntities.add(fileEntity);
     }
 
@@ -140,6 +142,11 @@ public class TimelineCardDto implements Parcelable {
     public void addFile(JSONObject object) {
         FileEntity fileEntity = new FileEntity(object);
         fileEntities.add(fileEntity);
+    }
+
+    public TimelineCardDto addFile(FileEntity fileEntity) {
+        fileEntities.add(fileEntity);
+        return this;
     }
 
 
