@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 
 import com.songjin.usum.controllers.RecyclerInScrollLayoutManager;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.UserEntity;
 
 import java.util.ArrayList;
 
 public class TimelineCommentRecyclerView extends RecyclerView {
     private ArrayList<TimelineCommentCardDto> timelineCommentCardDtos;
+    private UserEntity userEntity;
     private static final String TAG = "CommentRecyclerView";
 
     private TimelineCommentAdapter adapter;
@@ -56,6 +58,7 @@ public class TimelineCommentRecyclerView extends RecyclerView {
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             com.songjin.usum.controllers.views.TimelineCommentCardView timelineCommentCardView = new com.songjin.usum.controllers.views.TimelineCommentCardView(getContext());
             timelineCommentCardView.setTag("TimelineCommentCardView");
+            timelineCommentCardView.setUserEntity(userEntity);
 
             return new ViewHolder(timelineCommentCardView);
         }
@@ -84,7 +87,16 @@ public class TimelineCommentRecyclerView extends RecyclerView {
                 super(view);
 
                 timelineCommentCard = (com.songjin.usum.controllers.views.TimelineCommentCardView) view.findViewWithTag("TimelineCommentCardView");
+                timelineCommentCard.setUserEntity(userEntity);
             }
         }
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

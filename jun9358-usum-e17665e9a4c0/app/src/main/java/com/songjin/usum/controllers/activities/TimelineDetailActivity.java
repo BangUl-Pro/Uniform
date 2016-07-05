@@ -14,6 +14,7 @@ import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.TimelineCardView;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.utils.StringUtil;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 
 public class TimelineDetailActivity extends BaseActivity {
     private static final String TAG = "TimelineDetailActivity";
+    private UserEntity userEntity;
 
     private class ViewHolder {
         public TimelineCardView timelineCardView;
@@ -36,6 +38,9 @@ public class TimelineDetailActivity extends BaseActivity {
             writeCommentButton = (Button) view.findViewById(R.id.write_comment);
 
             comments = (TimelineCommentRecyclerView) view.findViewById(R.id.comments);
+
+            timelineCardView.setUserEntity(userEntity);
+            comments.setUserEntity(userEntity);
         }
     }
 
@@ -49,7 +54,7 @@ public class TimelineDetailActivity extends BaseActivity {
         Log.d(TAG, "액티비티 시작");
 
         timelineCardDto = getIntent().getParcelableExtra("timelineCardDto");
-        Log.d(TAG, "size = " + timelineCardDto.fileEntities.size());
+        userEntity = getIntent().getParcelableExtra(Global.USER);
 
         initViews(R.layout.activity_timeline_detail);
         requestTimelineComments();
@@ -59,7 +64,7 @@ public class TimelineDetailActivity extends BaseActivity {
     public void onResume() {
         super.onResume();
 
-        switch (AuthManager.getSignedInUserType()) {
+        switch (userEntity.userType) {
             case Global.GUEST:
                 viewHolder.commentContents.setVisibility(View.GONE);
                 viewHolder.writeCommentButton.setVisibility(View.GONE);
@@ -173,7 +178,7 @@ public class TimelineDetailActivity extends BaseActivity {
                 RequestManager.insertTimelineComment(
                         timelineItemUuid,
                         commentContents,
-                        Global.userEntity.id,
+                        userEntity.id,
                         new RequestManager.OnInsertTimelineComment() {
                             @Override
                             public void onSuccess() {

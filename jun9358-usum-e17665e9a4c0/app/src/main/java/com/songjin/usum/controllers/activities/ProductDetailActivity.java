@@ -16,6 +16,7 @@ import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.socketIo.SocketException;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 
 public class ProductDetailActivity extends BaseActivity {
     private static final String TAG = "ProductDetailActivity";
+    private UserEntity userEntity;
 
     private class ViewHolder {
         ProductDetailCardView productDetailCardView;
@@ -39,6 +41,9 @@ public class ProductDetailActivity extends BaseActivity {
             commentsLayout = (LinearLayout) view.findViewById(R.id.comments_layout);
             commentContents = (TextView) view.findViewById(R.id.comment_contents);
             writeCommentButton = (Button) view.findViewById(R.id.write_comment);
+
+            productDetailCardView.setUserEntity(userEntity);
+            comments.setUserEntity(userEntity);
         }
     }
 
@@ -52,6 +57,7 @@ public class ProductDetailActivity extends BaseActivity {
         Log.d(TAG, "액티비티 시작");
 
         productCardDto = getIntent().getParcelableExtra("productCardDto");
+        userEntity = getIntent().getParcelableExtra(Global.USER);
 
         initViews(R.layout.activity_product_detail);
         requestTimelineComments();
@@ -94,7 +100,7 @@ public class ProductDetailActivity extends BaseActivity {
                 RequestManager.insertTimelineComment(
                         timelineItemUuid,
                         commentContents,
-                        Global.userEntity.id,
+                        userEntity.id,
                         new RequestManager.OnInsertTimelineComment() {
                             @Override
                             public void onSuccess() {
@@ -169,7 +175,7 @@ public class ProductDetailActivity extends BaseActivity {
     public void onResume() {
         super.onResume();
 
-        switch (AuthManager.getSignedInUserType()) {
+        switch (userEntity.userType) {
             case Global.GUEST:
                 viewHolder.commentsLayout.setVisibility(View.GONE);
                 break;

@@ -2,8 +2,10 @@ package com.songjin.usum.reservation;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.songjin.usum.Global;
 import com.songjin.usum.HashBiMap;
 import com.songjin.usum.constants.Category;
@@ -30,6 +32,7 @@ public class ReservationPushService extends IntentService {
     private int objectIndex = 0;
     private JSONArray array;
 
+    private UserEntity userEntity;
 
     private RequestManager.OnGetProduct onGetProduct = new RequestManager.OnGetProduct() {
         @Override
@@ -37,7 +40,7 @@ public class ReservationPushService extends IntentService {
             Log.d(TAG, "getProduct");
             HashBiMap<Integer, String> categories = Category.getHashBiMap(Sex.ALL);
             for (ProductCardDto productCardDto : productCardDtos) {
-                if (productCardDto.productEntity.user_id.equals(Global.userEntity.id)) {
+                if (productCardDto.productEntity.user_id.equals(userEntity.id)) {
                     continue;
                 }
 
@@ -99,9 +102,13 @@ public class ReservationPushService extends IntentService {
                 return;
             }
 
-            UserEntity userEntity = Global.userEntity;
-            if (userEntity.id == null) {
-                return;
+            if (userEntity == null || userEntity.id == null) {
+                SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
+                String json = preferences.getString(Global.USER, null);
+                if (json != null) {
+                    Gson gson = new Gson();
+                    userEntity = gson.fromJson(json, UserEntity.class);
+                }
             }
             array = new JSONArray();
             for (ReservedCategoryEntity reservedCategory : reservedCategories) {
@@ -110,49 +117,12 @@ public class ReservationPushService extends IntentService {
                 object.put(ProductEntity.PROPERTY_CATEGORY, reservedCategory.category);
                 object.put(ProductEntity.PROPERTY_CREATED, reservedCategory.lastCheckedTimestamp);
                 array.put(object);
-
-//            where += "(" +
-//                    ProductEntity.PROPERTY_SCHOOL_ID + "=" + reservedCategory.schoolId + " AND " +
-//                    ProductEntity.PROPERTY_CATEGORY + "=" + reservedCategory.category + " AND " +
-//                    ProductEntity.PROPERTY_CREATED + ">=" + reservedCategory.lastCheckedTimestamp +
-//                    ") OR ";
             }
-//        where = where.substring(0, where.length() - String.valueOf(" OR ").length());
-//        query.setWheres(where);
-//        Log.d("USUM", where);
 
             objectIndex = 0;
             final JSONObject object = array.getJSONObject(objectIndex);
 
             RequestManager.getProduct(object, onGetProduct);
-
-
-//            RequestManager.getProductsInBackground(query, false, new RequestManager.TypedBaasioQueryCallback<ProductCardDto>() {
-//                @Override
-//                public void onResponse(List<ProductCardDto> entities) {
-//                    HashBiMap<Integer, String> categories = Category.getHashBiMap(Sex.ALL);
-//                    for (ProductCardDto productCardDto : entities) {
-//                        if (productCardDto.productEntity.user_uuid.equals(Baas.io().getSignedInUser().getUuid().toString())) {
-//                            continue;
-//                        }
-//
-//                        String msg = "";
-//                        msg += categories.get(productCardDto.productEntity.category);
-//                        msg += "에 해당하는 상품이 등록되었습니다.";
-//                        PushManager.sendReservationPushToMe(msg);
-//
-//                        SettingFragment.updateReservedCategoryTimestamp(
-//                                productCardDto.productEntity.school_id,
-//                                productCardDto.productEntity.category
-//                        );
-//                    }
-//                }
-//
-//                @Override
-//                public void onException(BaasioException e) {
-//
-//                }
-//            });
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -28,6 +28,8 @@ import java.util.ArrayList;
 public class UserProfileForm extends ScrollView {
     private static final String TAG = "UserProfileForm";
     private long id;
+    private UserEntity userEntity;
+
     private class ViewHolder {
         public EditText realNameEditText;
         public RadioGroup sexRadioGroup;
@@ -120,7 +122,6 @@ public class UserProfileForm extends ScrollView {
 
     private void setEditMode() {
 //        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
-        UserEntity userEntity = Global.userEntity;
         viewHolder.realNameEditText.setText(userEntity.realName);
         viewHolder.realNameEditText.setEnabled(false);
         viewHolder.sexRadioGroup.check(getSexResId(userEntity.sex));
@@ -185,10 +186,10 @@ public class UserProfileForm extends ScrollView {
         userEntity.phone = viewHolder.phoneEditText.getText().toString();
         userEntity.schoolId = selectedSchoolId;
         //
-        if (Global.userEntity == null)
+        if (this.userEntity == null)
             userEntity.id = String.valueOf(id);
         else
-            userEntity.id = Global.userEntity.id;
+            userEntity.id = this.userEntity.id;
 
         return userEntity;
     }
@@ -260,5 +261,9 @@ public class UserProfileForm extends ScrollView {
 
     public void setType(int type) {
         viewHolder.userTypeRadioGroup.check(getUserTypeResId(type));
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

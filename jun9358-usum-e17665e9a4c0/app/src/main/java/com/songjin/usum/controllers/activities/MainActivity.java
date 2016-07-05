@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
+import com.google.gson.Gson;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.fragments.BuyFragment;
@@ -22,6 +24,7 @@ import com.songjin.usum.controllers.fragments.MyPageFragment;
 import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.controllers.fragments.SupportFragment;
 import com.songjin.usum.entities.AlarmEntity;
+import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.gcm.gcm.GCMManager;
 import com.songjin.usum.gcm.gcm.PushHandler;
 import com.songjin.usum.gcm.gcm.RegistrationIntentService;
@@ -46,6 +49,7 @@ public class MainActivity extends BaseActivity implements PushHandler {
     private MyPageFragment myPageFragment;
     private SupportFragment supportFragment;
     private SettingFragment settingFragment;
+    private UserEntity userEntity;
     private Handler handler = new Handler();
 
 
@@ -69,10 +73,10 @@ public class MainActivity extends BaseActivity implements PushHandler {
                     // 액션이 COMPLETE일 경우
                     final String token = intent.getStringExtra("token");
 
-                    SocketIO.setToken(Global.userEntity.id, token, new RequestManager.OnSetToken() {
+                    SocketIO.setToken(userEntity.id, token, new RequestManager.OnSetToken() {
                         @Override
                         public void onSuccess() {
-                            Global.userEntity.token = token;
+                            userEntity.token = token;
                         }
 
                         @Override
@@ -95,21 +99,25 @@ public class MainActivity extends BaseActivity implements PushHandler {
 
         context = this;
         if (savedInstanceState == null) {
-            if (getIntent().getParcelableExtra(Global.USER) == null) {
+            userEntity = getIntent().getParcelableExtra(Global.USER);
+            if (userEntity == null) {
                 Toast.makeText(getApplicationContext(), "로그인 중 에러가 발생했습니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
-            Global.userEntity = getIntent().getParcelableExtra(Global.USER);
-            Log.d(TAG, "id = " + Global.userEntity.id);
-            Log.d(TAG, "schoolId = " + Global.userEntity.schoolId);
+            Gson gson = new Gson();
+            SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Global.USER, gson.toJson(userEntity));
+            editor.commit();
+
             ArrayList<SlidingBaseFragment> tabFragments = new ArrayList<>();
 
-            communityFragment = new CommunityFragment();
-            buyFragment = new BuyFragment();
-            myPageFragment = new MyPageFragment();
-            supportFragment = new SupportFragment();
-            settingFragment = SettingFragment.newInstance(this);
+            communityFragment = CommunityFragment.newInstance(userEntity);
+            buyFragment = BuyFragment.newInstance(userEntity);
+            myPageFragment = MyPageFragment.newInstance(userEntity);
+            supportFragment = SupportFragment.newInstance(userEntity);
+            settingFragment = SettingFragment.newInstance(this, userEntity);
 
             tabFragments.add(communityFragment);
             tabFragments.add(buyFragment);
@@ -139,6 +147,7 @@ public class MainActivity extends BaseActivity implements PushHandler {
          * 2016.06.20 MAYBE IT NEED THIS CODE...
          * */
         Intent reservationServiceIntent = new Intent(context, ReservationPushService.class);
+        reservationServiceIntent.putExtra(Global.USER, userEntity);
         context.startService(reservationServiceIntent);
     }
 

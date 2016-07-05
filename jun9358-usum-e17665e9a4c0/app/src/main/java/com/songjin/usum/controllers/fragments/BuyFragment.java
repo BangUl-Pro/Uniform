@@ -6,19 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.songjin.usum.controllers.activities.BaseActivity;
-import com.songjin.usum.controllers.views.ProductRecyclerView;
-import com.songjin.usum.controllers.views.ProductSearchForm;
+import com.malinskiy.superrecyclerview.OnMoreListener;
+import com.melnykov.fab.FloatingActionButton;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.AddProductsActivity;
+import com.songjin.usum.controllers.activities.BaseActivity;
+import com.songjin.usum.controllers.views.ProductRecyclerView;
+import com.songjin.usum.controllers.views.ProductSearchForm;
 import com.songjin.usum.controllers.views.ProductSearchSlidingLayer;
 import com.songjin.usum.dtos.ProductCardDto;
-import com.songjin.usum.managers.AuthManager;
+import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
-import com.malinskiy.superrecyclerview.OnMoreListener;
-import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -26,6 +26,8 @@ public class BuyFragment extends SlidingBaseFragment {
 
     private static final String TAG = "BuyFragment";
     private int position = 1;
+    private UserEntity userEntity;
+
     private class ViewHolder {
         public ProductSearchSlidingLayer productSearchSlidingLayer;
         public ProductRecyclerView products;
@@ -35,6 +37,8 @@ public class BuyFragment extends SlidingBaseFragment {
             productSearchSlidingLayer = (ProductSearchSlidingLayer) view.findViewById(R.id.product_search_sliding_layer);
             products = (ProductRecyclerView) view.findViewById(R.id.products);
             writeProductsButton = (FloatingActionButton) view.findViewById(R.id.donation_button);
+
+            productSearchSlidingLayer.setUserEntity(userEntity);
         }
     }
 
@@ -42,10 +46,20 @@ public class BuyFragment extends SlidingBaseFragment {
 
     private ArrayList<ProductCardDto> productCardDtos;
 
+    public static BuyFragment newInstance(UserEntity userEntity) {
+        BuyFragment fragment = new BuyFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Global.USER, userEntity);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        userEntity = getArguments().getParcelable(Global.USER);
         productCardDtos = new ArrayList<>();
         initCallback();
     }
@@ -75,7 +89,7 @@ public class BuyFragment extends SlidingBaseFragment {
 
     @Override
     public void onPageSelected() {
-        switch (AuthManager.getSignedInUserType()) {
+        switch (userEntity.userType) {
             case Global.GUEST:
                 break;
             case Global.STUDENT:
@@ -128,6 +142,7 @@ public class BuyFragment extends SlidingBaseFragment {
     private void getSearchProduct(int position) {
         this.position = position + 1;
         ProductSearchForm form = viewHolder.productSearchSlidingLayer.getProductSearchForm();
+        form.setUserEntity(userEntity);
         int schoolId = form.getSelectedSchoolId();
         int sex = form.getSex();
         int category = form.getCategory();

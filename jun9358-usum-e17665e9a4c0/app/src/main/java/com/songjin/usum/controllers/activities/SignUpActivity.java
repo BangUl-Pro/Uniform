@@ -30,6 +30,7 @@ public class SignUpActivity extends BaseActivity {
     private static final String TAG = "SignUpActivity";
     private long id;
     private Activity activity = this;
+    private UserEntity userEntity;
 
     private class ViewHolder {
         public CheckBox termsAgreementCheckBox;
@@ -38,6 +39,8 @@ public class SignUpActivity extends BaseActivity {
         public ViewHolder(View view) {
             termsAgreementCheckBox = (CheckBox) view.findViewById(R.id.terms_agreement);
             userProfileForm = (UserProfileForm) view.findViewById(R.id.user_profile_form);
+
+            userProfileForm.setUserEntity(userEntity);
         }
     }
 
@@ -67,6 +70,7 @@ public class SignUpActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "액티비티 시작");
+        userEntity = getIntent().getParcelableExtra(Global.USER);
         requestCheckConfirmedUser();
     }
 
@@ -157,8 +161,7 @@ public class SignUpActivity extends BaseActivity {
                 RequestManager.signInKakao(id, nickName, profileImage, thumbnailImage, new RequestManager.OnSignInKakao() {
                     @Override
                     public void onSuccess(final UserEntity userEntity) {
-
-                        Global.userEntity = userEntity;
+                        SignUpActivity.this.userEntity = userEntity;
 
                         if (userEntity.deviceId == null) {
                             SocketIO.setDeviceId(userEntity.id, getDeviceUUID(), new RequestManager.OnSetDeviceId() {
@@ -252,7 +255,7 @@ public class SignUpActivity extends BaseActivity {
                                 @Override
                                 public void onSuccess(final UserEntity userEntity) {
 
-                                    Global.userEntity = userEntity;
+                                    SignUpActivity.this.userEntity = userEntity;
 
                                     if (userEntity.deviceId == null) {
                                         SocketIO.setDeviceId(userEntity.id, getDeviceUUID(), new RequestManager.OnSetDeviceId() {
@@ -380,11 +383,11 @@ public class SignUpActivity extends BaseActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        SocketIO.setDeviceId(Global.userEntity.id, getDeviceUUID(), new RequestManager.OnSetDeviceId() {
+                        SocketIO.setDeviceId(userEntity.id, getDeviceUUID(), new RequestManager.OnSetDeviceId() {
                             @Override
                             public void onSuccess() {
                                 Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-                                intent1.putExtra(Global.USER, Global.userEntity);
+                                intent1.putExtra(Global.USER, userEntity);
                                 startActivity(intent1);
                                 finish();
                             }

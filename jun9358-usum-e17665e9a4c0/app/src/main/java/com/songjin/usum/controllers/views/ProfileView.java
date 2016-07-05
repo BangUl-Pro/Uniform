@@ -17,6 +17,9 @@ import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.SchoolManager;
 
 public class ProfileView extends LinearLayout {
+
+    private UserEntity userEntity;
+
     private class ViewHolder {
         public SquareImageView profilePicture;
         public TextView name;
@@ -87,10 +90,14 @@ public class ProfileView extends LinearLayout {
         }
         viewHolder.phone.setText(userEntity.phone);
 
-        if (userEntity.id.equals(Global.userEntity.id)) {
+        if (userEntity.id.equals(userEntity.id)) {
             viewHolder.editProfileButton.setVisibility(View.VISIBLE);
         } else {
             viewHolder.editProfileButton.setVisibility(View.GONE);
         }
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 }

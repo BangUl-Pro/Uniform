@@ -1,21 +1,20 @@
 package com.songjin.usum.controllers.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.songjin.usum.Global;
+import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.views.SchoolRankingCardView;
 import com.songjin.usum.controllers.views.SchoolRankingRecyclerView;
-import com.songjin.usum.Global;
-import com.songjin.usum.R;
 import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.entities.SchoolEntity;
-import com.songjin.usum.managers.AuthManager;
+import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.managers.SchoolManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
@@ -24,6 +23,8 @@ import java.util.ArrayList;
 
 public class CommunityFragment extends SlidingBaseFragment {
     private static final String TAG = "CommunityFragment";
+    private UserEntity userEntity;
+
     private class ViewHolder {
         public SchoolRankingRecyclerView schoolRankings;
         public LinearLayout mySchoolRankingCardContainer;
@@ -39,10 +40,20 @@ public class CommunityFragment extends SlidingBaseFragment {
     private ViewHolder viewHolder;
 
 
+    public static CommunityFragment newInstance(UserEntity userEntity) {
+        CommunityFragment fragment = new CommunityFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Global.USER, userEntity);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        userEntity = getArguments().getParcelable(Global.USER);
     }
 
 
@@ -100,7 +111,7 @@ public class CommunityFragment extends SlidingBaseFragment {
 
     public void setSchoolRankings(ArrayList<SchoolRanking> schoolRankings) {
         viewHolder.schoolRankings.setSchoolRankings(schoolRankings);
-        if (Global.userEntity.userType == Global.STUDENT) {
+        if (userEntity.userType == Global.STUDENT) {
             initMySchoolRankingCard(schoolRankings);
         }
     }
@@ -110,7 +121,7 @@ public class CommunityFragment extends SlidingBaseFragment {
     public void onResume() {
         super.onResume();
 
-        switch (AuthManager.getSignedInUserType()) {
+        switch (userEntity.userType) {
             case Global.GUEST:
                 viewHolder.mySchoolRankingCardContainer.setVisibility(View.GONE);
                 break;
@@ -126,11 +137,7 @@ public class CommunityFragment extends SlidingBaseFragment {
         SchoolManager schoolManager = new SchoolManager(getActivity());
 
 //        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
-        SchoolEntity mySchoolEntity = schoolManager.selectSchool(Global.userEntity.schoolId);
-        Log.d(TAG, "schoolId = " + Global.userEntity.schoolId);
-        Log.d(TAG, "schoolName = " + mySchoolEntity.schoolname);
-        Log.d(TAG, "mySchoolEntity = " + mySchoolEntity);
-        Log.d(TAG, "mySchoolEntity.Id = " + mySchoolEntity.id);
+        SchoolEntity mySchoolEntity = schoolManager.selectSchool(userEntity.schoolId);
         if (mySchoolEntity != null)
             viewHolder.mySchoolRankingCardView.setSchoolEntity(mySchoolEntity);
 
@@ -139,7 +146,7 @@ public class CommunityFragment extends SlidingBaseFragment {
         for (int i = 0; i < schoolRankings.size(); i++) {
             SchoolRanking schoolRanking = schoolRankings.get(i);
 
-            if (Global.userEntity.schoolId == schoolRanking.school_id) {
+            if (userEntity.schoolId == schoolRanking.school_id) {
                 myRanking = i + 1;
                 myProgress = SchoolRankingCardView.calcProgress(schoolRanking.point, schoolRankings.get(0).point);
                 break;

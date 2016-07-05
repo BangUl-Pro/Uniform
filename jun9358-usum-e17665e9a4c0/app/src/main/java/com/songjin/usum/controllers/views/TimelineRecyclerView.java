@@ -14,11 +14,13 @@ import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.activities.TimelineDetailActivity;
 import com.songjin.usum.dtos.TimelineCardDto;
+import com.songjin.usum.entities.UserEntity;
 
 import java.util.ArrayList;
 
 public class TimelineRecyclerView extends SuperRecyclerView {
     private ArrayList<TimelineCardDto> timelineCardDtos;
+    private UserEntity userEntity;
 
     public TimelineRecyclerView(Context context) {
         this(context, null);
@@ -77,6 +79,7 @@ public class TimelineRecyclerView extends SuperRecyclerView {
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             TimelineCardView timelineCardView = new TimelineCardView(getContext());
             timelineCardView.setTag("TimelineCardView");
+            timelineCardView.setUserEntity(userEntity);
 
             return new ViewHolder(timelineCardView);
         }
@@ -114,7 +117,16 @@ public class TimelineRecyclerView extends SuperRecyclerView {
                 super(view);
 
                 timelineCard = (TimelineCardView) view.findViewWithTag("TimelineCardView");
+                timelineCard.setUserEntity(userEntity);
             }
         }
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

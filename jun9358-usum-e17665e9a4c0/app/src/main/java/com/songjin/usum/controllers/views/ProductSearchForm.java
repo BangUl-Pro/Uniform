@@ -15,18 +15,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.songjin.usum.constants.Category;
-import com.songjin.usum.constants.Sex;
-import com.songjin.usum.constants.Size;
-import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.Global;
 import com.songjin.usum.HashBiMap;
 import com.songjin.usum.R;
+import com.songjin.usum.constants.Category;
+import com.songjin.usum.constants.Sex;
+import com.songjin.usum.constants.Size;
 import com.songjin.usum.controllers.activities.SchoolAutoCompleteArrayAdapter;
+import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.entities.ReservedCategoryEntity;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.UserEntity;
-import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.SchoolManager;
 
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class ProductSearchForm extends LinearLayout {
     private ArrayAdapter<String> sexAdapter;
     private ArrayAdapter<String> categoryAdapter;
     private ArrayAdapter<String> sizeAdapter;
-    private Context context;
+    private UserEntity userEntity;
 
     public ProductSearchForm(Context context) {
         this(context, null);
@@ -165,12 +164,11 @@ public class ProductSearchForm extends LinearLayout {
             }
         });
 
-        switch (AuthManager.getSignedInUserType()) {
+        switch (userEntity.userType) {
             case Global.GUEST:
                 viewHolder.useReservationPushContainer.setVisibility(View.INVISIBLE);
                 break;
             case Global.STUDENT:
-                UserEntity userEntity = Global.userEntity;
                 if (userEntity.schoolId != 0) {
                     SchoolEntity schoolEntity = schoolManager.selectSchool(userEntity.schoolId);
                     selectedSchoolId = schoolEntity.id;
@@ -316,5 +314,13 @@ public class ProductSearchForm extends LinearLayout {
             useReservationPush = (Switch) view.findViewById(R.id.use_reservation_push);
             submitButton = (Button) view.findViewById(R.id.submit_button);
         }
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

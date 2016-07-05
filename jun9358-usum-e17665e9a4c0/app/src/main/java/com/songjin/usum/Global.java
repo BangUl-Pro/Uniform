@@ -1,12 +1,11 @@
 package com.songjin.usum;
 
-import com.songjin.usum.entities.UserEntity;
-
 /**
  * Created by IronFactory on 15. 10. 26..
  */
 public class Global {
     public static final int APP_VER = 1;
+    public static final String APP_NAME = "Uniform";
 
     public static final String COMMAND = "command";
     public static final String CODE = "code";
@@ -103,6 +102,4 @@ public class Global {
     public static final int REQUESTED = 2;
     public static final int SENDED = 3;
     public static final int RECEIVED = 4;
-
-    public static UserEntity userEntity;
 }

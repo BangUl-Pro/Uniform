@@ -35,6 +35,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class ProductAddForm extends CardView {
+
+    private UserEntity userEntity;
+
     private class ViewHolder {
         AutoCompleteTextView schoolName;
         Spinner sex;
@@ -162,11 +165,10 @@ public class ProductAddForm extends CardView {
         });
 
         SchoolManager schoolManager = new SchoolManager(getContext());
-        switch (AuthManager.getSignedInUserType()) {
+        switch (userEntity.userType) {
             case Global.GUEST:
                 break;
             case Global.STUDENT:
-                UserEntity userEntity = Global.userEntity;
                 if (userEntity.schoolId != 0) {
                     SchoolEntity schoolEntity = schoolManager.selectSchool(userEntity.schoolId);
                     selectedSchoolId = schoolEntity.id;
@@ -241,7 +243,6 @@ public class ProductAddForm extends CardView {
         int selectedCondition = inverseCondition.get(conditionAdapter.getItem(conditionPosition));
         productEntity.condition = selectedCondition;
 
-        UserEntity userEntity = Global.userEntity;
         productEntity.user_id = userEntity.id;
 
         productEntity.contents = viewHolder.contents.getText().toString();
@@ -292,6 +293,14 @@ public class ProductAddForm extends CardView {
 
     public void setOnSubmitListener(OnSubmitListener listener) {
         viewHolder.submitButton.setOnClickListener(listener);
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public interface OnSubmitListener extends OnClickListener {

@@ -30,6 +30,7 @@ import com.songjin.usum.socketIo.SocketException;
 public class TimelineCardView extends CardView {
     private TimelineCardDto timelineCardDto;
     private TimelineActionCallback timelineActionCallback;
+    private UserEntity userEntity;
 
     private class ViewHolder {
         public WriterView writerView;
@@ -72,7 +73,7 @@ public class TimelineCardView extends CardView {
     }
 
     private void setViewVisibilityByAuth() {
-        switch (AuthManager.getSignedInUserType()) {
+        switch (userEntity.userType) {
             case Global.GUEST:
                 viewHolder.commentButton.setVisibility(View.GONE);
                 viewHolder.divider.setVisibility(View.GONE);
@@ -89,8 +90,6 @@ public class TimelineCardView extends CardView {
     }
 
     private void showMorePopup() {
-        UserEntity userEntity = Global.userEntity;
-
         PopupMenu popup = new PopupMenu(getContext(), viewHolder.writerView.moreButton);
         popup.getMenuInflater().inflate(R.menu.menu_writer_more, popup.getMenu());
         if (timelineCardDto.timelineEntity.user_id.equals(userEntity.id)) {
@@ -197,7 +196,6 @@ public class TimelineCardView extends CardView {
         protected Boolean doInBackground(Void... params) {
             try {
                 GMailSender sender = new GMailSender("usum.sender@gmail.com", "!@#usumsender123");
-                UserEntity userEntity = Global.userEntity;
                 sender.sendMail(
                         "교복통 타임라인 신고접수(" + timelineCardDto.timelineEntity.id + ")",
                         "TIMELINE UUID: " + timelineCardDto.timelineEntity.id + "\n" +
@@ -286,7 +284,7 @@ public class TimelineCardView extends CardView {
 //                        }
 //                    });
                 } else {
-                    RequestManager.insertLike(timelineCardDto.timelineEntity.id, Global.userEntity.id, new RequestManager.OnInsertLike() {
+                    RequestManager.insertLike(timelineCardDto.timelineEntity.id, userEntity.id, new RequestManager.OnInsertLike() {
                         @Override
                         public void onSuccess(LikeEntity likeEntity) {
                             timelineCardDto.likeEntity = likeEntity;
@@ -328,5 +326,13 @@ public class TimelineCardView extends CardView {
     public void setCommentButtonVisibility(int visibility) {
         viewHolder.commentButton.setVisibility(visibility);
         viewHolder.divider.setVisibility(visibility);
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

@@ -9,8 +9,11 @@ import android.widget.RelativeLayout;
 
 import com.slidinglayer.SlidingLayer;
 import com.songjin.usum.R;
+import com.songjin.usum.entities.UserEntity;
 
 public class ProductSearchSlidingLayer extends LinearLayout {
+    private UserEntity userEntity;
+
     private class ViewHolder {
         public SlidingLayer slidingLayer;
         public LinearLayout slidingContainer;
@@ -26,6 +29,7 @@ public class ProductSearchSlidingLayer extends LinearLayout {
             slidingArrow = (ImageView) view.findViewById(R.id.sliding_arrow);
 
             productSearchForm = (ProductSearchForm) view.findViewById(R.id.product_search_form);
+            productSearchForm.setUserEntity(userEntity);
         }
     }
 
@@ -100,5 +104,13 @@ public class ProductSearchSlidingLayer extends LinearLayout {
 
     public ProductSearchForm getProductSearchForm() {
         return viewHolder.productSearchForm;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }
