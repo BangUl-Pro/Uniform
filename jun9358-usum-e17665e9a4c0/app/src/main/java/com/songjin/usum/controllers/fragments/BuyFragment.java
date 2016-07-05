@@ -58,6 +58,15 @@ public class BuyFragment extends SlidingBaseFragment {
         if (productCard != null) {
             // 성공
             productCardDtos.addAll(productCard);
+            for (int i = 0; i < productCardDtos.size(); i++) {
+                for (int j = 1; j < productCardDtos.size() - i; j++) {
+                    if (productCardDtos.get(j - 1).productEntity.created < productCardDtos.get(j).productEntity.created) {
+                        ProductCardDto curDto = productCardDtos.get(j - 1);
+                        productCardDtos.set(j - 1, productCardDtos.get(j));
+                        productCardDtos.set(j, curDto);
+                    }
+                }
+            }
             viewHolder.products.setProductCardDtos(productCardDtos);
         }
         viewHolder.products.hideMoreProgress();

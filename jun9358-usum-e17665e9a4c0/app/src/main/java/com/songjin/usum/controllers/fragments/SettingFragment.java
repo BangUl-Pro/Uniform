@@ -32,6 +32,7 @@ import com.songjin.usum.controllers.activities.LoginActivity;
 import com.songjin.usum.controllers.activities.MainActivity;
 import com.songjin.usum.entities.AlarmEntity;
 import com.songjin.usum.entities.ReservedCategoryEntity;
+import com.songjin.usum.gcm.gcm.PushHandler;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
@@ -45,6 +46,7 @@ import java.util.Map;
 public class SettingFragment extends SlidingBaseFragment {
     private static final String TAG = "SettingFragment";
     public static Context context;
+    private static PushHandler handler;
 
     private class ViewHolder {
         public Button disconnectButton;
@@ -70,9 +72,9 @@ public class SettingFragment extends SlidingBaseFragment {
     public static final String PREFERENCE_SCHOOLS_LOADED = "schoolsLoaded";
     public static final String PREFERENCE_LAST_RANK = "lastRank";
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public static SettingFragment newInstance(PushHandler handler) {
+        SettingFragment.handler = handler;
+        return new SettingFragment();
     }
 
     @Override
@@ -299,6 +301,8 @@ public class SettingFragment extends SlidingBaseFragment {
         Log.d(TAG, "getReservedCategories");
         ArrayList<String> reservedCategoryJsonStrings;
 //        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
+        if (context == null)
+            return null;
         SecurePreferences securePreferences = new SecurePreferences(context);
         String rawJsonString = securePreferences.getString(PREFERENCE_RESERVED_CATEGORIES, "");
         Gson gson = new Gson();
@@ -400,22 +404,21 @@ public class SettingFragment extends SlidingBaseFragment {
     }
 
     public static void addReceivedPushMessage(AlarmEntity alarmEntity) {
-        Log.d(TAG, "addReceivedPushMessage");
         ArrayList<AlarmEntity> pushMessages = getReceivedPushMessages();
         pushMessages.add(alarmEntity);
 
         Gson gson = new Gson();
         ArrayList<String> pushMessageJsonStrings = new ArrayList<>();
         for (AlarmEntity pushMessage : pushMessages) {
-
             pushMessageJsonStrings.add(0, gson.toJson(pushMessage));
-            Log.d(TAG, "pushMessage = " + gson.toJson(pushMessage));
         }
 
         SecurePreferences securePreferences = new SecurePreferences(context);
         SecurePreferences.Editor editor = securePreferences.edit();
         editor.putString(PREFERENCE_RECEIVED_PUSH_MESSAGES, gson.toJson(pushMessageJsonStrings));
         editor.commit();
+
+        SettingFragment.handler.onReceivePushMessage();
     }
 
     public static long getLastAlarmSyncedTimestamp() {

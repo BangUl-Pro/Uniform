@@ -20,6 +20,8 @@ import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.socketIo.SocketIO;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -229,8 +231,8 @@ public class RequestManager {
     }
 
 
-    public static void getProduct(String productJson, OnGetProduct onGetProduct) {
-        SocketIO.getProduct(productJson, onGetProduct);
+    public static void getProduct(JSONObject object, OnGetProduct onGetProduct) {
+        SocketIO.getProduct(object, onGetProduct);
     }
 
 

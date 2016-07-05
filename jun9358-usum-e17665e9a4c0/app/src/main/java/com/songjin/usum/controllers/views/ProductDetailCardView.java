@@ -38,6 +38,7 @@ import nl.changer.polypicker.ImagePickerActivity;
 
 public class ProductDetailCardView extends CardView {
     private static final String TAG = "ProductDetailCardView";
+    private boolean isDeleteFile;
     private static final long ONE_WEEK = 1000 * 60 * 60 * 24 * 7;
     private class ViewHolder {
         public ProductCardView productCardView;
@@ -111,7 +112,8 @@ public class ProductDetailCardView extends CardView {
                         if (productCardDto.transactionEntity.donator_id.equals(signedUserUuid)) {
                             Log.d(TAG, "내가 기부자임 ");
                             targetUserUuids.add(productCardDto.transactionEntity.receiver_id);
-                        } else if (productCardDto.transactionEntity.receiver_id.equals(signedUserUuid)) {
+//                        } else if (productCardDto.transactionEntity.receiver_id.equals(signedUserUuid)) {
+                        } else {
                             Log.d(TAG, "내가 기부 요청자임 ");
                             targetUserUuids.add(productCardDto.transactionEntity.donator_id);
                         }
@@ -342,7 +344,9 @@ public class ProductDetailCardView extends CardView {
                     });
                 }
 
-                final boolean isDeleteFile = productCardDtoForUpdate.uris.get(0).toString().contains("com.jerryjang.donation/cache") ? false : true;
+                isDeleteFile = false;
+                if (productCardDtoForUpdate.uris.size() > 0)
+                    isDeleteFile = productCardDtoForUpdate.uris.get(0).toString().contains("com.jerryjang.donation/cache") ? false : true;
 
                 RequestManager.updateProduct(productCardDtoForUpdate, isDeleteFile, new RequestManager.OnUpdateProduct() {
                     @Override

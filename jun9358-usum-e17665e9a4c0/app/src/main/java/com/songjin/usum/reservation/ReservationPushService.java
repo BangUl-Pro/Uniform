@@ -23,8 +23,50 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class ReservationPushService extends IntentService {
+
+
     private static final String TAG = "ReservationPushService";
     private ReservationCheckThread reservationCheckThread;
+    private int objectIndex = 0;
+    private JSONArray array;
+
+
+    private RequestManager.OnGetProduct onGetProduct = new RequestManager.OnGetProduct() {
+        @Override
+        public void onSuccess(ArrayList<ProductCardDto> productCardDtos) {
+            Log.d(TAG, "getProduct");
+            HashBiMap<Integer, String> categories = Category.getHashBiMap(Sex.ALL);
+            for (ProductCardDto productCardDto : productCardDtos) {
+                if (productCardDto.productEntity.user_id.equals(Global.userEntity.id)) {
+                    continue;
+                }
+
+                String msg = "";
+                msg += categories.get(productCardDto.productEntity.category);
+                msg += "에 해당하는 상품이 등록되었습니다.";
+                PushManager.sendReservationPushToMe(msg);
+
+                SettingFragment.updateReservedCategoryTimestamp(
+                        productCardDto.productEntity.school_id,
+                        productCardDto.productEntity.category
+                );
+            }
+
+            if (array.length() > ++objectIndex) {
+                try {
+                    JSONObject object = array.getJSONObject(objectIndex);
+                    RequestManager.getProduct(object, onGetProduct);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onException() {
+
+        }
+    };
 
     public ReservationPushService() {
         super("ReservationPushService");
@@ -53,19 +95,15 @@ public class ReservationPushService extends IntentService {
         try {
             Log.d(TAG, "checkRegisteredNewProduct");
             ArrayList<ReservedCategoryEntity> reservedCategories = SettingFragment.getReservedCategories();
-            if (reservedCategories.size() == 0) {
+            if (reservedCategories == null || reservedCategories.size() == 0) {
                 return;
             }
 
-//        BaasioQuery query = new BaasioQuery();
-//        query.setType(ProductEntity.COLLECTION_NAME);
-//        String where = "";
             UserEntity userEntity = Global.userEntity;
-            Log.d(TAG, "checkId");
             if (userEntity.id == null) {
                 return;
             }
-            JSONArray array = new JSONArray();
+            array = new JSONArray();
             for (ReservedCategoryEntity reservedCategory : reservedCategories) {
                 JSONObject object = new JSONObject();
                 object.put(ProductEntity.PROPERTY_SCHOOL_ID, reservedCategory.schoolId);
@@ -83,33 +121,10 @@ public class ReservationPushService extends IntentService {
 //        query.setWheres(where);
 //        Log.d("USUM", where);
 
-            RequestManager.getProduct(array.toString(), new RequestManager.OnGetProduct() {
-                @Override
-                public void onSuccess(ArrayList<ProductCardDto> productCardDtos) {
-                    Log.d(TAG, "getProduct");
-                    HashBiMap<Integer, String> categories = Category.getHashBiMap(Sex.ALL);
-                    for (ProductCardDto productCardDto : productCardDtos) {
-                        if (productCardDto.productEntity.user_id.equals(Global.userEntity.id)) {
-                            continue;
-                        }
+            objectIndex = 0;
+            final JSONObject object = array.getJSONObject(objectIndex);
 
-                        String msg = "";
-                        msg += categories.get(productCardDto.productEntity.category);
-                        msg += "에 해당하는 상품이 등록되었습니다.";
-                        PushManager.sendReservationPushToMe(msg);
-
-                        SettingFragment.updateReservedCategoryTimestamp(
-                                productCardDto.productEntity.school_id,
-                                productCardDto.productEntity.category
-                        );
-                    }
-                }
-
-                @Override
-                public void onException() {
-
-                }
-            });
+            RequestManager.getProduct(object, onGetProduct);
 
 
 //            RequestManager.getProductsInBackground(query, false, new RequestManager.TypedBaasioQueryCallback<ProductCardDto>() {

@@ -351,7 +351,6 @@ public class PushManager {
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
-        Log.e(TAG, "5");
         Notification notification = new NotificationCompat.Builder(context).setWhen(when)
                 .setSmallIcon(icon).setContentTitle(context.getString(R.string.app_name))
                 .setContentText(alert).setContentIntent(intent).setTicker(alert)

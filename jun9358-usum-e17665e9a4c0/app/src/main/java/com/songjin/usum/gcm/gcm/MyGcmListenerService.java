@@ -13,6 +13,8 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.MainActivity;
+import com.songjin.usum.entities.AlarmEntity;
+import com.songjin.usum.gcm.PushManager;
 
 /**
  * Created by IronFactory on 2016. 5. 8..
@@ -36,9 +38,10 @@ public class MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, "Message: " + message);
 
         // GCM으로 받은 메세지를 디바이스에 알려주는 sendNotification()을 호출한다.
-        sendNotification(title, message);
+//        sendNotification(title, message);
+        AlarmEntity alarmEntity = new AlarmEntity(message);
+        PushManager.generateNotification(getApplicationContext(), alarmEntity);
     }
-
 
     /**
      * 실제 디바에스에 GCM으로부터 받은 메세지를 알려주는 함수이다. 디바이스 Notification Center에 나타난다.

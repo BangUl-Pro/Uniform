@@ -3,17 +3,16 @@ package com.songjin.usum.controllers.views;
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.koushikdutta.ion.Ion;
+import com.songjin.usum.R;
 import com.songjin.usum.constants.Category;
 import com.songjin.usum.constants.Condition;
 import com.songjin.usum.constants.Sex;
 import com.songjin.usum.constants.Size;
 import com.songjin.usum.constants.Status;
-import com.koushikdutta.ion.Ion;
-import com.songjin.usum.R;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.managers.SchoolManager;
@@ -58,7 +57,7 @@ public class ProductCardView extends LinearLayout {
         SchoolManager schoolManager = new SchoolManager(getContext());
         SchoolEntity schoolEntity = schoolManager.selectSchool(productCardDto.productEntity.school_id);
 
-        writtenTime.setText(DateFormat.format("yyyy년 MM월 dd일 HH시 mm분에 작성", productCardDto.productEntity.created));
+        writtenTime.setText(DateFormat.format("yyyy년 MM월 dd일 hh시 mm분에 작성", productCardDto.productEntity.created));
 
         photo.setImageResource(R.drawable.ic_launcher);
         if (0 < productCardDto.uris.size()) {
@@ -71,9 +70,7 @@ public class ProductCardView extends LinearLayout {
                     .load(photoUrl);
         }
         schoolname.setText(schoolEntity.schoolname);
-        Log.d(TAG, "sex = " + productCardDto.productEntity.sex);
         sex.setText("[" + Sex.getHashBiMapExceptAll().get(productCardDto.productEntity.sex) + "]");
-        Log.d(TAG, "sex TEXT = " + sex.getText().toString());
         category.setText(Category.getHashBiMap(productCardDto.productEntity.sex).get(productCardDto.productEntity.category));
         size.setText(Size.getHashBiMap(productCardDto.productEntity.category).get(productCardDto.productEntity.size));
         condition.setText(Condition.getHashBiMapExceptAll().get(productCardDto.productEntity.condition));

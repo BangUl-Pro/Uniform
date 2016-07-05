@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.controllers.fragments.SupportFragment;
 import com.songjin.usum.entities.AlarmEntity;
 import com.songjin.usum.gcm.gcm.GCMManager;
+import com.songjin.usum.gcm.gcm.PushHandler;
 import com.songjin.usum.gcm.gcm.RegistrationIntentService;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.reservation.ReservationPushService;
@@ -32,7 +34,7 @@ import com.songjin.usum.socketIo.SocketIO;
 import java.util.ArrayList;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements PushHandler {
 
     private static final String TAG = "MainActivity";
     public static Context context;
@@ -44,6 +46,7 @@ public class MainActivity extends BaseActivity {
     private MyPageFragment myPageFragment;
     private SupportFragment supportFragment;
     private SettingFragment settingFragment;
+    private Handler handler = new Handler();
 
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
@@ -106,7 +109,7 @@ public class MainActivity extends BaseActivity {
             buyFragment = new BuyFragment();
             myPageFragment = new MyPageFragment();
             supportFragment = new SupportFragment();
-            settingFragment = new SettingFragment();
+            settingFragment = SettingFragment.newInstance(this);
 
             tabFragments.add(communityFragment);
             tabFragments.add(buyFragment);
@@ -132,9 +135,8 @@ public class MainActivity extends BaseActivity {
 
 
         /**
-         *
-         * TEST
-         *
+         * 2016.05.29 TEST
+         * 2016.06.20 MAYBE IT NEED THIS CODE...
          * */
         Intent reservationServiceIntent = new Intent(context, ReservationPushService.class);
         context.startService(reservationServiceIntent);
@@ -226,5 +228,16 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initViews(int layoutResID) {
         setContentView(layoutResID);
+    }
+
+    @Override
+    public void onReceivePushMessage() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (alarmMenuItem != null)
+                    alarmMenuItem.setIcon(R.drawable.ic_alram);
+            }
+        });
     }
 }

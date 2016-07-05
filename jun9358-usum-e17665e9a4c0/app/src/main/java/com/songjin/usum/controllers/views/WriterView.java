@@ -67,7 +67,7 @@ public class WriterView extends RelativeLayout {
     }
 
     public void setWrittenTime(long writtenTimestamp) {
-        writtenTime.setText(DateFormat.format("yyyy년 MM월 dd일 HH시 mm분에 작성", writtenTimestamp));
+        writtenTime.setText(DateFormat.format("yyyy년 MM월 dd일 hh시 mm분에 작성", writtenTimestamp));
     }
 
     public void setMoreButtonVisibility(int visibility) {

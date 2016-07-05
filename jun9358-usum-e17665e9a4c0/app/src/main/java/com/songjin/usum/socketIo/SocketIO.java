@@ -522,6 +522,7 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(Global.ID, id);
             object.put(Global.MSG, msg);
+            Log.d(TAG, "GCM = " + object.toString());
             socket.emit(Global.SEND_GCM, object);
             socket.once(Global.SEND_GCM, new Emitter.Listener() {
                 @Override
@@ -639,19 +640,11 @@ public class SocketIO {
                                 } else {
                                     productMap.put(dto.productEntity.id, productMap.get(dto.productEntity.id).addFile(dto.fileEntities.get(0)));
                                 }
-
-//                                if (i != 0) {
-//                                    int size = products.size() - 1;
-//                                    if (products.get(size).isSame(dto)) {
-//                                        products.get(size).addFile(dto.fileEntities.get(0));
-//                                        continue;
-//                                    }
-//                                }
-//                                products.add(dto);
                             }
                             Iterator<String> iterator = productMap.keySet().iterator();
                             while (iterator.hasNext())
                                 products.add(productMap.get(iterator.next()));
+
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -676,7 +669,6 @@ public class SocketIO {
             e.printStackTrace();
         }
     }
-
 
     private static JSONObject getJson(Object... args) {
         JSONObject object = (JSONObject) args[0];
@@ -1180,7 +1172,7 @@ public class SocketIO {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    onGetMyProduct.onSuccess(productCardDtos);
+                                    onGetMyProduct.onSuccess(products);
                                 }
                             });
                         } else {
@@ -1622,51 +1614,80 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 제품 요청
-    public static void getProduct(String productJson, final RequestManager.OnGetProduct onGetProduct) {
-        try {
-            if (!checkSocket())
-                return;
-            JSONArray array = new JSONArray(productJson);
-            Log.d(TAG, "getProduct Array = " + array.toString());
-            socket.emit(Global.GET_PRODUCT, array);
-            socket.once(Global.GET_PRODUCT, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    try {
-                        JSONObject resObject = getJson(args);
-                        final int code = getCode(resObject);
-                        if (code == SocketException.SUCCESS) {
-                            JSONArray productArray = resObject.getJSONArray(Global.PRODUCT);
-                            Gson gson = new Gson();
-                            final ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
+    public static void getProduct(JSONObject object, final RequestManager.OnGetProduct onGetProduct) {
+        if (!checkSocket())
+            return;
+        Log.d(TAG, "getProduct Object = " + object.toString());
+        socket.emit(Global.GET_PRODUCT, object);
+        socket.once(Global.GET_PRODUCT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    JSONObject resObject = getJson(args);
+                    final int code = getCode(resObject);
+                    Log.d(TAG, "resObject = " + resObject.toString());
+                    if (code == SocketException.SUCCESS) {
+//                            JSONArray productArray = resObject.getJSONArray(Global.PRODUCT);
+//                            Gson gson = new Gson();
+//                            final ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
+//
+//                            for (int i = 0; i < productArray.length(); i++) {
+//                                JSONObject productObject = productArray.getJSONObject(i);
+//                                ProductCardDto dto = gson.fromJson(productObject.toString(), ProductCardDto.class);
+//                                productCardDtos.add(dto);
+//                            }
 
-                            for (int i = 0; i < productArray.length(); i++) {
-                                JSONObject productObject = productArray.getJSONObject(i);
-                                ProductCardDto dto = gson.fromJson(productObject.toString(), ProductCardDto.class);
-                                productCardDtos.add(dto);
+                        final ArrayList<ProductCardDto> products = new ArrayList<>();
+                        final Map<String, ProductCardDto> productMap = new HashMap<String, ProductCardDto>();
+
+
+                        JSONArray array = resObject.getJSONArray(Global.PRODUCT);
+                        Log.d(TAG, "제품 get array = " + array);
+                        Log.d(TAG, "제품 get arraySize = " + array.length());
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject productJson = array.getJSONObject(i);
+                            ProductCardDto dto = new ProductCardDto(productJson);
+
+                            if (productMap.get(dto.productEntity.id) == null) {
+                                productMap.put(dto.productEntity.id, dto);
+                            } else {
+                                productMap.put(dto.productEntity.id, productMap.get(dto.productEntity.id).addFile(dto.fileEntities.get(0)));
                             }
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    onGetProduct.onSuccess(productCardDtos);
-                                }
-                            });
-                        } else {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    onGetProduct.onException();
-                                }
-                            });
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        Iterator<String> iterator = productMap.keySet().iterator();
+                        while (iterator.hasNext())
+                            products.add(productMap.get(iterator.next()));
+
+                        // 정렬
+                        for (int i = 0; i < products.size(); i++) {
+                            for (int j = 1; j < products.size() - i; j++) {
+                                if (products.get(j - 1).productEntity.created < products.get(j).productEntity.created) {
+                                    ProductCardDto curDto = products.get(j - 1);
+                                    products.set(j - 1, products.get(j));
+                                    products.set(j, curDto);
+                                }
+                            }
+                        }
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onGetProduct.onSuccess(products);
+                            }
+                        });
+                    } else {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onGetProduct.onException();
+                            }
+                        });
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 
 
