@@ -30,8 +30,6 @@ import nl.changer.polypicker.ImagePickerActivity;
 public class TimelineWriteActivity extends BaseActivity {
     private static final String TAG = "TimelineWriteActivity";
     private TimelineCardDto timelineCardDto;
-    private UserEntity userEntity;
-
     private RequestManager.OnInsertFile onInsertFile = new RequestManager.OnInsertFile() {
         @Override
         public void onSuccess(int position) {
@@ -86,7 +84,6 @@ public class TimelineWriteActivity extends BaseActivity {
         Log.d(TAG, "액티비티 시작");
 
         isUpdate = getIntent().getBooleanExtra("isUpdate", false);
-        userEntity = getIntent().getParcelableExtra(Global.USER);
 
         context = this;
         selectedImageUris = new ArrayList<>();
@@ -121,6 +118,8 @@ public class TimelineWriteActivity extends BaseActivity {
                             .show();
                     return true;
                 }
+
+                UserEntity userEntity = Global.userEntity;
 
                 onWriteBefore();
                 if (isUpdate) {
@@ -245,7 +244,7 @@ public class TimelineWriteActivity extends BaseActivity {
             viewHolder.selectedImages.setUris(selectedImageUris);
         } else {
 //            viewHolder.writerView.setUserEntity(new UserEntity(Baas.io().getSignedInUser()));
-            viewHolder.writerView.setUserEntity(userEntity);
+            viewHolder.writerView.setUserEntity(Global.userEntity);
             viewHolder.writerView.setWrittenTime(System.currentTimeMillis());
         }
     }

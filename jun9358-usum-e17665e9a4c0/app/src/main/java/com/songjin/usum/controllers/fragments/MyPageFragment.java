@@ -6,13 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.songjin.usum.controllers.views.ProductRecyclerView;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
-import com.songjin.usum.controllers.views.ProductRecyclerView;
 import com.songjin.usum.controllers.views.ProfileView;
 import com.songjin.usum.dtos.ProductCardDto;
-import com.songjin.usum.entities.UserEntity;
+import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 
@@ -20,8 +20,6 @@ import java.util.ArrayList;
 
 public class MyPageFragment extends SlidingBaseFragment {
     private static final String TAG = "MyPageFragment";
-    private UserEntity userEntity;
-
     private class ViewHolder {
         public ProfileView profileView;
         public ProductRecyclerView dealingProducts;
@@ -29,34 +27,21 @@ public class MyPageFragment extends SlidingBaseFragment {
         public ViewHolder(View view) {
             profileView = (ProfileView) view.findViewById(R.id.profile_view);
             dealingProducts = (ProductRecyclerView) view.findViewById(R.id.dealing_products);
-
-            profileView.setUserEntity(userEntity);
         }
     }
 
     private ViewHolder viewHolder;
 
-    public static MyPageFragment newInstance(UserEntity userEntity) {
-        MyPageFragment fragment = new MyPageFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(Global.USER, userEntity);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        userEntity = getArguments().getParcelable(Global.USER);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        switch (userEntity.userType) {
+        switch (AuthManager.getSignedInUserType()) {
             case Global.GUEST:
                 break;
             case Global.STUDENT:
@@ -70,7 +55,7 @@ public class MyPageFragment extends SlidingBaseFragment {
 
     @Override
     public void onPageSelected() {
-        switch (userEntity.userType) {
+        switch (AuthManager.getSignedInUserType()) {
             case Global.GUEST:
                 BaseActivity.showGuestBlockedDialog();
                 break;
@@ -82,9 +67,10 @@ public class MyPageFragment extends SlidingBaseFragment {
     }
 
     private void initProfileView() {
-        viewHolder.profileView.setUserEntity(userEntity);
+        viewHolder.profileView.setUserEntity(Global.userEntity);
+        Log.d(TAG ,"schoolId = " + Global.userEntity.getSchoolId());
 
-        RequestManager.getMyProduct(userEntity, new RequestManager.OnGetMyProduct() {
+        RequestManager.getMyProduct(Global.userEntity, new RequestManager.OnGetMyProduct() {
             @Override
             public void onSuccess(final ArrayList<ProductCardDto> productCardDtos) {
                 setProduct(productCardDtos);

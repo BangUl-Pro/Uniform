@@ -11,9 +11,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.songjin.usum.GMailSender;
-import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
+import com.songjin.usum.GMailSender;
+import com.songjin.usum.Global;
+import com.songjin.usum.R;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.RequestManager;
@@ -22,7 +23,7 @@ public class TimelineCommentCardView extends CardView {
     private static final String TAG = "TimelineCommentCardView";
     private TimelineCommentCardDto timelineCommentCardDto;
     private TimelineCardView.TimelineActionCallback timelineActionCallback;
-    private UserEntity userEntity;
+    private int from;
 
     private class ViewHolder {
         public WriterView writerView;
@@ -55,6 +56,8 @@ public class TimelineCommentCardView extends CardView {
     }
 
     private void showMorePopup() {
+        UserEntity userEntity = Global.userEntity;
+
         PopupMenu popup = new PopupMenu(getContext(), viewHolder.writerView.moreButton);
         popup.getMenuInflater().inflate(R.menu.menu_writer_more, popup.getMenu());
         if (timelineCommentCardDto.commentEntity.user_id.equals(userEntity.id)) {
@@ -141,6 +144,7 @@ public class TimelineCommentCardView extends CardView {
         protected Boolean doInBackground(Void... params) {
             try {
                 GMailSender sender = new GMailSender("usum.sender@gmail.com", "!@#usumsender123");
+                UserEntity userEntity = Global.userEntity;
                 sender.sendMail(
                         "교복통 타임라인 댓글 신고접수(" + timelineCommentCardDto.commentEntity.timeline_item_id + ")",
                         "COMMENT UUID: " + timelineCommentCardDto.commentEntity.timeline_item_id + "\n" +
@@ -189,11 +193,12 @@ public class TimelineCommentCardView extends CardView {
     }
 
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public void setFrom(int from) {
+        this.from = from;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+
+    public void processDeleteComment(int code) {
+
     }
 }

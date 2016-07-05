@@ -32,7 +32,6 @@ import com.songjin.usum.controllers.activities.LoginActivity;
 import com.songjin.usum.controllers.activities.MainActivity;
 import com.songjin.usum.entities.AlarmEntity;
 import com.songjin.usum.entities.ReservedCategoryEntity;
-import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.gcm.gcm.PushHandler;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
@@ -48,7 +47,6 @@ public class SettingFragment extends SlidingBaseFragment {
     private static final String TAG = "SettingFragment";
     public static Context context;
     private static PushHandler handler;
-    private UserEntity userEntity;
 
     private class ViewHolder {
         public Button disconnectButton;
@@ -74,26 +72,14 @@ public class SettingFragment extends SlidingBaseFragment {
     public static final String PREFERENCE_SCHOOLS_LOADED = "schoolsLoaded";
     public static final String PREFERENCE_LAST_RANK = "lastRank";
 
-    public static SettingFragment newInstance(PushHandler handler, UserEntity userEntity) {
-        SettingFragment fragment = new SettingFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(Global.USER, userEntity);
-        fragment.setArguments(bundle);
+    public static SettingFragment newInstance(PushHandler handler) {
         SettingFragment.handler = handler;
-        return fragment;
-    }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        userEntity = getArguments().getParcelable(Global.USER);
+        return new SettingFragment();
     }
 
     @Override
     public void onPageSelected() {
-        switch (userEntity.userType) {
+        switch (AuthManager.getSignedInUserType()) {
             case Global.GUEST:
                 BaseActivity.showGuestBlockedDialog();
                 break;
@@ -175,7 +161,7 @@ public class SettingFragment extends SlidingBaseFragment {
 
                                 final SharedPreferencesCache cache = Session.getAppCache();
 
-                                SocketIO.setToken(userEntity.id, null, new RequestManager.OnSetToken() {
+                                SocketIO.setToken(Global.userEntity.id, null, new RequestManager.OnSetToken() {
                                     @Override
                                     public void onSuccess() {
 
@@ -205,7 +191,7 @@ public class SettingFragment extends SlidingBaseFragment {
 
                                     @Override
                                     public void onSuccess(Long result) {
-                                        RequestManager.deleteUser(userEntity.id, new Emitter.Listener() {
+                                        RequestManager.deleteUser(Global.userEntity.id, new Emitter.Listener() {
                                             @Override
                                             public void call(final Object... args) {
 
@@ -269,7 +255,7 @@ public class SettingFragment extends SlidingBaseFragment {
 
     private void requestLogout() {
         BaseActivity.showLoadingView();
-        SocketIO.setToken(userEntity.id, null, new RequestManager.OnSetToken() {
+        SocketIO.setToken(Global.userEntity.id, null, new RequestManager.OnSetToken() {
             @Override
             public void onSuccess() {
 
@@ -293,7 +279,7 @@ public class SettingFragment extends SlidingBaseFragment {
             }
         });
 
-        SocketIO.setDeviceId(userEntity.id, null, new RequestManager.OnSetDeviceId() {
+        SocketIO.setDeviceId(Global.userEntity.id, null, new RequestManager.OnSetDeviceId() {
             @Override
             public void onSuccess() {
                 SharedPreferencesCache cache = Session.getAppCache();

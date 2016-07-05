@@ -1,6 +1,5 @@
 package com.songjin.usum.controllers.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,14 +13,12 @@ import com.songjin.usum.managers.RequestManager;
 public class EditProfileActivity extends BaseActivity {
 
     private static final String TAG = "EditProfileActivity";
-    private UserEntity userEntity;
 
     private class ViewHolder {
         public UserProfileForm userProfileForm;
 
         public ViewHolder(View view) {
             userProfileForm = (UserProfileForm) view.findViewById(R.id.user_profile_form);
-            userProfileForm.setUserEntity(userEntity);
         }
     }
 
@@ -31,9 +28,6 @@ public class EditProfileActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews(R.layout.activity_edit_profile);
-
-        Intent intent = getIntent();
-        userEntity = intent.getParcelableExtra(Global.USER);
     }
 
     @Override
@@ -42,9 +36,9 @@ public class EditProfileActivity extends BaseActivity {
         Log.d(TAG, "액티비티 시작");
 
         viewHolder = new ViewHolder(getWindow().getDecorView());
-        viewHolder.userProfileForm.setRealName(userEntity.realName);
-        viewHolder.userProfileForm.setSex(userEntity.sex);
-        viewHolder.userProfileForm.setType(userEntity.userType);
+        viewHolder.userProfileForm.setRealName(Global.userEntity.realName);
+        viewHolder.userProfileForm.setSex(Global.userEntity.sex);
+        viewHolder.userProfileForm.setType(Global.userEntity.userType);
         viewHolder.userProfileForm.setMode(UserProfileForm.Mode.EDIT);
         viewHolder.userProfileForm.setOnSubmitListener(new UserProfileForm.OnSubmitListener() {
             @Override
@@ -54,7 +48,8 @@ public class EditProfileActivity extends BaseActivity {
                 RequestManager.updateUserProfile(viewHolder.userProfileForm.getUserEntity(), new RequestManager.OnUpdateUserProfile() {
                     @Override
                     public void onSuccess(UserEntity userEntity) {
-                        EditProfileActivity.this.userEntity = userEntity;
+                        Global.userEntity = userEntity;
+                        Log.d(TAG, "id = " + userEntity.id);
                         hideLoadingView();
                         finish();
                     }
@@ -64,6 +59,20 @@ public class EditProfileActivity extends BaseActivity {
 
                     }
                 });
+
+//                RequestManager.updateUserProfile(viewHolder.userProfileForm.getUserEntity(), new BaasioCallback<BaasioUser>() {
+//                    @Override
+//                    public void onResponse(BaasioUser baasioUser) {
+//                        Baas.io().setSignedInUser(baasioUser);
+//                        hideLoadingView();
+//                        finish();
+//                    }
+//
+//                    @Override
+//                    public void onException(BaasioException e) {
+//
+//                    }
+//                });
             }
         });
     }

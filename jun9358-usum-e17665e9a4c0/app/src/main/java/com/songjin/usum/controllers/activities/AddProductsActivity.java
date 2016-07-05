@@ -10,13 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.songjin.usum.Global;
 import com.songjin.usum.controllers.views.ProductAddForm;
 import com.songjin.usum.controllers.views.ProductRecyclerView;
 import com.songjin.usum.R;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.entities.TransactionEntity;
-import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.RequestManager;
 
 import java.util.ArrayList;
@@ -26,7 +24,6 @@ import nl.changer.polypicker.ImagePickerActivity;
 public class AddProductsActivity extends BaseActivity {
 
     private static final String TAG = "AddProductActivity";
-    private UserEntity userEntity;
 
     private class ViewHolder {
         ProductAddForm productAddForm;
@@ -35,8 +32,6 @@ public class AddProductsActivity extends BaseActivity {
         public ViewHolder(View view) {
             productAddForm = (ProductAddForm) view.findViewById(R.id.product_add_form);
             products = (ProductRecyclerView) view.findViewById(R.id.products);
-
-            productAddForm.setUserEntity(userEntity);
         }
     }
 
@@ -102,7 +97,6 @@ public class AddProductsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        userEntity = getIntent().getParcelableExtra(Global.USER);
         initViews(R.layout.activity_add_products);
     }
 

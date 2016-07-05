@@ -17,7 +17,6 @@ import com.songjin.usum.controllers.activities.SupportCompletedActivity;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.MainActivity;
-import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 
@@ -25,9 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SupportFragment extends SlidingBaseFragment {
-
-    private UserEntity userEntity;
-
     public class ViewHolder {
         public Button launchInAppBilling;
         public Button showFaq;
@@ -42,20 +38,9 @@ public class SupportFragment extends SlidingBaseFragment {
 
     public static BillingProcessor billingProcessor;
 
-    public static SupportFragment newInstance(UserEntity userEntity) {
-        SupportFragment fragment = new SupportFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(Global.USER, userEntity);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        userEntity = getArguments().getParcelable(Global.USER);
     }
 
     @Override
@@ -162,7 +147,7 @@ public class SupportFragment extends SlidingBaseFragment {
 
     @Override
     public void onPageSelected() {
-        switch (userEntity.userType) {
+        switch (AuthManager.getSignedInUserType()) {
             case Global.GUEST:
                 BaseActivity.showGuestBlockedDialog();
                 break;

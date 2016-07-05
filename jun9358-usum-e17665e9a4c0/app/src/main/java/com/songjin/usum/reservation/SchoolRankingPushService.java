@@ -2,10 +2,8 @@ package com.songjin.usum.reservation;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.songjin.usum.Global;
 import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.dtos.SchoolRanking;
@@ -95,13 +93,8 @@ public class SchoolRankingPushService extends IntentService {
     }
 
     private int getMyRank(ArrayList<SchoolRanking> schoolRankings) {
-        SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
-        String json = preferences.getString(Global.USER, null);
-        UserEntity userEntity = null;
-        if (json != null) {
-            Gson gson = new Gson();
-            userEntity = gson.fromJson(json, UserEntity.class);
-        }
+//        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
+        UserEntity userEntity = Global.userEntity;
 
         int myRanking = -1;
         for (int i = 0; i < schoolRankings.size(); i++) {

@@ -40,8 +40,6 @@ public class ProductDetailCardView extends CardView {
     private static final String TAG = "ProductDetailCardView";
     private boolean isDeleteFile;
     private static final long ONE_WEEK = 1000 * 60 * 60 * 24 * 7;
-    private UserEntity userEntity;
-
     private class ViewHolder {
         public ProductCardView productCardView;
         public ProductAddForm productAddForm;
@@ -66,8 +64,6 @@ public class ProductDetailCardView extends CardView {
             cancelButton = (Button) view.findViewById(R.id.cancel_button);
             updateButton = (Button) view.findViewById(R.id.update_button);
             deleteButton = (Button) view.findViewById(R.id.delete_button);
-
-            productAddForm.setUserEntity(userEntity);
         }
     }
 
@@ -104,7 +100,7 @@ public class ProductDetailCardView extends CardView {
 
                 ArrayList<String> targetUserUuids = new ArrayList<>();
                 String pushMessage = "";
-                String signedUserUuid = userEntity.getId();
+                String signedUserUuid = Global.userEntity.getId();
 
                 Log.d(TAG, "제품 상태 = " + productCardDto.transactionEntity.status);
                 Log.d(TAG, "내 아이디 = " + signedUserUuid);
@@ -230,21 +226,21 @@ public class ProductDetailCardView extends CardView {
             @Override
             public void onClick(View v) {
                 if (ONE_WEEK < System.currentTimeMillis() - productCardDto.transactionEntity.modified) {
-                    productCardDto.transactionEntity.receiver_id = userEntity.id;
+                    productCardDto.transactionEntity.receiver_id = Global.userEntity.id;
                     RequestManager.updateTransactionStatus(productCardDto.transactionEntity, Global.RECEIVED, onUpdateTransactionStatus);
                     return;
                 }
 
                 switch (productCardDto.transactionEntity.status) {
                     case Global.REGISTERED:
-                        productCardDto.transactionEntity.receiver_id = userEntity.id;
+                        productCardDto.transactionEntity.receiver_id = Global.userEntity.id;
                         RequestManager.updateTransactionStatus(productCardDto.transactionEntity, Global.REQUESTED, onUpdateTransactionStatus);
                         break;
                     case Global.REQUESTED:
                         RequestManager.updateTransactionStatus(productCardDto.transactionEntity, Global.SENDED, onUpdateTransactionStatus);
                         break;
                     case Global.SENDED:
-                        productCardDto.transactionEntity.receiver_id = userEntity.id;
+                        productCardDto.transactionEntity.receiver_id = Global.userEntity.id;
                         RequestManager.updateTransactionStatus(productCardDto.transactionEntity, Global.RECEIVED, onUpdateTransactionStatus);
                         break;
                     case Global.RECEIVED:
@@ -395,7 +391,7 @@ public class ProductDetailCardView extends CardView {
             }
         });
 
-        switch (userEntity.userType) {
+        switch (AuthManager.getSignedInUserType()) {
             case Global.GUEST:
                 viewHolder.donateButton.setVisibility(View.GONE);
                 viewHolder.cancelButton.setVisibility(View.GONE);
@@ -439,6 +435,7 @@ public class ProductDetailCardView extends CardView {
     }
 
     private void writeCommentToShareMyProfile() {
+        UserEntity userEntity = Global.userEntity;
         String commentContents =
                 "이름: " + userEntity.realName + "\n" +
                         "휴대폰번호: " + userEntity.phone;
@@ -446,7 +443,7 @@ public class ProductDetailCardView extends CardView {
         RequestManager.insertTimelineComment(
                 productCardDto.productEntity.id,
                 commentContents,
-                userEntity.id,
+                Global.userEntity.id,
                 new RequestManager.OnInsertTimelineComment() {
                     @Override
                     public void onSuccess() {
@@ -458,10 +455,26 @@ public class ProductDetailCardView extends CardView {
 
                     }
                 });
+
+//        RequestManager.insertTimelineComment(
+//                productCardDto.productEntity.uuid,
+//                commentContents,
+//                new BaasioCallback<BaasioEntity>() {
+//                    @Override
+//                    public void onResponse(BaasioEntity baasioEntity) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onException(BaasioException e) {
+//
+//                    }
+//                }
+//        );
     }
 
     private void writeTimelineThatTransactionCompleted() {
-        RequestManager.insertTimeline(productCardDto.productEntity.school_id, null, userEntity.id, "교복기부로 점수획득!", new RequestManager.OnInsertTimeline() {
+        RequestManager.insertTimeline(productCardDto.productEntity.school_id, null, Global.userEntity.id, "교복기부로 점수획득!", new RequestManager.OnInsertTimeline() {
             @Override
             public void onSuccess(TimelineCardDto timelineCardDto) {
 
@@ -477,6 +490,7 @@ public class ProductDetailCardView extends CardView {
     public void setProductCardDto(ProductCardDto productCardDto) {
         this.productCardDto = productCardDto;
 
+        UserEntity userEntity = Global.userEntity;
         if (productCardDto.productEntity.user_id.equals(userEntity.id) &&
                 productCardDto.transactionEntity.status == Global.REGISTERED) {
             viewHolder.cancelButton.setVisibility(GONE);
@@ -492,7 +506,8 @@ public class ProductDetailCardView extends CardView {
     private void notifyTransactionStatusChanged() {
         String donatorUuid = productCardDto.transactionEntity.donator_id;
         String receiverUuid = productCardDto.transactionEntity.receiver_id;
-        String signedUserUuid = userEntity.id;
+//        String signedUserUuid = Baas.io().getSignedInUser().getUuid().toString();
+        String signedUserUuid = Global.userEntity.id;
         Log.d(TAG, "상태 = " +  productCardDto.transactionEntity.status);
         switch (productCardDto.transactionEntity.status) {
             case Global.REGISTERED:
@@ -572,13 +587,5 @@ public class ProductDetailCardView extends CardView {
                 viewHolder.deleteButton.setVisibility(View.GONE);
                 break;
         }
-    }
-
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
     }
 }

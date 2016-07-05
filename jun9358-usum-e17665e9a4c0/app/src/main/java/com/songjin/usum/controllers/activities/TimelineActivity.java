@@ -24,7 +24,6 @@ public class TimelineActivity extends BaseActivity {
     private static final String TAG = "TimelineActivity";
     private static final int ALL = 0;
     private static final int MINE = 1;
-    private UserEntity userEntity;
 
     private int timelineStatus = 0;
 
@@ -35,8 +34,6 @@ public class TimelineActivity extends BaseActivity {
         public ViewHolder(View view) {
             timelines = (TimelineRecyclerView) view.findViewById(R.id.timelines);
             writeTimelineButton = (FloatingActionButton) view.findViewById(R.id.write_timeline);
-
-            timelines.setUserEntity(userEntity);
         }
     }
 
@@ -55,7 +52,6 @@ public class TimelineActivity extends BaseActivity {
         Log.d(TAG, "액티비티 시작");
 
         Intent intent = getIntent();
-        userEntity = intent.getParcelableExtra(Global.USER);
         schoolEntity = intent.getParcelableExtra("schoolEntity");
         Log.d(TAG, "schoolEntity = " + schoolEntity);
 
@@ -70,7 +66,7 @@ public class TimelineActivity extends BaseActivity {
     public void onResume() {
         super.onResume();
 
-        switch (userEntity.userType) {
+        switch (AuthManager.getSignedInUserType()) {
             case Global.GUEST:
                 viewHolder.writeTimelineButton.setVisibility(View.GONE);
                 break;
@@ -89,7 +85,7 @@ public class TimelineActivity extends BaseActivity {
 
     private void getTimeline() {
         if (timelineStatus == ALL) {
-            RequestManager.getAllTimeline(userEntity.id, schoolEntity.id, new RequestManager.OnGetAllTimeline() {
+            RequestManager.getAllTimeline(Global.userEntity.id, schoolEntity.id, new RequestManager.OnGetAllTimeline() {
                 @Override
                 public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
                     viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
@@ -102,7 +98,7 @@ public class TimelineActivity extends BaseActivity {
                 }
             });
         } else if (timelineStatus == MINE) {
-            RequestManager.getMyTimeline(userEntity.id, schoolEntity.id, new RequestManager.OnGetMyTimeline() {
+            RequestManager.getMyTimeline(Global.userEntity.id, schoolEntity.id, new RequestManager.OnGetMyTimeline() {
                 @Override
                 public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
                     viewHolder.timelines.setTimelineCardDtos(timelineCardDtos);
@@ -174,7 +170,7 @@ public class TimelineActivity extends BaseActivity {
 
         viewHolder = new ViewHolder(getWindow().getDecorView());
 
-        UserEntity signedUser = userEntity;
+        UserEntity signedUser = Global.userEntity;
         if (signedUser.schoolId != schoolEntity.id) {
             viewHolder.writeTimelineButton.setVisibility(View.GONE);
         }
@@ -191,15 +187,26 @@ public class TimelineActivity extends BaseActivity {
             public void onRefresh() {
                 timelineCardDtos.clear();
                 getTimeline();
+                Log.d(TAG, "2");
+//                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
             }
         });
+
+//        viewHolder.timelines.setOnMoreListener(new OnMoreListener() {
+//            @Override
+//            public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
+//                getTimeline();
+//                Log.d(TAG, "3");
+////                RequestManager.getNextTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
+//            }
+//        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        switch (userEntity.userType) {
+        switch (AuthManager.getSignedInUserType()) {
             case Global.GUEST:
                 break;
             case Global.STUDENT:
