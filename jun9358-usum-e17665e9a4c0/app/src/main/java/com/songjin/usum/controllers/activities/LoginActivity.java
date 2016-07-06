@@ -45,6 +45,8 @@ public class LoginActivity extends BaseActivity {
         if (schoolManager.isEmptyTable()) {
             showLoadingView("학교 DB 다운로드 중 입니다.");
 
+            schoolManager.deleteAllSchools();
+
             // 학교 정보 로딩 요청
             RequestManager.getSchool(new RequestManager.OnGetSchool() {
                 @Override

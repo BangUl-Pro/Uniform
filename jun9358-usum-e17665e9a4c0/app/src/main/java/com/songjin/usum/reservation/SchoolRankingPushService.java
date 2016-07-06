@@ -42,12 +42,14 @@ public class SchoolRankingPushService extends IntentService {
     }
 
     private void checkSchoolRankUpdated() {
+        if (Global.userEntity == null || Global.userEntity.schoolId == 0)
+            return;
         SchoolManager schoolManager = new SchoolManager(getApplicationContext());
-        RequestManager.getSchoolRanking(new RequestManager.OnGetSchoolRanking() {
+        RequestManager.getMySchoolRanking(new RequestManager.OnGetMySchoolRanking() {
             @Override
-            public void onSuccess(ArrayList<SchoolRanking> schoolRankings) {
+            public void onSuccess(int rank) {
                 int lastRank = SettingFragment.getLastSchoolRank();
-                int currentRank = getMyRank(schoolRankings);
+                int currentRank = rank;
                 if (lastRank == -1 || currentRank == -1) {
                     SettingFragment.setLastSchoolRank(currentRank);
                 } else if (lastRank != currentRank) {
@@ -60,9 +62,9 @@ public class SchoolRankingPushService extends IntentService {
 
             @Override
             public void onException() {
-
+                Log.d(TAG, "내 학교 순위 얻기 실패");
             }
-        });
+        }, Global.userEntity.schoolId);
 
 //        RequestManager.getSchoolRankingsInBackground(schoolManager,
 //                new BaasioQueryCallback() {

@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.songjin.usum.Global;
+import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.views.SchoolRankingCardView;
 import com.songjin.usum.controllers.views.SchoolRankingRecyclerView;
-import com.songjin.usum.Global;
-import com.songjin.usum.R;
 import com.songjin.usum.dtos.SchoolRanking;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.managers.AuthManager;
@@ -60,7 +60,7 @@ public class CommunityFragment extends SlidingBaseFragment {
         RequestManager.getSchoolRanking(new RequestManager.OnGetSchoolRanking() {
             @Override
             public void onSuccess(ArrayList<SchoolRanking> schoolRankings) {
-                setSchoolRankings(schoolRankings);
+                addSchoolRankings(schoolRankings);
             }
 
             @Override
@@ -70,38 +70,16 @@ public class CommunityFragment extends SlidingBaseFragment {
                         .content("학교순위를 가져오는 중에 문제가 발생하였습니다.")
                         .show();
             }
-        });
-
-//        RequestManager.getSchoolRankingsInBackground(schoolManager, new BaasioQueryCallback() {
-//                    @Override
-//                    public void onResponse(List<BaasioBaseEntity> entities, List<Object> objects, BaasioQuery baasioQuery, long l) {
-//                        ArrayList<SchoolRanking> schoolRankings = new ArrayList<>();
-//                        for (BaasioBaseEntity entity : entities) {
-//                            schoolRankings.add(new SchoolRanking(entity));
-//                        }
-//                        viewHolder.schoolRankings.setSchoolRankings(schoolRankings);
-//
-//                        initMySchoolRankingCard(schoolRankings);
-//                    }
-//
-//                    @Override
-//                    public void onException(BaasioException e) {
-//                        new MaterialDialog.Builder(BaseActivity.context)
-//                                .title(R.string.app_name)
-//                                .content("학교순위를 가져오는 중에 문제가 발생하였습니다.")
-//                                .show();
-//                    }
-//                }
-//        );
+        }, 0);
 
         return view;
     }
 
 
-    public void setSchoolRankings(ArrayList<SchoolRanking> schoolRankings) {
-        viewHolder.schoolRankings.setSchoolRankings(schoolRankings);
+    public void addSchoolRankings(ArrayList<SchoolRanking> schoolRankings) {
+        viewHolder.schoolRankings.addSchoolRankings(schoolRankings);
         if (Global.userEntity.userType == Global.STUDENT) {
-            initMySchoolRankingCard(schoolRankings);
+            initMySchoolRankingCard((int) schoolRankings.get(0).point);
         }
     }
 
@@ -122,30 +100,26 @@ public class CommunityFragment extends SlidingBaseFragment {
         }
     }
 
-    private void initMySchoolRankingCard(ArrayList<SchoolRanking> schoolRankings) {
+    private void initMySchoolRankingCard(final int topPoint) {
         SchoolManager schoolManager = new SchoolManager(getActivity());
 
 //        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
         SchoolEntity mySchoolEntity = schoolManager.selectSchool(Global.userEntity.schoolId);
-        Log.d(TAG, "schoolId = " + Global.userEntity.schoolId);
-        Log.d(TAG, "schoolName = " + mySchoolEntity.schoolname);
-        Log.d(TAG, "mySchoolEntity = " + mySchoolEntity);
-        Log.d(TAG, "mySchoolEntity.Id = " + mySchoolEntity.id);
         if (mySchoolEntity != null)
             viewHolder.mySchoolRankingCardView.setSchoolEntity(mySchoolEntity);
 
-        int myRanking = 0;
-        int myProgress = 0;
-        for (int i = 0; i < schoolRankings.size(); i++) {
-            SchoolRanking schoolRanking = schoolRankings.get(i);
-
-            if (Global.userEntity.schoolId == schoolRanking.school_id) {
-                myRanking = i + 1;
-                myProgress = SchoolRankingCardView.calcProgress(schoolRanking.point, schoolRankings.get(0).point);
-                break;
+        RequestManager.getMySchoolRanking(new RequestManager.OnGetMySchoolRanking() {
+            @Override
+            public void onSuccess(int rank) {
+                viewHolder.mySchoolRankingCardView.setRanking(rank);
+                int myProgress = SchoolRankingCardView.calcProgress(rank, topPoint);
+                viewHolder.mySchoolRankingCardView.setProgress(myProgress);
             }
-        }
-        viewHolder.mySchoolRankingCardView.setRanking(myRanking);
-        viewHolder.mySchoolRankingCardView.setProgress(myProgress);
+
+            @Override
+            public void onException() {
+                Log.d(TAG, "내 학교 순위 얻기 실패");
+            }
+        }, Global.userEntity.schoolId);
     }
 }

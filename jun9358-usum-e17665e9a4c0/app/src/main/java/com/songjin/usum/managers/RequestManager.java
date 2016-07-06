@@ -206,9 +206,14 @@ public class RequestManager {
     }
 
 
-    public static void getSchoolRanking(OnGetSchoolRanking onGetSchoolRanking) {
+    public static void getSchoolRanking(OnGetSchoolRanking onGetSchoolRanking, int index) {
         Log.d(TAG, "학교 랭킹 요청");
-        SocketIO.getSchoolRanking(onGetSchoolRanking);
+        SocketIO.getSchoolRanking(onGetSchoolRanking, index);
+    }
+
+    public static void getMySchoolRanking(OnGetMySchoolRanking onGetSchoolRanking, int rank) {
+        Log.d(TAG, "내 학교 랭킹 요청");
+        SocketIO.getMySchoolRanking(onGetSchoolRanking, rank);
     }
 
 
@@ -260,6 +265,11 @@ public class RequestManager {
 
     public interface OnGetSchoolRanking {
         void onSuccess(ArrayList<SchoolRanking> schoolRankings);
+        void onException();
+    }
+
+    public interface OnGetMySchoolRanking {
+        void onSuccess(int rank);
         void onException();
     }
 

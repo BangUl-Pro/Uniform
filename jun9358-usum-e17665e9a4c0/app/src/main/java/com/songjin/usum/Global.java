@@ -12,6 +12,7 @@ public class Global {
     public static final String CODE = "code";
     public static final String GET_SCHOOL = "getSchool";
     public static final String GET_SCHOOL_RANKING = "getSchoolRanking";
+    public static final String GET_MY_SCHOOL_RANKING = "getMySchoolRanking";
     public static final String SIGN_UP = "signUp";
     public static final String SIGN_IN = "signIn";
     public static final String SIGN_IN_KAKAO = "signInKakao";
@@ -59,9 +60,11 @@ public class Global {
     public static final String PICTURE = "picture";
     public static final String PHONE = "phone";
     public static final String SCHOOL_ID = "school_id";
+    public static final String RANK = "rank";
     public static final String PRODUCT_CARD = "productCard";
     public static final String TIMELINE = "timeline";
     public static final String TIMELINE_COMMENT = "timelineComment";
+    public static final String INDEX = "index";
     public static final String FROM = "from";
     public static final String FILE = "file";
     public static final String TIMELINE_ITEM_ID = "timelineItemId";

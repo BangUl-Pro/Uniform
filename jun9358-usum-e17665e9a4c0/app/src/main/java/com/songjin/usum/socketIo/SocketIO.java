@@ -561,47 +561,98 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 20. 학교 랭킹 요청
-    public static void getSchoolRanking(final RequestManager.OnGetSchoolRanking onGetSchoolRanking) {
+    public static void getSchoolRanking(final RequestManager.OnGetSchoolRanking onGetSchoolRanking, int index) {
         Log.d(TAG, "학교 랭킹 요청");
         if (!checkSocket())
             return;
-        socket.emit(Global.GET_SCHOOL_RANKING, "");
-        socket.once(Global.GET_SCHOOL_RANKING, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                try {
-                    JSONObject resObject = getJson(args);
-                    final int code = getCode(resObject);
-                    Log.d(TAG, "학교랭킹 응답 resObject = " + resObject);
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.INDEX, index);
+            socket.emit(Global.GET_SCHOOL_RANKING, object);
+            socket.once(Global.GET_SCHOOL_RANKING, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        Log.d(TAG, "학교랭킹 응답 resObject = " + resObject);
 
-                    if (code == SocketException.SUCCESS) {
-                        // 성공
-                        JSONArray schoolArray = resObject.getJSONArray(Global.SCHOOL);
-                        final ArrayList<SchoolRanking> schoolRankingList = new ArrayList<>();
-                        for (int i = 0; i < schoolArray.length(); i++) {
-                            JSONObject schoolObject = schoolArray.getJSONObject(i);
-                            SchoolRanking schoolRanking = new SchoolRanking(schoolObject);
-                            schoolRankingList.add(schoolRanking);
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            JSONArray schoolArray = resObject.getJSONArray(Global.SCHOOL);
+                            final ArrayList<SchoolRanking> schoolRankingList = new ArrayList<>();
+                            for (int i = 0; i < schoolArray.length(); i++) {
+                                JSONObject schoolObject = schoolArray.getJSONObject(i);
+                                SchoolRanking schoolRanking = new SchoolRanking(schoolObject);
+                                schoolRankingList.add(schoolRanking);
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetSchoolRanking.onSuccess(schoolRankingList);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetSchoolRanking.onException();
+                                }
+                            });
                         }
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                onGetSchoolRanking.onSuccess(schoolRankingList);
-                            }
-                        });
-                    } else {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                onGetSchoolRanking.onException();
-                            }
-                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // TODO: 15. 11. 20. 학교 랭킹 요청
+    public static void getMySchoolRanking(final RequestManager.OnGetMySchoolRanking onGetSchoolRanking, int schoolId) {
+        Log.d(TAG, "학교 랭킹 요청");
+        if (!checkSocket())
+            return;
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.SCHOOL_ID, schoolId);
+            socket.emit(Global.GET_MY_SCHOOL_RANKING, object);
+            socket.once(Global.GET_MY_SCHOOL_RANKING, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+                        Log.d(TAG, "내 학교랭킹 응답 resObject = " + resObject);
+
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            JSONObject rankJson = resObject.getJSONObject(Global.RANK);
+                            final int rank = rankJson.getInt(Global.RANK);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetSchoolRanking.onSuccess(rank);
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onGetSchoolRanking.onException();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     // TODO: 15. 11. 20. 제품검색

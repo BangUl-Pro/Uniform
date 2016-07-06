@@ -89,6 +89,6 @@ public class SchoolManager {
 
         db.close();
 
-        return !(0 < count);
+        return count == 0;
     }
 }
