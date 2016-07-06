@@ -76,27 +76,6 @@ public class SocketIO {
         if (!Global.isCreated)
             setListener();
         Global.isCreated = true;
-
-
-
-        socket.emit("dropTransaction", "");
-        socket.emit("dropProduct", "");
-        socket.emit("dropComment", "");
-        socket.emit("dropLike", "");
-        socket.emit("dropFile", "");
-        socket.emit("dropSchool", "");
-        socket.emit("dropTimeline", "");
-        socket.emit("dropUser", "");
-
-
-        socket.emit("createSchool", "");
-        socket.emit("createUser", "");
-        socket.emit("createTimeline", "");
-        socket.emit("createLike", "");
-        socket.emit("createFile", "");
-        socket.emit("createComment", "");
-        socket.emit("createProduct", "");
-        socket.emit("createTransaction", "");
     }
 
 
