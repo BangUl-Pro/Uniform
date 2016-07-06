@@ -83,7 +83,9 @@
             android:name="com.kakao.sdk.GcmProjectId"
             android:value="@string/gcm_project_number" />
 
-        <receiver android:name="com.songjin.usum.reservation.ReservationPushBroadcastReceiver" >
+        <receiver
+            android:name="com.songjin.usum.reservation.ReservationPushBroadcastReceiver"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -91,7 +93,9 @@
 
         <service android:name="com.songjin.usum.reservation.ReservationPushService" />
 
-        <receiver android:name="com.songjin.usum.reservation.SchoolRankingPushBroadcastReceiver" >
+        <receiver
+            android:name="com.songjin.usum.reservation.SchoolRankingPushBroadcastReceiver"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -164,21 +168,18 @@
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
                 <category android:name="com.songjin.usum" />
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="com.songjin.usum.gcm.gcm.MyGcmListenerService"
-            android:exported="false" >
+        <service android:name="com.songjin.usum.gcm.gcm.MyGcmListenerService" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-        <service
-            android:name="com.songjin.usum.gcm.gcm.MyInstanceIDListenerService"
-            android:exported="false" >
+        <service android:name="com.songjin.usum.gcm.gcm.MyInstanceIDListenerService" >
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>

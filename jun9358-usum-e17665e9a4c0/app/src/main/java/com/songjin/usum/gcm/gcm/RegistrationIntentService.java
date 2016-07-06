@@ -19,6 +19,10 @@ public class RegistrationIntentService extends IntentService {
 
     private static final String TAG = "RegistrationIntentService";
 
+    private String token = null;
+
+    private InstanceID instanceID;
+
     public RegistrationIntentService() {
         super(TAG);
     }
@@ -36,27 +40,47 @@ public class RegistrationIntentService extends IntentService {
                 .sendBroadcast(new Intent(GCMManager.REGISTRATION_GENERATION));
 
         // GCM을 위한 Instance ID를 가져온다.
-        InstanceID instanceID = InstanceID.getInstance(this);
-        String token = null;
-        try {
-            synchronized (TAG) {
-                // GCM 앱을 등록하고 획득한 설정파일인 google-services.json을 기반으로 SenderID를 자동으로 가져온다.
-                String default_senderId = getString(R.string.gcm_defaultSenderId);
-                // GCM 기본 scope는 "GCM"이다.
-                String scope = GoogleCloudMessaging.INSTANCE_ID_SCOPE;
-                // Instance ID에 해당하는 토큰을 생성하여 가져온다.
-                token = instanceID.getToken(default_senderId, scope, null);
+        instanceID = InstanceID.getInstance(this);
 
-                Log.i(TAG, "GCM Registration Token: " + token);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        synchronized (TAG) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    long backoff = 3000;
+                    for (int i = 1; i <= 5; i++) {
+                        try {
+                            token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                            Log.i(TAG, "GCM Registration Token: " + token);
+                            if(null != token && !token.isEmpty()) {
+//                                GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+//                                token = gcm.register(getString(R.string.gcm_defaultSenderId));
+//                                Log.d(TAG, "GCM Registration : " + token);
+                                break;
+                            }
+                        } catch (IOException e) {
+                            //Log exception
+                            Log.e(TAG, "토큰 안돼 " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                        if (i == 5) {
+                            break;
+                        }
+                        try {
+                            Thread.sleep(backoff);
+                        } catch (InterruptedException e1) {
+                            break;
+                        }
+                        // increase backoff exponentially
+                        backoff <<= 1;
+                    }
+
+                    // GCM Instance ID에 해당하는 토큰을 획득하면 LocalBoardcast에 COMPLETE 액션을 알린다.
+                    // 이때 토큰을 함께 넘겨주어서 UI에 토큰 정보를 활용할 수 있도록 했다.
+                    Intent registrationComplete = new Intent(GCMManager.REGISTRATION_COMPLETE);
+                    registrationComplete.putExtra("token", token);
+                    LocalBroadcastManager.getInstance(RegistrationIntentService.this).sendBroadcast(registrationComplete);
+                }
+            }).start();
         }
-
-        // GCM Instance ID에 해당하는 토큰을 획득하면 LocalBoardcast에 COMPLETE 액션을 알린다.
-        // 이때 토큰을 함께 넘겨주어서 UI에 토큰 정보를 활용할 수 있도록 했다.
-        Intent registrationComplete = new Intent(GCMManager.REGISTRATION_COMPLETE);
-        registrationComplete.putExtra("token", token);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
     }
 }

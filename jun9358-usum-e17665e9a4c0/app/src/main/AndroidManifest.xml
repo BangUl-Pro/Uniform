@@ -73,7 +73,8 @@
             android:name="com.kakao.sdk.GcmProjectId"
             android:value="@string/gcm_project_number" />
 
-        <receiver android:name=".reservation.ReservationPushBroadcastReceiver">
+        <receiver android:name=".reservation.ReservationPushBroadcastReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -81,7 +82,8 @@
 
         <service android:name=".reservation.ReservationPushService" />
 
-        <receiver android:name=".reservation.SchoolRankingPushBroadcastReceiver">
+        <receiver android:name=".reservation.SchoolRankingPushBroadcastReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -154,21 +156,19 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
                 <category android:name="com.songjin.usum" />
             </intent-filter>
         </receiver>
 
         <service
-            android:name=".gcm.gcm.MyGcmListenerService"
-            android:exported="false">
+            android:name=".gcm.gcm.MyGcmListenerService">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
         <service
-            android:name=".gcm.gcm.MyInstanceIDListenerService"
-            android:exported="false">
+            android:name=".gcm.gcm.MyInstanceIDListenerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>

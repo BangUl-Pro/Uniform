@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.fragments.BuyFragment;
@@ -68,6 +70,10 @@ public class MainActivity extends BaseActivity implements PushHandler {
                 if(action.equals(GCMManager.REGISTRATION_COMPLETE)){
                     // 액션이 COMPLETE일 경우
                     final String token = intent.getStringExtra("token");
+                    Log.d(TAG, "token = " + token);
+                    if (token == null)
+                        return;
+                    Log.d(TAG, "not return");
 
                     SocketIO.setToken(Global.userEntity.id, token, new RequestManager.OnSetToken() {
                         @Override
@@ -85,11 +91,27 @@ public class MainActivity extends BaseActivity implements PushHandler {
         };
     }
 
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        9000).show();
+            } else {
+                Log.i("ICELANCER", "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews(R.layout.activity_main);
         Log.d(TAG, "액티비티 시작");
+        checkPlayServices();
         registBroadcastReceiver();
         getInstanceIdToken();
 

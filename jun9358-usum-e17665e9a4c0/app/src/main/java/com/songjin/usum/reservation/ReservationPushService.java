@@ -100,7 +100,7 @@ public class ReservationPushService extends IntentService {
             }
 
             UserEntity userEntity = Global.userEntity;
-            if (userEntity.id == null) {
+            if (userEntity == null || userEntity.id == null) {
                 return;
             }
             array = new JSONArray();
