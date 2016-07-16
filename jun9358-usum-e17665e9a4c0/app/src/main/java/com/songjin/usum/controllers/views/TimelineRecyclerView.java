@@ -74,6 +74,7 @@ public class TimelineRecyclerView extends SuperRecyclerView {
 
         public TimelineAdapter(ArrayList<TimelineCardDto> timelineCardDtos) {
             this.timelineCardDtos = timelineCardDtos;
+            sortTimeline();
         }
 
         @Override
@@ -126,10 +127,24 @@ public class TimelineRecyclerView extends SuperRecyclerView {
 
         public void setTimelineCardDtos(ArrayList<TimelineCardDto> timelineCardDtos) {
             this.timelineCardDtos = timelineCardDtos;
+            sortTimeline();
         }
 
         public void addTimelineCardDtos(ArrayList<TimelineCardDto> timelineCardDtos) {
             this.timelineCardDtos.addAll(timelineCardDtos);
+            sortTimeline();
+        }
+
+        public void sortTimeline() {
+            for (int i = 0; i < timelineCardDtos.size(); i++) {
+                for (int j = 0; j < timelineCardDtos.size() - i - 1; j++) {
+                    if (timelineCardDtos.get(j).timelineEntity.created < timelineCardDtos.get(j + 1).timelineEntity.created) {
+                        TimelineCardDto temp = timelineCardDtos.get(j);
+                        timelineCardDtos.set(j, timelineCardDtos.get(j + 1));
+                        timelineCardDtos.set(j + 1, temp);
+                    }
+                }
+            }
         }
     }
 }

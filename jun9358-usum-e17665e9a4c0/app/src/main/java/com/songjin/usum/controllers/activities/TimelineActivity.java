@@ -1,6 +1,7 @@
 package com.songjin.usum.controllers.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.melnykov.fab.FloatingActionButton;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.TimelineRecyclerView;
@@ -16,7 +18,6 @@ import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
-import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -79,7 +80,10 @@ public class TimelineActivity extends BaseActivity {
 
         timelineCardDtos.clear();
         getTimeline();
-        Log.d(TAG, "1");
+        SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong(Global.TIMELINE, System.currentTimeMillis());
+        editor.commit();
     }
 
 
@@ -244,4 +248,7 @@ public class TimelineActivity extends BaseActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+
 }

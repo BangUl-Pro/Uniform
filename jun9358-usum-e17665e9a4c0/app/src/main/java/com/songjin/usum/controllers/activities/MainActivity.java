@@ -29,6 +29,7 @@ import com.songjin.usum.gcm.gcm.PushHandler;
 import com.songjin.usum.gcm.gcm.RegistrationIntentService;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.reservation.ReservationPushService;
+import com.songjin.usum.reservation.SchoolRankingPushService;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 import com.songjin.usum.slidingtab.SlidingTabsBasicFragment;
 import com.songjin.usum.socketIo.SocketIO;
@@ -162,6 +163,9 @@ public class MainActivity extends BaseActivity implements PushHandler {
          * */
         Intent reservationServiceIntent = new Intent(context, ReservationPushService.class);
         context.startService(reservationServiceIntent);
+
+        Intent SchoolRankingPushServiceIntent = new Intent(context, SchoolRankingPushService.class);
+        context.startService(SchoolRankingPushServiceIntent);
     }
 
     @Override

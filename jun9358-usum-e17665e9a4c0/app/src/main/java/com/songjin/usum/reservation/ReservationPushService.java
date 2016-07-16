@@ -2,6 +2,7 @@ package com.songjin.usum.reservation;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.songjin.usum.Global;
@@ -10,6 +11,7 @@ import com.songjin.usum.constants.Category;
 import com.songjin.usum.constants.Sex;
 import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.dtos.ProductCardDto;
+import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.entities.ProductEntity;
 import com.songjin.usum.entities.ReservedCategoryEntity;
 import com.songjin.usum.entities.UserEntity;
@@ -110,49 +112,39 @@ public class ReservationPushService extends IntentService {
                 object.put(ProductEntity.PROPERTY_CATEGORY, reservedCategory.category);
                 object.put(ProductEntity.PROPERTY_CREATED, reservedCategory.lastCheckedTimestamp);
                 array.put(object);
-
-//            where += "(" +
-//                    ProductEntity.PROPERTY_SCHOOL_ID + "=" + reservedCategory.schoolId + " AND " +
-//                    ProductEntity.PROPERTY_CATEGORY + "=" + reservedCategory.category + " AND " +
-//                    ProductEntity.PROPERTY_CREATED + ">=" + reservedCategory.lastCheckedTimestamp +
-//                    ") OR ";
             }
-//        where = where.substring(0, where.length() - String.valueOf(" OR ").length());
-//        query.setWheres(where);
-//        Log.d("USUM", where);
-
             objectIndex = 0;
             final JSONObject object = array.getJSONObject(objectIndex);
 
             RequestManager.getProduct(object, onGetProduct);
+            RequestManager.getAllTimeline(userEntity.id, userEntity.schoolId, new RequestManager.OnGetAllTimeline() {
+                @Override
+                public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
+                    Log.d(TAG, "getAllTimeline");
+                    SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
+                    long time = preferences.getLong(Global.TIMELINE, -1);
 
+                    String msg = "타임라인에 새 글이 등록되었습니다.";
 
-//            RequestManager.getProductsInBackground(query, false, new RequestManager.TypedBaasioQueryCallback<ProductCardDto>() {
-//                @Override
-//                public void onResponse(List<ProductCardDto> entities) {
-//                    HashBiMap<Integer, String> categories = Category.getHashBiMap(Sex.ALL);
-//                    for (ProductCardDto productCardDto : entities) {
-//                        if (productCardDto.productEntity.user_uuid.equals(Baas.io().getSignedInUser().getUuid().toString())) {
-//                            continue;
-//                        }
-//
-//                        String msg = "";
-//                        msg += categories.get(productCardDto.productEntity.category);
-//                        msg += "에 해당하는 상품이 등록되었습니다.";
-//                        PushManager.sendReservationPushToMe(msg);
-//
-//                        SettingFragment.updateReservedCategoryTimestamp(
-//                                productCardDto.productEntity.school_id,
-//                                productCardDto.productEntity.category
-//                        );
-//                    }
-//                }
-//
-//                @Override
-//                public void onException(BaasioException e) {
-//
-//                }
-//            });
+                    if (time != -1) {
+                        for (TimelineCardDto dto :
+                                timelineCardDtos) {
+                            if (dto.timelineEntity.created > time) {
+                                PushManager.sendReservationPushToMe(msg);
+                            }
+                        }
+
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putLong(Global.TIMELINE, System.currentTimeMillis());
+                        editor.commit();
+                    }
+                }
+
+                @Override
+                public void onException(int code) {
+
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }

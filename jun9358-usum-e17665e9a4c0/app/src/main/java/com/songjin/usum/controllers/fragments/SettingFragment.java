@@ -352,6 +352,9 @@ public class SettingFragment extends SlidingBaseFragment {
 
     public static int findIndexOfReservedCategories(ArrayList<ReservedCategoryEntity> reservedCategories, int schoolId, int category) {
         int index = -1;
+        if (reservedCategories == null)
+            return index;
+
         for (int i=0 ; i<reservedCategories.size() ; i++) {
             ReservedCategoryEntity reservedCategory = reservedCategories.get(i);
             if (reservedCategory.schoolId == schoolId && reservedCategory.category == category) {

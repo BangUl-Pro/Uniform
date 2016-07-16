@@ -73,6 +73,7 @@ public class ImageCardView extends CardView {
             return;
         }
 
+        Log.d(TAG, "이미지 id = " + fileEntity.id);
         RequestManager.downloadImage("http://uniform-donation.herokuapp.com/imgs/" + fileEntity.id, file, new RequestManager.OnDownloadImage() {
             @Override
             public void onSuccess() {

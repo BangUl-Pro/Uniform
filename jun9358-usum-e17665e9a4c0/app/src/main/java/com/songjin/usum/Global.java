@@ -6,6 +6,7 @@ import com.songjin.usum.entities.UserEntity;
  * Created by IronFactory on 15. 10. 26..
  */
 public class Global {
+    public static final String APP_NAME = "uniform";
     public static final int APP_VER = 1;
 
     public static final String COMMAND = "command";
