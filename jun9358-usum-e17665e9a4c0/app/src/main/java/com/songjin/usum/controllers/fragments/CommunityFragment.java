@@ -70,7 +70,7 @@ public class CommunityFragment extends SlidingBaseFragment {
                         .content("학교순위를 가져오는 중에 문제가 발생하였습니다.")
                         .show();
             }
-        }, 0);
+        });
 
         return view;
     }
@@ -104,16 +104,27 @@ public class CommunityFragment extends SlidingBaseFragment {
         SchoolManager schoolManager = new SchoolManager(getActivity());
 
 //        UserEntity userEntity = new UserEntity(Baas.io().getSignedInUser());
-        SchoolEntity mySchoolEntity = schoolManager.selectSchool(Global.userEntity.schoolId);
+        final SchoolEntity mySchoolEntity = schoolManager.selectSchool(Global.userEntity.schoolId);
         if (mySchoolEntity != null)
             viewHolder.mySchoolRankingCardView.setSchoolEntity(mySchoolEntity);
 
         RequestManager.getMySchoolRanking(new RequestManager.OnGetMySchoolRanking() {
             @Override
-            public void onSuccess(int rank) {
-                viewHolder.mySchoolRankingCardView.setRanking(rank);
-                int myProgress = SchoolRankingCardView.calcProgress(rank, topPoint);
-                viewHolder.mySchoolRankingCardView.setProgress(myProgress);
+            public void onSuccess(final int rank) {
+                RequestManager.getSchoolRanking(new RequestManager.OnGetSchoolRanking() {
+                    @Override
+                    public void onSuccess(ArrayList<SchoolRanking> schoolRankings) {
+                        SchoolRanking ranking = schoolRankings.get(0);
+                        viewHolder.mySchoolRankingCardView.setRanking(rank);
+                        int myProgress = SchoolRankingCardView.calcProgress(ranking.point, topPoint);
+                        viewHolder.mySchoolRankingCardView.setProgress(myProgress);
+                    }
+
+                    @Override
+                    public void onException() {
+
+                    }
+                }, mySchoolEntity.id);
             }
 
             @Override

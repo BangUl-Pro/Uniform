@@ -9,16 +9,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.malinskiy.superrecyclerview.OnMoreListener;
-import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.activities.TimelineActivity;
 import com.songjin.usum.dtos.SchoolRanking;
-import com.songjin.usum.managers.RequestManager;
 
 import java.util.ArrayList;
 
-public class SchoolRankingRecyclerView extends SuperRecyclerView {
+public class SchoolRankingRecyclerView extends RecyclerView {
     private static final String TAG = "SchoolRankRecyclerView";
     private ArrayList<SchoolRanking> schoolRankings;
     private int index = 0;
@@ -40,23 +37,6 @@ public class SchoolRankingRecyclerView extends SuperRecyclerView {
         schoolRankings = new ArrayList<>();
         setLayoutManager(new LinearLayoutManager(getContext()));
         setAdapter(new SchoolRankingAdapter(schoolRankings));
-
-        setupMoreListener(new OnMoreListener() {
-            @Override
-            public void onMoreAsked(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
-                RequestManager.getSchoolRanking(new RequestManager.OnGetSchoolRanking() {
-                    @Override
-                    public void onSuccess(ArrayList<SchoolRanking> schoolRankings) {
-                        addSchoolRankings(schoolRankings);
-                    }
-
-                    @Override
-                    public void onException() {
-                        Log.d(TAG, "학교랭킹 loadmore 실패");
-                    }
-                }, ++index);
-            }
-        }, 10);
     }
 
     public void addSchoolRankings(ArrayList<SchoolRanking> schoolRankings) {

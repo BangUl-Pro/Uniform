@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
@@ -124,8 +125,10 @@ public class MainActivity extends BaseActivity implements PushHandler {
             }
 
             Global.userEntity = getIntent().getParcelableExtra(Global.USER);
-            Log.d(TAG, "id = " + Global.userEntity.id);
-            Log.d(TAG, "schoolId = " + Global.userEntity.schoolId);
+            SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            Log.d(TAG, "USERDATA = " + Global.userEntity.toString());
+            editor.putString(Global.USER, Global.userEntity.toString());
             ArrayList<SlidingBaseFragment> tabFragments = new ArrayList<>();
 
             communityFragment = new CommunityFragment();

@@ -153,7 +153,12 @@ public class RequestManager {
 
     public static void getAllTimeline(String userId, int schoolId, OnGetAllTimeline onGetAllTimeline) {
         Log.d(TAG, "모든 타임라인 리스트 요청");
-        SocketIO.getAllTimeline(schoolId, userId, onGetAllTimeline);
+        SocketIO.getAllTimeline(schoolId, userId, 0, onGetAllTimeline);
+    }
+
+    public static void getAllTimeline(String userId, int schoolId, long time, OnGetAllTimeline onGetAllTimeline) {
+        Log.d(TAG, "모든 타임라인 리스트 요청");
+        SocketIO.getAllTimeline(schoolId, userId, time, onGetAllTimeline);
     }
 
     public static void getMyTimeline(String userId, int schoolId, OnGetMyTimeline onGetMyTimeline) {
@@ -206,9 +211,14 @@ public class RequestManager {
     }
 
 
-    public static void getSchoolRanking(OnGetSchoolRanking onGetSchoolRanking, int index) {
+    public static void getSchoolRanking(OnGetSchoolRanking onGetSchoolRanking) {
         Log.d(TAG, "학교 랭킹 요청");
-        SocketIO.getSchoolRanking(onGetSchoolRanking, index);
+        SocketIO.getSchoolRanking(onGetSchoolRanking);
+    }
+
+    public static void getSchoolRanking(OnGetSchoolRanking onGetSchoolRanking, int schoolId) {
+        Log.d(TAG, "학교 랭킹 요청");
+        SocketIO.getSchoolRanking(onGetSchoolRanking, schoolId);
     }
 
     public static void getMySchoolRanking(OnGetMySchoolRanking onGetSchoolRanking, int rank) {

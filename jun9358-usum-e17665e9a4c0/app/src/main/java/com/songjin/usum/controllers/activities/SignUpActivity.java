@@ -152,8 +152,6 @@ public class SignUpActivity extends BaseActivity {
 
                 id = userProfile.getId();
 
-//                new SocketIO(getApplicationContext());
-//                Log.d(TAG, "11111");
                 RequestManager.signInKakao(id, nickName, profileImage, thumbnailImage, new RequestManager.OnSignInKakao() {
                     @Override
                     public void onSuccess(final UserEntity userEntity) {

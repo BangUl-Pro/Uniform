@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.songjin.usum.Global;
 import com.songjin.usum.HashBiMap;
 import com.songjin.usum.constants.Category;
@@ -31,6 +32,7 @@ public class ReservationPushService extends IntentService {
     private ReservationCheckThread reservationCheckThread;
     private int objectIndex = 0;
     private JSONArray array;
+    private UserEntity userEntity = Global.userEntity;
 
 
     private RequestManager.OnGetProduct onGetProduct = new RequestManager.OnGetProduct() {
@@ -85,7 +87,8 @@ public class ReservationPushService extends IntentService {
             while (true) {
                 try {
                     checkRegisteredNewProduct();
-                    sleep(60 * 1000);   // 60초마다
+                    checkTimeline();
+                    sleep(1000 * 10);   // 10초마다
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -101,10 +104,6 @@ public class ReservationPushService extends IntentService {
                 return;
             }
 
-            UserEntity userEntity = Global.userEntity;
-            if (userEntity == null || userEntity.id == null) {
-                return;
-            }
             array = new JSONArray();
             for (ReservedCategoryEntity reservedCategory : reservedCategories) {
                 JSONObject object = new JSONObject();
@@ -115,38 +114,47 @@ public class ReservationPushService extends IntentService {
             }
             objectIndex = 0;
             final JSONObject object = array.getJSONObject(objectIndex);
-
             RequestManager.getProduct(object, onGetProduct);
-            RequestManager.getAllTimeline(userEntity.id, userEntity.schoolId, new RequestManager.OnGetAllTimeline() {
-                @Override
-                public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
-                    Log.d(TAG, "getAllTimeline");
-                    SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
-                    long time = preferences.getLong(Global.TIMELINE, -1);
-
-                    String msg = "타임라인에 새 글이 등록되었습니다.";
-
-                    if (time != -1) {
-                        for (TimelineCardDto dto :
-                                timelineCardDtos) {
-                            if (dto.timelineEntity.created > time) {
-                                PushManager.sendReservationPushToMe(msg);
-                            }
-                        }
-
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putLong(Global.TIMELINE, System.currentTimeMillis());
-                        editor.commit();
-                    }
-                }
-
-                @Override
-                public void onException(int code) {
-
-                }
-            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void checkTimeline() {
+        if (userEntity == null || userEntity.id == null) {
+            SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
+            Gson gson = new Gson();
+            userEntity = gson.fromJson(preferences.getString(Global.USER, null), UserEntity.class);
+        }
+
+        final SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
+        final long time = preferences.getLong(Global.TIMELINE, -1);
+
+        RequestManager.getAllTimeline(userEntity.id, userEntity.schoolId, time, new RequestManager.OnGetAllTimeline() {
+            @Override
+            public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
+                Log.d(TAG, "getAllTimeline");
+
+                String msg = "타임라인에 새 글이 등록되었습니다.";
+
+                if (time != -1) {
+                    for (TimelineCardDto dto :
+                            timelineCardDtos) {
+                        if (dto.timelineEntity.created > time && !dto.timelineEntity.user_id.equals(userEntity.id)) {
+                            PushManager.sendReservationPushToMe(msg);
+
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putLong(Global.TIMELINE, System.currentTimeMillis());
+                            editor.commit();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onException(int code) {
+
+            }
+        });
     }
 }

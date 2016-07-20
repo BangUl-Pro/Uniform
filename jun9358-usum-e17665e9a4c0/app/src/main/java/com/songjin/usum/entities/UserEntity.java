@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
 import com.songjin.usum.dtos.KakaoProfile;
 
 import org.json.JSONException;
@@ -307,4 +308,10 @@ public class UserEntity implements Parcelable {
         dest.writeBundle(getBundle());
     }
 
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
 }

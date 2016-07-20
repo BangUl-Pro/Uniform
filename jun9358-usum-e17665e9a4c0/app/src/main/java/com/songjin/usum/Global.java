@@ -51,6 +51,7 @@ public class Global {
     public static final String USER = "user";
     public static final String SCHOOL = "school";
     public static final String USER_ID = "user_id";
+    public static final String TIME = "time";
     public static final String REAL_NAME = "realName";
     public static final String NAME = "name";
     public static final String HAS_EXTRA_PROFILE = "has_extra_profile";

@@ -90,17 +90,21 @@ public class SchoolManager {
     }
 
     public boolean isEmptyTable() {
-        SQLiteDatabase db = adapter.getReadableDatabase();
+        try {
+            SQLiteDatabase db = adapter.getReadableDatabase();
 
-        int count = 0;
-        Cursor cursor = db.query(SchoolEntity.COLLECTION_NAME, null, null, null, null, null, null, "1");
-        if (cursor != null) {
-            count = cursor.getCount();
-            cursor.close();
+            int count = 0;
+            Cursor cursor = db.query(SchoolEntity.COLLECTION_NAME, null, null, null, null, null, null, "1");
+            if (cursor != null) {
+                count = cursor.getCount();
+                cursor.close();
+            }
+
+            db.close();
+
+            return count == 0;
+        } catch (Exception e) {
+            return true;
         }
-
-        db.close();
-
-        return count == 0;
     }
 }

@@ -33,7 +33,7 @@ public class SchoolRankingPushService extends IntentService {
             while (true) {
                 try {
                     checkSchoolRankUpdated();
-                    sleep(60 * 60 * 1000); // 1시간마다
+                    sleep(1000 * 10); // 10초마다
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -51,6 +51,7 @@ public class SocketIO {
 
     private static Handler handler = new Handler();
     private static final String SERVER_URL = "http://uniform-donation.herokuapp.com";
+//    private static final String SERVER_URL = "10.0.2.2";
     private static final String TAG = "SocketIO";
 
     public static Socket socket;
@@ -76,6 +77,21 @@ public class SocketIO {
         if (!Global.isCreated)
             setListener();
         Global.isCreated = true;
+
+//        socket.emit("dropTransaction", "");
+//        socket.emit("dropProduct", "");
+//        socket.emit("dropComment", "");
+//        socket.emit("dropFile", "");
+//        socket.emit("dropLike", "");
+//        socket.emit("dropTimeline", "");
+//
+//        socket.emit("createTransaction", "");
+//        socket.emit("createProduct", "");
+//        socket.emit("createComment", "");
+//        socket.emit("createFile", "");
+//        socket.emit("createLike", "");
+//        socket.emit("createTimeline", "");
+//        socket.emit("resetSchoolRank", "");
     }
 
 
@@ -561,13 +577,57 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 20. 학교 랭킹 요청
-    public static void getSchoolRanking(final RequestManager.OnGetSchoolRanking onGetSchoolRanking, int index) {
+    public static void getSchoolRanking(final RequestManager.OnGetSchoolRanking onGetSchoolRanking) {
+        Log.d(TAG, "학교 랭킹 요청");
+        if (!checkSocket())
+            return;
+        socket.emit(Global.GET_SCHOOL_RANKING, "");
+        socket.once(Global.GET_SCHOOL_RANKING, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    JSONObject resObject = getJson(args);
+                    final int code = getCode(resObject);
+                    Log.d(TAG, "학교랭킹 응답 resObject = " + resObject);
+
+                    if (code == SocketException.SUCCESS) {
+                        // 성공
+                        JSONArray schoolArray = resObject.getJSONArray(Global.SCHOOL);
+                        final ArrayList<SchoolRanking> schoolRankingList = new ArrayList<>();
+                        for (int i = 0; i < schoolArray.length(); i++) {
+                            JSONObject schoolObject = schoolArray.getJSONObject(i);
+                            SchoolRanking schoolRanking = new SchoolRanking(schoolObject);
+                            schoolRankingList.add(schoolRanking);
+                        }
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onGetSchoolRanking.onSuccess(schoolRankingList);
+                            }
+                        });
+                    } else {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onGetSchoolRanking.onException();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    // TODO: 15. 11. 20. 학교 랭킹 요청
+    public static void getSchoolRanking(final RequestManager.OnGetSchoolRanking onGetSchoolRanking, int schoolId) {
         Log.d(TAG, "학교 랭킹 요청");
         if (!checkSocket())
             return;
         try {
             JSONObject object = new JSONObject();
-            object.put(Global.INDEX, index);
+            object.put(Global.SCHOOL_ID, schoolId);
             socket.emit(Global.GET_SCHOOL_RANKING, object);
             socket.once(Global.GET_SCHOOL_RANKING, new Emitter.Listener() {
                 @Override
@@ -919,13 +979,14 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 글 모두 불러오기
-    public static void getAllTimeline(int schoolId, String userId, final RequestManager.OnGetAllTimeline onGetAllTimeline) {
+    public static void getAllTimeline(int schoolId, String userId, long time, final RequestManager.OnGetAllTimeline onGetAllTimeline) {
         try {
             if (!checkSocket())
                 return;
             JSONObject object = new JSONObject();
             object.put(Global.SCHOOL_ID, schoolId);
             object.put(Global.USER_ID, userId);
+            object.put(Global.TIME, time);
             Log.d(TAG, "getAllTimeline Object = " + object);
             socket.emit(Global.GET_ALL_TIMELINE, object);
             socket.once(Global.GET_ALL_TIMELINE, new Emitter.Listener() {
