@@ -12,7 +12,7 @@ public class SchoolDBAdapter extends SQLiteOpenHelper {
     public SchoolDBAdapter(Context context) {
         super(context, SchoolEntity.COLLECTION_NAME, null, VERSION);
     }
-
+    
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
