@@ -3,7 +3,9 @@ package com.songjin.usum.controllers.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +27,12 @@ import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.managers.SchoolManager;
 import com.songjin.usum.socketIo.SocketIO;
 
-import java.util.ArrayList;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 public class LoginActivity extends BaseActivity {
@@ -42,32 +49,37 @@ public class LoginActivity extends BaseActivity {
 
         schoolManager = new SchoolManager(this);
         new SocketIO(getApplicationContext());
+
         if (schoolManager.isEmptyTable()) {
             showLoadingView("학교 DB 다운로드 중 입니다.");
 
             schoolManager.deleteAllSchools();
+            schoolManager.copy();
+            onLoadingSchoolsCompleted();
+            hideLoadingView();
 
             // 학교 정보 로딩 요청
-            RequestManager.getSchool(new RequestManager.OnGetSchool() {
-                @Override
-                public void onSuccess(final ArrayList<SchoolEntity> schoolEntities) {
-                    schoolManager.insertSchools(schoolEntities);
-
-                    onLoadingSchoolsCompleted();
-                    hideLoadingView();
-                }
-
-                @Override
-                public void onException() {
-                    new MaterialDialog.Builder(context)
-                            .title(R.string.app_name)
-                            .content("학교정보를 가져오는데 실패하였습니다.")
-                            .show();
-                    hideLoadingView();
-                }
-            });
+//            RequestManager.getSchool(new RequestManager.OnGetSchool() {
+//                @Override
+//                public void onSuccess(final ArrayList<SchoolEntity> schoolEntities) {
+//                    schoolManager.insertSchools(schoolEntities);
+//
+//                    onLoadingSchoolsCompleted();
+//                    hideLoadingView();
+//                }
+//
+//                @Override
+//                public void onException() {
+//                    new MaterialDialog.Builder(context)
+//                            .title(R.string.app_name)
+//                            .content("학교정보를 가져오는데 실패하였습니다.")
+//                            .show();
+//                    hideLoadingView();
+//                }
+//            });
         } else {
             onLoadingSchoolsCompleted();
+            schoolManager.open();
         }
     }
 
@@ -257,6 +269,64 @@ public class LoginActivity extends BaseActivity {
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
             viewHolder.kakaoLoginButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public boolean checkDB(Context mContext){
+        String filePath = Environment.getExternalStorageState() + "/data/data/" + Global.PACKAGE_NAME + "/databases/" + SchoolEntity.COLLECTION_NAME;
+        File file = new File(filePath);
+        Log.d(TAG, "DB있나 " + file.exists());
+        return file.exists();
+    }
+
+    // Dump DB
+    public void dumpDB(Context mContext){
+        AssetManager manager = mContext.getAssets();
+        String folderPath = Environment.getExternalStorageDirectory().getPath() + "/data/data/" + Global.PACKAGE_NAME + "/databases";
+//        String filePath = "/data/data/" + Global.PACKAGE_NAME + "/databases/bazar.db";
+        String filePath = Environment.getExternalStorageState() + "/data/data/" + Global.PACKAGE_NAME + "/databases/" + SchoolEntity.COLLECTION_NAME;
+
+        File folder = new File(folderPath);
+        File file = new File(filePath);
+
+        FileOutputStream fos = null;
+        BufferedOutputStream bos = null;
+
+        try {
+            InputStream is = manager.open(SchoolEntity.COLLECTION_NAME);
+            BufferedInputStream bis = new BufferedInputStream(is);
+
+            if (folder.exists()) {
+                Log.d(TAG, "폴더 있음");
+            }else{
+                folder.mkdirs();
+                Log.d(TAG, "폴더 없음");
+            }
+
+            Log.d(TAG, "파일 생성 준비");
+            if (file.exists()) {
+                file.delete();
+                file.createNewFile();
+                Log.d(TAG, "파일 생성");
+            }
+            Log.d(TAG, "파일 생성 끝");
+
+            fos = new FileOutputStream(file);
+            bos = new BufferedOutputStream(fos);
+            int read = -1;
+            byte[] buffer = new byte[1024];
+            while ((read = bis.read(buffer, 0, 1024)) != -1) {
+                bos.write(buffer, 0, read);
+            }
+
+            bos.flush();
+            bos.close();
+            fos.close();
+            bis.close();
+            is.close();
+
+        } catch (IOException e) {
+            Log.e("ErrorMessage : ", e.getMessage());
         }
     }
 }

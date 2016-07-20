@@ -7,6 +7,7 @@ import com.songjin.usum.entities.UserEntity;
  */
 public class Global {
     public static final String APP_NAME = "uniform";
+    public static final String PACKAGE_NAME = "com.songjin.usum";
     public static final int APP_VER = 1;
 
     public static final String COMMAND = "command";

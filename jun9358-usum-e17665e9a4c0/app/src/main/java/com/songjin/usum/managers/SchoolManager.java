@@ -17,6 +17,18 @@ public class SchoolManager {
         adapter = new SchoolDBAdapter(context);
     }
 
+    public void copy() {
+        adapter.copyDB();
+    }
+
+    public void open() {
+        adapter.openDB();
+    }
+
+    public void close() {
+        adapter.closeDB();
+    }
+
     public void insertSchools(ArrayList<SchoolEntity> schoolEntities) {
         SQLiteDatabase db = adapter.getWritableDatabase();
 
