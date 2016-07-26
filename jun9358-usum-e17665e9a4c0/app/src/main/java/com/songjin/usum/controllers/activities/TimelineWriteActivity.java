@@ -40,7 +40,7 @@ public class TimelineWriteActivity extends BaseActivity {
 
                 String parentUuid = timelineCardDto.timelineEntity.id;
                 Log.e(TAG, "position = " + position);
-                RequestManager.insertFile(parentUuid, selectedUri.toString(), position, onInsertFile);
+                RequestManager.insertFile(parentUuid, selectedUri.toString(), position, FileEntity.TIMELINE, onInsertFile);
             } else {
                 onWriteAfter(true);
             }
@@ -149,7 +149,7 @@ public class TimelineWriteActivity extends BaseActivity {
                                 Uri selectedUri = selectedImageUris.get(0);
                                 selectedImageUris.remove(0);
                                 final String parentUuid = timelineCardDto.timelineEntity.id;
-                                RequestManager.insertFile(parentUuid, selectedUri.toString(), 0, onInsertFile);
+                                RequestManager.insertFile(parentUuid, selectedUri.toString(), 0, FileEntity.TIMELINE, onInsertFile);
                             } else {
                                 onWriteAfter(true);
                             }
@@ -174,7 +174,7 @@ public class TimelineWriteActivity extends BaseActivity {
                                 selectedImageUris.remove(0);
                                 Log.e(TAG, "이미지 수 = " + selectedImageUris.size());
                                 final String parentUuid = timelineCardDto.timelineEntity.id;
-                                RequestManager.insertFile(parentUuid, selectedUri.toString(), 0, onInsertFile);
+                                RequestManager.insertFile(parentUuid, selectedUri.toString(), 0, FileEntity.TIMELINE, onInsertFile);
                             } else {
                                 onWriteAfter(true);
                             }

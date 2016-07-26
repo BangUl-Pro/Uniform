@@ -23,6 +23,7 @@ import com.songjin.usum.controllers.fragments.SupportFragment;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.ProductEntity;
 import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.entities.UserEntity;
@@ -358,6 +359,7 @@ public class ProductDetailCardView extends CardView {
                                     productEntity.id,
                                     uri.toString(),
                                     i,
+                                    FileEntity.PRODUCT,
                                     new RequestManager.OnInsertFile() {
                                         @Override
                                         public void onSuccess(int position) {

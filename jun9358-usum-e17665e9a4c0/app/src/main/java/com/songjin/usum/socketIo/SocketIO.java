@@ -745,6 +745,7 @@ public class SocketIO {
                             Log.d(TAG, "제품 검색 arraySize = " + array.length());
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject productJson = array.getJSONObject(i);
+                                Log.d(TAG, "제품 검색 Object = " + productJson);
                                 ProductCardDto dto = new ProductCardDto(productJson);
 
                                 if (productMap.get(dto.productEntity.id) == null) {
@@ -1487,27 +1488,17 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 25. 파일 입력
-    public static void insertFile(String id, String path, int position, RequestManager.OnInsertFile onInsertFile) {
-//        try {
+    public static void insertFile(String id, String path, int position, int type, RequestManager.OnInsertFile onInsertFile) {
             String serverUrl = SERVER_URL + "/api/photo";
 
             Log.d(TAG, "productId = " + id);
             Log.d(TAG, "path = " + path);
 
-            upload(serverUrl, path, id, position, onInsertFile);
-
-//            object.put(Global.PRODUCT_ID, id);
-//            object.put(Global.PATH, path);
-//            object.put(Global.FILE, fileName);
-//            Log.d(TAG, "insertFile Object = " + object);
-//            socket.emit(Global.INSERT_FILE, object);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+            upload(serverUrl, path, id, position, type, onInsertFile);
     }
 
 
-    private static void upload(final String serverUrl, final String fileUrl, final String id, final int position, final RequestManager.OnInsertFile onInsertFile) {
+    private static void upload(final String serverUrl, final String fileUrl, final String id, final int position, final int type, final RequestManager.OnInsertFile onInsertFile) {
         Log.d(TAG, "fileUrl = " + fileUrl);
         new Thread(new Runnable() {
             @Override
@@ -1544,6 +1535,7 @@ public class SocketIO {
                     conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + BOUNDARY);
                     conn.setRequestProperty("uploaded_file", fileUrl);
                     conn.setRequestProperty("parent_id", id);
+                    conn.setRequestProperty("file_type", String.valueOf(type));
 
                     dos = new DataOutputStream(conn.getOutputStream());
                     dos.writeBytes(TWO_HYPHENS + BOUNDARY + LINE_END);

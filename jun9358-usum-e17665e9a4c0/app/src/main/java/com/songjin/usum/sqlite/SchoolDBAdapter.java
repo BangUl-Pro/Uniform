@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.songjin.usum.Global;
 import com.songjin.usum.entities.SchoolEntity;
 
 import java.io.File;
@@ -26,17 +27,16 @@ public class SchoolDBAdapter extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        db.execSQL(
-//                "CREATE TABLE " + SchoolEntity.COLLECTION_NAME + " ( " +
-//                        SchoolEntity.PROPERTY_ID + " INTEGER, " +
-////                        SchoolEntity.PROPERTY_UUID + " TEXT, " +
-//                        SchoolEntity.PROPERTY_SCHOOLNAME + " TEXT, " +
-//                        SchoolEntity.PROPERTY_ADDRESS + " TEXT, " +
-//                        SchoolEntity.PROPERTY_CITY + " TEXT, " +
-//                        SchoolEntity.PROPERTY_CATEGORY + " TEXT, " +
-//                        SchoolEntity.PROPERTY_GU + " TEXT " +
-//                        ")"
-//        );
+        db.execSQL(
+                "CREATE TABLE " + SchoolEntity.COLLECTION_NAME + " ( " +
+                        SchoolEntity.PROPERTY_ID + " INTEGER, " +
+                        SchoolEntity.PROPERTY_SCHOOLNAME + " TEXT, " +
+                        SchoolEntity.PROPERTY_ADDRESS + " TEXT, " +
+                        SchoolEntity.PROPERTY_CITY + " TEXT, " +
+                        SchoolEntity.PROPERTY_CATEGORY + " TEXT, " +
+                        SchoolEntity.PROPERTY_GU + " TEXT " +
+                        ")"
+        );
     }
 
     @Override
@@ -62,12 +62,23 @@ public class SchoolDBAdapter extends SQLiteOpenHelper {
     public void copyDB() {
         try {
             InputStream is = context.getResources().getAssets().open(SchoolEntity.COLLECTION_NAME);
-            File file = new File(context.getDatabasePath(SchoolEntity.COLLECTION_NAME).getPath());
+            File dir = new File("/data/data/" + Global.PACKAGE_NAME + "/databases/");
+            File file = new File("/data/data/" + Global.PACKAGE_NAME + "/databases/" + SchoolEntity.COLLECTION_NAME);
             Log.d(TAG, "file Path = " + file.getPath());
-            if (!file.exists()) {
+            if (!dir.exists()) {
                 Log.d(TAG, "파일 만듬");
-                Log.d(TAG, "성공? = " + file.mkdirs());
+                Log.d(TAG, "성공? = " + dir.mkdirs());
             }
+
+            if (!file.exists()) {
+                Log.d(TAG, "파일 만들기 = " + file.createNewFile());
+            }
+
+            if (!file.isFile()) {
+                Log.d(TAG, "파일 삭제 = " + file.delete());
+                Log.d(TAG, "폴더 -> 파일 = " + file.createNewFile());
+            }
+
             String outFileName = file.getPath();
             OutputStream os = new FileOutputStream(outFileName);
             byte[] buffer = new byte[1024 * 8];
@@ -75,8 +86,8 @@ public class SchoolDBAdapter extends SQLiteOpenHelper {
             while ((length = is.read(buffer)) > 0)
                 os.write(buffer, 0, length);
             os.flush();
-            is.close();
             os.close();
+            is.close();
             Log.d(TAG, "COPY DB");
         } catch (Exception e) {
             e.printStackTrace();

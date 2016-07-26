@@ -369,36 +369,40 @@ public class SignUpActivity extends BaseActivity {
 
 
     private void requestLogout() {
-        BaseActivity.showLoadingView();
-        new MaterialDialog.Builder(this)
-                .title("이미 다른 기기에서 접속 중 입니다.")
-                .content("로그아웃 시키고 접속 하시겠습니까?")
-                .positiveText("예")
-                .negativeText("아니오")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        SocketIO.setDeviceId(Global.userEntity.id, getDeviceUUID(), new RequestManager.OnSetDeviceId() {
-                            @Override
-                            public void onSuccess() {
-                                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-                                intent1.putExtra(Global.USER, Global.userEntity);
-                                startActivity(intent1);
-                                finish();
-                            }
+        try {
+            BaseActivity.showLoadingView();
+            new MaterialDialog.Builder(this)
+                    .title("이미 다른 기기에서 접속 중 입니다.")
+                    .content("로그아웃 시키고 접속 하시겠습니까?")
+                    .positiveText("예")
+                    .negativeText("아니오")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            SocketIO.setDeviceId(Global.userEntity.id, getDeviceUUID(), new RequestManager.OnSetDeviceId() {
+                                @Override
+                                public void onSuccess() {
+                                    Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                                    intent1.putExtra(Global.USER, Global.userEntity);
+                                    startActivity(intent1);
+                                    finish();
+                                }
 
-                            @Override
-                            public void onException() {
+                                @Override
+                                public void onException() {
 
-                            }
-                        });
-                    }
-                }).onNegative(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                dialog.dismiss();
-                finish();
-            }
-        }).show();
+                                }
+                            });
+                        }
+                    }).onNegative(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    dialog.dismiss();
+                    finish();
+                }
+            }).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

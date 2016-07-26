@@ -10,10 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.ProductAddForm;
 import com.songjin.usum.controllers.views.ProductRecyclerView;
-import com.songjin.usum.R;
 import com.songjin.usum.dtos.ProductCardDto;
+import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.TransactionEntity;
 import com.songjin.usum.managers.RequestManager;
 
@@ -56,7 +57,7 @@ public class AddProductsActivity extends BaseActivity {
             RequestManager.insertTransaction(transactionEntity);
 
             for (Uri uri : productCardDtos.get(positions).uris) {
-                RequestManager.insertFile(productCardDto.productEntity.id, uri.toString(), positions, new RequestManager.OnInsertFile() {
+                RequestManager.insertFile(productCardDto.productEntity.id, uri.toString(), positions, FileEntity.PRODUCT, new RequestManager.OnInsertFile() {
                     @Override
                     public void onSuccess(int position) {
                         if (position == positions - 1) {

@@ -78,30 +78,6 @@ public class SchoolEntity implements Parcelable {
         }
     }
 
-//    public void set(BaasioBaseEntity entity) {
-//        if (entity.getProperty(PROPERTY_ID) != null) {
-//            this.id = entity.getProperty(PROPERTY_ID).asInt();
-//        }
-//        if (entity.getUuid() != null) {
-//            this.uuid = entity.getUuid().toString();
-//        }
-//        if (entity.getProperty(PROPERTY_SCHOOLNAME) != null) {
-//            this.schoolname = entity.getProperty(PROPERTY_SCHOOLNAME).asText();
-//        }
-//        if (entity.getProperty(PROPERTY_ADDRESS) != null) {
-//            this.address = entity.getProperty(PROPERTY_ADDRESS).asText();
-//        }
-//        if (entity.getProperty(PROPERTY_CITY) != null) {
-//            this.city = entity.getProperty(PROPERTY_CITY).asText();
-//        }
-//        if (entity.getProperty(PROPERTY_CATEGORY) != null) {
-//            this.category = entity.getProperty(PROPERTY_CATEGORY).asText();
-//        }
-//        if (entity.getProperty(PROPERTY_GU) != null) {
-//            this.gu = entity.getProperty(PROPERTY_GU).asText();
-//        }
-//    }
-
     public void set(HashMap<String, String> map) {
         this.id = Integer.valueOf(map.get(PROPERTY_ID));
 //        this.uuid = String.valueOf(map.get(PROPERTY_UUID));
@@ -187,7 +163,6 @@ public class SchoolEntity implements Parcelable {
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
         values.put(PROPERTY_ID, this.id);
-//        values.put(PROPERTY_UUID, this.uuid);
         values.put(PROPERTY_SCHOOLNAME, this.schoolname);
         values.put(PROPERTY_ADDRESS, this.address);
         values.put(PROPERTY_CITY, this.city);

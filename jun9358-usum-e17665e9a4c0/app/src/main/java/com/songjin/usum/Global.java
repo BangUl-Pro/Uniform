@@ -7,8 +7,7 @@ import com.songjin.usum.entities.UserEntity;
  */
 public class Global {
     public static final String APP_NAME = "uniform";
-    public static final String PACKAGE_NAME = "com.songjin.usum";
-    public static final int APP_VER = 1;
+    public static final String PACKAGE_NAME = "com.jerryjang.donation";
 
     public static final String COMMAND = "command";
     public static final String CODE = "code";
@@ -35,7 +34,6 @@ public class Global {
     public static final String DELETE_LIKE = "deleteLike";
     public static final String INSERT_PRODUCT = "insertProduct";
     public static final String INSERT_TIMELINE = "insertTimeline";
-    public static final String INSERT_FILE = "insertFile";
     public static final String INSERT_LIKE = "insertLike";
     public static final String INSERT_TRANSACTION = "insertTransaction";
     public static final String INSERT_TIMELINE_COMMENT = "insertTimelineComment";
@@ -53,43 +51,32 @@ public class Global {
     public static final String USER_ID = "user_id";
     public static final String TIME = "time";
     public static final String REAL_NAME = "realName";
-    public static final String NAME = "name";
-    public static final String HAS_EXTRA_PROFILE = "has_extra_profile";
     public static final String SEX = "sex";
     public static final String CATEGORY = "category";
     public static final String POSITION = "position";
     public static final String SIZE = "size";
     public static final String USER_TYPE = "userType";
-    public static final String PICTURE = "picture";
     public static final String PHONE = "phone";
     public static final String SCHOOL_ID = "school_id";
     public static final String RANK = "rank";
-    public static final String PRODUCT_CARD = "productCard";
+    public static final String POINT = "point";
     public static final String TIMELINE = "timeline";
     public static final String TIMELINE_COMMENT = "timelineComment";
-    public static final String INDEX = "index";
-    public static final String FROM = "from";
     public static final String FILE = "file";
     public static final String TIMELINE_ITEM_ID = "timelineItemId";
     public static final String COMMENT_CONTENT = "commentContent";
     public static final String TIMELINE_CONTENT = "timelineContent";
-    public static final String PARENT_ID = "parentId";
     public static final String PRODUCT_ID = "productId";
     public static final String TRANSACTION = "transaction";
     public static final String STATUS = "status";
-    public static final String COMMENT = "comment";
     public static final String PRODUCT = "product";
-    public static final String PATH = "path";
     public static final String LIKE = "like";
     public static final String TOKEN = "token";
-    public static final String CREATED = "created";
-    public static final String CONTENT = "content";
     public static final String MESSAGE = "message";
     public static final String NICK_NAME = "nickName";
     public static final String PROFILE_IMAGE = "profileImage";
     public static final String THUMBNAIL_IMAGE = "thumbnailImage";
 
-    public static final String ANOTHER_DEVICE = "다른 기기에서 접속했습니다.";
 
     public static boolean isCreated = false;
 

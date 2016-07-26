@@ -123,9 +123,9 @@ public class RequestManager {
     }
 
 
-    public static void insertFile(String productId, String path, int position, OnInsertFile onInsertFile) {
+    public static void insertFile(String productId, String path, int position, int type, OnInsertFile onInsertFile) {
         Log.e(TAG, "파일 입력 요청");
-        SocketIO.insertFile(productId, path, position, onInsertFile);
+        SocketIO.insertFile(productId, path, position, type, onInsertFile);
     }
 
     public static void deleteFile(ArrayList<FileEntity> fileEntities, OnDeleteFile onDeleteFile) {

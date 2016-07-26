@@ -40,6 +40,7 @@ public class SchoolRankingRecyclerView extends RecyclerView {
     }
 
     public void addSchoolRankings(ArrayList<SchoolRanking> schoolRankings) {
+        this.schoolRankings.clear();
         this.schoolRankings.addAll(schoolRankings);
         getAdapter().notifyDataSetChanged();
     }

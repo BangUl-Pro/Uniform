@@ -43,6 +43,7 @@ public class LoginActivity extends BaseActivity {
 
         if (schoolManager.isEmptyTable()) {
             showLoadingView("학교 DB 다운로드 중 입니다.");
+            Log.d(TAG, "학교 DB 다운로드");
 
             schoolManager.copy();
             hideLoadingView();

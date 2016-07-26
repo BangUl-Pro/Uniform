@@ -8,14 +8,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-import com.songjin.usum.controllers.activities.BaseActivity;
+import com.bumptech.glide.Glide;
 import com.songjin.usum.R;
+import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.activities.PhotoViewActivity;
 import com.songjin.usum.entities.FileEntity;
-import com.songjin.usum.managers.RequestManager;
-import com.koushikdutta.ion.Ion;
-
-import java.io.File;
 
 public class ImageCardView extends CardView {
     private static final String TAG = "ImageCardView";
@@ -60,61 +57,13 @@ public class ImageCardView extends CardView {
 
     public void setUri(Uri uri) {
         imageUrl = uri.getPath();
-        loadImage(imageUrl);
+        Glide.with(getContext()).load(imageUrl)
+                .into(viewHolder.image);
     }
 
     public void setFileEntity(final FileEntity fileEntity) {
         Log.d(TAG, "setFileEntity");
-        File file = new File(BaseActivity.context.getCacheDir() + fileEntity.id);
-        if (file.exists()) {
-            // 성공
-            imageUrl = BaseActivity.context.getCacheDir() + fileEntity.id;
-            loadImage(imageUrl);
-            return;
-        }
-
-        Log.d(TAG, "이미지 id = " + fileEntity.id);
-        RequestManager.downloadImage("http://uniform-donation.herokuapp.com/imgs/" + fileEntity.id, file, new RequestManager.OnDownloadImage() {
-            @Override
-            public void onSuccess() {
-                Log.d(TAG, "이미지 다운로드 성공");
-                imageUrl = BaseActivity.context.getCacheDir() + fileEntity.id;
-                loadImage(imageUrl);
-            }
-
-            @Override
-            public void onException() {
-                Log.d(TAG, "이미지 다운로드 실패");
-            }
-        });
-
-
-//        BaasioFile baasioFile = fileEntity.getBaasioFile();
-//        baasioFile.fileDownloadInBackground(BaseActivity.context.getCacheDir() + fileEntity.id, baasioDownloadCallback);
-
-//        RequestManager.downloadFile(fileEntity, new BaasioDownloadCallback() {
-//            @Override
-//            public void onResponse(String s) {
-//                imageUrl = BaseActivity.context.getCacheDir() + fileEntity.uuid;
-//                loadImage(imageUrl);
-//            }
-//
-//            @Override
-//            public void onException(BaasioException e) {
-//
-//            }
-//
-//            @Override
-//            public void onProgress(long l, long l1) {
-//
-//            }
-//        });
-    }
-
-    private void loadImage(String url) {
-        Ion.with(viewHolder.image)
-                .placeholder(R.drawable.ic_launcher)
-                .error(R.drawable.ic_launcher)
-                .load(url);
+        Glide.with(getContext()).load("http://uniform-donation.herokuapp.com/imgs/" + fileEntity.id)
+                .into(viewHolder.image);
     }
 }

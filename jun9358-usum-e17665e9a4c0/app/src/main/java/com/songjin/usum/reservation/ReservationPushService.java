@@ -121,13 +121,12 @@ public class ReservationPushService extends IntentService {
     }
 
     private void checkTimeline() {
+        final SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
         if (userEntity == null || userEntity.id == null) {
-            SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
             Gson gson = new Gson();
             userEntity = gson.fromJson(preferences.getString(Global.USER, null), UserEntity.class);
         }
 
-        final SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
         final long time = preferences.getLong(Global.TIMELINE, -1);
 
         RequestManager.getAllTimeline(userEntity.id, userEntity.schoolId, time, new RequestManager.OnGetAllTimeline() {
