@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -71,7 +70,6 @@ public class TimelineImageRecyclerView extends RecyclerView {
         public void onBindViewHolder(ViewHolder viewHolder, int position) {
             FileEntity fileEntity = fileIEntities.get(position);
             viewHolder.imageCardView.setFileEntity(fileEntity);
-            Log.d(TAG, "fileSize = " + fileIEntities.size());
         }
 
         @Override

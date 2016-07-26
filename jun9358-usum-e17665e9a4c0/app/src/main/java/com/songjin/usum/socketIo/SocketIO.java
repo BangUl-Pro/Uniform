@@ -1022,8 +1022,6 @@ public class SocketIO {
                             while (iterator.hasNext())
                                 timelineCardDtos.add(timelineMap.get(iterator.next()));
 
-                            Log.e(TAG, "타임라인 개수 = " + timelineCardDtos.size());
-
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1070,6 +1068,8 @@ public class SocketIO {
                         if (code == SocketException.SUCCESS) {
                             // 성공
                             final ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
+                            final Map<String, TimelineCardDto> timelineMap = new HashMap<String, TimelineCardDto>();
+
                             JSONArray timelineArray = resObject.getJSONArray(Global.TIMELINE);
                             for (int i = 0; i < timelineArray.length(); i++) {
                                 JSONObject timelineObject = timelineArray.getJSONObject(i);
@@ -1078,8 +1078,18 @@ public class SocketIO {
                                 timelineCardDto.setUser(timelineObject);
                                 timelineCardDto.setLike(timelineObject);
                                 timelineCardDto.setFile(timelineObject);
-                                timelineCardDtos.add(timelineCardDto);
+
+
+                                if (timelineMap.get(timelineCardDto.timelineEntity.id) == null)
+                                    timelineMap.put(timelineCardDto.timelineEntity.id, timelineCardDto);
+                                else
+                                    timelineMap.put(timelineCardDto.timelineEntity.id, timelineMap.get(timelineCardDto.timelineEntity.id).addFile(timelineCardDto.fileEntities.get(0)));
                             }
+
+                            Iterator<String> iterator = timelineMap.keySet().iterator();
+                            while (iterator.hasNext())
+                                timelineCardDtos.add(timelineMap.get(iterator.next()));
+
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {

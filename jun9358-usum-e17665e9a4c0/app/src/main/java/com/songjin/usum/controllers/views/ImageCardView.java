@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -62,8 +61,8 @@ public class ImageCardView extends CardView {
     }
 
     public void setFileEntity(final FileEntity fileEntity) {
-        Log.d(TAG, "setFileEntity");
-        Glide.with(getContext()).load("http://uniform-donation.herokuapp.com/imgs/" + fileEntity.id)
+        imageUrl = "http://uniform-donation.herokuapp.com/imgs/" + fileEntity.id;
+        Glide.with(getContext()).load(imageUrl)
                 .into(viewHolder.image);
     }
 }

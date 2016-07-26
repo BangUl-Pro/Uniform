@@ -11,8 +11,10 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
+import com.securepreferences.SecurePreferences;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.MainActivity;
+import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.entities.AlarmEntity;
 import com.songjin.usum.gcm.PushManager;
 
@@ -30,6 +32,11 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     @Override
     public void onMessageReceived(String from, Bundle data) {
+        SecurePreferences securePrefs = new SecurePreferences(getApplicationContext());
+        boolean check = securePrefs.getBoolean(SettingFragment.PREFERENCE_USE_TRANSACTION_PUSH, true);
+        if (!check)
+            return;
+
         String title = data.getString("title");
         String message = data.getString("message");
 

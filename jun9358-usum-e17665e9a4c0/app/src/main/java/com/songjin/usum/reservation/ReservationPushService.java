@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.securepreferences.SecurePreferences;
 import com.songjin.usum.Global;
 import com.songjin.usum.HashBiMap;
 import com.songjin.usum.constants.Category;
@@ -121,6 +122,12 @@ public class ReservationPushService extends IntentService {
     }
 
     private void checkTimeline() {
+        SecurePreferences securePrefs = new SecurePreferences(getApplicationContext());
+        boolean check = securePrefs.getBoolean(SettingFragment.PREFERENCE_USE_TIMELINE_PUSH, true);
+
+        if (!check)
+            return;
+
         final SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
         if (userEntity == null || userEntity.id == null) {
             Gson gson = new Gson();

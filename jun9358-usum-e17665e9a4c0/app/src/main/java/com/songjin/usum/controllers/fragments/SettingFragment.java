@@ -213,32 +213,6 @@ public class SettingFragment extends SlidingBaseFragment {
                                     }
                                 });
 
-//                                RequestManager.unlinkAppInBackground(new UnlinkResponseCallback() {
-//                                    @Override
-//                                    protected void onSuccess(final long userId) {
-//                                        BaseActivity.hideLoadingView();
-//                                        BaseActivity.startActivityOnTopStack(LoginActivity.class);
-//                                        ((Activity) MainActivity.context).finish();
-//                                    }
-//
-//                                    @Override
-//                                    protected void onSessionClosedFailure(final APIErrorResult errorResult) {
-//                                        BaseActivity.hideLoadingView();
-//                                        new MaterialDialog.Builder(BaseActivity.context)
-//                                                .title(R.string.app_name)
-//                                                .content("연결해제하는 중에 세션에 문제가 생겼습니다.")
-//                                                .show();
-//                                    }
-//
-//                                    @Override
-//                                    protected void onFailure(final APIErrorResult errorResult) {
-//                                        BaseActivity.hideLoadingView();
-//                                        new MaterialDialog.Builder(BaseActivity.context)
-//                                                .title(R.string.app_name)
-//                                                .content("연결해제에 실패하였습니다.")
-//                                                .show();
-//                                    }
-//                                });
                                 dialog.dismiss();
                             }
                         })

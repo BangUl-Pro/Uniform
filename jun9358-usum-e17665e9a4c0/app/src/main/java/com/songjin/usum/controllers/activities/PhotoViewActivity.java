@@ -4,10 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.Request;
 import com.songjin.usum.R;
 
 import uk.co.senab.photoview.PhotoView;
@@ -47,17 +46,76 @@ public class PhotoViewActivity extends Activity {
     }
 
     private void loadImage(String url) {
-        Ion.with(viewHolder.photoView)
+        Log.d(TAG, "url = " + url);
+        Glide.with(this)
+                .load(url)
                 .placeholder(R.drawable.ic_launcher)
                 .error(R.drawable.ic_launcher)
-                .load(url)
-                .setCallback(new FutureCallback<ImageView>() {
+                .into(viewHolder.photoView)
+                .setRequest(new Request() {
                     @Override
-                    public void onCompleted(Exception e, ImageView result) {
-                        if (result != null)
-                            mAttacher = new PhotoViewAttacher(result);
+                    public void begin() {
+
+                    }
+
+                    @Override
+                    public void pause() {
+
+                    }
+
+                    @Override
+                    public void clear() {
+
+                    }
+
+                    @Override
+                    public boolean isPaused() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isRunning() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isComplete() {
+                        Log.d(TAG, "isComplete");
+                        mAttacher = new PhotoViewAttacher(viewHolder.photoView);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isResourceSet() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isCancelled() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isFailed() {
+                        return false;
+                    }
+
+                    @Override
+                    public void recycle() {
+
                     }
                 });
+//        Ion.with(viewHolder.photoView)
+//                .placeholder(R.drawable.ic_launcher)
+//                .error(R.drawable.ic_launcher)
+//                .load(url)
+//                .setCallback(new FutureCallback<ImageView>() {
+//                    @Override
+//                    public void onCompleted(Exception e, ImageView result) {
+//                        if (result != null)
+//                            mAttacher = new PhotoViewAttacher(result);
+//                    }
+//                });
     }
 
     @Override
