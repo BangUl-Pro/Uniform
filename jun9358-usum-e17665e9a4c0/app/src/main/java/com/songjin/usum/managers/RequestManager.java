@@ -293,6 +293,10 @@ public class RequestManager {
         void onException();
     }
 
+    public interface OnSetHasExtraProfile {
+        void onSuccess();
+        void onException();
+    }
 
     public interface OnUpdateUserProfile {
         void onSuccess(UserEntity userEntity);

@@ -2,7 +2,6 @@ package com.songjin.usum.controllers.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +10,12 @@ import android.widget.Button;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
-import com.songjin.usum.controllers.activities.BaseActivity;
-import com.songjin.usum.controllers.activities.FaqActivity;
-import com.songjin.usum.controllers.activities.SupportCompletedActivity;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
+import com.songjin.usum.controllers.activities.BaseActivity;
+import com.songjin.usum.controllers.activities.FaqActivity;
 import com.songjin.usum.controllers.activities.MainActivity;
+import com.songjin.usum.controllers.activities.SupportCompletedActivity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.slidingtab.SlidingBaseFragment;
 
@@ -90,10 +89,6 @@ public class SupportFragment extends SlidingBaseFragment {
                 new BillingProcessor.IBillingHandler() {
                     @Override
                     public void onProductPurchased(String productId, TransactionDetails transactionDetails) {
-                        Log.d("USUM", "[onProductPurchased]");
-                        Log.d("USUM", productId);
-                        Log.d("USUM", transactionDetails.toString());
-
 //                        billingProcessor.consumePurchase(BaseActivity.context.getResources().getString(R.string.sku_id));
                         billingProcessor.consumePurchase("bill_5000");
                         BaseActivity.startActivityUsingStack(SupportCompletedActivity.class);
@@ -101,21 +96,19 @@ public class SupportFragment extends SlidingBaseFragment {
 
                     @Override
                     public void onPurchaseHistoryRestored() {
-                        Log.d("USUM", "[onPurchaseHistoryRestored]");
-
-                        for (String sku : billingProcessor.listOwnedProducts()) {
-                            Log.d("USUM", "Owned Managed Product: " + sku);
-                        }
-                        for (String sku : billingProcessor.listOwnedSubscriptions()) {
-                            Log.d("USUM", "Owned Subscription: " + sku);
-                        }
+//                        for (String sku : billingProcessor.listOwnedProducts()) {
+//                            Log.d("USUM", "Owned Managed Product: " + sku);
+//                        }
+//                        for (String sku : billingProcessor.listOwnedSubscriptions()) {
+//                            Log.d("USUM", "Owned Subscription: " + sku);
+//                        }
                     }
 
                     @Override
                     public void onBillingError(int errorCode, Throwable throwable) {
-                        Log.d("USUM", "[onBillingError]");
-                        Log.d("USUM", errorCode + "");
-                        Log.d("USUM", throwable != null ? throwable.getMessage() : "throwable is null");
+//                        Log.d("USUM", "[onBillingError]");
+//                        Log.d("USUM", errorCode + "");
+//                        Log.d("USUM", throwable != null ? throwable.getMessage() : "throwable is null");
 
                         if (errorCode == 1) {   // 단순 취소
                             return;
@@ -128,7 +121,7 @@ public class SupportFragment extends SlidingBaseFragment {
 
                     @Override
                     public void onBillingInitialized() {
-                        Log.d("USUM", "[onBillingInitialized]");
+//                        Log.d("USUM", "[onBillingInitialized]");
 
 //                        billingProcessor.consumePurchase(BaseActivity.context.getResources().getString(R.string.sku_id));
                         billingProcessor.consumePurchase("bill_5000");

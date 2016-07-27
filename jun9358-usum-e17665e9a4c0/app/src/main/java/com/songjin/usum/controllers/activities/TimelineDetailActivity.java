@@ -1,17 +1,16 @@
 package com.songjin.usum.controllers.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.songjin.usum.controllers.views.TimelineCommentRecyclerView;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.views.TimelineCardView;
+import com.songjin.usum.controllers.views.TimelineCommentRecyclerView;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.managers.AuthManager;
@@ -46,10 +45,8 @@ public class TimelineDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "액티비티 시작");
 
         timelineCardDto = getIntent().getParcelableExtra("timelineCardDto");
-        Log.d(TAG, "size = " + timelineCardDto.fileEntities.size());
 
         initViews(R.layout.activity_timeline_detail);
         requestTimelineComments();

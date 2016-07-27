@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,8 +99,6 @@ public class SettingFragment extends SlidingBaseFragment {
             @Override
             public void onClick(View v) {
                 requestUnlink();
-                clearAllSharedPreferences();
-                Log.d(TAG, "회원 탈퇴 ");
             }
         });
         viewHolder.logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -161,18 +158,6 @@ public class SettingFragment extends SlidingBaseFragment {
 
                                 final SharedPreferencesCache cache = Session.getAppCache();
 
-                                SocketIO.setToken(Global.userEntity.id, null, new RequestManager.OnSetToken() {
-                                    @Override
-                                    public void onSuccess() {
-
-                                    }
-
-                                    @Override
-                                    public void onException() {
-
-                                    }
-                                });
-
                                 UserManagement.requestUnlink(new UnLinkResponseCallback() {
                                     @Override
                                     public void onSessionClosed(ErrorResult errorResult) {
@@ -181,16 +166,38 @@ public class SettingFragment extends SlidingBaseFragment {
                                                 .title(R.string.app_name)
                                                 .content("연결해제에 실패하였습니다.")
                                                 .show();
-                                        Log.d(TAG, "연결해제 실패");
                                     }
 
                                     @Override
                                     public void onNotSignedUp() {
-                                        Log.d(TAG, "Not Signed Up");
                                     }
 
                                     @Override
                                     public void onSuccess(Long result) {
+                                        SocketIO.setToken(Global.userEntity.id, null, new RequestManager.OnSetToken() {
+                                            @Override
+                                            public void onSuccess() {
+
+                                            }
+
+                                            @Override
+                                            public void onException() {
+
+                                            }
+                                        });
+
+//                                        SocketIO.setHasExtraProfile(Global.userEntity.id, false, new RequestManager.OnSetHasExtraProfile() {
+//                                            @Override
+//                                            public void onSuccess() {
+//
+//                                            }
+//
+//                                            @Override
+//                                            public void onException() {
+//
+//                                            }
+//                                        });
+
                                         RequestManager.deleteUser(Global.userEntity.id, new Emitter.Listener() {
                                             @Override
                                             public void call(final Object... args) {
@@ -201,7 +208,6 @@ public class SettingFragment extends SlidingBaseFragment {
                                                         cache.clearAll();
 
                                                         JSONObject object = (JSONObject) args[0];
-                                                        Log.d(TAG, "회원탈퇴 응답 Object = " + object);
 
                                                         BaseActivity.hideLoadingView();
                                                         BaseActivity.startActivityOnTopStack(LoginActivity.class);
@@ -214,6 +220,8 @@ public class SettingFragment extends SlidingBaseFragment {
                                 });
 
                                 dialog.dismiss();
+
+                                clearAllSharedPreferences();
                             }
                         })
                 .setNegativeButton(
@@ -244,35 +252,25 @@ public class SettingFragment extends SlidingBaseFragment {
         UserManagement.requestLogout(new LogoutResponseCallback() {
             @Override
             public void onCompleteLogout() {
-//                BaseActivity.hideLoadingView();
-//                BaseActivity.startActivityOnTopStack(LoginActivity.class);
-//                ((Activity) MainActivity.context).finish();
-//
-//                SharedPreferencesCache cache = Session.getAppCache();
-//                cache.clearAll();
-            }
-        });
+                SocketIO.setDeviceId(Global.userEntity.id, null, new RequestManager.OnSetDeviceId() {
+                    @Override
+                    public void onSuccess() {
+                        SharedPreferencesCache cache = Session.getAppCache();
+                        cache.clearAll();
 
-        SocketIO.setDeviceId(Global.userEntity.id, null, new RequestManager.OnSetDeviceId() {
-            @Override
-            public void onSuccess() {
-                SharedPreferencesCache cache = Session.getAppCache();
-                cache.clearAll();
+                        ((Activity) MainActivity.context).finish();
+                    }
 
-                //        BaseActivity.hideLoadingView();
-//        BaseActivity.startActivityOnTopStack(LoginActivity.class);
-                ((Activity) MainActivity.context).finish();
-            }
+                    @Override
+                    public void onException() {
 
-            @Override
-            public void onException() {
-
+                    }
+                });
             }
         });
     }
 
     public static ArrayList<ReservedCategoryEntity> getReservedCategories() {
-        Log.d(TAG, "getReservedCategories");
         ArrayList<String> reservedCategoryJsonStrings;
 //        SecurePreferences securePreferences = new SecurePreferences(BaasioApplication.context);
         if (context == null)
@@ -354,7 +352,6 @@ public class SettingFragment extends SlidingBaseFragment {
     }
 
     public static ArrayList<AlarmEntity> getReceivedPushMessages() {
-        Log.d(TAG, "getReceivedPushMessages");
         SecurePreferences securePreferences = new SecurePreferences(context);
         String pushMessageJsonString = securePreferences.getString(PREFERENCE_RECEIVED_PUSH_MESSAGES, "");
 

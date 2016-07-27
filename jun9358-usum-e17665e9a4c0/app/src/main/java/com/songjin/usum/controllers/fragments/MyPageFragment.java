@@ -1,15 +1,14 @@
 package com.songjin.usum.controllers.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.songjin.usum.controllers.views.ProductRecyclerView;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
+import com.songjin.usum.controllers.views.ProductRecyclerView;
 import com.songjin.usum.controllers.views.ProfileView;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.managers.AuthManager;
@@ -68,7 +67,6 @@ public class MyPageFragment extends SlidingBaseFragment {
 
     private void initProfileView() {
         viewHolder.profileView.setUserEntity(Global.userEntity);
-        Log.d(TAG ,"schoolId = " + Global.userEntity.getSchoolId());
 
         RequestManager.getMyProduct(Global.userEntity, new RequestManager.OnGetMyProduct() {
             @Override
@@ -78,7 +76,6 @@ public class MyPageFragment extends SlidingBaseFragment {
 
             @Override
             public void onException(int code) {
-                Log.d(TAG, "error");
             }
         });
 

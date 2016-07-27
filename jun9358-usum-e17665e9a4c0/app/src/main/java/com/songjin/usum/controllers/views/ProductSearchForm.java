@@ -2,7 +2,6 @@ package com.songjin.usum.controllers.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,14 +14,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.songjin.usum.constants.Category;
-import com.songjin.usum.constants.Sex;
-import com.songjin.usum.constants.Size;
-import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.Global;
 import com.songjin.usum.HashBiMap;
 import com.songjin.usum.R;
+import com.songjin.usum.constants.Category;
+import com.songjin.usum.constants.Sex;
+import com.songjin.usum.constants.Size;
 import com.songjin.usum.controllers.activities.SchoolAutoCompleteArrayAdapter;
+import com.songjin.usum.controllers.fragments.SettingFragment;
 import com.songjin.usum.entities.ReservedCategoryEntity;
 import com.songjin.usum.entities.SchoolEntity;
 import com.songjin.usum.entities.UserEntity;
@@ -144,7 +143,6 @@ public class ProductSearchForm extends LinearLayout {
                 String categoryName = Category.getHashBiMap(selectedSex).get(selectedCategory);
                 ArrayList<ReservedCategoryEntity> reservedCategories = SettingFragment.getReservedCategories();
                 Boolean hasAlready = SettingFragment.findIndexOfReservedCategories(reservedCategories, selectedSchoolId, selectedCategory) != -1;
-                Log.d(TAG, "hasAlready = " + hasAlready);
                 if (isChecked) {
                     if (hasAlready)
                         return;
@@ -212,7 +210,6 @@ public class ProductSearchForm extends LinearLayout {
 
     public int getSex() {
         int sexPosition = viewHolder.sex.getSelectedItemPosition();
-        Log.d(TAG, "sexPosition = " + sexPosition);
         HashBiMap<String, Integer> inverseSex = Sex.getHashBiMapExceptAll().inverse();
         int selectedSex = inverseSex.get(sexAdapter.getItem(sexPosition));
         return selectedSex;
@@ -221,7 +218,6 @@ public class ProductSearchForm extends LinearLayout {
 
     public int getCategory() {
         int categoryPosition = viewHolder.category.getSelectedItemPosition();
-        Log.d(TAG, "categoryPosition = " + categoryPosition);
         HashBiMap<String, Integer> inverseCategory = Category.getHashBiMap(getSex()).inverse();
         int selectedCategory = inverseCategory.get(categoryAdapter.getItem(categoryPosition));
         if (selectedCategory == 0)
@@ -232,7 +228,6 @@ public class ProductSearchForm extends LinearLayout {
 
     public int getSize() {
         int sizePosition = viewHolder.size.getSelectedItemPosition();
-        Log.d(TAG, "sizePosition = " + sizePosition);
         HashBiMap<String, Integer> inverseSize = Size.getHashBiMap(getCategory()).inverse();
         int selectedSize = inverseSize.get(sizeAdapter.getItem(sizePosition));
         if (selectedSize == 0)

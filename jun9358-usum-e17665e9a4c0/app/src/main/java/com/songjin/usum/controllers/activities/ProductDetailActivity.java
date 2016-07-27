@@ -49,8 +49,6 @@ public class ProductDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "액티비티 시작");
-
         productCardDto = getIntent().getParcelableExtra("productCardDto");
 
         initViews(R.layout.activity_product_detail);
@@ -98,7 +96,6 @@ public class ProductDetailActivity extends BaseActivity {
                         new RequestManager.OnInsertTimelineComment() {
                             @Override
                             public void onSuccess() {
-                                Log.d(TAG, "성공2");
                                 requestTimelineComments();
                                 viewHolder.commentContents.setText("");
                                 viewHolder.commentContents.clearFocus();
@@ -220,7 +217,6 @@ public class ProductDetailActivity extends BaseActivity {
                         timelineCommentCardDto.userEntity.realName = "이방인";
                     }
                 }
-                Log.d(TAG, "comment size = " + timelineCommentCardDtos.size());
                 viewHolder.comments.setTimelineCommentCardDtos(timelineCommentCardDtos);
             }
 

@@ -72,10 +72,8 @@ public class MainActivity extends BaseActivity implements PushHandler {
                 if(action.equals(GCMManager.REGISTRATION_COMPLETE)){
                     // 액션이 COMPLETE일 경우
                     final String token = intent.getStringExtra("token");
-                    Log.d(TAG, "token = " + token);
                     if (token == null)
                         return;
-                    Log.d(TAG, "not return");
 
                     SocketIO.setToken(Global.userEntity.id, token, new RequestManager.OnSetToken() {
                         @Override
@@ -85,7 +83,6 @@ public class MainActivity extends BaseActivity implements PushHandler {
 
                         @Override
                         public void onException() {
-                            Log.d(TAG, "token 설정 실패");
                         }
                     });
                 }
@@ -100,7 +97,6 @@ public class MainActivity extends BaseActivity implements PushHandler {
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         9000).show();
             } else {
-                Log.i("ICELANCER", "This device is not supported.");
                 finish();
             }
             return false;
@@ -112,7 +108,6 @@ public class MainActivity extends BaseActivity implements PushHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews(R.layout.activity_main);
-        Log.d(TAG, "액티비티 시작");
         checkPlayServices();
         registBroadcastReceiver();
         getInstanceIdToken();
@@ -127,7 +122,6 @@ public class MainActivity extends BaseActivity implements PushHandler {
             Global.userEntity = getIntent().getParcelableExtra(Global.USER);
             SharedPreferences preferences = getSharedPreferences(Global.APP_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
-            Log.d(TAG, "USERDATA = " + Global.userEntity.toString());
             editor.putString(Global.USER, Global.userEntity.toString());
             ArrayList<SlidingBaseFragment> tabFragments = new ArrayList<>();
 

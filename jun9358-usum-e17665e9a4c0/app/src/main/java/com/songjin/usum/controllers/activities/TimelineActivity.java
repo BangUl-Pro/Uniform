@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,11 +49,9 @@ public class TimelineActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "액티비티 시작");
 
         Intent intent = getIntent();
         schoolEntity = intent.getParcelableExtra("schoolEntity");
-        Log.d(TAG, "schoolEntity = " + schoolEntity);
 
         timelineCardDtos = new ArrayList<>();
         setQueryToAllTimelines();
@@ -191,19 +188,8 @@ public class TimelineActivity extends BaseActivity {
             public void onRefresh() {
                 timelineCardDtos.clear();
                 getTimeline();
-                Log.d(TAG, "2");
-//                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
             }
         });
-
-//        viewHolder.timelines.setOnMoreListener(new OnMoreListener() {
-//            @Override
-//            public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
-//                getTimeline();
-//                Log.d(TAG, "3");
-////                RequestManager.getNextTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
-//            }
-//        });
     }
 
     @Override
@@ -240,7 +226,6 @@ public class TimelineActivity extends BaseActivity {
                     setQueryToAllTimelines();
                 }
                 getTimeline();
-                Log.d(TAG, "4");
 //                RequestManager.getTimelinesInBackground(timelineCardDtoQuery, timelineCardDtoQueryCallback);
 
                 return true;

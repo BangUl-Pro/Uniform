@@ -36,14 +36,12 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews(R.layout.activity_login);
-        Log.d(TAG, "액티비티 시작");
 
         schoolManager = new SchoolManager(this);
         new SocketIO(getApplicationContext());
 
         if (schoolManager.isEmptyTable()) {
             showLoadingView("학교 DB 다운로드 중 입니다.");
-            Log.d(TAG, "학교 DB 다운로드");
 
             schoolManager.copy();
             hideLoadingView();

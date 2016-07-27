@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
@@ -52,7 +51,6 @@ public class SignUpActivity extends BaseActivity {
             bundle.putString("device_id", curId);
             cache.save(bundle);
         }
-        Log.d(TAG, "getDeviceUUID = " + curId);
         return curId;
     }
 
@@ -66,7 +64,6 @@ public class SignUpActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "액티비티 시작");
         requestCheckConfirmedUser();
     }
 
@@ -131,7 +128,6 @@ public class SignUpActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         final SharedPreferencesCache cache = Session.getAppCache();
         final String kakaoToken = cache.getString(Global.TOKEN);
-        Log.d(TAG, "kakaoToken = " + kakaoToken);
 
         UserManagement.requestMe(new MeResponseCallback() {
             @Override
@@ -158,38 +154,19 @@ public class SignUpActivity extends BaseActivity {
 
                         Global.userEntity = userEntity;
 
-                        if (userEntity.deviceId == null) {
+                        if (!userEntity.hasExtraProfile) {
+                            initViews(R.layout.activity_sign_up);
+                        } else if (userEntity.deviceId == null) {
                             SocketIO.setDeviceId(userEntity.id, getDeviceUUID(), new RequestManager.OnSetDeviceId() {
                                 @Override
                                 public void onSuccess() {
                                     userEntity.setDeviceId(userEntity.id);
-                                    Log.d(TAG, "성공");
-
                                     String token = kakaoToken;
                                     if (token == null) {
                                         token = Session.getCurrentSession().getAccessToken();
                                         Bundle bundle = new Bundle();
                                         bundle.putString(Global.TOKEN, token);
                                         cache.save(bundle);
-
-//                                        PushService.registerPushToken(new ApiResponseCallback<Integer>() {
-//                                            @Override
-//                                            public void onSessionClosed(ErrorResult errorResult) {
-//                                                Log.d(TAG, "GCM PUSH 등록 에러 메세지 = " + errorResult.getErrorMessage());
-//                                                Log.d(TAG, "GCM PUSH 등록 에러 URL = " + errorResult.getHttpStatus());
-//                                                Log.d(TAG, "GCM PUSH 등록 에러 코드 = " + errorResult.getErrorCode());
-//                                            }
-//
-//                                            @Override
-//                                            public void onNotSignedUp() {
-//
-//                                            }
-//
-//                                            @Override
-//                                            public void onSuccess(Integer result) {
-//
-//                                            }
-//                                        }, kakaoToken, userEntity.deviceId, Global.APP_VER);
                                     }
 
                                     Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
@@ -200,46 +177,24 @@ public class SignUpActivity extends BaseActivity {
 
                                 @Override
                                 public void onException() {
-                                    Log.d(TAG, "실패");
                                 }
                             });
                         } else if (!getDeviceUUID().equals(userEntity.deviceId)) {
                             Toast.makeText(SignUpActivity.this, "이미 다른 기기에서 접속 중입니다.", Toast.LENGTH_SHORT).show();
                             requestLogout();
-                        } else if (userEntity.hasExtraProfile) {
+                        } else {
                             String token = kakaoToken;
                             if (token == null) {
                                 token = Session.getCurrentSession().getAccessToken();
                                 Bundle bundle = new Bundle();
                                 bundle.putString(Global.TOKEN, token);
                                 cache.save(bundle);
-
-//                                PushService.registerPushToken(new ApiResponseCallback<Integer>() {
-//                                    @Override
-//                                    public void onSessionClosed(ErrorResult errorResult) {
-//                                        Log.d(TAG, "GCM PUSH 등록 에러 메세지 = " + errorResult.getErrorMessage());
-//                                        Log.d(TAG, "GCM PUSH 등록 에러 URL = " + errorResult.getHttpStatus());
-//                                        Log.d(TAG, "GCM PUSH 등록 에러 코드 = " + errorResult.getErrorCode());
-//                                    }
-//
-//                                    @Override
-//                                    public void onNotSignedUp() {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onSuccess(Integer result) {
-//
-//                                    }
-//                                }, kakaoToken, userEntity.deviceId, Global.APP_VER);
                             }
 
                             Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
                             intent1.putExtra(Global.USER, userEntity);
                             startActivity(intent1);
                             finish();
-                        } else {
-                            initViews(R.layout.activity_sign_up);
                         }
                     }
 
@@ -252,12 +207,13 @@ public class SignUpActivity extends BaseActivity {
 
                                     Global.userEntity = userEntity;
 
-                                    if (userEntity.deviceId == null) {
+                                    if (!userEntity.hasExtraProfile) {
+                                        initViews(R.layout.activity_sign_up);
+                                    } else if (userEntity.deviceId == null) {
                                         SocketIO.setDeviceId(userEntity.id, getDeviceUUID(), new RequestManager.OnSetDeviceId() {
                                             @Override
                                             public void onSuccess() {
                                                 userEntity.setDeviceId(userEntity.id);
-                                                Log.d(TAG, "성공");
 
                                                 String token = kakaoToken;
                                                 if (token == null) {
@@ -265,25 +221,6 @@ public class SignUpActivity extends BaseActivity {
                                                     Bundle bundle = new Bundle();
                                                     bundle.putString(Global.TOKEN, token);
                                                     cache.save(bundle);
-
-//                                                    PushService.registerPushToken(new ApiResponseCallback<Integer>() {
-//                                                        @Override
-//                                                        public void onSessionClosed(ErrorResult errorResult) {
-//                                                            Log.d(TAG, "GCM PUSH 등록 에러 메세지 = " + errorResult.getErrorMessage());
-//                                                            Log.d(TAG, "GCM PUSH 등록 에러 URL = " + errorResult.getHttpStatus());
-//                                                            Log.d(TAG, "GCM PUSH 등록 에러 코드 = " + errorResult.getErrorCode());
-//                                                        }
-//
-//                                                        @Override
-//                                                        public void onNotSignedUp() {
-//
-//                                                        }
-//
-//                                                        @Override
-//                                                        public void onSuccess(Integer result) {
-//
-//                                                        }
-//                                                    }, kakaoToken, userEntity.deviceId, Global.APP_VER);
                                                 }
 
                                                 Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
@@ -294,46 +231,24 @@ public class SignUpActivity extends BaseActivity {
 
                                             @Override
                                             public void onException() {
-                                                Log.d(TAG, "실패");
                                             }
                                         });
                                     } else if (!getDeviceUUID().equals(userEntity.deviceId)) {
                                         Toast.makeText(SignUpActivity.this, "이미 다른 기기에서 접속 중입니다.", Toast.LENGTH_SHORT).show();
                                         requestLogout();
-                                    } else if (userEntity.hasExtraProfile) {
+                                    } else {
                                         String token = kakaoToken;
                                         if (token == null) {
                                             token = Session.getCurrentSession().getAccessToken();
                                             Bundle bundle = new Bundle();
                                             bundle.putString(Global.TOKEN, token);
                                             cache.save(bundle);
-
-//                                            PushService.registerPushToken(new ApiResponseCallback<Integer>() {
-//                                                @Override
-//                                                public void onSessionClosed(ErrorResult errorResult) {
-//                                                    Log.d(TAG, "GCM PUSH 등록 에러 메세지 = " + errorResult.getErrorMessage());
-//                                                    Log.d(TAG, "GCM PUSH 등록 에러 URL = " + errorResult.getHttpStatus());
-//                                                    Log.d(TAG, "GCM PUSH 등록 에러 코드 = " + errorResult.getErrorCode());
-//                                                }
-//
-//                                                @Override
-//                                                public void onNotSignedUp() {
-//
-//                                                }
-//
-//                                                @Override
-//                                                public void onSuccess(Integer result) {
-//
-//                                                }
-//                                            }, kakaoToken, userEntity.deviceId, Global.APP_VER);
                                         }
 
                                         Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
                                         intent1.putExtra(Global.USER, userEntity);
                                         startActivity(intent1);
                                         finish();
-                                    } else {
-                                        initViews(R.layout.activity_sign_up);
                                     }
                                 }
 

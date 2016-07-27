@@ -487,6 +487,47 @@ public class SocketIO {
         }
     }
 
+    public static void setHasExtraProfile(String id, boolean hasExtraProfile, final RequestManager.OnSetHasExtraProfile sender) {
+        if (!checkSocket())
+            return;
+        try {
+            JSONObject object = new JSONObject();
+            object.put(Global.ID, id);
+            object.put(Global.HAS_EXTRA_PROFILE, hasExtraProfile);
+            socket.emit(Global.SET_HAS_EXTRA_PROFILE, object);
+            socket.once(Global.SET_HAS_EXTRA_PROFILE, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    try {
+                        JSONObject resObject = getJson(args);
+                        final int code = getCode(resObject);
+
+                        if (code == SocketException.SUCCESS) {
+                            // 성공
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    sender.onSuccess();
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    sender.onException();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void setToken(String id, String token, final RequestManager.OnSetToken onSetToken) {
         Log.d(TAG, "토큰 설정 id  = " + id);
         Log.d(TAG, "토큰 설정 token  = " + token);
@@ -1858,7 +1899,7 @@ public class SocketIO {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.d(TAG, "device Id = " + user.deviceId);
+                                    Log.d(TAG, "##################hasProfile = " + user.hasExtraProfile);
                                     onSignInKakao.onSuccess(user);
                                 }
                             });

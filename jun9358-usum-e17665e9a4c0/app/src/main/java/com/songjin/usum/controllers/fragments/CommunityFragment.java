@@ -2,7 +2,6 @@ package com.songjin.usum.controllers.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +89,6 @@ public class CommunityFragment extends SlidingBaseFragment {
         RequestManager.getSchoolRanking(new RequestManager.OnGetSchoolRanking() {
             @Override
             public void onSuccess(final ArrayList<SchoolRanking> schoolRankings) {
-                Log.d(TAG, "학교 랭킹 성공");
                 addSchoolRankings(schoolRankings);
 
                 schoolRankingManager.deleteAllSchoolRankings();
@@ -164,7 +162,6 @@ public class CommunityFragment extends SlidingBaseFragment {
 
             @Override
             public void onException() {
-                Log.d(TAG, "내 학교 순위 얻기 실패");
             }
         }, Global.userEntity.schoolId);
     }

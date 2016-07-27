@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Parcelable;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -103,19 +102,13 @@ public class ProductDetailCardView extends CardView {
                 String pushMessage = "";
                 String signedUserUuid = Global.userEntity.getId();
 
-                Log.d(TAG, "제품 상태 = " + productCardDto.transactionEntity.status);
-                Log.d(TAG, "내 아이디 = " + signedUserUuid);
-
                 switch (productCardDto.transactionEntity.status) {
                     case Global.REGISTERED:
                         writeCommentToShareMyProfile();
 
                         if (productCardDto.transactionEntity.donator_id.equals(signedUserUuid)) {
-                            Log.d(TAG, "내가 기부자임 ");
                             targetUserUuids.add(productCardDto.transactionEntity.receiver_id);
-//                        } else if (productCardDto.transactionEntity.receiver_id.equals(signedUserUuid)) {
                         } else {
-                            Log.d(TAG, "내가 기부 요청자임 ");
                             targetUserUuids.add(productCardDto.transactionEntity.donator_id);
                         }
                         pushMessage = "진행중이던 거래가 취소되었습니다.";
@@ -132,7 +125,6 @@ public class ProductDetailCardView extends CardView {
                         break;
                     case Global.RECEIVED:
                         if (productCardDto.transactionEntity.donator_id.equals(signedUserUuid)) {
-                            Log.d(TAG, "기부자와 내가 일치함");
                             new MaterialDialog.Builder(BaseActivity.context)
                                     .title(R.string.app_name)
                                     .content("정상적으로 처리되었습니다.")
@@ -150,7 +142,6 @@ public class ProductDetailCardView extends CardView {
                             return;
                         }
 
-                        Log.d(TAG, "기부자와 내가 일치하지 않음");
                         new MaterialDialog.Builder(BaseActivity.context)
                                 .title(R.string.app_name)
                                 .content("교복이 마음에 드시나요?" + "\n" +
@@ -352,7 +343,6 @@ public class ProductDetailCardView extends CardView {
                 RequestManager.updateProduct(productCardDtoForUpdate, isDeleteFile, new RequestManager.OnUpdateProduct() {
                     @Override
                     public void onSuccess(ProductEntity productEntity) {
-                        Log.d(TAG, "업데이트 성공");
                         for (int i = 0; i < productCardDtoForUpdate.uris.size(); i++) {
                             Uri uri = productCardDtoForUpdate.uris.get(i);
                             RequestManager.insertFile(
@@ -449,7 +439,6 @@ public class ProductDetailCardView extends CardView {
                 new RequestManager.OnInsertTimelineComment() {
                     @Override
                     public void onSuccess() {
-                        Log.d(TAG, "성공");
                     }
 
                     @Override
@@ -510,17 +499,14 @@ public class ProductDetailCardView extends CardView {
         String receiverUuid = productCardDto.transactionEntity.receiver_id;
 //        String signedUserUuid = Baas.io().getSignedInUser().getUuid().toString();
         String signedUserUuid = Global.userEntity.id;
-        Log.d(TAG, "상태 = " +  productCardDto.transactionEntity.status);
         switch (productCardDto.transactionEntity.status) {
             case Global.REGISTERED:
                 if (donatorUuid.equals(signedUserUuid)) {
-                    Log.d(TAG, "기부자와 내가 일치");
                     viewHolder.donateButton.setVisibility(View.GONE);
                     viewHolder.cancelButton.setVisibility(View.GONE);
                     viewHolder.updateButton.setVisibility(View.VISIBLE);
                     viewHolder.deleteButton.setVisibility(View.VISIBLE);
                 } else {
-                    Log.d(TAG, "기부자와 내가 일치하지 않음");
                     viewHolder.donateButton.setVisibility(View.VISIBLE);
                     viewHolder.cancelButton.setVisibility(View.GONE);
                     viewHolder.updateButton.setVisibility(View.GONE);
@@ -531,7 +517,6 @@ public class ProductDetailCardView extends CardView {
                 break;
             case Global.REQUESTED:
                 if (donatorUuid.equals(signedUserUuid)) {
-                    Log.d(TAG, "기부자와 내가 일치");
                     viewHolder.donateButton.setVisibility(View.VISIBLE);
                     viewHolder.cancelButton.setVisibility(View.VISIBLE);
                     viewHolder.updateButton.setVisibility(View.GONE);
@@ -539,7 +524,6 @@ public class ProductDetailCardView extends CardView {
 
                     viewHolder.donateButton.setText("발송완료");
                 } else if (receiverUuid.equals(signedUserUuid)) {
-                    Log.d(TAG, "구매자와 내가 일치");
                     viewHolder.donateButton.setVisibility(View.GONE);
                     viewHolder.cancelButton.setVisibility(View.VISIBLE);
                     viewHolder.updateButton.setVisibility(View.GONE);
@@ -547,7 +531,6 @@ public class ProductDetailCardView extends CardView {
 
                     viewHolder.donateButton.setText("발송대기중");
                 } else {
-                    Log.d(TAG, "그 누구와도 일치하지 않음");
                     viewHolder.donateButton.setVisibility(View.GONE);
                     viewHolder.cancelButton.setVisibility(View.GONE);
                     viewHolder.updateButton.setVisibility(View.GONE);
@@ -556,7 +539,6 @@ public class ProductDetailCardView extends CardView {
                 break;
             case Global.SENDED:
                 if (donatorUuid.equals(signedUserUuid)) {
-                    Log.d(TAG, "기부자와 내가 일치");
                     viewHolder.donateButton.setVisibility(View.GONE);
                     viewHolder.cancelButton.setVisibility(View.GONE);
                     viewHolder.updateButton.setVisibility(View.GONE);

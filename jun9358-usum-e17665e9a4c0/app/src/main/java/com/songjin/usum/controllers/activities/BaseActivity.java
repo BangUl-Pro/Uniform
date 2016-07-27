@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.songjin.usum.R;
@@ -89,7 +88,6 @@ public abstract class BaseActivity extends ActionBarActivity {
             materialDialog.hide();
         }
 
-        Log.d("USUM", "BaseActivity.context: " + context);
         materialDialog = new MaterialDialog.Builder(context)
                 .title(R.string.app_name)
                 .content(msg)

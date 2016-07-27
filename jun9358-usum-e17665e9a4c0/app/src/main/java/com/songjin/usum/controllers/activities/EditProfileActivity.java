@@ -1,7 +1,6 @@
 package com.songjin.usum.controllers.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.songjin.usum.Global;
@@ -33,7 +32,6 @@ public class EditProfileActivity extends BaseActivity {
     @Override
     protected void initViews(int layoutResID) {
         setContentView(R.layout.activity_edit_profile);
-        Log.d(TAG, "액티비티 시작");
 
         viewHolder = new ViewHolder(getWindow().getDecorView());
         viewHolder.userProfileForm.setRealName(Global.userEntity.realName);
@@ -49,7 +47,6 @@ public class EditProfileActivity extends BaseActivity {
                     @Override
                     public void onSuccess(UserEntity userEntity) {
                         Global.userEntity = userEntity;
-                        Log.d(TAG, "id = " + userEntity.id);
                         hideLoadingView();
                         finish();
                     }

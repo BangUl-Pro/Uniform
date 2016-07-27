@@ -46,6 +46,8 @@ public class Global {
     public static final String ID = "id";
     public static final String MSG = "msg";
     public static final String DEVICE_ID = "deviceId";
+    public static final String HAS_EXTRA_PROFILE = "hasExtraProfile";
+    public static final String SET_HAS_EXTRA_PROFILE = "setHasExtraProfile";
     public static final String USER = "user";
     public static final String SCHOOL = "school";
     public static final String USER_ID = "user_id";

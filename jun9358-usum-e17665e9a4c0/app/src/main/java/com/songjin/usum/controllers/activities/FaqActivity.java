@@ -1,7 +1,6 @@
 package com.songjin.usum.controllers.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -38,8 +37,6 @@ public class FaqActivity extends BaseActivity {
     @Override
     protected void initViews(int layoutResID) {
         setContentView(layoutResID);
-        Log.d(TAG, "액티비티 시작");
-
         viewHolder = new ViewHolder(getWindow().getDecorView());
     }
 

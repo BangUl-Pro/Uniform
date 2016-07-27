@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,8 +103,6 @@ public class AddProductsActivity extends BaseActivity {
     @Override
     protected void initViews(int layoutResID) {
         setContentView(layoutResID);
-        Log.d(TAG, "액티비티 시작");
-
         // 액션바 설정
         getSupportActionBar().setTitle("기증하기");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

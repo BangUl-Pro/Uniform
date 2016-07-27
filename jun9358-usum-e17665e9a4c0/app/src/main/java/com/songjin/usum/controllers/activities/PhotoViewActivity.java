@@ -2,7 +2,6 @@ package com.songjin.usum.controllers.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -32,8 +31,6 @@ public class PhotoViewActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "액티비티 시작");
-
         imageUrl = getIntent().getStringExtra("imageUrl");
         initViews(R.layout.activity_photo_view);
     }
@@ -46,7 +43,6 @@ public class PhotoViewActivity extends Activity {
     }
 
     private void loadImage(String url) {
-        Log.d(TAG, "url = " + url);
         Glide.with(this)
                 .load(url)
                 .placeholder(R.drawable.ic_launcher)
@@ -80,7 +76,6 @@ public class PhotoViewActivity extends Activity {
 
                     @Override
                     public boolean isComplete() {
-                        Log.d(TAG, "isComplete");
                         mAttacher = new PhotoViewAttacher(viewHolder.photoView);
                         return false;
                     }
