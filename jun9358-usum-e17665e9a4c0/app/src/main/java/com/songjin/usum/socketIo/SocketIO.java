@@ -63,11 +63,9 @@ public class SocketIO {
     }
 
     private void init() {
-        Log.d(TAG, "init");
         try {
             socket = IO.socket(SERVER_URL);
         } catch (Exception e) {
-            Log.e(TAG, "init 에러 = " + e.getMessage());
         }
 
         if (socket != null) {
@@ -96,18 +94,15 @@ public class SocketIO {
 
 
     private void setListener() {
-        Log.d(TAG, "setListener");
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 // 연결
-                Log.d(TAG, "소켓 연결");
             }
         }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 // 연결 끊김
-                Log.d(TAG, "소켓 연결 끊김");
                 socketConnect();
             }
         });
@@ -127,7 +122,6 @@ public class SocketIO {
 
     public static void signUp(UserEntity userEntity, final RequestManager.OnSignUp onSignUp) {
         // 회원가입
-        Log.d(TAG, "회원가입");
 
         String userId = userEntity.id;
         String realName = userEntity.realName;
@@ -136,7 +130,6 @@ public class SocketIO {
         String phone = userEntity.phone;
         int schoolId = userEntity.schoolId;
 
-        Log.i(TAG, "userId = " + userId);
 
         try {
             if (!checkSocket())
@@ -158,7 +151,6 @@ public class SocketIO {
                         final int code = getCode(resObject);
                         if (code == SocketException.SUCCESS) {
                             JSONObject userObject = resObject.getJSONObject(Global.USER);
-                            Log.d(TAG, "userObject = " + userObject);
                             final UserEntity user = new UserEntity(userObject);
                             handler.post(new Runnable() {
                                 @Override
@@ -187,8 +179,6 @@ public class SocketIO {
 
     public static void signIn(String userId, final RequestManager.OnSignIn onSignIn) {
         // 로그인
-        Log.d(TAG, "로그인");
-        Log.i(TAG, "userId = " + userId);
 
         try {
             if (!checkSocket())
@@ -237,7 +227,6 @@ public class SocketIO {
      * TODO: 학교 정보 요청
      * */
     public static void getSchool(final RequestManager.OnGetSchool onGetSchool) {
-        Log.d(TAG, "학교 정보 요청");
         if (!checkSocket())
             return;
         socket.emit(Global.GET_SCHOOL, "");
@@ -247,7 +236,6 @@ public class SocketIO {
                 try {
                     JSONObject resObject = getJson(args);
                     final int code = getCode(resObject);
-                    Log.d(TAG, "학교 정보 응답 resObject = " + resObject);
 
                     if (code == SocketException.SUCCESS) {
                         JSONArray array = resObject.getJSONArray(Global.SCHOOL);
@@ -281,7 +269,6 @@ public class SocketIO {
 
 
     private static void insertSchool() {
-        Log.d(TAG, "학교 데이터 입력 ");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -321,7 +308,6 @@ public class SocketIO {
                                     String tag = parser.getName();
                                     if (tag.equals(START)) {
                                         schoolEntity = new SchoolEntity();
-                                        Log.d(TAG, "시작");
                                     }
                                     isText = true;
                                     break;
@@ -338,24 +324,20 @@ public class SocketIO {
                                         // 학교급
                                         if (text.equals(MIDDLE_SCHOOL) || text.equals(HIGH_SCHOOL)) {
                                             schoolEntity.category = text;
-                                            Log.d(TAG, "타겟임 " + text);
                                             isTarget = true;
                                             isCategory = false;
                                         } else if (isText) {
-                                            Log.d(TAG, "타겟아님 " + text);
                                             isTarget = false;
                                             isCategory = false;
                                         }
                                     } else if (isAddress) {
                                         // 주소
                                         if (isTarget && isText) {
-                                            Log.d(TAG, text);
                                             schoolEntity = setAddress(schoolEntity, text);
                                             isAddress = false;
                                         }
                                     } else if (isName) {
                                         if (isTarget && isText) {
-                                            Log.d(TAG, text);
                                             schoolEntity.schoolname = text;
                                             isName = false;
                                         }
@@ -368,7 +350,6 @@ public class SocketIO {
                                         if (isTarget) {
                                             schoolEntity.id = schoolEntities.size() + 1;
                                             schoolEntities.add(schoolEntity);
-                                            Log.d(TAG, "끝");
                                         }
                                     }
 
@@ -382,36 +363,12 @@ public class SocketIO {
                         Gson gson = new Gson();
                         String json = gson.toJson(schoolEntities);
                         JSONArray array = new JSONArray(json);
-                        Log.d(TAG, "array = " + array);
                         socket.emit("insertSchool", array);
                     } catch (XmlPullParserException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-//                    Log.d(TAG, "urlStr = " + urlStr);
-//                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-//                    httpURLConnection.setRequestMethod("GET");
-//                    if (httpURLConnection != null) {
-//                        int resCode = httpURLConnection.getResponseCode();
-//                        if (resCode == HttpURLConnection.HTTP_OK) {
-//                            StringBuilder sb = new StringBuilder();
-//                            BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), "UTF-8"));
-//                            while (true) {
-//                                String line = reader.readLine();
-//                                if (line == null)
-//                                    break;
-//                                sb.append(line);
-//                            }
-//                            String school = sb.toString();
-//                            Log.d(TAG, "school = " + school);
-//                            reader.close();
-//                            processGetSchool(school);
-//                    httpURLConnection.disconnect();
-//
-//
-//                        }
-//                    }
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -432,8 +389,6 @@ public class SocketIO {
         schoolEntity.city = address.substring(0, firstSpace).trim();
         schoolEntity.gu = address.substring(firstSpace, secondSpace).trim();
 
-        Log.d(TAG, "city = " + schoolEntity.city);
-        Log.d(TAG, "gu = " + schoolEntity.gu);
         return schoolEntity;
     }
 
@@ -445,7 +400,6 @@ public class SocketIO {
     }
 
     public static void setDeviceId(String id, String deviceId, final RequestManager.OnSetDeviceId onSetDeviceId) {
-        Log.d(TAG, "디바이스 아이디 설정");
         if (!checkSocket())
             return;
         try {
@@ -459,7 +413,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "디바이스 아이디 설정 응답 resObject = " + resObject);
 
                         if (code == SocketException.SUCCESS) {
                             // 성공
@@ -529,8 +482,6 @@ public class SocketIO {
     }
 
     public static void setToken(String id, String token, final RequestManager.OnSetToken onSetToken) {
-        Log.d(TAG, "토큰 설정 id  = " + id);
-        Log.d(TAG, "토큰 설정 token  = " + token);
         if (!checkSocket())
             return;
         try {
@@ -544,7 +495,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "토큰 설정 응답 resObject = " + resObject);
 
                         if (code == SocketException.SUCCESS) {
                             // 성공
@@ -573,14 +523,12 @@ public class SocketIO {
     }
 
     public static void sendGcm(String id, String msg, final RequestManager.OnSetToken onSetToken) {
-        Log.d(TAG, "GCM 보내기");
         if (!checkSocket())
             return;
         try {
             JSONObject object = new JSONObject();
             object.put(Global.ID, id);
             object.put(Global.MSG, msg);
-            Log.d(TAG, "GCM = " + object.toString());
             socket.emit(Global.SEND_GCM, object);
             socket.once(Global.SEND_GCM, new Emitter.Listener() {
                 @Override
@@ -588,7 +536,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "GCM 보내기 응답 resObject = " + resObject);
 
                         if (code == SocketException.SUCCESS) {
                             // 성공
@@ -619,7 +566,6 @@ public class SocketIO {
 
     // TODO: 15. 11. 20. 학교 랭킹 요청
     public static void getSchoolRanking(final RequestManager.OnGetSchoolRanking onGetSchoolRanking) {
-        Log.d(TAG, "학교 랭킹 요청");
         if (!checkSocket())
             return;
         socket.emit(Global.GET_SCHOOL_RANKING, "");
@@ -629,7 +575,6 @@ public class SocketIO {
                 try {
                     JSONObject resObject = getJson(args);
                     final int code = getCode(resObject);
-                    Log.d(TAG, "학교랭킹 응답 resObject = " + resObject);
 
                     if (code == SocketException.SUCCESS) {
                         // 성공
@@ -663,7 +608,6 @@ public class SocketIO {
 
     // TODO: 15. 11. 20. 학교 랭킹 요청
     public static void getSchoolRanking(final RequestManager.OnGetSchoolRanking onGetSchoolRanking, int schoolId) {
-        Log.d(TAG, "학교 랭킹 요청");
         if (!checkSocket())
             return;
         try {
@@ -676,7 +620,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "학교랭킹 응답 resObject = " + resObject);
 
                         if (code == SocketException.SUCCESS) {
                             // 성공
@@ -713,7 +656,6 @@ public class SocketIO {
 
     // TODO: 15. 11. 20. 학교 랭킹 요청
     public static void getMySchoolRanking(final RequestManager.OnGetMySchoolRanking onGetSchoolRanking, int schoolId) {
-        Log.d(TAG, "학교 랭킹 요청");
         if (!checkSocket())
             return;
         try {
@@ -726,7 +668,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "내 학교랭킹 응답 resObject = " + resObject);
 
                         if (code == SocketException.SUCCESS) {
                             // 성공
@@ -758,7 +699,6 @@ public class SocketIO {
 
     // TODO: 15. 11. 20. 제품검색
     public static void searchProduct(int schoolId, int sex, int category, int size, int position, final RequestManager.OnSearchProduct onSearchProduct) {
-        Log.d(TAG, "제품 검색 ");
         try {
             if (!checkSocket())
                 return;
@@ -768,7 +708,6 @@ public class SocketIO {
             object.put(Global.CATEGORY, category);
             object.put(Global.SIZE, size);
             object.put(Global.POSITION, position);
-            Log.d(TAG, "searchProduct Object = " + object);
             socket.emit(Global.SEARCH_PRODUCT, object);
             socket.once(Global.SEARCH_PRODUCT, new Emitter.Listener() {
                 @Override
@@ -782,11 +721,8 @@ public class SocketIO {
 
 
                             JSONArray array = reqObject.getJSONArray(Global.PRODUCT);
-                            Log.d(TAG, "제품 검색 array = " + array);
-                            Log.d(TAG, "제품 검색 arraySize = " + array.length());
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject productJson = array.getJSONObject(i);
-                                Log.d(TAG, "제품 검색 Object = " + productJson);
                                 ProductCardDto dto = new ProductCardDto(productJson);
 
                                 if (productMap.get(dto.productEntity.id) == null) {
@@ -802,7 +738,6 @@ public class SocketIO {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.d(TAG, "제품 검색 크기 = " + products.size());
                                     onSearchProduct.onSuccess(products);
                                 }
                             });
@@ -842,7 +777,6 @@ public class SocketIO {
                 return;
             Gson gson = new Gson();
             JSONObject object = new JSONObject(gson.toJson(productCardDto.productEntity));
-            Log.d(TAG, "insertProduct Object = " + object);
             socket.emit(Global.INSERT_PRODUCT, object);
             socket.once(Global.INSERT_PRODUCT, new Emitter.Listener() {
                 @Override
@@ -850,7 +784,6 @@ public class SocketIO {
                     try {
                         JSONObject reqObject = (JSONObject) args[0];
                         int code = reqObject.getInt(Global.CODE);
-                        Log.d(TAG, "제품 등록 응답 = " + reqObject);
 
                         if (code == SocketException.SUCCESS) {
                             JSONObject productJson = reqObject.getJSONObject(Global.PRODUCT);
@@ -889,7 +822,6 @@ public class SocketIO {
             Gson gson = new Gson();
             String json = gson.toJson(user, UserEntity.class);
             JSONObject object = new JSONObject(json);
-            Log.d(TAG, "updateUserProfile Object = " + object);
             socket.emit(Global.UPDATE_USER_PROFILE, object);
             socket.once(Global.UPDATE_USER_PROFILE, new Emitter.Listener() {
                 @Override
@@ -897,7 +829,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "프로필 수정 응답 resObject = " + resObject);
                         if (code == SocketException.SUCCESS) {
                             // 성공
                             JSONObject userObject = resObject.getJSONObject(Global.USER);
@@ -937,7 +868,6 @@ public class SocketIO {
             object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
             object.put(Global.COMMENT_CONTENT, commentContent);
             object.put(Global.USER_ID, userId);
-            Log.d(TAG, "insertTimelineComment Object = " + object);
             socket.emit(Global.INSERT_TIMELINE_COMMENT, object);
             socket.once(Global.INSERT_TIMELINE_COMMENT, new Emitter.Listener() {
                 @Override
@@ -945,7 +875,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "타임라인 댓글 입력 응답 resObject = " + resObject);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -974,7 +903,6 @@ public class SocketIO {
                 return;
             JSONObject object = new JSONObject();
             object.put(Global.ID, timelineId);
-            Log.d(TAG, "getTimelineComment Object = " + object);
             socket.emit(Global.GET_TIMELINE_COMMENT, object);
             socket.once(Global.GET_TIMELINE_COMMENT, new Emitter.Listener() {
                 @Override
@@ -982,7 +910,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "타임라인 댓글 응답 resObject = " + resObject);
 
                         if (code == SocketException.SUCCESS) {
                             // 성공
@@ -1029,7 +956,6 @@ public class SocketIO {
             object.put(Global.SCHOOL_ID, schoolId);
             object.put(Global.USER_ID, userId);
             object.put(Global.TIME, time);
-            Log.d(TAG, "getAllTimeline Object = " + object);
             socket.emit(Global.GET_ALL_TIMELINE, object);
             socket.once(Global.GET_ALL_TIMELINE, new Emitter.Listener() {
                 @Override
@@ -1037,7 +963,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "모든 타임라인 리스트 응답 resObject = " + resObject);
                         if (code == SocketException.SUCCESS) {
                             // 성공
                             final ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
@@ -1052,7 +977,6 @@ public class SocketIO {
                                 timelineCardDto.setFile(timelineObject);
 
 
-                                Log.d(TAG, "timelineID = " + timelineCardDto.timelineEntity.id);
                                 if (timelineMap.get(timelineCardDto.timelineEntity.id) == null)
                                     timelineMap.put(timelineCardDto.timelineEntity.id, timelineCardDto);
                                 else
@@ -1097,7 +1021,6 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(Global.SCHOOL_ID, schoolId);
             object.put(Global.USER_ID, userId);
-            Log.d(TAG, "getMyTimeline Object = " + object);
             socket.emit(Global.GET_MY_TIMELINE, object);
             socket.once(Global.GET_MY_TIMELINE, new Emitter.Listener() {
                 @Override
@@ -1105,7 +1028,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "내 타임라인 리스트 응답 resObject = " + resObject);
                         if (code == SocketException.SUCCESS) {
                             // 성공
                             final ArrayList<TimelineCardDto> timelineCardDtos = new ArrayList<>();
@@ -1162,9 +1084,6 @@ public class SocketIO {
         try {
             if (!checkSocket())
                 return;
-            Log.d(TAG, "schoolId = " + schoolId);
-            Log.d(TAG, "timelineContent = " + timelineContent);
-
             Gson gson = new Gson();
             JSONArray array = new JSONArray(gson.toJson(files));
             JSONObject object = new JSONObject();
@@ -1172,7 +1091,6 @@ public class SocketIO {
             object.put(Global.USER_ID, id);
             object.put(Global.TIMELINE_CONTENT, timelineContent);
             object.put(Global.FILE, array);
-            Log.d(TAG, "insertTimeline Object = " + object);
             socket.emit(Global.INSERT_TIMELINE, object);
             socket.once(Global.INSERT_TIMELINE, new Emitter.Listener() {
                 @Override
@@ -1180,7 +1098,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "타임라인 입력 응답 resObject = " + resObject);
                         if (code == SocketException.SUCCESS) {
                             final JSONObject timelineJson = resObject.getJSONObject(Global.TIMELINE);
                             handler.post(new Runnable() {
@@ -1215,9 +1132,6 @@ public class SocketIO {
             if (!checkSocket())
                 return;
             for (int i = 0; i < files.size(); i++) {
-                Log.d(TAG, i + "번째 id = " + files.get(i).id);
-                Log.d(TAG, i + "번째 parent_uuid = " + files.get(i).parent_uuid);
-
                 if (files.get(i).id == null || files.get(i).id.equals(null))
                     return;
 
@@ -1230,7 +1144,6 @@ public class SocketIO {
             JSONArray array = new JSONArray(json);
             JSONObject object = new JSONObject();
             object.put(Global.FILE, array);
-            Log.d(TAG, "deleteFile Object = " + object);
             socket.emit(Global.DELETE_FILE, object);
             socket.once(Global.DELETE_FILE, new Emitter.Listener() {
                 @Override
@@ -1238,7 +1151,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "파일 삭제 응답 resObject = " + resObject);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -1268,7 +1180,6 @@ public class SocketIO {
             Gson gson = new Gson();
             String json = gson.toJson(timelineCardDto);
             JSONObject object = new JSONObject(json);
-            Log.d(TAG, "updateTimeline Object = " + object);
             socket.emit(Global.UPDATE_TIMELINE, object);
             socket.once(Global.UPDATE_TIMELINE, new Emitter.Listener() {
                 @Override
@@ -1276,7 +1187,6 @@ public class SocketIO {
                     try {
                         final JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "타임라인 업데이트 응답 resObject = " + resObject);
                         if (code == SocketException.SUCCESS) {
                             JSONObject timelineJson = resObject.getJSONObject(Global.TIMELINE);
                             final TimelineCardDto resTimelineCardDto = new TimelineCardDto(timelineJson);
@@ -1313,7 +1223,6 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(TransactionEntity.PROPERTY_DONATOR_UUID, userId);
             object.put(TransactionEntity.PROPERTY_RECEIVER_UUID, userId);
-            Log.d(TAG, "getMyProduct Object = " + object);
             socket.emit(Global.GET_MY_PRODUCT, object);
             socket.once(Global.GET_MY_PRODUCT, new Emitter.Listener() {
                 @Override
@@ -1321,7 +1230,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = (JSONObject) args[0];
                         final int code = resObject.getInt(Global.CODE);
-                        Log.d(TAG, "내 제품 리스트 응답 resObject = " + resObject);
                         if (code == SocketException.SUCCESS) {
                             final ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
                             JSONArray array = resObject.getJSONArray(Global.PRODUCT);
@@ -1377,7 +1285,6 @@ public class SocketIO {
             object.put(Global.ID, timelineCommentCardDto.commentEntity.id);
             object.put(Global.TIMELINE_ITEM_ID, timelineCommentCardDto.commentEntity.timeline_item_id);
             object.put(Global.USER_ID, timelineCommentCardDto.commentEntity.user_id);
-            Log.d(TAG, "deleteComment Object = " + object);
             socket.emit(Global.DELETE_COMMENT, object);
             socket.once(Global.DELETE_COMMENT, new Emitter.Listener() {
                 @Override
@@ -1385,7 +1292,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "댓글 삭제 응답 resObject = " + resObject);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -1417,7 +1323,6 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(Global.STATUS, status);
             object.put(Global.TRANSACTION, transJson);
-            Log.d(TAG, "updateTransactionStatus Object = " + object);
             socket.emit(Global.UPDATE_TRANSACTION_STATUS, object);
             socket.once(Global.UPDATE_TRANSACTION_STATUS, new Emitter.Listener() {
                 @Override
@@ -1425,7 +1330,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "트랜잭션 업데이트 응답 = " + resObject);
 
                         if (code == SocketException.SUCCESS) {
                             // 성공
@@ -1463,7 +1367,6 @@ public class SocketIO {
                 return;
             JSONObject object = new JSONObject();
             object.put(Global.PRODUCT_ID, productId);
-            Log.d(TAG, "deleteProduct Object = " + object);
             socket.emit(Global.DELETE_PRODUCT, object);
             socket.once(Global.DELETE_PRODUCT, new Emitter.Listener() {
                 @Override
@@ -1471,7 +1374,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "제품 삭제 응답 resObject = " + resObject);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -1502,7 +1404,6 @@ public class SocketIO {
             String json = gson.toJson(productCardDto);
             JSONObject object = new JSONObject(json);
             object.put("isDeleteFile", isDeleteFile);
-            Log.d(TAG, "updateProduct Object = " + object);
             socket.emit(Global.UPDATE_PRODUCT, object);
             socket.once(Global.UPDATE_PRODUCT, new Emitter.Listener() {
                 @Override
@@ -1510,7 +1411,6 @@ public class SocketIO {
                     try {
                         final JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "제품 수정 응답 resObject = " + resObject);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -1542,15 +1442,11 @@ public class SocketIO {
     public static void insertFile(String id, String path, int position, int type, RequestManager.OnInsertFile onInsertFile) {
             String serverUrl = SERVER_URL + "/api/photo";
 
-            Log.d(TAG, "productId = " + id);
-            Log.d(TAG, "path = " + path);
-
             upload(serverUrl, path, id, position, type, onInsertFile);
     }
 
 
     private static void upload(final String serverUrl, final String fileUrl, final String id, final int position, final int type, final RequestManager.OnInsertFile onInsertFile) {
-        Log.d(TAG, "fileUrl = " + fileUrl);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -1566,13 +1462,11 @@ public class SocketIO {
                 File file = new File(fileUrl);
 
                 if (!file.isFile()) {
-                    Log.e(TAG, "파일아님 = " + fileUrl);
                     onInsertFile.onException(1000);
                     return;
                 }
 
                 try {
-                    Log.d(TAG, "파일은 맞음");
                     FileInputStream fis = new FileInputStream(file);
                     URL url = new URL(serverUrl);
 
@@ -1610,12 +1504,10 @@ public class SocketIO {
 
                     dos.writeBytes(LINE_END);
                     dos.writeBytes(TWO_HYPHENS + BOUNDARY + TWO_HYPHENS + LINE_END);
-                    Log.d(TAG, "연결");
                     final int serverResCode = conn.getResponseCode();
                     String serverResMsg = conn.getResponseMessage();
 
                     if (serverResCode == 200) {
-                        Log.d(TAG, "서버 메세지 = " + serverResMsg);
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                         final StringBuilder sb = new StringBuilder();
                         String str = null;
@@ -1623,7 +1515,6 @@ public class SocketIO {
                             sb.append(str);
                         }
                         serverResMsg = sb.toString();
-                        Log.d(TAG, "서버 메세지2 = " + serverResMsg);
                         bufferedReader.close();
 
                         handler.post(new Runnable() {
@@ -1664,7 +1555,6 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(Global.TIMELINE_ITEM_ID, timelineId);
             object.put(Global.USER_ID, userId);
-            Log.d(TAG, "deleteTimeLine Object = " + object);
             socket.emit(Global.DELETE_TIMELINE, object);
             socket.once(Global.DELETE_TIMELINE, new Emitter.Listener() {
                 @Override
@@ -1672,7 +1562,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "타임라인 삭제 응답 resObject = " + resObject);
 
                         handler.post(new Runnable() {
                             @Override
@@ -1702,7 +1591,6 @@ public class SocketIO {
             Gson gson = new Gson();
             String json = gson.toJson(likeEntity);
             JSONObject object = new JSONObject(json);
-            Log.d(TAG, "deleteLike Object = " + object);
             socket.emit(Global.DELETE_LIKE, object);
             socket.once(Global.DELETE_LIKE, new Emitter.Listener() {
                 @Override
@@ -1710,7 +1598,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "좋아요 삭제 응답 resObject = " + resObject);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -1739,7 +1626,6 @@ public class SocketIO {
             JSONObject object = new JSONObject();
             object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
             object.put(Global.USER_ID, userId);
-            Log.d(TAG, "insertLike Object = " + object);
             socket.emit(Global.INSERT_LIKE, object);
             socket.once(Global.INSERT_LIKE, new Emitter.Listener() {
                 @Override
@@ -1747,7 +1633,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "좋아요 입력 응답 resObject = " + resObject);
 
                         if (code == SocketException.SUCCESS) {
                             JSONObject likeObject = resObject.getJSONObject(Global.LIKE);
@@ -1782,7 +1667,6 @@ public class SocketIO {
     public static void getProduct(JSONObject object, final RequestManager.OnGetProduct onGetProduct) {
         if (!checkSocket())
             return;
-        Log.d(TAG, "getProduct Object = " + object.toString());
         socket.emit(Global.GET_PRODUCT, object);
         socket.once(Global.GET_PRODUCT, new Emitter.Listener() {
             @Override
@@ -1790,25 +1674,12 @@ public class SocketIO {
                 try {
                     JSONObject resObject = getJson(args);
                     final int code = getCode(resObject);
-                    Log.d(TAG, "resObject = " + resObject.toString());
                     if (code == SocketException.SUCCESS) {
-//                            JSONArray productArray = resObject.getJSONArray(Global.PRODUCT);
-//                            Gson gson = new Gson();
-//                            final ArrayList<ProductCardDto> productCardDtos = new ArrayList<>();
-//
-//                            for (int i = 0; i < productArray.length(); i++) {
-//                                JSONObject productObject = productArray.getJSONObject(i);
-//                                ProductCardDto dto = gson.fromJson(productObject.toString(), ProductCardDto.class);
-//                                productCardDtos.add(dto);
-//                            }
-
                         final ArrayList<ProductCardDto> products = new ArrayList<>();
                         final Map<String, ProductCardDto> productMap = new HashMap<String, ProductCardDto>();
 
 
                         JSONArray array = resObject.getJSONArray(Global.PRODUCT);
-                        Log.d(TAG, "제품 get array = " + array);
-                        Log.d(TAG, "제품 get arraySize = " + array.length());
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject productJson = array.getJSONObject(i);
                             ProductCardDto dto = new ProductCardDto(productJson);
@@ -1863,7 +1734,6 @@ public class SocketIO {
                 return;
             Gson gson = new Gson();
             JSONObject jsonObject = new JSONObject(gson.toJson(transactionEntity));
-            Log.d(TAG, "insertTransaction object = " + jsonObject);
             socket.emit(Global.INSERT_TRANSACTION, jsonObject);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1881,8 +1751,6 @@ public class SocketIO {
             object.put(Global.NICK_NAME, nickName);
             object.put(Global.PROFILE_IMAGE, profileImage);
             object.put(Global.THUMBNAIL_IMAGE, thumbnailImage);
-            Log.d(TAG, "signInKakao Object = " + object);
-//            socket.emit("addDeviceId", "");
             socket.emit(Global.SIGN_IN_KAKAO, object);
             socket.once(Global.SIGN_IN_KAKAO, new Emitter.Listener() {
                 @Override
@@ -1890,7 +1758,6 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
-                        Log.d(TAG, "카카오 로그인 응답 resObject = " + resObject);
 
                         if (code == SocketException.SUCCESS) {
                             // 성공
@@ -1899,7 +1766,6 @@ public class SocketIO {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.d(TAG, "##################hasProfile = " + user.hasExtraProfile);
                                     onSignInKakao.onSuccess(user);
                                 }
                             });

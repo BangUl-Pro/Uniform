@@ -3,7 +3,6 @@ package com.songjin.usum.sqlite;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.songjin.usum.dtos.SchoolRanking;
 
@@ -42,7 +41,6 @@ public class SchoolRankingDBAdapter extends SQLiteOpenHelper {
 
     public void openDB() {
         String dbPath = context.getDatabasePath(SchoolRanking.COLLECTION_NAME).getPath();
-        Log.d(TAG, "dbPath = " + dbPath);
         if (db != null && db.isOpen())
             return;
         db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);

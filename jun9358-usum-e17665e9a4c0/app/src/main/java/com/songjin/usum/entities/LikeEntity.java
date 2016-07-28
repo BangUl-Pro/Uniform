@@ -3,7 +3,6 @@ package com.songjin.usum.entities;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,7 +55,6 @@ public class LikeEntity implements Parcelable {
         try {
             if (!object.get(PROPERTY_ID).equals(null)) {
                 this.id = object.getString(PROPERTY_ID);
-                Log.d(TAG, "id = " + id);
             }
             if (object.getString(PROPERTY_timeline_id) != null) {
                 this.timeline_id = object.getString(PROPERTY_timeline_id);

@@ -47,7 +47,6 @@ public class SchoolDBAdapter extends SQLiteOpenHelper {
 
     public void openDB() {
         String dbPath = context.getDatabasePath(SchoolEntity.COLLECTION_NAME).getPath();
-        Log.d(TAG, "dbPath = " + dbPath);
         if (db != null && db.isOpen())
             return;
         db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
@@ -64,19 +63,17 @@ public class SchoolDBAdapter extends SQLiteOpenHelper {
             InputStream is = context.getResources().getAssets().open(SchoolEntity.COLLECTION_NAME);
             File dir = new File("/data/data/" + Global.PACKAGE_NAME + "/databases/");
             File file = new File("/data/data/" + Global.PACKAGE_NAME + "/databases/" + SchoolEntity.COLLECTION_NAME);
-            Log.d(TAG, "file Path = " + file.getPath());
             if (!dir.exists()) {
-                Log.d(TAG, "파일 만듬");
-                Log.d(TAG, "성공? = " + dir.mkdirs());
+                dir.mkdirs();
             }
 
             if (!file.exists()) {
-                Log.d(TAG, "파일 만들기 = " + file.createNewFile());
+                file.createNewFile();
             }
 
             if (!file.isFile()) {
-                Log.d(TAG, "파일 삭제 = " + file.delete());
-                Log.d(TAG, "폴더 -> 파일 = " + file.createNewFile());
+                file.delete();
+                file.createNewFile();
             }
 
             String outFileName = file.getPath();

@@ -153,64 +153,7 @@ public class AddProductsActivity extends BaseActivity {
                 }
 
                 showLoadingView();
-
                 RequestManager.insertProduct(productCardDtos.get(0), onInsertProduct);
-
-
-//                RequestManager.insertProductsInBackground(productCardDtos, new BaasioCallback<List<BaasioEntity>>() {
-//                    @Override
-//                    public void onResponse(List<BaasioEntity> baasioEntities) {
-//                        ArrayList<ProductEntity> productEntities = new ArrayList<>();
-//                        for (BaasioEntity baasioEntity : baasioEntities) {
-//                            productEntities.add(new ProductEntity(baasioEntity));
-//                        }
-//
-//                        RequestManager.insertTransactionsInBackground(productEntities, new BaasioCallback<List<BaasioEntity>>() {
-//                            @Override
-//                            public void onResponse(List<BaasioEntity> baasioEntities) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onException(BaasioException e) {
-//
-//                            }
-//                        });
-//
-//                        for (int i = 0; i < productEntities.size(); i++) {
-//                            for (Uri uri : productCardDtos.get(i).uris) {
-//                                RequestManager.insertFile(
-//                                        productEntities.get(i).uuid,
-//                                        uri,
-//                                        new BaasioUploadCallback() {
-//                                            @Override
-//                                            public void onResponse(BaasioFile baasioFile) {
-//
-//                                            }
-//
-//                                            @Override
-//                                            public void onException(BaasioException e) {
-//
-//                                            }
-//
-//                                            @Override
-//                                            public void onProgress(long l, long l2) {
-//
-//                                            }
-//                                        }
-//                                );
-//                            }
-//                        }
-//
-//                        hideLoadingView();
-//                        finish();
-//                    }
-//
-//                    @Override
-//                    public void onException(BaasioException e) {
-//                        // TODO: 에러메세지
-//                    }
-//                });
                 return true;
         }
         return super.onOptionsItemSelected(item);

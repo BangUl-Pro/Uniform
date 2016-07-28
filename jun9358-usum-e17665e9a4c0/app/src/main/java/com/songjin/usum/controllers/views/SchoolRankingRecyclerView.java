@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -54,7 +53,6 @@ public class SchoolRankingRecyclerView extends RecyclerView {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
-            Log.d("USUM", position + "");
             SchoolRanking schoolRanking = schoolRankings.get(position);
 
             SchoolRankingCardView schoolRankingCardView = new SchoolRankingCardView(getContext());

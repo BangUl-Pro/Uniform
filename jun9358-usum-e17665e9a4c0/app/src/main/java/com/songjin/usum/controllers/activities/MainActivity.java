@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -158,11 +157,11 @@ public class MainActivity extends BaseActivity implements PushHandler {
          * 2016.05.29 TEST
          * 2016.06.20 MAYBE IT NEED THIS CODE...
          * */
-        Intent reservationServiceIntent = new Intent(context, ReservationPushService.class);
-        context.startService(reservationServiceIntent);
+        Intent reservationServiceIntent = new Intent(getApplicationContext(), ReservationPushService.class);
+        startService(reservationServiceIntent);
 
-        Intent SchoolRankingPushServiceIntent = new Intent(context, SchoolRankingPushService.class);
-        context.startService(SchoolRankingPushServiceIntent);
+        Intent SchoolRankingPushServiceIntent = new Intent(getApplicationContext(), SchoolRankingPushService.class);
+        startService(SchoolRankingPushServiceIntent);
     }
 
     @Override
@@ -209,7 +208,7 @@ public class MainActivity extends BaseActivity implements PushHandler {
         updateAlarmStatus();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(GCMManager.REGISTRATION_REDAY));
+                new IntentFilter(GCMManager.REGISTRATION_READY));
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(GCMManager.REGISTRATION_GENERATION));
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
@@ -34,19 +33,15 @@ public class PushManager {
     private static final String TAG = "PushManager";
 
     public static void sendTransactionPush(ArrayList<String> userIds, String msg) {
-        Log.d(TAG, "msg = " + msg);
-
         for (String id :
                 userIds) {
             SocketIO.sendGcm(id, msg, new RequestManager.OnSetToken() {
                 @Override
                 public void onSuccess() {
-                    Log.d(TAG, "성공");
                 }
 
                 @Override
                 public void onException() {
-                    Log.d(TAG, "실패");
                 }
             });
         }
@@ -55,7 +50,6 @@ public class PushManager {
 
 
     public static void registerToken(final String uuid, final String deviceId, final String pushType, final String token) {
-        Log.d(TAG, "registerToken = " + token);
 
         new Thread(new Runnable() {
             @Override
@@ -71,32 +65,14 @@ public class PushManager {
                     conn.setDoOutput(true);
 
                     String urlParameters = "uuid="+ uuid + "&device_id=" + deviceId + "&push_type=" + pushType + "&push_token=" + token;
-                    Log.d(TAG, "registerToken param = " + urlParameters);
                     OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
                     writer.write(urlParameters);
                     writer.flush();
                     writer.close();
 
-//                    urlParameters = "push_token=" + token;
-//                    Log.d(TAG, "registerToken param = " + urlParameters);
-//                    writer = new OutputStreamWriter(conn.getOutputStream());
-//                    writer.write(urlParameters);
-//                    writer.flush();
-//                    writer.close();
-
-//                    StringBuilder builder = new StringBuilder();
-//                    builder.append("uuids").append("=").append(array.toString()).append("&");
-//                    builder.append("push_message").append("=").append(json);
-//
-//                    PrintWriter pw = new PrintWriter(new OutputStreamWriter(conn.getOutputStream(), "utf-8"));
-//                    pw.write(builder.toString());
-//                    pw.flush();
-//                    pw.close();
 
                     int code = conn.getResponseCode();
                     String message = conn.getResponseMessage();
-                    Log.d(TAG, "registerToken code = " + code);
-                    Log.d(TAG, "registerToken message = " + message);
 
                     InputStreamReader in;
                     if (code == 200)
@@ -113,7 +89,6 @@ public class PushManager {
                     in.close();
 
                     //print result
-                    Log.d(TAG, "registerToken res = " + response.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -122,8 +97,6 @@ public class PushManager {
     }
 
     public static void deregisterToken(final String uuid, final String deviceId, final String pushType) {
-        Log.d(TAG, "deregisterToken = " + uuid);
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -138,7 +111,6 @@ public class PushManager {
                     conn.setDoOutput(true);
 
                     String urlParameters = "uuid="+ uuid + "&device_id=" + deviceId + "&push_type=" + pushType;
-                    Log.d(TAG, "deregisterToken param = " + urlParameters);
                     OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
                     writer.write(urlParameters);
                     writer.flush();
@@ -155,8 +127,6 @@ public class PushManager {
 
                     int code = conn.getResponseCode();
                     String message = conn.getResponseMessage();
-                    Log.d(TAG, "deregisterToken code = " + code);
-                    Log.d(TAG, "deregisterToken message = " + message);
 
                     InputStreamReader in;
                     if (code == 200)
@@ -173,7 +143,6 @@ public class PushManager {
                     in.close();
 
                     //print result
-                    Log.d(TAG, "deregisterToken res = " + response.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -182,8 +151,6 @@ public class PushManager {
     }
 
     public static void searchToken(final String uuid) {
-        Log.d(TAG, "searchToken = " + uuid);
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -198,7 +165,6 @@ public class PushManager {
                     conn.setDoOutput(true);
 
                     String urlParameters = "uuid="+ uuid;
-                    Log.d(TAG, "searchToken param = " + urlParameters);
                     OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
                     writer.write(urlParameters);
                     writer.flush();
@@ -215,8 +181,6 @@ public class PushManager {
 
                     int code = conn.getResponseCode();
                     String message = conn.getResponseMessage();
-                    Log.d(TAG, "searchToken code = " + code);
-                    Log.d(TAG, "searchToken message = " + message);
 
                     InputStreamReader in;
                     if (code == 200)
@@ -233,7 +197,6 @@ public class PushManager {
                     in.close();
 
                     //print result
-                    Log.d(TAG, "searchToken res = " + response.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

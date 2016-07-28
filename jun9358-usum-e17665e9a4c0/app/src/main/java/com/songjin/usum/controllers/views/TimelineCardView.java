@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -14,12 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.songjin.usum.controllers.activities.BaseActivity;
-import com.songjin.usum.controllers.activities.TimelineDetailActivity;
-import com.songjin.usum.controllers.activities.TimelineWriteActivity;
 import com.songjin.usum.GMailSender;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
+import com.songjin.usum.controllers.activities.BaseActivity;
+import com.songjin.usum.controllers.activities.TimelineDetailActivity;
+import com.songjin.usum.controllers.activities.TimelineWriteActivity;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.entities.LikeEntity;
 import com.songjin.usum.entities.UserEntity;
@@ -207,7 +206,6 @@ public class TimelineCardView extends CardView {
                         "usum.sender@gmail.com",
                         "usum.dev@gmail.com");
             } catch (Exception e) {
-                Log.e("SendMail", e.getMessage(), e);
                 return false;
             }
             return true;

@@ -5,16 +5,15 @@ import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.GMailSender;
 import com.songjin.usum.Global;
 import com.songjin.usum.R;
+import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
 import com.songjin.usum.entities.UserEntity;
 import com.songjin.usum.managers.RequestManager;
@@ -154,7 +153,6 @@ public class TimelineCommentCardView extends CardView {
                         "usum.sender@gmail.com",
                         "usum.dev@gmail.com");
             } catch (Exception e) {
-                Log.e("SendMail", e.getMessage(), e);
                 return false;
             }
             return true;

@@ -3,7 +3,6 @@ package com.songjin.usum.controllers.views;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -41,7 +40,6 @@ public class TimelineCommentRecyclerView extends RecyclerView {
     public void setTimelineCommentCardDtos(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
         this.timelineCommentCardDtos.clear();
         this.timelineCommentCardDtos.addAll(timelineCommentCardDtos);
-        Log.d(TAG, "setTimelineComments");
         getAdapter().notifyDataSetChanged();
     }
 

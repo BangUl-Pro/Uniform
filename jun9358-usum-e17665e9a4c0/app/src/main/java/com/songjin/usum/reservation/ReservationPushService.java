@@ -3,7 +3,6 @@ package com.songjin.usum.reservation;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.securepreferences.SecurePreferences;
@@ -39,7 +38,6 @@ public class ReservationPushService extends IntentService {
     private RequestManager.OnGetProduct onGetProduct = new RequestManager.OnGetProduct() {
         @Override
         public void onSuccess(ArrayList<ProductCardDto> productCardDtos) {
-            Log.d(TAG, "getProduct");
             HashBiMap<Integer, String> categories = Category.getHashBiMap(Sex.ALL);
             for (ProductCardDto productCardDto : productCardDtos) {
                 if (productCardDto.productEntity.user_id.equals(Global.userEntity.id)) {
@@ -99,7 +97,6 @@ public class ReservationPushService extends IntentService {
 
     private void checkRegisteredNewProduct() {
         try {
-            Log.d(TAG, "checkRegisteredNewProduct");
             ArrayList<ReservedCategoryEntity> reservedCategories = SettingFragment.getReservedCategories();
             if (reservedCategories == null || reservedCategories.size() == 0) {
                 return;
@@ -139,7 +136,6 @@ public class ReservationPushService extends IntentService {
         RequestManager.getAllTimeline(userEntity.id, userEntity.schoolId, time, new RequestManager.OnGetAllTimeline() {
             @Override
             public void onSuccess(ArrayList<TimelineCardDto> timelineCardDtos) {
-                Log.d(TAG, "getAllTimeline");
 
                 String msg = "타임라인에 새 글이 등록되었습니다.";
 

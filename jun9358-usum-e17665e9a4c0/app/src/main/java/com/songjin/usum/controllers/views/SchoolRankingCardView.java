@@ -3,15 +3,14 @@ package com.songjin.usum.controllers.views;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.songjin.usum.R;
 import com.songjin.usum.controllers.activities.BaseActivity;
 import com.songjin.usum.controllers.activities.TimelineActivity;
-import com.songjin.usum.R;
 import com.songjin.usum.entities.SchoolEntity;
 
 public class SchoolRankingCardView extends LinearLayout {
@@ -56,7 +55,6 @@ public class SchoolRankingCardView extends LinearLayout {
                 if (schoolEntity != null) {
                     Intent intent = new Intent(BaseActivity.context, TimelineActivity.class);
                     intent.putExtra("schoolEntity", schoolEntity);
-                    Log.d(TAG, "schoolEntity = " + schoolEntity);
                     BaseActivity.startActivityUsingStack(intent);
                 }
             }

@@ -2,7 +2,6 @@ package com.songjin.usum.reservation;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.util.Log;
 
 import com.securepreferences.SecurePreferences;
 import com.songjin.usum.Global;
@@ -64,13 +63,10 @@ public class SchoolRankingPushService extends IntentService {
                     PushManager.sendSchoolRankUpdatedPushToMe("학교 순위가 " + lastRank + "위에서 " + currentRank + "위로 변경되었습니다!");
                     SettingFragment.setLastSchoolRank(currentRank);
                 }
-                Log.d("USUM", "lastRank: " + lastRank);
-                Log.d("USUM", "currentRank: " + currentRank);
             }
 
             @Override
             public void onException() {
-                Log.d(TAG, "내 학교 순위 얻기 실패");
             }
         }, Global.userEntity.schoolId);
 

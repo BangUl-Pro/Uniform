@@ -41,6 +41,7 @@ public class RegistrationIntentService extends IntentService {
 
         // GCM을 위한 Instance ID를 가져온다.
         instanceID = InstanceID.getInstance(this);
+        Log.d(TAG, "instanceID = " + instanceID);
 
         synchronized (TAG) {
             new Thread(new Runnable() {
@@ -50,7 +51,7 @@ public class RegistrationIntentService extends IntentService {
                     for (int i = 1; i <= 5; i++) {
                         try {
                             token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-                            Log.i(TAG, "GCM Registration Token: " + token);
+                            Log.d(TAG, "token = " + token);
                             if(null != token && !token.isEmpty()) {
 //                                GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
 //                                token = gcm.register(getString(R.string.gcm_defaultSenderId));
@@ -59,7 +60,6 @@ public class RegistrationIntentService extends IntentService {
                             }
                         } catch (IOException e) {
                             //Log exception
-                            Log.e(TAG, "토큰 안돼 " + e.getMessage());
                             e.printStackTrace();
                         }
                         if (i == 5) {
