@@ -58,28 +58,33 @@ public class SchoolManager {
     }
 
     public SchoolEntity selectSchool(int schoolId) {
-        if (adapter == null || adapter.getReadableDatabase() == null)
-            return null;
-        SQLiteDatabase db = adapter.getReadableDatabase();
+        try {
+            if (adapter == null || adapter.getReadableDatabase() == null)
+                return null;
+            SQLiteDatabase db = adapter.getReadableDatabase();
 
-        Cursor cursor = db.query(
-                SchoolEntity.COLLECTION_NAME,
-                null,
-                SchoolEntity.PROPERTY_ID + "=?",
-                new String[]{String.valueOf(schoolId)},
-                null,
-                null,
-                null,
-                null
-        );
+            Cursor cursor = db.query(
+                    SchoolEntity.COLLECTION_NAME,
+                    null,
+                    SchoolEntity.PROPERTY_ID + "=?",
+                    new String[]{String.valueOf(schoolId)},
+                    null,
+                    null,
+                    null,
+                    null
+            );
 
-        cursor.moveToFirst();
-        SchoolEntity schoolEntity = new SchoolEntity(cursor);
-        cursor.close();
+            cursor.moveToFirst();
+            SchoolEntity schoolEntity = new SchoolEntity(cursor);
+            cursor.close();
 
-        db.close();
+            db.close();
 
-        return schoolEntity;
+            return schoolEntity;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void deleteAllSchools() {

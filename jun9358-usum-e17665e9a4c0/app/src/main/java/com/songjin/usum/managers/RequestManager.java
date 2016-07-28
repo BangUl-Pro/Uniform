@@ -167,15 +167,17 @@ public class RequestManager {
 
 
     public static void getSchool(OnGetSchool onGetSchool) {
+        getSchool(onGetSchool);
     }
 
 
-    public static void insertTimelineComment(String timelineId, String comment, String userId, OnInsertTimelineComment onInsertTimelineComment) {
+    public static void insertTimelineComment(String timelineId, String comment, String userId, int type, OnInsertTimelineComment onInsertTimelineComment) {
+        SocketIO.insertTimelineComment(timelineId, comment, userId, type, onInsertTimelineComment);
     }
 
 
-    public static void getTimelineComment(String timelineId, OnGetTimelineComment onGetTimelineComment) {
-        SocketIO.getTimelineComment(timelineId, onGetTimelineComment);
+    public static void getTimelineComment(String timelineId, int type, OnGetTimelineComment onGetTimelineComment) {
+        SocketIO.getTimelineComment(timelineId, type, onGetTimelineComment);
     }
 
 

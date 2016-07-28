@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -41,7 +40,6 @@ public class RegistrationIntentService extends IntentService {
 
         // GCM을 위한 Instance ID를 가져온다.
         instanceID = InstanceID.getInstance(this);
-        Log.d(TAG, "instanceID = " + instanceID);
 
         synchronized (TAG) {
             new Thread(new Runnable() {
@@ -51,7 +49,6 @@ public class RegistrationIntentService extends IntentService {
                     for (int i = 1; i <= 5; i++) {
                         try {
                             token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-                            Log.d(TAG, "token = " + token);
                             if(null != token && !token.isEmpty()) {
 //                                GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
 //                                token = gcm.register(getString(R.string.gcm_defaultSenderId));

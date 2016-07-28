@@ -125,6 +125,8 @@ public class CommunityFragment extends SlidingBaseFragment {
         if (mySchoolEntity != null)
             viewHolder.mySchoolRankingCardView.setSchoolEntity(mySchoolEntity);
 
+        if (getActivity() == null)
+            return;
         final SharedPreferences preferences = getActivity().getSharedPreferences(Global.APP_NAME, getActivity().MODE_PRIVATE);
         int rank = preferences.getInt(Global.RANK, -1);
         final long point = preferences.getLong(Global.POINT, -1);

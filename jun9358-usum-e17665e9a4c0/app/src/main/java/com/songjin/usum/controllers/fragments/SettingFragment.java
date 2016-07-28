@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -186,18 +187,6 @@ public class SettingFragment extends SlidingBaseFragment {
                                             }
                                         });
 
-//                                        SocketIO.setHasExtraProfile(Global.userEntity.id, false, new RequestManager.OnSetHasExtraProfile() {
-//                                            @Override
-//                                            public void onSuccess() {
-//
-//                                            }
-//
-//                                            @Override
-//                                            public void onException() {
-//
-//                                            }
-//                                        });
-
                                         RequestManager.deleteUser(Global.userEntity.id, new Emitter.Listener() {
                                             @Override
                                             public void call(final Object... args) {
@@ -208,6 +197,11 @@ public class SettingFragment extends SlidingBaseFragment {
                                                         cache.clearAll();
 
                                                         JSONObject object = (JSONObject) args[0];
+
+                                                        SharedPreferences preferences = getActivity().getSharedPreferences(Global.APP_NAME, Context.MODE_PRIVATE);
+                                                        SharedPreferences.Editor editor = preferences.edit();
+                                                        editor.clear();
+                                                        editor.commit();
 
                                                         BaseActivity.hideLoadingView();
                                                         BaseActivity.startActivityOnTopStack(LoginActivity.class);

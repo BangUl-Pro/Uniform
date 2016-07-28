@@ -22,6 +22,7 @@ import com.songjin.usum.controllers.fragments.SupportFragment;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.CommentEntity;
 import com.songjin.usum.entities.FileEntity;
 import com.songjin.usum.entities.ProductEntity;
 import com.songjin.usum.entities.TransactionEntity;
@@ -245,7 +246,7 @@ public class ProductDetailCardView extends CardView {
             public void onClick(View v) {
                 RequestManager.updateTransactionStatus(productCardDto.transactionEntity, Global.REGISTERED, onUpdateTransactionStatus);
 
-                RequestManager.getTimelineComment(productCardDto.productEntity.id, new RequestManager.OnGetTimelineComment() {
+                RequestManager.getTimelineComment(productCardDto.productEntity.id, CommentEntity.PRODUCT, new RequestManager.OnGetTimelineComment() {
                     @Override
                     public void onSuccess(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
                         for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {
@@ -436,6 +437,7 @@ public class ProductDetailCardView extends CardView {
                 productCardDto.productEntity.id,
                 commentContents,
                 Global.userEntity.id,
+                CommentEntity.PRODUCT,
                 new RequestManager.OnInsertTimelineComment() {
                     @Override
                     public void onSuccess() {

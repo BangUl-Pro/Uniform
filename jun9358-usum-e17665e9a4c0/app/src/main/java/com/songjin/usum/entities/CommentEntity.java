@@ -8,11 +8,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CommentEntity implements Parcelable {
-    // FIXME: comment_items => comments
+
+    public static final int PRODUCT = 1;
+    public static final int TIMELINE = 2;
+
     public static final String COLLECTION_NAME = "timeline_comments";
-//    public static final String PROPERTY_UUID = BaasioEntity.PROPERTY_UUID;
     public static final String PROPERTY_ID = "comment_id";
-    // FIXME: timeline_item_id => timeline_uuid
     public static final String PROPERTY_timeline_item_id = "comment_timeline_item_id";
     public static final String PROPERTY_user_id = "comment_user_id";
     public static final String PROPERTY_CREATED = "comment_created";
@@ -73,17 +74,6 @@ public class CommentEntity implements Parcelable {
         this.contents = bundle.getString(PROPERTY_CONTENTS);
     }
 
-//    public BaasioBaseEntity getBaasioBaseEntity() {
-//        BaasioBaseEntity entity = new BaasioBaseEntity();
-//        entity.setType(COLLECTION_NAME);
-//        entity.setUuid(UUID.fromString(this.uuid));
-//        entity.setProperty(PROPERTY_timeline_item_id, this.timeline_item_id);
-//        entity.setProperty(PROPERTY_user_id, this.user_id);
-//        entity.setProperty(PROPERTY_CREATED, this.created);
-//        entity.setProperty(PROPERTY_CONTENTS, this.contents);
-//
-//        return entity;
-//    }
 
     public JSONObject getBaasioEntity() {
         JSONObject object = new JSONObject();

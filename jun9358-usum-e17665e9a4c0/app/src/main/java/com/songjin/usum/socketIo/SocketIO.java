@@ -2,6 +2,7 @@ package com.songjin.usum.socketIo;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 
@@ -860,7 +861,7 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 게시글에 댓글 달기
-    public static void insertTimelineComment(String timelineItemId, String commentContent, String userId, final RequestManager.OnInsertTimelineComment onInsertTimelineComment) {
+    public static void insertTimelineComment(String timelineItemId, String commentContent, String userId, int type, final RequestManager.OnInsertTimelineComment onInsertTimelineComment) {
         try {
             if (!checkSocket())
                 return;
@@ -868,6 +869,7 @@ public class SocketIO {
             object.put(Global.TIMELINE_ITEM_ID, timelineItemId);
             object.put(Global.COMMENT_CONTENT, commentContent);
             object.put(Global.USER_ID, userId);
+            object.put(Global.TYPE, type);
             socket.emit(Global.INSERT_TIMELINE_COMMENT, object);
             socket.once(Global.INSERT_TIMELINE_COMMENT, new Emitter.Listener() {
                 @Override
@@ -897,12 +899,13 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 23. 타임라인 게시글 댓글 불러오기
-    public static void getTimelineComment(String timelineId, final RequestManager.OnGetTimelineComment onGetTimelineComment) {
+    public static void getTimelineComment(String timelineId, int type, final RequestManager.OnGetTimelineComment onGetTimelineComment) {
         try {
             if (!checkSocket())
                 return;
             JSONObject object = new JSONObject();
             object.put(Global.ID, timelineId);
+            object.put(Global.TYPE, type);
             socket.emit(Global.GET_TIMELINE_COMMENT, object);
             socket.once(Global.GET_TIMELINE_COMMENT, new Emitter.Listener() {
                 @Override
@@ -1742,10 +1745,24 @@ public class SocketIO {
 
 
     // TODO: 15. 11. 28. 카카오 로그인
-    public static void signInKakao(long id, String nickName, String profileImage, String thumbnailImage, final RequestManager.OnSignInKakao onSignInKakao) {
+    public static void signInKakao(final long id, final String nickName, final String profileImage, final String thumbnailImage, final RequestManager.OnSignInKakao onSignInKakao) {
         try {
             if (!checkSocket())
                 return;
+            final CountDownTimer timer = new CountDownTimer(5000, 5000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    socket.off(Global.SIGN_IN_KAKAO);
+                    signInKakao(id, nickName, profileImage, thumbnailImage, onSignInKakao);
+                }
+            }.start();
+
+            Log.d(TAG, "signInKAkao");
             JSONObject object = new JSONObject();
             object.put(Global.ID, String.valueOf(id));
             object.put(Global.NICK_NAME, nickName);
@@ -1758,9 +1775,11 @@ public class SocketIO {
                     try {
                         JSONObject resObject = getJson(args);
                         final int code = getCode(resObject);
+                        Log.d(TAG, "signInKakao = " + code);
 
                         if (code == SocketException.SUCCESS) {
                             // 성공
+                            timer.cancel();
                             JSONObject userObject = resObject.getJSONObject(Global.USER);
                             final UserEntity user = new UserEntity(userObject);
                             handler.post(new Runnable() {

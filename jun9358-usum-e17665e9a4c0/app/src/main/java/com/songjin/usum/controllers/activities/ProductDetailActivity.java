@@ -15,6 +15,7 @@ import com.songjin.usum.controllers.views.ProductDetailCardView;
 import com.songjin.usum.controllers.views.TimelineCommentRecyclerView;
 import com.songjin.usum.dtos.ProductCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.CommentEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.utils.StringUtil;
@@ -91,6 +92,7 @@ public class ProductDetailActivity extends BaseActivity {
                         timelineItemUuid,
                         commentContents,
                         Global.userEntity.id,
+                        CommentEntity.PRODUCT,
                         new RequestManager.OnInsertTimelineComment() {
                             @Override
                             public void onSuccess() {
@@ -199,7 +201,7 @@ public class ProductDetailActivity extends BaseActivity {
     }
 
     public void requestTimelineComments() {
-        RequestManager.getTimelineComment(productCardDto.productEntity.id, new RequestManager.OnGetTimelineComment() {
+        RequestManager.getTimelineComment(productCardDto.productEntity.id, CommentEntity.PRODUCT, new RequestManager.OnGetTimelineComment() {
             @Override
             public void onSuccess(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
                 for (TimelineCommentCardDto timelineCommentCardDto : timelineCommentCardDtos) {

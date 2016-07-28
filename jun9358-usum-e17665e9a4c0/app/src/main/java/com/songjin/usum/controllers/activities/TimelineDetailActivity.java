@@ -13,6 +13,7 @@ import com.songjin.usum.controllers.views.TimelineCardView;
 import com.songjin.usum.controllers.views.TimelineCommentRecyclerView;
 import com.songjin.usum.dtos.TimelineCardDto;
 import com.songjin.usum.dtos.TimelineCommentCardDto;
+import com.songjin.usum.entities.CommentEntity;
 import com.songjin.usum.managers.AuthManager;
 import com.songjin.usum.managers.RequestManager;
 import com.songjin.usum.utils.StringUtil;
@@ -72,7 +73,7 @@ public class TimelineDetailActivity extends BaseActivity {
 
     public void requestTimelineComments() {
         showLoadingView();
-        RequestManager.getTimelineComment(timelineCardDto.timelineEntity.id, new RequestManager.OnGetTimelineComment() {
+        RequestManager.getTimelineComment(timelineCardDto.timelineEntity.id, CommentEntity.TIMELINE, new RequestManager.OnGetTimelineComment() {
             @Override
             public void onSuccess(ArrayList<TimelineCommentCardDto> timelineCommentCardDtos) {
                 viewHolder.comments.setTimelineCommentCardDtos(timelineCommentCardDtos);
@@ -85,35 +86,7 @@ public class TimelineDetailActivity extends BaseActivity {
             }
         });
 
-//        RequestManager.getTimelineComments(timelineCardDto.timelineEntity.id, new RequestManager.TypedBaasioQueryCallback<TimelineCommentCardDto>() {
-//            @Override
-//            public void onResponse(List<TimelineCommentCardDto> entities) {
-//                ArrayList<TimelineCommentCardDto> timelineCommentCardDtos = new ArrayList<>();
-//                timelineCommentCardDtos.addAll(entities);
-//                viewHolder.comments.setTimelineCommentCardDtos(timelineCommentCardDtos);
-//
-//                hideLoadingView();
-//            }
-//
-//            @Override
-//            public void onException(BaasioException e) {
-//                hideLoadingView();
-//            }
-//        });
     }
-
-
-//    // TODO: 15. 11. 25. 좋아요
-//    private void processInsertLike(int code, Intent intent) {
-//        LikeEntity likeEntity = intent.getParcelableExtra(Global.LIKE);
-//        viewHolder.timelineCardView.processInsertLike(code, likeEntity);
-//    }
-//
-//
-//    // TODO: 15. 11. 25. 타임라인 지우기
-//    private void processDeleteTimeline(int code) {
-//        viewHolder.timelineCardView.processDeleteTimeline(code);
-//    }
 
 
     @Override
@@ -171,6 +144,7 @@ public class TimelineDetailActivity extends BaseActivity {
                         timelineItemUuid,
                         commentContents,
                         Global.userEntity.id,
+                        CommentEntity.TIMELINE,
                         new RequestManager.OnInsertTimelineComment() {
                             @Override
                             public void onSuccess() {
